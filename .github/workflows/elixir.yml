@@ -16,7 +16,7 @@ jobs:
         image: postgres:latest
         env:
           POSTGRES_DB: postgres        
-          POSTGRES_PASSWORD: postgres
+          POSTGRES_PASSWORD: root
           POSTGRES_USER: postgres
         ports:
           - 5432:5432
