@@ -27,14 +27,17 @@ channel.join();
 
 let ul = document.getElementById('msg-list');
 let name = document.getElementById('name');          // name of message sender
-let msg = document.getElementById('msg');            // message input field
+let message = document.getElementById('msg');            // message input field
+let type = "public"
 
 // "listen" for the [Enter] keypress event to send a message:
 msg.addEventListener('keypress', function (event) {
   if (event.keyCode == 13 && msg.value.length > 0) { // don't sent empty msg.
     channel.push('shout', { // send the message to the server on "shout" channel
       name: name.value,     // get value of "name" of person sending the message
-      message: msg.value    // get message text (value) from msg input field.
+      message: message.value,    // get message text (value) from msg input field.
+      type: type,
+      lobby: "PutinsKGB" // replace with variable lobby name
     });
     msg.value = '';         // reset the message input field for next message.
   }

@@ -12,9 +12,9 @@
     <header>
       <section class="container">
         <nav role="navigation">
-          <h1 style="padding-top: 15px">Chat Example</h1>
+          <h1 style="padding-top: 15px">Putin's KGB</h1>
         </nav>
-        <img src="<%= Routes.static_path(@conn, "/images/putin.png") %>"
+        <img src="<%= Routes.static_path(@conn, "/images/stanlin.gif") %>"
              width="500px" alt="Phoenix Framework Logo" />
       </section>
     </header>
