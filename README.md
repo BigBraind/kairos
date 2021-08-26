@@ -1,8 +1,11 @@
 # Kairos
->> ho nyn kairos
+> ho nyn kairos
 
-To start your KGB server:
+![Salud](https://64.media.tumblr.com/c3190830c3c97a997c7507c1bb7d47ad/tumblr_n3eqpzSoLf1sh7htzo1_400.gif)
 
+To start your KGB Chat server:
+
+  * Enter the chat directory 
   * Install dependencies with `mix deps.get`
   * Create and migrate your database with `mix ecto.setup`
   * Install Node.js dependencies with `npm install` inside the `assets` directory
