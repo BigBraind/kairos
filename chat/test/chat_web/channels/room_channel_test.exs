@@ -24,4 +24,16 @@ defmodule ChatWeb.RoomChannelTest do
     broadcast_from! socket, "broadcast", %{"some" => "data"}
     assert_push "broadcast", %{"some" => "data"}
   end
+  test "echoes  messages from data repo :after_join", %{socket: graveyard} do
+    payload = %{name: "Paul Valéry", message: "Le vent se lève! . . . Il faut tenter de vivre"}
+    Chat.Echo.changeset(%Chat.Echo{}, payload) |> Chat.Repo.insert()
+
+    {:ok, _, sea} = ChatWeb.UserSocket
+    |> socket("user_id", %{some: :assign})
+    |> subscribe_and_join(ChatWeb.RoomChannel, "room:lobby")
+
+    assert graveyard.join_ref != sea.join_ref
+
+
+  end
 end
