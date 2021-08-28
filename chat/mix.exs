@@ -10,7 +10,10 @@ defmodule Chat.MixProject do
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [coveralls: :test, "coveralls.detail": :test,
+                          "coveralls.post": :test, "coveralls.html": :test]
     ]
   end
 
@@ -40,6 +43,7 @@ defmodule Chat.MixProject do
       {:phoenix_html, "~> 2.11"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:phoenix_live_dashboard, "~> 0.4"},
+      {:excoveralls, "~> 0.14.2", only: [:test, :dev]}, # interrogate test coverage
       {:telemetry_metrics, "~> 0.4"},
       {:telemetry_poller, "~> 0.4"},
       {:gettext, "~> 0.11"},
