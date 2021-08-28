@@ -63,7 +63,7 @@ jobs:
         with:
           python-version: '3.8.11'
 
-      - uses: mhanberg/gigalixir-action@<current release>
+      - uses: mhanberg/gigalixir-action@0.6.1
         with:
           APP_SUBFOLDER: chat  # Add only if you want to deploy an app that is not at the root of your repository
           GIGALIXIR_APP: satorotas # Feel free to also put this in your secrets
