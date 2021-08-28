@@ -9,8 +9,8 @@ To start your KGB Chat server:
   * Install dependencies with `mix deps.get`
   * Create and migrate your database with `mix ecto.setup`
   * Install Node.js dependencies with `npm install` inside the `assets` directory
-  * Migrate using `mix ecto.migrate` to update the repository that maps to Postgres data store
-  * Start Phoenix endpoint with `mix phx.server`OR `iex -S mix.server
+  * Next, go back to Chat folder. Migrate using `mix ecto.migrate` to update the repository that maps to Postgres data store
+  * In the Chat folder, start Phoenix endpoint with `mix phx.server`OR `iex -S mix.server
 
 Testing:
   * `mix test`
