@@ -5,7 +5,7 @@ defmodule ChatWeb.UserSocket do
   channel "room:lobby", ChatWeb.RoomChannel
 
   ## Transports
-  transport :websocket, Phoenix.Transports.WebSocket, check_origin: ["//localhost", "//*.bigbrain.link"]
+  transport :websocket, Phoenix.Transports.WebSocket, check_origin: ["//localhost", "//*.bigbrain.link", "//satorotas.gigalixirapp.com"]
 
   # Socket params are passed from the client and can
   # be used to verify and authenticate a user. After
