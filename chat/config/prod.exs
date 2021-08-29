@@ -10,13 +10,24 @@ use Mix.Config
 # which you should run after static files are built and
 # before starting your production server.
 config :chat, ChatWeb.Endpoint,
-  url: [host: "example.com", port: 80],
+  url: [host: "${APP_NAME}.gigalixirapp.com", port: 443],
   cache_static_manifest: "priv/static/cache_manifest.json",
+  https: [
+    port: 443,
+    cipher_suite: :strong,
+    transport_options: [socket_opts: [:inet6]]
+  ],
   check_origin: ["//localhost", "//*.bigbrain.link"],
-  force_ssl: [rewrite_on: [:x_forwarded_proto]],
+  force_ssl: [rewrite_on: [:x_forwarded_proto]]
 
 # Do not print debug messages in production
 config :logger, level: :info
+
+config :gigalixir, ChatWeb.Endpoint,
+  http: [port: {:system, "PORT"}],
+  url: [host: System.get_env("APP_NAME") <> ".gigalixirapp.com", port: 443],
+  secret_key_base: Map.fetch!(System.get_env(), "SECRET_KEY_BASE"),
+  server: true
 
 # ## SSL Support
 #
