@@ -38,6 +38,8 @@ defmodule ChatWeb.RoomChannel do
   end
 
   # Add authorization logic here as required.
+  # create internal journey centered authorisation library
+  # tag guardian token system for shielding apis
   defp authorized?(_payload) do
     true
   end
