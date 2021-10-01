@@ -21,16 +21,22 @@ defmodule ChatWeb.Router do
     pow_routes()
   end
 
+  pipeline :authenticated do
+    plug Pow.Plug.RequireAuthenticated,
+      error_handler: Pow.Phoenix.PlugErrorHandler
+  end
 
   scope "/", ChatWeb do
-    pipe_through :browser
+    pipe_through [:browser, :authenticated]
+
+
 
     get "/", PageController, :index
   end
 
-  scope "/api", ChatWeb do
-    pipe_through :api
-  end
+  # scope "/api", ChatWeb do
+  #   pipe_through :api
+  # end
 
   # Enables LiveDashboard only for development
   #

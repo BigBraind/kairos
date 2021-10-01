@@ -26,7 +26,8 @@ channel.on('shout', function (payload) { // listen to the 'shout' event
 channel.join();
 
 let ul = document.getElementById('msg-list');
-let name = document.getElementById('name');          // name of message sender
+//name of message sender, retarded implementation using live view metadata in html and email 9001K version
+let name = document.head.querySelector("[name~=user_mail][content]").content.split('@')[0];
 let message = document.getElementById('msg');            // message input field
 let type = "public"
 
@@ -34,7 +35,7 @@ let type = "public"
 msg.addEventListener('keypress', function (event) {
   if (event.keyCode == 13 && msg.value.length > 0) { // don't sent empty msg.
     channel.push('shout', { // send the message to the server on "shout" channel
-      name: name.value,     // get value of "name" of person sending the message
+      name: name,     // get value of "name" of person sending the message
       message: message.value,    // get message text (value) from msg input field.
       type: type,
       lobby: "PutinsKGB" // replace with variable lobby name
