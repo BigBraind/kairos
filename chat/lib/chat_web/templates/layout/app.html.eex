@@ -4,7 +4,10 @@
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Chat · Phoenix Framework</title>
+    <%= if Pow.Plug.current_user(@conn) do %>
+    <meta name="user_mail" content=<%= @current_user.email %>>
+    <% end %>
+    <title>Kairos · Phoenix Framework</title>
     <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
     <script defer type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
   </head>
@@ -13,6 +16,23 @@
       <section class="container">
         <nav role="navigation">
           <h1 style="padding-top: 15px">Putin's KGB</h1>
+          <ul>
+            <%= if Pow.Plug.current_user(@conn) do %>
+              <li>
+                <%= @current_user.email %>
+              </li>
+              <li>
+                <%= link "Farewell", to: Routes.pow_session_path(@conn, :delete), method: :delete %>
+              </li>
+            <% else %>
+              <li>
+                <%= link "Initiation", to: Routes.pow_registration_path(@conn, :new) %>
+              </li>
+              <li>
+                <%= link "Enter Here", to: Routes.pow_session_path(@conn, :new) %>
+              </li>
+            <% end %>
+          </ul>
         </nav>
         <img src="<%= Routes.static_path(@conn, "/images/stanlin.gif") %>"
              width="500px" alt="Phoenix Framework Logo" />
