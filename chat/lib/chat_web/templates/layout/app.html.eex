@@ -17,6 +17,10 @@
         <nav role="navigation">
           <h1 style="padding-top: 15px">Putin's KGB</h1>
           <ul>
+            <a href="./journey" > Journey</a>
+
+            </ul>
+          <ul>
             <%= if Pow.Plug.current_user(@conn) do %>
               <li>
                 <%= @current_user.email %>

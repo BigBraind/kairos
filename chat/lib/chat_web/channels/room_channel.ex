@@ -1,9 +1,11 @@
 defmodule ChatWeb.RoomChannel do
+  require Logger
   use ChatWeb, :channel
 
   @impl true
-  def join("room:lobby", payload, socket) do
+  def join("journey:" <> _phase, payload, socket) do
     if authorized?(payload) do
+      Logger.info payload
       send(self(), :after_join)
       {:ok, socket}
     else
@@ -28,8 +30,9 @@ defmodule ChatWeb.RoomChannel do
   end
 
   @impl true
-  def handle_info(:after_join, socket) do
-    Chat.Echo.recall()
+  def handle_info(:after_join,  socket) do
+    Logger.info socket.topic
+    Chat.Echo.journey_call(socket.topic)
     |> Enum.each(fn echos -> push(socket, "shout", %{
                                          name: echos.name,
                                          message: echos.message,
