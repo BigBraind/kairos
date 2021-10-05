@@ -5,7 +5,7 @@ defmodule ChatWeb.RoomChannelTest do
     {:ok, _, socket} =
       ChatWeb.UserSocket
       |> socket("user_id", %{some: :assign})
-      |> subscribe_and_join(ChatWeb.RoomChannel, "room:lobby")
+      |> subscribe_and_join(ChatWeb.RoomChannel, "journey:Byzantium")
 
     %{socket: socket}
   end
@@ -30,7 +30,7 @@ defmodule ChatWeb.RoomChannelTest do
 
     {:ok, _, sea} = ChatWeb.UserSocket
     |> socket("user_id", %{some: :assign})
-    |> subscribe_and_join(ChatWeb.RoomChannel, "room:lobby")
+    |> subscribe_and_join(ChatWeb.RoomChannel, "journey:towardZeno")
 
     assert graveyard.join_ref != sea.join_ref
 
