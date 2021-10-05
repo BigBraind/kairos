@@ -2,7 +2,7 @@ defmodule ChatWeb.UserSocket do
   use Phoenix.Socket
 
   ## Channels
-  channel "room:lobby", ChatWeb.RoomChannel
+  channel "journey:*", ChatWeb.RoomChannel
 
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket, check_origin: ["//localhost", "//*.bigbrain.link", "//satorotas.gigalixirapp.com"]

@@ -1,4 +1,4 @@
-<h2>Cultivators All-Chat</h2>
+<h2>Phase: <%= @journey%></h2>
 <!-- The list of messages will appear here: -->
 <ul id="msg-list" style="list-style: none; min-height:200px;">
 </ul>

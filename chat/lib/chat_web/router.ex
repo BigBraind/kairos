@@ -28,8 +28,8 @@ defmodule ChatWeb.Router do
 
   scope "/", ChatWeb do
     pipe_through [:browser, :authenticated]
-
-
+    resources "/journey", JourneyController, only: [:show]
+    get "/journey", PageController, :journey
 
     get "/", PageController, :index
   end
