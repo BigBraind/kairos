@@ -15,9 +15,9 @@
     <header>
       <section class="container">
         <nav role="navigation">
-          <h1 style="padding-top: 15px">Putin's KGB</h1>
+          <h1 style="padding: 35px">Welcome to BigBrain</h1>
           <ul>
-            <a href="./journey" > Journey</a>
+            <a href="http://localhost:4000/journey" > Journey</a>
 
             </ul>
           <ul>
@@ -38,7 +38,7 @@
             <% end %>
           </ul>
         </nav>
-        <img src="<%= Routes.static_path(@conn, "/images/stanlin.gif") %>"
+        <img src="<%= Routes.static_path(@conn, "/images/bigbrain.png") %>"
              width="500px" alt="Phoenix Framework Logo" />
       </section>
     </header>

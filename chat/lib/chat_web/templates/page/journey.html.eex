@@ -1,4 +1,5 @@
 <head>
+<%# <link rel="stylesheet" hr ef="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> %>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
 * {
@@ -41,20 +42,20 @@
 
 <div class="row">
   <div class="column" style="background-color:#aaa;">
-    <h2>Initiation</h2>
-    <p>Start here!</p>
+    <h2> <a href = "./journey/Initiation"> Initiation </a></h2>
+    <%# <p>Start here!</p> %>
   </div>
   <div class="column" style="background-color:#bbb;">
     <h2>Primordia Formation</h2>
-    <p>Some text..</p>
+    <%# <p>Some text..</p> %>
   </div>
   <div class="column" style="background-color:#ccc;">
     <h2>Mature Fruitbody</h2>
-    <p>Some text..</p>
+    <%# <p>Some text..</p> %>
   </div>
   <div class="column" style="background-color:#ddd;">
     <h2>Harvest</h2>
-    <p>Some text..</p>
+    <%# <p>Some text..</p> %>
   </div>
 </div>
 
