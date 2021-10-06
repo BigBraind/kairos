@@ -10,7 +10,7 @@ defmodule ChatWeb.PageControllerTest do
   test "redirects to show when data is valid", %{authed_conn: authed_conn} do
 
     conn = get(authed_conn, "/")
-    assert html_response(conn, 200) =~ "Putin"
+    assert html_response(conn, 200) =~ "BigBrain"
   end
 
   test "GET /", %{conn: conn} do
