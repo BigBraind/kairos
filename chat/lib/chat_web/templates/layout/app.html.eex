@@ -17,7 +17,7 @@
         <nav role="navigation">
           <h1 style="padding: 35px">Welcome to BigBrain</h1>
           <ul>
-            <a href="http://localhost:4000/journey" > Journey</a>
+            <a href="/journey" > Journey</a>
 
             </ul>
           <ul>
