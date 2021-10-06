@@ -9,6 +9,13 @@
     <% end %>
     <title>Kairos · Phoenix Framework</title>
     <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
+    <style>
+      a:hover {
+          color: #D9BB41;
+          background-color: transparent;
+          text-decoration: underline;
+      }
+    </style>
     <script defer type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
   </head>
   <body>
@@ -18,23 +25,21 @@
           <h1 style="padding: 35px">Welcome to BigBrain</h1>
           <ul>
             <a href="/journey" > Journey</a>
-
-            </ul>
-          <ul>
+            <hr>
             <%= if Pow.Plug.current_user(@conn) do %>
-              <li>
-                <%= @current_user.email %>
-              </li>
-              <li>
-                <%= link "Farewell", to: Routes.pow_session_path(@conn, :delete), method: :delete %>
-              </li>
+            <li>
+              <%= @current_user.email %>
+            </li>
+            <li>
+              <%= link "Farewell", to: Routes.pow_session_path(@conn, :delete), method: :delete %>
+            </li>
             <% else %>
-              <li>
-                <%= link "Initiation", to: Routes.pow_registration_path(@conn, :new) %>
-              </li>
-              <li>
-                <%= link "Enter Here", to: Routes.pow_session_path(@conn, :new) %>
-              </li>
+            <li>
+              <%= link "Initiation", to: Routes.pow_registration_path(@conn, :new) %>
+            </li>
+            <li>
+              <%= link "Enter Here", to: Routes.pow_session_path(@conn, :new) %>
+            </li>
             <% end %>
           </ul>
         </nav>
