@@ -60,7 +60,7 @@ if(document.head.querySelector("[name~=user_mail][content]"))
         name: name,     // get value of "name" of person sending the message
         message: message.value,    // get message text (value) from msg input field.
         type: type,
-        time: Date.now(),
+        time: Date.now() /1000,
         journey: topic  // replace with variable lobby name
       });
       msg.value = '';         // reset the message input field for next message.
