@@ -8,6 +8,6 @@
   <!--   <input type="text" id="name" class="form-control" placeholder="Your Name" style="border: 2px gold solid; font-size: 1.3em;" autofocus> -->
   <!-- </div> -->
   <div class="col-xs-9" style="width: 100%; margin-left: 0%; ">
-    <input type="text" id="msg" class="form-control" placeholder="Shoutout here" style="border: 2px gold solid; font-size: 1.3em;">
+    <input type="text" id="msg" class="form-control" placeholder="In the beginning was the Word..." style="border: 2px gold solid; font-size: 1.3em;">
   </div>
 </div>

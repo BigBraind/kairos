@@ -18,15 +18,33 @@ import "phoenix_html"
 // checking header for user_mail gtg
 if(document.head.querySelector("[name~=user_mail][content]"))
 {
+  let time = new Intl.DateTimeFormat("en-US" , {
+    hour: "numeric",
+    dayPeriod: 'narrow',
+    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+  })
+  let date = new Intl.DateTimeFormat("en-GB" , {
+    month: "short",
+    day: "2-digit",
+    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+  })
+  var date_state
   let phase = window.location.pathname.split("/").pop()
   let topic = 'journey:' + phase
   let data = {}
   let channel = socket.channel(topic, data); // connect to chat "room"
 
   channel.on('shout', function (payload) { // listen to the 'shout' event
+    console.log(payload)
     let li = document.createElement("li"); // create new list item DOM element
+    payload.time = payload.time* 1000
+    var current_date = date.format(payload.time)
+    if(date_state !== current_date){
+      date_state = current_date
+      li.innerHTML = '<div style="width: 100%; height: 25px;  border-bottom: 1px solid gold; text-align: center"><span style="color:#192756; padding: 0 10px; font-style: oblique;">'+ date_state +'</span></div>'
+    }
     let name = payload.name || 'guest';    // get name from payload or set default
-    li.innerHTML = '<b>' + name + '</b>: ' + payload.message; // set li contents
+    li.innerHTML += '<b>' + name + '</b>: ' + payload.message + '<i style="float:right;color: gray;"> '+ time.format(payload.time)+ '</i>'; // set li contents
     ul.appendChild(li);                    // append to list
   });
 
@@ -42,6 +60,7 @@ if(document.head.querySelector("[name~=user_mail][content]"))
         name: name,     // get value of "name" of person sending the message
         message: message.value,    // get message text (value) from msg input field.
         type: type,
+        time: Date.now(),
         journey: topic  // replace with variable lobby name
       });
       msg.value = '';         // reset the message input field for next message.
