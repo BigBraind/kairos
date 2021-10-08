@@ -30,7 +30,7 @@ defmodule ChatWeb.RoomChannel do
   @impl true
   def handle_info(:after_join,  socket) do
     Chat.Echo.journey_call(socket.topic)
-    |> Enum.each(fn echoes -> push(socket, "shout", %{
+    |> Enum.each(fn echoes -> push(socket, "reverie", %{
                                          name: echoes.name,
                                          message: echoes.message,
                                          time: DateTime.from_naive!(echoes.inserted_at,"Etc/UTC") |> DateTime.to_unix()

@@ -28,7 +28,11 @@ if(document.head.querySelector("[name~=user_mail][content]"))
     day: "2-digit",
     timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
   })
-  var date_state
+
+  var present_date // your internal frame of reference date
+  var current_date // from inbound messages in channel
+  var date_state // keeping track of deltas
+  var past_date // past messages in reveries
   let phase = window.location.pathname.split("/").pop()
   let topic = 'journey:' + phase
   let data = {}
@@ -37,15 +41,38 @@ if(document.head.querySelector("[name~=user_mail][content]"))
   channel.on('shout', function (payload) { // listen to the 'shout' event
     console.log(payload)
     let li = document.createElement("li"); // create new list item DOM element
+    let name = payload.name || 'guest';    // get name from payload or set default
+    current_date = date.format(payload.time)
+    if(typeof present_date === "undefined"){
+      li.innerHTML = '<b>' + name + '</b>: ' + payload.message + '<i style="float:right;color: gray;"> '+ time.format(payload.time)+ '</i>'; // set li contents
+      li.innerHTML += '<div style="width: 100%; height: 25px;  border-bottom: 1px solid gold; text-align: center"><span style="color:#192756; padding: 0 10px; font-style: oblique;">'+ "Session Genesis" +'</span></div>'
+      present_date = current_date
+    }
+    else if (present_date !== current_date){
+      li.innerHTML = '<b>' + name + '</b>: ' + payload.message + '<i style="float:right;color: gray;"> '+ time.format(payload.time)+ '</i>'; // set li contents
+      li.innerHTML += '<div style="width: 100%; height: 25px;  border-bottom: 1px solid gold; text-align: center"><span style="color:#192756; padding: 0 10px; font-style: oblique;">'+ present_date +'</span></div>'
+      present_state = current_date
+    }
+    else {
+      li.innerHTML += '<b>' + name + '</b>: ' + payload.message + '<i style="float:right;color: gray;"> '+ time.format(payload.time)+ '</i>'; // set li contents
+    }
+
+
+    ul.insertBefore(li, ul.childNodes[0]);                    // prepend to list
+  });
+
+  channel.on('reverie', function (payload) { // listen to the 'shout' event
+    console.log(payload)
+    let li = document.createElement("li"); // create new list item DOM element
     payload.time = payload.time* 1000
-    var current_date = date.format(payload.time)
-    if(date_state !== current_date){
-      date_state = current_date
-      li.innerHTML = '<div style="width: 100%; height: 25px;  border-bottom: 1px solid gold; text-align: center"><span style="color:#192756; padding: 0 10px; font-style: oblique;">'+ date_state +'</span></div>'
+    past_date = date.format(payload.time)
+    if(date_state !== past_date){
+      if(typeof date_state !== "undefined") li.innerHTML = '<div style="width: 100%; height: 25px;  border-bottom: 1px solid gold; text-align: center"><span style="color:#192756; padding: 0 10px; font-style: oblique;">'+ date_state +'</span></div>'
+      date_state = past_date
     }
     let name = payload.name || 'guest';    // get name from payload or set default
-    li.innerHTML += '<b>' + name + '</b>: ' + payload.message + '<i style="float:right;color: gray;"> '+ time.format(payload.time)+ '</i>'; // set li contents
-    ul.appendChild(li);                    // append to list
+    li.innerHTML += '<b>' + name  + '</b>: ' + payload.message + '<i style="float:right;color: gray;"> '+ time.format(payload.time)+ '</i>'; // set li contents
+    ul.append(li);                    // prepend to list
   });
 
   channel.join().receive("ok", resp => { console.log("Joined successfully", resp) });
@@ -60,7 +87,7 @@ if(document.head.querySelector("[name~=user_mail][content]"))
         name: name,     // get value of "name" of person sending the message
         message: message.value,    // get message text (value) from msg input field.
         type: type,
-        time: Date.now() /1000,
+        time: Date.now(),
         journey: topic  // replace with variable lobby name
       });
       msg.value = '';         // reset the message input field for next message.

@@ -24,7 +24,7 @@ defmodule Chat.Echo do
   end
 
   def journey_call(journey) do
-    query=from(Chat.Echo, where: [journey: ^journey])
+    query=from(e in Chat.Echo, where: e.journey == ^journey , order_by: [desc: e.inserted_at])
     Chat.Repo.all(query, limit: 8)
   end
 end

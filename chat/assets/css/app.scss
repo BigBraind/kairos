@@ -1,6 +1,18 @@
 /* This file is for your main application css. */
 @import "./phoenix.css";
 
+
+$color-map: (#2F1038, #411B44,#582C55 ,#743560, #994A77, #BA6090, #D07DA9, #E4A1BD ,#F4C3D1, #FBF5F7, #F4C3D1);
+
+header {
+  background-color: #fdfdfd;
+}
+
+body {
+  background-color: #fdfdfd;
+}
+
+
 /* Alerts and form errors */
 .alert {
   padding: 15px;
