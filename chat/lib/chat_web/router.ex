@@ -6,7 +6,7 @@ defmodule ChatWeb.Router do
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
-    plug :fetch_flash
+    plug :fetch_live_flash
     plug :protect_from_forgery
     plug :put_secure_browser_headers
   end
@@ -28,10 +28,14 @@ defmodule ChatWeb.Router do
 
   scope "/", ChatWeb do
     pipe_through [:browser, :authenticated]
-    resources "/journey", JourneyController, only: [:show]
-    get "/journey", PageController, :journey
 
-    get "/", PageController, :index
+    resources "/journey", JourneyController, only: [:show]
+    #get "/journey", PageController, :journey
+    #get "/", PageController, :index
+
+    live "/", PageLive.Index, :index
+    live "/journey", PageLive.Journey, :journey
+    live "/journey", JourneyController
   end
 
   # scope "/api", ChatWeb do
