@@ -16,6 +16,7 @@
           text-decoration: underline;
       }
     </style>
+    <%= csrf_meta_tag() %>
     <script defer type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
   </head>
   <body>

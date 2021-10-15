@@ -17,6 +17,15 @@ defmodule ChatWeb do
   and import those modules here.
   """
 
+  def live_view do
+    quote do
+      use Phoenix.LiveView,
+        layout: {ChatWeb.LayoutView, "live.html"}
+
+      unquote(view_helpers())
+    end
+  end
+
   def controller do
     quote do
       use Phoenix.Controller, namespace: ChatWeb

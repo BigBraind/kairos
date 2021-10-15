@@ -7,6 +7,6 @@ defmodule ChatWeb.PageController do
 
   def journey(conn, _params) do
     render(conn, "journey.html")
- end
+  end
 
 end
