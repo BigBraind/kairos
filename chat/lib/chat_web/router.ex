@@ -32,11 +32,11 @@ defmodule ChatWeb.Router do
 
     resources "/journey", JourneyController, only: [:show]
 
-    get "/journey", PageController, :journey
-    #live "/journey", PageLive.Journey, :journey
+    #get "/journey", PageController, :journey
+    live "/journey", PageLive.Journey, :journey
 
-    get "/", PageController, :index
-    #live "/", PageLive.Index, :index
+    #get "/", PageController, :index
+    live "/", PageLive.Index, :index
 
 
     # live "/journey", JourneyController, only: [:show]
