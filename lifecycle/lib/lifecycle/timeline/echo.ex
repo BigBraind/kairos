@@ -12,7 +12,7 @@ defmodule Lifecycle.Timeline.Echo do
   end
 
   @doc false
-  def changeset(echo, attrs) do
+  def changeset(echo, attrs \\ %{}) do
     echo
     |> cast(attrs, [:message, :journey, :type, :name])
     |> validate_required([:message, :name])

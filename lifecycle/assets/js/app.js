@@ -27,14 +27,23 @@ import {LiveSocket} from "phoenix_live_view"
 import topbar from "../vendor/topbar"
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
-let liveSocket = new LiveSocket("/live", 
-                                Socket,
-                                {params: 
+let liveSocket = new LiveSocket("/live", Socket,{
+                                params: 
                                     {_csrf_token: csrfToken,
                                     locale: Intl.NumberFormat().resolvedOptions().locale,
                                     timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-                                    timezone_offset: -(new Date().getTimezoneOffset() / 60)}
-                                })
+                                    timezone_offset: -(new Date().getTimezoneOffset() / 60)},
+                                metadata: 
+                                    {keyup: (e, el) => {
+                                        return {
+                                            key: e.key,
+                                            metaKey: e.metaKey,
+                                            repeat: e.repeat
+                                        }
+                                    }
+                                 }
+                                }
+                               )
 
 // Show progress bar on live navigation and form submits
 topbar.config({barColors: {0: "#29d"}, shadowColor: "rgba(0, 0, 0, .3)"})

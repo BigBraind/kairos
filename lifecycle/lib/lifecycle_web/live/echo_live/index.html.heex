@@ -1,5 +1,19 @@
 <h1>Message</h1>
 
+<.form let={f} for={@changeset} to={ Routes.echo_index_path(@socket, :new)} phx-submit="save">
+    <%= label f, :name %>
+    <%= text_input f, :name %>
+    <%= error_tag f, :name %>
+    
+    <%= label f, :message %>
+    <%= text_input f, :message %>
+    <%= error_tag f, :message %>
+
+    <div>
+      <%= submit "Save", phx_disable_with: "Sending..." %>
+    </div>
+</.form>
+
 <%= if @live_action in [:new, :edit] do %>
   <%= live_modal LifecycleWeb.EchoLive.FormComponent,
     id: @echo.id || :new,
@@ -9,6 +23,15 @@
     return_to: Routes.echo_index_path(@socket, :index) %>
 <% end %>
 
+
+<ul id="msg-list" style="list-style: none; min-height:10px;">
+  <%= for echo <- @nowstream do %>
+    <b><%= echo.name %></b>: <%= echo.message %> <i style="float:right;color: gray;"><%= timeFormat(echo.inserted_at, @timezone) %> </i>
+    <br>
+   <% end %>
+   <div style="width: 100%; height: 25px;  border-bottom: 1px solid gold; text-align: center"><span style="color:#192756; padding: 0 10px; font-style: oblique;">Session Genesis</span></div>
+</ul>
+
 <ul id="msg-list" style="list-style: none; min-height:200px;">
   <%= for echo <- @echoes do %>
     <b><%= echo.name %></b>: <%= echo.message %> <i style="float:right;color: gray;"><%= timeFormat(echo.inserted_at, @timezone) %> </i>
@@ -16,5 +39,18 @@
    <% end %>
 </ul>
 
+
+  <%# <form phx-submit="enter" class="row">
+      <div class="col-xs-3" style="width: 25%; margin-left: 0;">
+          <input type="text" id="name" name="name" class="input" placeholder="Your Name" style="border: 2px gold solid; font-size: 1.3em;" autofocus>
+      </div> 
+      <div class="col-xs-9" style="width: 75%; margin-left: 1%; ">
+          <input type="text" id="msg" name="msg" class="input" placeholder="Shoutout here" style="border: 2px gold solid; font-size: 1.3em;">
+      </div>
+  </form> %>
+
+
+<.ignore>
 <span><%= live_redirect "New Echo", to: Routes.echo_index_path(@socket, :new)%></span>
 <%# li.innerHTML += '<div style="width: 100%; height: 25px;  border-bottom: 1px solid gold; text-align: center"><span style="color:#192756; padding: 0 10px; font-style: oblique;">'+ "Session Genesis" +'</span></div>' %>
+</.ignore>
