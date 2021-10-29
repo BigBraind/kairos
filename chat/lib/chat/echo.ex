@@ -3,7 +3,9 @@ defmodule Chat.Echo do
   import Ecto.Changeset
   import Ecto.Query
 
+
   schema "echo" do
+
     field :journey, :string
     field :message, :string
     field :name, :string
