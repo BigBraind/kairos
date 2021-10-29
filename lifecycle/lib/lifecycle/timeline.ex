@@ -78,7 +78,6 @@ defmodule Lifecycle.Timeline do
     echo
     |> Echo.changeset(attrs)
     |> Repo.update()
-    |> notify_subs([:echo, :updated])
   end
 
   @doc """
@@ -93,11 +92,6 @@ defmodule Lifecycle.Timeline do
       {:error, %Ecto.Changeset{}}
 
   """
-  def delete_echo(%Echo{} = echo) do
-    echo
-    |> Repo.delete(echo)
-    |> notify_subs([:echo, :deleted])
-  end
 
   @doc """
   Returns an `%Ecto.Changeset{}` for tracking echo changes.
@@ -113,7 +107,8 @@ defmodule Lifecycle.Timeline do
   end
 
   def recall(limit \\ 8) do
-    Lifecycle.Repo.all(Chat.Echo, limit: limit)
+    query=from(e in Echo, order_by: [desc: e.inserted_at])
+    Lifecycle.Repo.all(query, limit: limit)
   end
 
   def journey_call(journey) do

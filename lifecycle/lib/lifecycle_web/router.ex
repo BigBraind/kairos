@@ -20,10 +20,7 @@ defmodule LifecycleWeb.Router do
     get "/", PageController, :index
     live "/echoes", EchoLive.Index, :index
     live "/echoes/new", EchoLive.Index, :new
-    live "/echoes/:id/edit", EchoLive.Index, :edit
-
     live "/echoes/:id", EchoLive.Show, :show
-    live "/echoes/:id/show/edit", EchoLive.Show, :edit
   end
 
   # Other scopes may use custom stacks.

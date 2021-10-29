@@ -11,11 +11,18 @@ import Config
 # before starting your production server.
 config :lifecycle, LifecycleWeb.Endpoint,
   url: [host: "example.com", port: 80],
-  cache_static_manifest: "priv/static/cache_manifest.json"
+  cache_static_manifest: "priv/static/cache_manifest.json",
+  check_origin: ["//localhost", "//*.bigbrain.link", "//satorotas.gigalixirapp.com"],
+  force_ssl: [rewrite_on: [:x_forwarded_proto]]
 
 # Do not print debug messages in production
 config :logger, level: :info
 
+
+config :gigalixir, ChatWeb.Endpoint,
+  http: [port: {:system, "PORT"}],
+  url: [host: System.get_env("APP_NAME") <> ".gigalixirapp.com", port: 443],
+  server: true
 # ## SSL Support
 #
 # To get SSL working, you will need to add the `https` key

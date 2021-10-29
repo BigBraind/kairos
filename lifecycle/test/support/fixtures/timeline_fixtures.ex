@@ -11,13 +11,13 @@ defmodule Lifecycle.TimelineFixtures do
     {:ok, echo} =
       attrs
       |> Enum.into(%{
-        journey: "some journey",
-        message: "some message",
-        name: "some name",
-        type: "some type"
-      })
-      |> Lifecycle.Timeline.create_echo()
+          #journey: "some journey",
+          message: "some message",
+          name: "some name",
+          #type: "type"
+                   })
+                   |> Lifecycle.Timeline.create_echo()
 
-    echo
+      echo
   end
 end
