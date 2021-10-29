@@ -28,4 +28,12 @@ defmodule Lifecycle.Timezone do
     |> assign_timezone()
     |> assign_timezone_offset()
   end
+
+  def getTime(time, timezone, timezone_offset) do
+    time
+    |> DateTime.from_naive!(timezone)
+    |> Timex.shift(hours: timezone_offset)
+    |> Timex.format("{YYYY}-{0M}-{D}")
+    |> elem(1)
+  end
 end
