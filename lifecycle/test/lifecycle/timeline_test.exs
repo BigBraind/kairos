@@ -21,13 +21,13 @@ defmodule Lifecycle.TimelineTest do
     end
 
     test "create_echo/1 with valid data creates a echo" do
-      valid_attrs = %{journey: "some journey", message: "some message", name: "some name", type: "some type"}
+      valid_attrs = %{message: "some message", name: "some name"}
 
       assert {:ok, %Echo{} = echo} = Timeline.create_echo(valid_attrs)
-      assert echo.journey == "some journey"
+      #assert echo.journey == "some journey"
       assert echo.message == "some message"
       assert echo.name == "some name"
-      assert echo.type == "some type"
+      #assert echo.type == "some type"
     end
 
     test "create_echo/1 with invalid data returns error changeset" do
@@ -36,25 +36,19 @@ defmodule Lifecycle.TimelineTest do
 
     test "update_echo/2 with valid data updates the echo" do
       echo = echo_fixture()
-      update_attrs = %{journey: "some updated journey", message: "some updated message", name: "some updated name", type: "some updated type"}
+      update_attrs = %{ message: "some updated message", name: "some updated name"}
 
       assert {:ok, %Echo{} = echo} = Timeline.update_echo(echo, update_attrs)
-      assert echo.journey == "some updated journey"
+      #assert echo.journey == "some updated journey"
       assert echo.message == "some updated message"
       assert echo.name == "some updated name"
-      assert echo.type == "some updated type"
+      #assert echo.type == "some updated type"
     end
 
     test "update_echo/2 with invalid data returns error changeset" do
       echo = echo_fixture()
       assert {:error, %Ecto.Changeset{}} = Timeline.update_echo(echo, @invalid_attrs)
       assert echo == Timeline.get_echo!(echo.id)
-    end
-
-    test "delete_echo/1 deletes the echo" do
-      echo = echo_fixture()
-      assert {:ok, %Echo{}} = Timeline.delete_echo(echo)
-      assert_raise Ecto.NoResultsError, fn -> Timeline.get_echo!(echo.id) end
     end
 
     test "change_echo/1 returns a echo changeset" do
