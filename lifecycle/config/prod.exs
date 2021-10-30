@@ -10,13 +10,26 @@ import Config
 # which you should run after static files are built and
 # before starting your production server.
 config :lifecycle, LifecycleWeb.Endpoint,
-  url: [host: "example.com", port: 80],
   cache_static_manifest: "priv/static/cache_manifest.json",
   check_origin: ["//localhost", "//*.bigbrain.link", "//satorotas.gigalixirapp.com"],
-  force_ssl: [rewrite_on: [:x_forwarded_proto]]
+  force_ssl: [rewrite_on: [:x_forwarded_proto]],
+  server: true,
+  url: [host: System.get_env("APP_NAME") <> ".gigalixirapp.com", port: 443],
+  secret_key_base: Map.fetch!(System.get_env(), "SECRET_KEY_BASE"),
+  http: [port: {:system, "PORT"}]
+
+config :lifecycle, Lifecycle.Repo,
+  adapter: Ecto.Adapters.Postgres,
+  url: System.get_env("DATABASE_URL"),
+  ssl: true,
+  pool_size: 2
+
 
 # Do not print debug messages in production
 config :logger, level: :info
+
+
+
 
 
 # ## SSL Support
