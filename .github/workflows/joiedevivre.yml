@@ -1,0 +1,74 @@
+name: Viva Liveview in Gigalixir
+
+on:
+  push:
+    branches: [ unstable/live/concoction ]
+  pull_request:
+    branches: [ unstable/live/concoction ]
+
+jobs:
+  build:
+
+    name: Build and test
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_DB: postgres
+          POSTGRES_PASSWORD: root
+          POSTGRES_USER: postgres
+        ports:
+          - 5432:5432
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Elixir
+      uses: erlef/setup-elixir@885971a72ed1f9240973bd92ab57af8c1aa68f24
+      with:
+        elixir-version: '1.12.2' # Define the elixir version [required]
+        otp-version: '24.0.5' # Define the OTP version [required]
+    - name: Restore dependencies cache
+      uses: actions/cache@v2
+      with:
+        path: deps
+        key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
+        restore-keys: ${{ runner.os }}-mix-
+    - name: Install dependencies
+      working-directory: ./lifecycle
+      run: mix deps.get
+    - name: Run tests
+      env:
+        # use localhost for the host here because we are running the job on the VM.
+        # If we were running the job on in a container this would be postgres
+        POSTGRES_HOST: localhost
+        POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
+      working-directory: ./lifecycle
+      run: mix test
+
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.8.11'
+
+      - uses: mhanberg/gigalixir-action@v0.6.1
+        with:
+          APP_SUBFOLDER: lifecycle  # Add only if you want to deploy an app that is not at the root of your repository
+          GIGALIXIR_APP: satorotas # Feel free to also put this in your secrets
+          GIGALIXIR_CLEAN: true # defaults to false
+          GIGALIXIR_USERNAME: ${{ secrets.GIGALIXIR_USERNAME }}
+          GIGALIXIR_PASSWORD: ${{ secrets.GIGALIXIR_PASSWORD }}
+          MIGRATIONS: false  # defaults to true
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}

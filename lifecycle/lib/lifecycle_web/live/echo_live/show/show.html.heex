@@ -1,0 +1,37 @@
+<h1>Show Echo</h1>
+
+<%= if @live_action in [:edit] do %>
+  <%= live_modal LifecycleWeb.EchoLive.FormComponent,
+    id: @echo.id,
+    title: @page_title,
+    action: @live_action,
+    echo: @echo,
+    return_to: Routes.echo_show_path(@socket, :show, @echo) %>
+<% end %>
+
+<ul>
+
+  <li>
+    <strong>Message:</strong>
+    <%= @echo.message %>
+  </li>
+
+  <li>
+    <strong>Journey:</strong>
+    <%= @echo.journey %>
+  </li>
+
+  <li>
+    <strong>Type:</strong>
+    <%= @echo.type %>
+  </li>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @echo.name %>
+  </li>
+
+</ul>
+
+
+<span><%= live_patch "Back", to: Routes.echo_index_path(@socket, :index) , class: "button" %></span>
