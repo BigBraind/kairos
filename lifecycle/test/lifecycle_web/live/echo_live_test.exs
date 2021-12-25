@@ -51,4 +51,14 @@ defmodule LifecycleWeb.EchoLiveTest do
       assert html =~ echo.message
     end
   end
+
+  describe "PubSub Integration" do
+    setup [:create_echo]
+
+    test "publish & subscribes to echo" do
+      
+    end
+
+  end
+
 end
