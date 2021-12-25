@@ -15,7 +15,7 @@ defmodule LifecycleWeb.EchoLive.Index do
   def mount(_params, _session, socket) do
 
 
-    if connected?(socket), do: Pubsub.subscribe("1") #topic TODO
+    if connected?(socket), do: Pubsub.subscribe("1") #topic TODO change the topic
     socket = Timezone.getTimezone(socket)
     timezone = socket.assigns.timezone
     timezone_offset = socket.assigns.timezone_offset

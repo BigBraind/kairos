@@ -1,7 +1,7 @@
 defmodule Lifecycle.Pubsub do
 
   def subscribe(topic) do
-    IO.inspect topic
+    # IO.inspect topic
     Phoenix.PubSub.subscribe(Lifecycle.PubSub, topic)
   end
 
