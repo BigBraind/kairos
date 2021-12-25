@@ -8,6 +8,8 @@ defmodule Lifecycle.Timeline do
 
   alias Lifecycle.Timeline.Echo
 
+  alias Lifecycle.Timeline.Journey
+
   @topic inspect(__MODULE__)
 
   def subscribe do
@@ -60,6 +62,13 @@ defmodule Lifecycle.Timeline do
     |> Echo.changeset(attrs)
     |> Repo.insert()
     |> notify_subs([:echo, :created])
+  end
+
+  def create_journey(attrs \\ %{}) do
+    %Journey{}
+    |> Journey.changeset(attrs)
+    |> Repo.insert()
+    # |> notify_subs([:journey, :created])
   end
 
   @doc """

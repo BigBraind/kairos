@@ -4,7 +4,7 @@ defmodule Lifecycle.Repo.Migrations.CreateEchoes do
   def change do
     create table(:echoes) do
       add :message, :string
-      add :journey, references("journeys", column: :id, type: :binary_id)
+      add :journey, references("journeys", column: :journey_id, type: :binary_id)
       add :type, :string
       add :name, :string
 
