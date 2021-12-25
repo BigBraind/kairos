@@ -8,11 +8,10 @@ defmodule Lifecycle.Timeline do
 
   alias Lifecycle.Timeline.Echo
 
-  @topic inspect(__MODULE__)
+  alias Lifecycle.Pubsub
 
-  def subscribe do
-    Phoenix.PubSub.subscribe(Lifecycle.PubSub, @topic)
-  end
+
+  # @topic inspect(__MODULE__)
 
   @doc """
   Returns the list of echoes.
@@ -59,7 +58,7 @@ defmodule Lifecycle.Timeline do
     %Echo{}
     |> Echo.changeset(attrs)
     |> Repo.insert()
-    |> notify_subs([:echo, :created])
+    # |> Pubsub.notify_subs([:echo, :created])
   end
 
   @doc """
@@ -116,12 +115,12 @@ defmodule Lifecycle.Timeline do
     Lifecycle.Repo.all(query, limit: 8)
   end
 
-  defp notify_subs({:ok, result}, event) do
-    Phoenix.PubSub.broadcast(Lifecycle.PubSub, @topic, {__MODULE__, event, result})
-    {:ok, result}
-  end
+  # defp notify_subs({:ok, result}, event) do
+  #   Phoenix.PubSub.broadcast(Lifecycle.PubSub, @topic, {__MODULE__, event, result})
+  #   {:ok, result}
+  # end
 
-  defp notify_subs({:error, reason}, _event) do
-    {:error, reason}
-  end
+  # defp notify_subs({:error, reason}, _event) do
+  #   {:error, reason}
+  # end
 end
