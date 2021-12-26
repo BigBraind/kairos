@@ -2,13 +2,13 @@ defmodule Lifecycle.Timeline.Echo do
   use Ecto.Schema
   import Ecto.Changeset
 
-
+  @foreign_key_type :binary_id
   schema "echoes" do
-    belongs_to :journey, Lifecycle.Timeline.Journey
     field :message, :string
     field :name, :string
     field :type, :string
 
+    belongs_to :journey, Lifecycle.Timeline.Journey, foreign_key: :journey_id
     timestamps()
   end
 
@@ -16,7 +16,7 @@ defmodule Lifecycle.Timeline.Echo do
   def changeset(echo, attrs \\ %{}) do
     echo
     |> cast(attrs, [:message, :journey_id, :type, :name])
-    # |> cast_assoc(attrs, [:id])
+    # |> cast_assoc(attrs, [:journey])
     |> validate_required([:message, :name])
     # |> validate_required([:message, :journey, :type, :name])
   end

@@ -64,13 +64,6 @@ defmodule Lifecycle.Timeline do
     |> notify_subs([:echo, :created])
   end
 
-  def create_journey(attrs \\ %{}) do
-    %Journey{}
-    |> Journey.changeset(attrs)
-    |> Repo.insert()
-    # |> notify_subs([:journey, :created])
-  end
-
   @doc """
   Updates a echo.
 
@@ -132,5 +125,24 @@ defmodule Lifecycle.Timeline do
 
   defp notify_subs({:error, reason}, _event) do
     {:error, reason}
+  end
+
+  @doc """
+  Creates a echo.
+
+  ## Examples
+
+      iex> create_journey(%{field: value})
+      {:ok, %Journey{}}
+
+      iex> create_journey(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_journey(attrs \\ %{}) do
+    %Journey{}
+    |> Journey.changeset(attrs)
+    |> Repo.insert()
+    # |> notify_subs([:journey, :created])
   end
 end
