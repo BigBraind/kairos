@@ -2,6 +2,7 @@ defmodule Lifecycle.Timeline.Echo do
   use Ecto.Schema
   import Ecto.Changeset
 
+
   schema "echoes" do
     belongs_to :journey, Lifecycle.Timeline.Journey
     field :message, :string
