@@ -3,6 +3,12 @@ defmodule LifecycleWeb.EchoLiveTest do
 
   import Phoenix.LiveViewTest
   import Lifecycle.TimelineFixtures
+  import Lifecycle.PubsubFixtures
+
+  alias Lifecycle.Pubsub
+
+  import ExUnit.CaptureLog
+  require Logger
 
   @create_attrs %{message: "some message", name: "some name"}
   @update_attrs %{journey: "some updated journey", message: "some updated message", name: "some updated name", type: "some updated type"}
@@ -50,15 +56,6 @@ defmodule LifecycleWeb.EchoLiveTest do
       assert html =~ "Show Echo"
       assert html =~ echo.message
     end
-  end
-
-  describe "PubSub Integration" do
-    setup [:create_echo]
-
-    test "publish & subscribes to echo" do
-      
-    end
-
   end
 
 end

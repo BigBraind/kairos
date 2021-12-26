@@ -13,8 +13,6 @@ defmodule LifecycleWeb.EchoLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
-
-
     if connected?(socket), do: Pubsub.subscribe("1") #topic TODO change the topic
     socket = Timezone.getTimezone(socket)
     timezone = socket.assigns.timezone
@@ -45,7 +43,7 @@ defmodule LifecycleWeb.EchoLive.Index do
     case Timeline.create_echo(echo_params) do
       {:ok, echo} ->
         {Pubsub.notify_subs({:ok, echo}, [:echo, :created], "1")}
-        {:noreply,
+     {:noreply,
          socket
          |> put_flash(:info, "Message Sent")
         #  |> Pubsub.notify_subs([:echo, :created], "1")
