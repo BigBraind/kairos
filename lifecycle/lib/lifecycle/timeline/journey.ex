@@ -17,7 +17,7 @@ defmodule Lifecycle.Timeline.Journey do
   end
 
   @doc false
-  def changeset(journey, attrs) do
+  def changeset(journey, attrs \\ %{}) do
     journey
     |> cast(attrs, [:journey_id, :journey_type, :journey_title, :journey_content])
     |> validate_required([:journey_id, :journey_type, :journey_title, :journey_content])

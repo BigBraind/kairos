@@ -1,0 +1,31 @@
+<h1>Journey</h1>
+
+<%= if @live_action in [:new, :edit] do %>
+  <%= live_modal LifecycleWeb.EchoLive.FormComponent,
+    id: @journey.id || :new,
+    action: @live_action,
+    echo: @echo,
+    return_to: Routes.journey_index_path(@socket, :index) %>
+<% end %>
+
+<ul id="msg-list" style="list-style: none; min-height:200px;">
+  <%= for journey <- @journeys do %>
+    <b>Id: </b> <%= journey.journey_id%> <br>
+    <a href="./{journey.journey_id}"><b>Title: </b></a> <%= journey.journey_title %> <br>
+    <b>Type: </b> <%= journey.journey_type %> <br>
+    <b>Content: </b> <%= journey.journey_content %> <br>
+
+    <i style="float:right;color: gray;"><%= timeFormat(journey.inserted_at, @timezone, @timezone_offset) %> </i>
+    <br>
+   <% end %>
+</ul>
+
+
+  <%# <form phx-submit="enter" class="row">
+      <div class="col-xs-3" style="width: 25%; margin-left: 0;">
+          <input type="text" id="name" name="name" class="input" placeholder="Your Name" style="border: 2px gold solid; font-size: 1.3em;" autofocus>
+      </div> 
+      <div class="col-xs-9" style="width: 75%; margin-left: 1%; ">
+          <input type="text" id="msg" name="msg" class="input" placeholder="Shoutout here" style="border: 2px gold solid; font-size: 1.3em;">
+      </div>
+  </form> %>
