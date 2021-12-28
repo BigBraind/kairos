@@ -4,12 +4,16 @@ defmodule LifecycleWeb.EchoLive.Index do
 
   alias Lifecycle.Timezone
 
+  alias Lifecycle.Pubsub
+
   alias Lifecycle.Timeline
   alias Lifecycle.Timeline.Echo
 
+  @topic inspect(__MODULE__)
+
   @impl true
   def mount(_params, _session, socket) do
-    if connected?(socket), do: Timeline.subscribe() #topic TODO
+    if connected?(socket), do: Pubsub.subscribe("1") #topic TODO change the topic
     socket = Timezone.getTimezone(socket)
     timezone = socket.assigns.timezone
     timezone_offset = socket.assigns.timezone_offset
@@ -37,19 +41,23 @@ defmodule LifecycleWeb.EchoLive.Index do
   def handle_event("save", %{"echo" => echo_params}, socket) do
     # save_echo(socket, :new, echo_params)
     case Timeline.create_echo(echo_params) do
-      {:ok, _echo} ->
-        {:noreply,
+      {:ok, echo} ->
+        {Pubsub.notify_subs({:ok, echo}, [:echo, :created], "1")}
+     {:noreply,
          socket
          |> put_flash(:info, "Message Sent")
+        #  |> Pubsub.notify_subs([:echo, :created], "1")
          # pub sub to be added
         }
+
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, changeset: changeset)}
     end
   end
 
-  def handle_info({Lifecycle.Timeline, [:echo, :created], _message}, socket) do
+  def handle_info({Pubsub, [:echo, :created], _message}, socket) do
+
     {:noreply, assign(socket, :nowstream, [_message | socket.assigns.nowstream])}
   end
 
