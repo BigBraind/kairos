@@ -115,6 +115,8 @@ defmodule Lifecycle.Timeline do
     Lifecycle.Repo.all(query, limit: 8)
   end
 
+  def list_journeys, do: Repo.all(Journey)
+
   @doc """
   Creates a echo.
 
@@ -133,4 +135,6 @@ defmodule Lifecycle.Timeline do
     |> Repo.insert()
     # |> notify_subs([:journey, :created])
   end
+
+  def get_journey!(id), do: Repo.get!(Journey, id)
 end

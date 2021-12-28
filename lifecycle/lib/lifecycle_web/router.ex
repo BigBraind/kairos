@@ -21,6 +21,13 @@ defmodule LifecycleWeb.Router do
     live "/echoes", EchoLive.Index, :index
     live "/echoes/new", EchoLive.Index, :new
     live "/echoes/:id", EchoLive.Show, :show
+
+    live "/journeys", JourneyLive.Index, :index
+    live "/journeys/new", JourneyLive.Index, :new
+    live "/journeys/:id/edit", JourneyLive.Index, :edit
+
+    live "/journeys/:id", JourneyLive.Show, :show
+    live "/journeys/:id/show/edit", JourneyLive.Show, :edit
   end
 
   # Other scopes may use custom stacks.
