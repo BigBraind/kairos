@@ -9,7 +9,7 @@ defmodule LifecycleWeb.JourneysLiveTest do
   @invalid_attrs %{}
 
   defp create_journeys(_) do
-    journeys = journeys_fixture()
+    journeys = journey_fixture()
     %{journeys: journeys}
   end
 

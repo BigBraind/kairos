@@ -10,6 +10,7 @@ defmodule Lifecycle.Timeline.Phase do
     field :type, :string
     field :parent, :binary_id
     field :child, :binary_id
+    has_many :echoes, Lifecycle.Timeline.Echo, foreign_key: :phase_id
 
     timestamps()
   end
