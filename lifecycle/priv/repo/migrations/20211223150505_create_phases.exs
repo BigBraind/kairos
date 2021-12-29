@@ -7,8 +7,8 @@ defmodule Lifecycle.Repo.Migrations.CreatePhases do
       add :content, :string
       add :title, :string
       add :type, :string
-      add :parent, references(:phases, on_delete: :nothing, type: :binary_id)
-      add :child, references(:phases, on_delete: :nothing, type: :binary_id)
+      add :parent, references(:phases,column: :id, on_delete: :nothing, type: :binary_id)
+      add :child, references(:phases,column: :id, on_delete: :nothing, type: :binary_id)
 
       timestamps()
     end

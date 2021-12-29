@@ -12,7 +12,7 @@ defmodule Lifecycle.Timeline.Journey do
     field :parent_journey, :binary_id
     field :child_journey, :binary_id
 
-    has_many :echoes, Lifecycle.Timeline.Echo, foreign_key: :journey_id
+    #has_many :echoes, Lifecycle.Timeline.Echo, foreign_key: :journey_id
     timestamps()
   end
 
