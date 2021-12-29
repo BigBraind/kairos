@@ -32,6 +32,12 @@ defmodule LifecycleWeb.JourneyLive.Index do
     |> assign(:journey, %Journey{})
   end
 
+  defp apply_action(socket, :edit, %{"id" => id}) do
+    socket
+    |> assign(:page_title, "Edit Journey")
+    |> assign(:journey, Timeline.get_journey!(id))
+  end
+
   defp apply_action(socket, :index, _params) do
     socket
     |> assign(:page_title, "Journey")
@@ -49,7 +55,6 @@ defmodule LifecycleWeb.JourneyLive.Index do
         #  |> Pubsub.notify_subs([:echo, :created], "1")
          # pub sub to be added
         }
-
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, changeset: changeset)}

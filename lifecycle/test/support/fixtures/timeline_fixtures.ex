@@ -38,4 +38,20 @@ defmodule Lifecycle.TimelineFixtures do
 
       journey
   end
+
+  @doc """
+  Generate a phase.
+  """
+  def phase_fixture(attrs \\ %{}) do
+    {:ok, phase} =
+      attrs
+      |> Enum.into(%{
+        content: "some content",
+        title: "some title",
+        type: "some type"
+      })
+      |> Lifecycle.Timeline.create_phase()
+
+    phase
+  end
 end

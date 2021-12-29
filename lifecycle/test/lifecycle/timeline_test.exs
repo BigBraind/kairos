@@ -87,4 +87,62 @@ defmodule Lifecycle.TimelineTest do
 
   # end
 
+
+  describe "phases" do
+    alias Lifecycle.Timeline.Phase
+
+    import Lifecycle.TimelineFixtures
+
+    @invalid_attrs %{content: nil, title: nil, type: nil}
+
+    test "list_phases/0 returns all phases" do
+      phase = phase_fixture()
+      assert Timeline.list_phases() == [phase]
+    end
+
+    test "get_phase!/1 returns the phase with given id" do
+      phase = phase_fixture()
+      assert Timeline.get_phase!(phase.id) == phase
+    end
+
+    test "create_phase/1 with valid data creates a phase" do
+      valid_attrs = %{content: "some content", title: "some title", type: "some type"}
+
+      assert {:ok, %Phase{} = phase} = Timeline.create_phase(valid_attrs)
+      assert phase.content == "some content"
+      assert phase.title == "some title"
+      assert phase.type == "some type"
+    end
+
+    test "create_phase/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Timeline.create_phase(@invalid_attrs)
+    end
+
+    test "update_phase/2 with valid data updates the phase" do
+      phase = phase_fixture()
+      update_attrs = %{content: "some updated content", title: "some updated title", type: "some updated type"}
+
+      assert {:ok, %Phase{} = phase} = Timeline.update_phase(phase, update_attrs)
+      assert phase.content == "some updated content"
+      assert phase.title == "some updated title"
+      assert phase.type == "some updated type"
+    end
+
+    test "update_phase/2 with invalid data returns error changeset" do
+      phase = phase_fixture()
+      assert {:error, %Ecto.Changeset{}} = Timeline.update_phase(phase, @invalid_attrs)
+      assert phase == Timeline.get_phase!(phase.id)
+    end
+
+    test "delete_phase/1 deletes the phase" do
+      phase = phase_fixture()
+      assert {:ok, %Phase{}} = Timeline.delete_phase(phase)
+      assert_raise Ecto.NoResultsError, fn -> Timeline.get_phase!(phase.id) end
+    end
+
+    test "change_phase/1 returns a phase changeset" do
+      phase = phase_fixture()
+      assert %Ecto.Changeset{} = Timeline.change_phase(phase)
+    end
+  end
 end
