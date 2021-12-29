@@ -1,0 +1,32 @@
+<h1>Show Phase</h1>
+
+<%= if @live_action in [:edit] do %>
+  <%= live_modal LifecycleWeb.PhaseLive.FormComponent,
+    id: @phase.id,
+    title: @page_title,
+    action: @live_action,
+    phase: @phase,
+    return_to: Routes.phase_show_path(@socket, :show, @phase) %>
+<% end %>
+
+<ul>
+
+  <li>
+    <strong>Content:</strong>
+    <%= @phase.content %>
+  </li>
+
+  <li>
+    <strong>Title:</strong>
+    <%= @phase.title %>
+  </li>
+
+  <li>
+    <strong>Type:</strong>
+    <%= @phase.type %>
+  </li>
+
+</ul>
+
+<span><%= live_patch "Edit", to: Routes.phase_show_path(@socket, :edit, @phase), class: "button" %></span> |
+<span><%= live_redirect "Back", to: Routes.phase_index_path(@socket, :index) %></span>

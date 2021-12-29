@@ -1,7 +1,7 @@
-<h1>Show Echo</h1>
+<h1>Show Journey</h1>
 
 <%= if @live_action in [:edit] do %>
-  <%= live_modal LifecycleWeb.EchoLive.FormComponent,
+  <%= live_modal LifecycleWeb.JourneyLive.FormComponent,
     id: @journey.journey_id,
     title: @journey_title,
     action: @live_action,
@@ -34,4 +34,3 @@
 </ul>
 
 
-<span><%= live_patch "Back", to: Routes.journey_index_path(@socket, :index) , class: "button" %></span>
