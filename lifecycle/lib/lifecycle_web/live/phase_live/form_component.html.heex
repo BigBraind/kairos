@@ -20,10 +20,6 @@
     <%= label f, :type %>
     <%= text_input f, :type %>
     <%= error_tag f, :type %>
-
-    <%= label f, :parent %>
-    <%= select f, :parent, for(%{"id" => id, "title" => title} <- @phases, do: {id, title}) %>
-    <%= error_tag f, :parent %>
   
     <div>
       <%= submit "Save", phx_disable_with: "Saving..." %>
