@@ -109,8 +109,8 @@ defmodule Lifecycle.Timeline do
     Lifecycle.Repo.all(query, limit: limit)
   end
 
-  def journey_call(journey) do
-    query=from(e in Lifecycle.Echo, where: e.journey == ^journey , order_by: [desc: e.inserted_at])
+  def phase_recall(id) do
+    query=from(e in Echo, where: e.phase_id == ^id , order_by: [desc: e.inserted_at])
     Lifecycle.Repo.all(query, limit: 8)
   end
 

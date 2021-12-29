@@ -9,11 +9,9 @@ defmodule LifecycleWeb.EchoLive.Index do
   alias Lifecycle.Timeline
   alias Lifecycle.Timeline.Echo
 
-  @topic inspect(__MODULE__)
-
   @impl true
   def mount(_params, _session, socket) do
-    if connected?(socket), do: Pubsub.subscribe("1") #topic TODO change the topic
+    if connected?(socket), do: Pubsub.subscribe("1") #topic TODO subscription currently static
     socket = Timezone.getTimezone(socket)
     timezone = socket.assigns.timezone
     timezone_offset = socket.assigns.timezone_offset
