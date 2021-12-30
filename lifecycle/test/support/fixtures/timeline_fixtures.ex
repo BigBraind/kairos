@@ -8,16 +8,35 @@ defmodule Lifecycle.TimelineFixtures do
   Generate a echo.
   """
   def echo_fixture(attrs \\ %{}) do
+    phase = phase_fixture()
     {:ok, echo} =
       attrs
       |> Enum.into(%{
-          #journey: "some journey",
+          phase: phase.id,
           message: "some message",
           name: "some name",
           #type: "type"
                    })
                    |> Lifecycle.Timeline.create_echo()
-
+      IO.inspect echo
       echo
+  end
+
+
+  @doc """
+  Generate a phase.
+  """
+  def phase_fixture(attrs \\ %{}) do
+    {:ok, phase} =
+      attrs
+      |> Enum.into(%{
+        content: "some content",
+        title: "some title",
+        type: "some type",
+        id: Ecto.UUID.generate()
+      })
+      |> Lifecycle.Timeline.create_phase()
+
+    phase
   end
 end
