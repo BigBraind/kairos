@@ -42,11 +42,12 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
 
   defp save_phase(socket, :new, phase_params) do
     case Timeline.create_phase(phase_params) do
-      {:ok, _phase} ->
+      {:ok, phase} ->
         {:noreply,
          socket
          |> put_flash(:info, "Phase created successfully")
-         |> push_redirect(to: socket.assigns.return_to)}
+         |> push_redirect(to: Routes.phase_show_path(socket, :show, phase.id)) #"/phases/" <> phase.id
+        }
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, changeset: changeset)}

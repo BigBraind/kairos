@@ -8,6 +8,7 @@ defmodule LifecycleWeb.PhaseLive.Show do
 
   @impl true
   def mount(params, _session, socket) do
+    IO.inspect params
     id = params["id"]
     socket = Timezone.getTimezone(socket)
     timezone = socket.assigns.timezone
@@ -33,11 +34,14 @@ defmodule LifecycleWeb.PhaseLive.Show do
     |> assign(:phase, Timeline.get_phase!(id))
   end
 
-  defp apply_action(socket, :new, _params) do
-    IO.inspect socket.assigns.phase
+  defp apply_action(socket, :new, params) do
+    parent_phase = Timeline.get_phase!(params["id"])
+    parent_phase = %{parent_phase | parent: parent_phase.id}
+    IO.inspect parent_phase
     socket
     |> assign(:page_title, "Child Phase")
-    |> assign(:phase, %{socket.assigns.phase | parent: _params["id"]} )
+    |> assign(:title, "Hello")
+    |> assign(:phase,  parent_phase)
   end
 
   defp apply_action(socket, :show, %{"id" => id}) do

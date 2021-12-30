@@ -27,7 +27,7 @@
 
 <div>
   <div align="right">
-    <span><%= live_patch "Child Phase", to: Routes.phase_show_path(@socket, :new, @phase), class: "button" %></span> |
+    <span><%= live_patch "+ Child Phase", to: Routes.phase_show_path(@socket, :new, @phase), class: "button" %></span> |
     <span><%= live_patch "Edit", to: Routes.phase_show_path(@socket, :edit, @phase), class: "button" %></span> |
     <span><%= live_redirect "Back", to: Routes.phase_index_path(@socket, :index), class: "button" %></span>
   </div>
