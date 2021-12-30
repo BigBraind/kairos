@@ -41,7 +41,7 @@ jobs:
         key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
         restore-keys: ${{ runner.os }}-mix-
     - name: Install dependencies
-      working-directory: ./chat
+      working-directory: ./lifecycle
       run: mix deps.get
     - name: Run tests
       env:
@@ -49,5 +49,5 @@ jobs:
         # If we were running the job on in a container this would be postgres
         POSTGRES_HOST: localhost
         POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
-      working-directory: ./chat
+      working-directory: ./lifecycle
       run: mix test

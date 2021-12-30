@@ -8,11 +8,6 @@ defmodule Lifecycle.Timeline do
 
   alias Lifecycle.Timeline.Echo
 
-  @topic inspect(__MODULE__)
-
-  def subscribe do
-    Phoenix.PubSub.subscribe(Lifecycle.PubSub, @topic)
-  end
 
   @doc """
   Returns the list of echoes.
@@ -23,9 +18,8 @@ defmodule Lifecycle.Timeline do
       [%Echo{}, ...]
 
   """
-  def list_echoes do
-    Repo.all(Echo)
-  end
+  def list_echoes, do: Repo.all(Echo)
+
 
   @doc """
   Gets a single echo.
@@ -59,7 +53,7 @@ defmodule Lifecycle.Timeline do
     %Echo{}
     |> Echo.changeset(attrs)
     |> Repo.insert()
-    |> notify_subs([:echo, :created])
+    # |> Pubsub.notify_subs([:echo, :created])
   end
 
   @doc """
@@ -111,17 +105,105 @@ defmodule Lifecycle.Timeline do
     Lifecycle.Repo.all(query, limit: limit)
   end
 
-  def journey_call(journey) do
-    query=from(e in Lifecycle.Echo, where: e.journey == ^journey , order_by: [desc: e.inserted_at])
+  def phase_recall(id) do
+    query=from(e in Echo, where: e.phase_id == ^id , order_by: [desc: e.inserted_at])
     Lifecycle.Repo.all(query, limit: 8)
   end
 
-  defp notify_subs({:ok, result}, event) do
-    Phoenix.PubSub.broadcast(Lifecycle.PubSub, @topic, {__MODULE__, event, result})
-    {:ok, result}
+
+  alias Lifecycle.Timeline.Phase
+
+  @doc """
+  Returns the list of phases.
+
+  ## Examples
+
+      iex> list_phases()
+      [%Phase{}, ...]
+
+  """
+  def list_phases do
+    Repo.all(Phase)
   end
 
-  defp notify_subs({:error, reason}, _event) do
-    {:error, reason}
+  @doc """
+  Gets a single phase.
+
+  Raises `Ecto.NoResultsError` if the Phase does not exist.
+
+  ## Examples
+
+      iex> get_phase!(123)
+      %Phase{}
+
+      iex> get_phase!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_phase!(id), do: Repo.get!(Phase, id)
+
+  @doc """
+  Creates a phase.
+
+  ## Examples
+
+      iex> create_phase(%{field: value})
+      {:ok, %Phase{}}
+
+      iex> create_phase(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_phase(attrs \\ %{}) do
+    %Phase{}
+    |> Phase.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a phase.
+
+  ## Examples
+
+      iex> update_phase(phase, %{field: new_value})
+      {:ok, %Phase{}}
+
+      iex> update_phase(phase, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_phase(%Phase{} = phase, attrs) do
+    phase
+    |> Phase.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a phase.
+
+  ## Examples
+
+      iex> delete_phase(phase)
+      {:ok, %Phase{}}
+
+      iex> delete_phase(phase)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_phase(%Phase{} = phase) do
+    Repo.delete(phase)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking phase changes.
+
+  ## Examples
+
+      iex> change_phase(phase)
+      %Ecto.Changeset{data: %Phase{}}
+
+  """
+  def change_phase(%Phase{} = phase, attrs \\ %{}) do
+    Phase.changeset(phase, attrs)
   end
 end
