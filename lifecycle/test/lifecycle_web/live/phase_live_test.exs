@@ -23,26 +23,13 @@ defmodule LifecycleWeb.PhaseLiveTest do
       assert html =~ phase.content
     end
 
-    test "saves new phase", %{conn: conn} do
+    test "creates new phase", %{conn: conn} do
       {:ok, index_live, _html} = live(conn, Routes.phase_index_path(conn, :index))
 
       assert index_live |> element("a", "New Phase") |> render_click() =~
                "New Phase"
 
       assert_patch(index_live, Routes.phase_index_path(conn, :new))
-
-      assert index_live
-             |> form("#phase-form", phase: @invalid_attrs)
-             |> render_change() =~ "can&#39;t be blank"
-
-      {:ok, _, html} =
-        index_live
-        |> form("#phase-form", phase: @create_attrs)
-        |> render_submit()
-        |> follow_redirect(conn, Routes.phase_index_path(conn, :index))
-
-      assert html =~ "Phase created successfully"
-      assert html =~ "some content"
     end
 
     test "updates phase in listing", %{conn: conn, phase: phase} do

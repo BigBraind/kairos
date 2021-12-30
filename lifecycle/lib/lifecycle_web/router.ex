@@ -18,17 +18,10 @@ defmodule LifecycleWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
+
     live "/echoes", EchoLive.Index, :index
     live "/echoes/new", EchoLive.Index, :new
     live "/echoes/:id", EchoLive.Show, :show
-
-    live "/journeys", JourneyLive.Index, :index
-    live "/journeys/new", JourneyLive.Index, :new
-    live "/journeys/:id/edit", JourneyLive.Index, :edit
-
-    live "/journeys/:id", JourneyLive.Show, :show
-    live "/journeys/:id/show/edit", JourneyLive.Show, :edit
-
 
     live "/phases", PhaseLive.Index, :index
     live "/phases/new", PhaseLive.Index, :new

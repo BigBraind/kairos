@@ -8,10 +8,6 @@ defmodule Lifecycle.Timeline do
 
   alias Lifecycle.Timeline.Echo
 
-  alias Lifecycle.Timeline.Journey
-  alias Lifecycle.Pubsub
-
-  # @topic inspect(__MODULE__)
 
   @doc """
   Returns the list of echoes.
@@ -112,39 +108,6 @@ defmodule Lifecycle.Timeline do
   def phase_recall(id) do
     query=from(e in Echo, where: e.phase_id == ^id , order_by: [desc: e.inserted_at])
     Lifecycle.Repo.all(query, limit: 8)
-  end
-
-  def list_journeys, do: Repo.all(Journey)
-
-  @doc """
-  Creates a echo.
-
-  ## Examples
-
-      iex> create_journey(%{field: value})
-      {:ok, %Journey{}}
-
-      iex> create_journey(%{field: bad_value})
-      {:error, %Ecto.Changeset{}}
-
-  """
-  def create_journey(attrs \\ %{}) do
-    %Journey{}
-    |> Journey.changeset(attrs)
-    |> Repo.insert()
-    # |> notify_subs([:journey, :created])
-  end
-
-  def get_journey!(id), do: Repo.get!(Journey, id)
-
-  def change_journey(%Journey{} = journey, attrs \\ %{}) do
-    Journey.changeset(journey, attrs)
-  end
-
-  def update_journey(%Journey{} = journey, attrs) do
-    journey
-    |> Journey.changeset(attrs)
-    |> Repo.update()
   end
 
 
