@@ -1,0 +1,44 @@
+<h1>Listing Phases</h1>
+
+<%= if @live_action in [:new, :edit] do %>
+  <%= live_modal LifecycleWeb.PhaseLive.FormComponent,
+    id: @phase.id || :new,
+    title: @page_title,
+    action: @live_action,
+    phase: @phase,
+    phases: @phases,
+    return_to: Routes.phase_index_path(@socket, :index) %>
+<% end %>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Title</th>
+      <th>Content</th>
+      <th>Type</th>
+      <th>Parent</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody id="phases">
+    <%= for phase <- @phases do %>
+      <tr id={"phase-#{phase.id}"}>
+        <td><%= phase.id %></td>
+        <td><%= phase.title %></td>
+        <td><%= phase.content %></td>
+        <td><%= phase.type %></td>
+        <td><%= phase.parent %></td>
+
+        <td>
+          <span><%= live_redirect "Show", to: Routes.phase_show_path(@socket, :show, phase) %></span>
+          <span><%= live_patch "Edit", to: Routes.phase_index_path(@socket, :edit, phase) %></span>
+          <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: phase.id, data: [confirm: "Are you sure?"] %></span>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<span><%= live_patch "New Phase", to: Routes.phase_index_path(@socket, :new) %></span>

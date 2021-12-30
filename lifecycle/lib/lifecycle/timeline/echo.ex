@@ -7,15 +7,14 @@ defmodule Lifecycle.Timeline.Echo do
     field :message, :string
     field :name, :string
     field :type, :string
-
-    belongs_to :journey, Lifecycle.Timeline.Journey, foreign_key: :journey_id
+    belongs_to :phase, Lifecycle.Timeline.Phase, foreign_key: :phase_id
     timestamps()
   end
 
   @doc false
   def changeset(echo, attrs \\ %{}) do
     echo
-    |> cast(attrs, [:message, :journey_id, :type, :name])
+    |> cast(attrs, [:message, :phase_id, :type, :name])
     # |> cast_assoc(attrs, [:journey])
     |> validate_required([:message, :name])
     # |> validate_required([:message, :journey, :type, :name])
