@@ -14,8 +14,8 @@
   <thead>
     <tr>
       <th>ID</th>
-      <th>Content</th>
       <th>Title</th>
+      <th>Content</th>
       <th>Type</th>
       <th>Parent</th>
 
@@ -26,8 +26,8 @@
     <%= for phase <- @phases do %>
       <tr id={"phase-#{phase.id}"}>
         <td><%= phase.id %></td>
-        <td><%= phase.content %></td>
         <td><%= phase.title %></td>
+        <td><%= phase.content %></td>
         <td><%= phase.type %></td>
         <td><%= phase.parent %></td>
 
