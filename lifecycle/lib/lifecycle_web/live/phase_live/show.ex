@@ -3,47 +3,65 @@ defmodule LifecycleWeb.PhaseLive.Show do
 
   alias Lifecycle.Timeline
   alias Lifecycle.Pubsub
-  alias Lifecycle.Timeline.Echo
+  alias Lifecycle.Timeline.{Echo, Phase}
   alias Lifecycle.Timezone
 
   @impl true
-  def mount(_params, _session, socket) do
+  def mount(params, _session, socket) do
+    id = params["id"]
     socket = Timezone.getTimezone(socket)
     timezone = socket.assigns.timezone
     timezone_offset = socket.assigns.timezone_offset
     echo_changeset = Timeline.Echo.changeset(%Echo{})
-    {:ok, assign(socket, timezone: timezone, echo_changeset: echo_changeset, nowstream: [], timezone_offset: timezone_offset)}
-    #abstract and call modular EchoLive Components in future
+    if connected?(socket), do: Pubsub.subscribe("phase:" <> id)
+    {:ok, assign(socket, timezone: timezone,
+        echo_changeset: echo_changeset,
+        nowstream: [],
+        timezone_offset: timezone_offset,
+        echoes: list_echoes(id)
+      )}
   end
 
   @impl true
-  def handle_params(%{"id" => id}, _, socket) do
-    if connected?(socket), do: Pubsub.subscribe("phase:" <> id)
-
-    {:noreply,
-     socket
-     |> assign(:page_title, page_title(socket.assigns.live_action))
-     |> assign(:phase, Timeline.get_phase!(id))
-     |> assign(echoes: list_echoes(id))
-    }
+  def handle_params(%{"id" => id} = params, _, socket) do
+    {:noreply, apply_action(socket, socket.assigns.live_action, params)}
   end
 
-  def handle_info({Pubsub, [:echo, :created], _message}, socket) do
+  defp apply_action(socket, :edit, %{"id" => id}) do
+    socket
+    |> assign(:page_title, "Edit Phase")
+    |> assign(:phase, Timeline.get_phase!(id))
+  end
 
+  defp apply_action(socket, :new, _params) do
+    IO.inspect socket.assigns.phase
+    socket
+    |> assign(:page_title, "Child Phase")
+    |> assign(:phase, %{socket.assigns.phase | parent: _params["id"]} )
+  end
+
+  defp apply_action(socket, :show, %{"id" => id}) do
+    socket
+    |> assign(:page_title, "Show Phase")
+    |> assign(:phase, Timeline.get_phase!(id))
+  end
+
+  @impl true
+  def handle_info({Pubsub, [:echo, :created], _message}, socket) do
     {:noreply, assign(socket, :nowstream, [_message | socket.assigns.nowstream])}
   end
 
+  @impl true
   def handle_event("save", %{"echo" => echo_params}, socket) do
     # save_echo(socket, :new, echo_params)
     echo_params = Map.put(echo_params, "phase_id", socket.assigns.phase.id)
     case Timeline.create_echo(echo_params) do
       {:ok, echo} ->
         {Pubsub.notify_subs({:ok, echo}, [:echo, :created], "phase:" <> socket.assigns.phase.id)}
-     {:noreply,
+        {:noreply,
          socket
          |> put_flash(:info, "Message Sent")
         }
-
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, changeset: changeset)}
@@ -61,5 +79,6 @@ defmodule LifecycleWeb.PhaseLive.Show do
 
   defp page_title(:show), do: "Show Phase"
   defp page_title(:edit), do: "Edit Phase"
+  defp page_title(:new), do: "Child Phase" 
 
 end

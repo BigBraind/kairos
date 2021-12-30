@@ -1,6 +1,6 @@
-<%= if @live_action in [:edit] do %>
+<%= if @live_action in [:new, :edit] do %>
   <%= live_modal LifecycleWeb.PhaseLive.FormComponent,
-    id: @phase.id,
+    id: @phase.id || :new,
     title: @page_title,
     action: @live_action,
     phase: @phase,
@@ -25,20 +25,24 @@
     </div>
 </.form>
 
-<div align="right"><span><%= live_patch "Edit", to: Routes.phase_show_path(@socket, :edit, @phase), class: "button" %></span> |
-<span><%= live_redirect "Back", to: Routes.phase_index_path(@socket, :index), class: "button" %></span></div>
+<div>
+  <div align="right">
+    <span><%= live_patch "Child Phase", to: Routes.phase_show_path(@socket, :new, @phase), class: "button" %></span> |
+    <span><%= live_patch "Edit", to: Routes.phase_show_path(@socket, :edit, @phase), class: "button" %></span> |
+    <span><%= live_redirect "Back", to: Routes.phase_index_path(@socket, :index), class: "button" %></span>
+  </div>
+  <ul id="msg-list" style="list-style: none; min-height:10px;">
+    <%= for echo <- @nowstream do %>
+        <b><%= echo.name %></b>: <%= echo.message %> <i style="float:right;color: gray;"><%= timeFormat(echo.inserted_at, @timezone, @timezone_offset) %> </i>
+        <br>
+        <% end %>
+        <div style="width: 100%; height: 25px;  border-bottom: 1px solid gold; text-align: center"><span style="color:#192756; padding: 0 10px; font-style: oblique;">Session Genesis</span></div>
+  </ul>
 
-<ul id="msg-list" style="list-style: none; min-height:10px;">
-  <%= for echo <- @nowstream do %>
-    <b><%= echo.name %></b>: <%= echo.message %> <i style="float:right;color: gray;"><%= timeFormat(echo.inserted_at, @timezone, @timezone_offset) %> </i>
-    <br>
-   <% end %>
-   <div style="width: 100%; height: 25px;  border-bottom: 1px solid gold; text-align: center"><span style="color:#192756; padding: 0 10px; font-style: oblique;">Session Genesis</span></div>
-</ul>
-
-<ul id="msg-list" style="list-style: none; min-height:200px;">
-  <%= for echo <- @echoes do %>
-    <b><%= echo.name %></b>: <%= echo.message %> <i style="float:right;color: gray;"><%= timeFormat(echo.inserted_at, @timezone, @timezone_offset) %> </i>
-    <br>
-   <% end %>
-</ul>
+  <ul id="msg-list" style="list-style: none; min-height:200px;">
+    <%= for echo <- @echoes do %>
+        <b><%= echo.name %></b>: <%= echo.message %> <i style="float:right;color: gray;"><%= timeFormat(echo.inserted_at, @timezone, @timezone_offset) %> </i>
+        <br>
+        <% end %>
+  </ul>
+</div>
