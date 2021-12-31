@@ -18,7 +18,6 @@ defmodule Lifecycle.TimelineFixtures do
           #type: "type"
                    })
                    |> Lifecycle.Timeline.create_echo()
-      IO.inspect echo
       echo
   end
 
