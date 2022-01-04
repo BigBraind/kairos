@@ -11,6 +11,7 @@ defmodule LifecycleWeb.EchoLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
+    IO.inspect(_session)
     if connected?(socket), do: Pubsub.subscribe("1") #topic TODO subscription currently static
     socket = Timezone.getTimezone(socket)
     timezone = socket.assigns.timezone
@@ -21,6 +22,7 @@ defmodule LifecycleWeb.EchoLive.Index do
 
   @impl true
   def handle_params(params, _url, socket) do
+    IO.inspect(_url)
     {:noreply, apply_action(socket, socket.assigns.live_action, params)}
   end
 
