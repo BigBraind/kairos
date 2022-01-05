@@ -1,5 +1,6 @@
 defmodule LifecycleWeb.Router do
   use LifecycleWeb, :router
+  use Pow.Phoenix.Router
 
   pipeline :browser do
     plug :accepts, ["html"]
@@ -10,12 +11,22 @@ defmodule LifecycleWeb.Router do
     plug :put_secure_browser_headers
   end
 
+  pipeline :protected do
+    plug Pow.Plug.RequireAuthenticated, error_handler: Pow.Phoenix.PlugErrorHandler
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
   end
 
-  scope "/", LifecycleWeb do
+  scope "/" do
     pipe_through :browser
+
+    pow_routes()
+  end
+
+  scope "/", LifecycleWeb do
+    pipe_through [:protected, :browser]
 
     get "/", PageController, :index
 

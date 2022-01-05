@@ -20,6 +20,7 @@ defmodule LifecycleWeb.PhaseLive.Show do
         nowstream: [],
         timezone_offset: timezone_offset,
         echoes: list_echoes(id)
+        # name: Pow.Plug.current_user.name
       )}
   end
 
@@ -45,9 +46,11 @@ defmodule LifecycleWeb.PhaseLive.Show do
   end
 
   defp apply_action(socket, :show, %{"id" => id}) do
+    IO.inspect(socket)
     socket
     |> assign(:page_title, "Show Phase")
     |> assign(:phase, Timeline.get_phase!(id))
+    |> assign(:echoes ,list_echoes(id))
   end
 
   @impl true
@@ -83,6 +86,6 @@ defmodule LifecycleWeb.PhaseLive.Show do
 
   defp page_title(:show), do: "Show Phase"
   defp page_title(:edit), do: "Edit Phase"
-  defp page_title(:new), do: "Child Phase" 
+  defp page_title(:new), do: "Child Phase"
 
 end
