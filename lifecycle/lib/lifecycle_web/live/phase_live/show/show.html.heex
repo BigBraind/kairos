@@ -12,8 +12,7 @@
 <h3><%= @phase.content %></h3>
 
 <.form let={f} for={@echo_changeset} phx-submit="save">
-    <%= label f, :name %>
-    <%= text_input f, :name %>
+    <%= hidden_input f, :name %>
     <%= error_tag f, :name %>
 
     <%= label f, :message %>
