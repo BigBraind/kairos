@@ -1,5 +1,6 @@
 defmodule LifecycleWeb.PhaseLive.Index do
   use LifecycleWeb, :live_view
+  on_mount LifecycleWeb.Auth.Protocol
 
   alias Lifecycle.Timeline
   alias Lifecycle.Timeline.Phase
