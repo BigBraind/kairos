@@ -50,7 +50,7 @@ config :phoenix, :json_library, Jason
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"
 
-# for settng up pow
+# Pow Configuration
 config :lifecycle, :pow,
   user: Lifecycle.Users.User,
   repo: Lifecycle.Repo,

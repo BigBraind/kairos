@@ -1,6 +1,7 @@
 defmodule LifecycleWeb.EchoLive.Index do
   use LifecycleWeb, :live_view
   use Timex
+  on_mount LifecycleWeb.Auth.Protocol
 
   alias Lifecycle.Timezone
 
@@ -11,7 +12,7 @@ defmodule LifecycleWeb.EchoLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
-    IO.inspect(_session)
+    IO.inspect(socket.assigns)
     if connected?(socket), do: Pubsub.subscribe("1") #topic TODO subscription currently static
     socket = Timezone.getTimezone(socket)
     timezone = socket.assigns.timezone

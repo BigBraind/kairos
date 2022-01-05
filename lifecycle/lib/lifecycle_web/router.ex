@@ -9,14 +9,16 @@ defmodule LifecycleWeb.Router do
     plug :put_root_layout, {LifecycleWeb.LayoutView, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug Pow.Plug.Session, otp_app: :lifecycle
   end
 
-  pipeline :protected do
-    plug Pow.Plug.RequireAuthenticated, error_handler: Pow.Phoenix.PlugErrorHandler
-  end
+  # pipeline :protected do
+  #   plug Pow.Plug.RequireAuthenticated, error_handler: Pow.Phoenix.PlugErrorHandler
+  # end
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug LifecycleWeb.Auth.Plug, otp_app: :lifecycle
   end
 
   scope "/" do
@@ -26,9 +28,15 @@ defmodule LifecycleWeb.Router do
   end
 
   scope "/", LifecycleWeb do
-    pipe_through [:protected, :browser]
+    # pipe_through [:protected, :browser]
+    pipe_through [:browser]
 
     get "/", PageController, :index
+    post "/register", UserRegistrationController, :register
+    post "/login", UserLoginController, :login
+
+    # live "/register", AuthLive.Login, :register
+    # live "/login", AuthLive.Register, :login
 
     live "/echoes", EchoLive.Index, :index
     live "/echoes/new", EchoLive.Index, :new
@@ -43,9 +51,12 @@ defmodule LifecycleWeb.Router do
     live "/phases/:id/show/new", PhaseLive.Show, :new
   end
 
-  # Other scopes may use custom stacks.
+  # # Other scopes may use custom stacks.
   # scope "/api", LifecycleWeb do
   #   pipe_through :api
+
+  #   live "/phases/:id", PhaseLive.Show, :show
+
   # end
 
   # Enables LiveDashboard only for development
