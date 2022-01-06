@@ -1,8 +1,6 @@
 defmodule LifecycleWeb.PhaseLive.Show do
   @moduledoc false
   use LifecycleWeb, :live_view
-
-  use Phoenix.LiveView
   on_mount {LifecycleWeb.Auth.Protocol, :auth}
 
   alias Lifecycle.Timeline
@@ -65,7 +63,6 @@ defmodule LifecycleWeb.PhaseLive.Show do
   @impl true
   def handle_event("save", %{"echo" => echo_params}, socket) do
     echo_params = Map.put(echo_params, "phase_id", socket.assigns.phase.id)
-    echo_params = Map.put(echo_params, "name", socket.assigns.current_user.name)
 
     case Timeline.create_echo(echo_params) do
       {:ok, echo} ->

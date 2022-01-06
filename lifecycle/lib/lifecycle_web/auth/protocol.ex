@@ -7,12 +7,9 @@ defmodule LifecycleWeb.Auth.Protocol do
     2. id
     3. created_at
   """
-  import Phoenix.LiveView
   alias LifecycleWeb.Auth.Helpers
 
   def on_mount(:auth, _params, session, socket) do
-    %{assigns: assigns} = Helpers.assign_defaults(socket, session)
-    %{current_user: user} = assigns
-    {:cont, assign(socket, current_user: user)}
+    {:cont, Helpers.assign_defaults(socket, session)}
   end
 end

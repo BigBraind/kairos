@@ -1,4 +1,6 @@
 <section class="phx-hero">
-  <h1><%= gettext "Welcome to %{name}!", name: "BigBrain" %></h1>
+  <%= if Pow.Plug.current_user(@conn) do %>
+  <h1><%= gettext "Welcome to BigBrain, %{name}!", name: @current_user.name %></h1>
+  <%= end %>
   <p>Cultivate a tomorrow now</p>
 </section>
