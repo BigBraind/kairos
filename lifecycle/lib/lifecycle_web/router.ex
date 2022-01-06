@@ -12,9 +12,10 @@ defmodule LifecycleWeb.Router do
     plug(Pow.Plug.Session, otp_app: :lifecycle)
   end
 
-  # pipeline :protected do
-  #   plug Pow.Plug.RequireAuthenticated, error_handler: Pow.Phoenix.PlugErrorHandler
-  # end
+  pipeline :authenticated do
+    plug Pow.Plug.RequireAuthenticated,
+     error_handler: Pow.Phoenix.PlugErrorHandler
+  end
 
   pipeline :api do
     plug(:accepts, ["json"])
@@ -29,14 +30,7 @@ defmodule LifecycleWeb.Router do
 
   scope "/", LifecycleWeb do
     # pipe_through [:protected, :browser]
-    pipe_through([:browser])
-
-    get("/", PageController, :index)
-    post("/register", UserRegistrationController, :register)
-    post("/login", UserLoginController, :login)
-
-    # live "/register", AuthLive.Login, :register
-    # live "/login", AuthLive.Register, :login
+    pipe_through([:browser, :authenticated])
 
     live("/echoes", EchoLive.Index, :index)
     live("/echoes/new", EchoLive.Index, :new)
