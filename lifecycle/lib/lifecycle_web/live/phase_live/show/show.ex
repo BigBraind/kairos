@@ -25,8 +25,7 @@ defmodule LifecycleWeb.PhaseLive.Show do
        echo_changeset: echo_changeset,
        nowstream: [],
        timezone_offset: timezone_offset,
-       echoes: list_echoes(id),
-       name: socket.assigns.user_info.current_user.name
+       echoes: list_echoes(id)
      )}
   end
 
@@ -66,7 +65,7 @@ defmodule LifecycleWeb.PhaseLive.Show do
   @impl true
   def handle_event("save", %{"echo" => echo_params}, socket) do
     echo_params = Map.put(echo_params, "phase_id", socket.assigns.phase.id)
-    echo_params = Map.put(echo_params, "name", socket.assigns.user_info.current_user.name)
+    echo_params = Map.put(echo_params, "name", socket.assigns.current_user.name)
 
     case Timeline.create_echo(echo_params) do
       {:ok, echo} ->

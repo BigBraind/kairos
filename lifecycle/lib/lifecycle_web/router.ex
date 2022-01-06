@@ -32,6 +32,8 @@ defmodule LifecycleWeb.Router do
     # pipe_through [:protected, :browser]
     pipe_through([:browser, :authenticated])
 
+    get("/", PageController, :index)
+
     live("/echoes", EchoLive.Index, :index)
     live("/echoes/new", EchoLive.Index, :new)
     live("/echoes/:id", EchoLive.Show, :show)

@@ -1,4 +1,7 @@
 defmodule LifecycleWeb.EchoLiveTest do
+  @moduledoc """
+  This module tests on the Echoes object
+  """
   use LifecycleWeb.ConnCase
 
   import Phoenix.LiveViewTest
@@ -17,7 +20,7 @@ defmodule LifecycleWeb.EchoLiveTest do
     name: "some updated name",
     type: "some updated type"
   }
-  @invalid_attrs %{message: nil, name: nil}
+  @invalid_attrs %{message: nil}
 
   defp create_echo(_) do
     echo = echo_fixture()
@@ -28,6 +31,7 @@ defmodule LifecycleWeb.EchoLiveTest do
     setup [:create_echo]
 
     test "lists all echoes", %{conn: conn, echo: echo} do
+      IO.inspect "list"
       {:ok, _index_live, html} = live(conn, Routes.echo_index_path(conn, :index))
 
       assert html =~ "Echo History"
@@ -35,14 +39,15 @@ defmodule LifecycleWeb.EchoLiveTest do
     end
 
     test "saves new echo", %{conn: conn} do
+      IO.inspect "save"
+      #conn = get(conn, "/echoes")
+      #IO.inspect conn
       {:ok, index_live, _html} = live(conn, Routes.echo_index_path(conn, :index))
-
       assert index_live
              |> element("form")
              |> render_submit(echo: @invalid_attrs) =~ "can&#39;t be blank"
 
       {:ok, index_live, _html} = live(conn, Routes.echo_index_path(conn, :index))
-
       assert index_live
              |> element("form")
              |> render_submit(echo: @create_attrs) =~ "Message Sent"
@@ -51,6 +56,7 @@ defmodule LifecycleWeb.EchoLiveTest do
 
   describe "Show" do
     setup [:create_echo]
+    IO.inspect "show"
 
     test "displays echo", %{conn: conn, echo: echo} do
       {:ok, _show_live, html} = live(conn, Routes.echo_show_path(conn, :show, echo))
