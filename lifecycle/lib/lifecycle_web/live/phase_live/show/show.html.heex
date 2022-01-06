@@ -12,8 +12,6 @@
 <h3><%= @phase.content %></h3>
 
 <.form let={f} for={@echo_changeset} phx-submit="save">
-    <%= hidden_input f, :name %>
-    <%= error_tag f, :name %>
 
     <%= label f, :message %>
     <%= text_input f, :message %>
@@ -35,7 +33,7 @@
   </div>
   <ul id="msg-list" style="list-style: none; min-height:10px;">
     <%= for echo <- @nowstream do %>
-        <b><%= echo.name %></b>: <%= echo.message %> <i style="float:right;color: gray;"><%= timeFormat(echo.inserted_at, @timezone, @timezone_offset) %> </i>
+        <b><%= echo.name %></b>: <%= echo.message %> <i style="float:right;color: gray;"><%= time_format(echo.inserted_at, @timezone, @timezone_offset) %> </i>
         <br>
         <% end %>
         <div style="width: 100%; height: 25px;  border-bottom: 1px solid gold; text-align: center"><span style="color:#192756; padding: 0 10px; font-style: oblique;">Session Genesis</span></div>
@@ -43,7 +41,7 @@
 
   <ul id="msg-list" style="list-style: none; min-height:200px;">
     <%= for echo <- @echoes do %>
-        <b><%= echo.name %></b>: <%= echo.message %> <i style="float:right;color: gray;"><%= timeFormat(echo.inserted_at, @timezone, @timezone_offset) %> </i>
+        <b><%= echo.name %></b>: <%= echo.message %> <i style="float:right;color: gray;"><%= time_format(echo.inserted_at, @timezone, @timezone_offset) %> </i>
         <br>
         <% end %>
   </ul>

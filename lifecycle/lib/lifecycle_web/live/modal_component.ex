@@ -1,4 +1,5 @@
 defmodule LifecycleWeb.ModalComponent do
+  @moduledoc false
   use LifecycleWeb, :live_component
 
   @impl true

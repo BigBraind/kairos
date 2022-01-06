@@ -11,10 +11,10 @@ defmodule Lifecycle.PubsubFixtures do
     pubsub =
       attrs
       |> Enum.into(%{
-          topic: "some topics",
-          message: "Some unimportant msg",
-          event: [:pubsub, :tested],
-                   })
+        topic: "some topics",
+        message: "Some unimportant msg",
+        event: [:pubsub, :tested]
+      })
 
     pubsub
   end
