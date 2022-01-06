@@ -16,6 +16,7 @@ defmodule LifecycleWeb.ConnCase do
   """
 
   use ExUnit.CaseTemplate
+  import Lifecycle.UserFixtures
 
   using do
     quote do
@@ -34,6 +35,11 @@ defmodule LifecycleWeb.ConnCase do
   setup tags do
     pid = Ecto.Adapters.SQL.Sandbox.start_owner!(Lifecycle.Repo, shared: not tags[:async])
     on_exit(fn -> Ecto.Adapters.SQL.Sandbox.stop_owner(pid) end)
-    {:ok, conn: Phoenix.ConnTest.build_conn()}
+    conn = Phoenix.ConnTest.build_conn()
+    ## authentication for Bruce Lee
+    {:ok, user} = user_fixtures()
+    authed_conn = Pow.Plug.assign_current_user(conn, user, [])
+    {:ok, conn: authed_conn}
   end
+
 end

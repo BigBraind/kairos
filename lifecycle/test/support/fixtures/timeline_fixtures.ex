@@ -9,18 +9,19 @@ defmodule Lifecycle.TimelineFixtures do
   """
   def echo_fixture(attrs \\ %{}) do
     phase = phase_fixture()
+
     {:ok, echo} =
       attrs
       |> Enum.into(%{
-          phase: phase.id,
-          message: "some message",
-          name: "some name",
-          #type: "type"
-                   })
-                   |> Lifecycle.Timeline.create_echo()
-      echo
-  end
+        phase: phase.id,
+        message: "some message",
+        name: "some name"
+        # type: "type"
+      })
+      |> Lifecycle.Timeline.create_echo()
 
+    echo
+  end
 
   @doc """
   Generate a phase.
