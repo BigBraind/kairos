@@ -12,10 +12,13 @@ defmodule LifecycleWeb.Endpoint do
 
   @pow_config otp_app: :lifecycle
 
-  socket "/live", Phoenix.LiveView.Socket, websocket: [
-    connect_info: [
-      session: @session_options,
-      pow_config: @pow_config]]
+  socket "/live", Phoenix.LiveView.Socket,
+    websocket: [
+      connect_info: [
+        session: @session_options,
+        pow_config: @pow_config
+      ]
+    ]
 
   # Serve at "/" the static files from "priv/static" directory.
   #

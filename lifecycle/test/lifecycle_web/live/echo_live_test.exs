@@ -11,7 +11,12 @@ defmodule LifecycleWeb.EchoLiveTest do
   require Logger
 
   @create_attrs %{message: "some message", name: "some name"}
-  @update_attrs %{journey: "some updated journey", message: "some updated message", name: "some updated name", type: "some updated type"}
+  @update_attrs %{
+    journey: "some updated journey",
+    message: "some updated message",
+    name: "some updated name",
+    type: "some updated type"
+  }
   @invalid_attrs %{message: nil, name: nil}
 
   defp create_echo(_) do
@@ -32,19 +37,16 @@ defmodule LifecycleWeb.EchoLiveTest do
     test "saves new echo", %{conn: conn} do
       {:ok, index_live, _html} = live(conn, Routes.echo_index_path(conn, :index))
 
-
       assert index_live
              |> element("form")
              |> render_submit(echo: @invalid_attrs) =~ "can&#39;t be blank"
 
       {:ok, index_live, _html} = live(conn, Routes.echo_index_path(conn, :index))
 
-        assert index_live
-        |> element("form")
-        |> render_submit(echo: @create_attrs)  =~ "Message Sent"
+      assert index_live
+             |> element("form")
+             |> render_submit(echo: @create_attrs) =~ "Message Sent"
     end
-
-
   end
 
   describe "Show" do
@@ -57,5 +59,4 @@ defmodule LifecycleWeb.EchoLiveTest do
       assert html =~ echo.message
     end
   end
-
 end

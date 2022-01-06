@@ -3,13 +3,13 @@ defmodule LifecycleWeb.Router do
   use Pow.Phoenix.Router
 
   pipeline :browser do
-    plug :accepts, ["html"]
-    plug :fetch_session
-    plug :fetch_live_flash
-    plug :put_root_layout, {LifecycleWeb.LayoutView, :root}
-    plug :protect_from_forgery
-    plug :put_secure_browser_headers
-    plug Pow.Plug.Session, otp_app: :lifecycle
+    plug(:accepts, ["html"])
+    plug(:fetch_session)
+    plug(:fetch_live_flash)
+    plug(:put_root_layout, {LifecycleWeb.LayoutView, :root})
+    plug(:protect_from_forgery)
+    plug(:put_secure_browser_headers)
+    plug(Pow.Plug.Session, otp_app: :lifecycle)
   end
 
   # pipeline :protected do
@@ -17,38 +17,38 @@ defmodule LifecycleWeb.Router do
   # end
 
   pipeline :api do
-    plug :accepts, ["json"]
-    plug LifecycleWeb.Auth.Plug, otp_app: :lifecycle
+    plug(:accepts, ["json"])
+    plug(LifecycleWeb.Auth.Plug, otp_app: :lifecycle)
   end
 
   scope "/" do
-    pipe_through :browser
+    pipe_through(:browser)
 
     pow_routes()
   end
 
   scope "/", LifecycleWeb do
     # pipe_through [:protected, :browser]
-    pipe_through [:browser]
+    pipe_through([:browser])
 
-    get "/", PageController, :index
-    post "/register", UserRegistrationController, :register
-    post "/login", UserLoginController, :login
+    get("/", PageController, :index)
+    post("/register", UserRegistrationController, :register)
+    post("/login", UserLoginController, :login)
 
     # live "/register", AuthLive.Login, :register
     # live "/login", AuthLive.Register, :login
 
-    live "/echoes", EchoLive.Index, :index
-    live "/echoes/new", EchoLive.Index, :new
-    live "/echoes/:id", EchoLive.Show, :show
+    live("/echoes", EchoLive.Index, :index)
+    live("/echoes/new", EchoLive.Index, :new)
+    live("/echoes/:id", EchoLive.Show, :show)
 
-    live "/phases", PhaseLive.Index, :index
-    live "/phases/new", PhaseLive.Index, :new
-    live "/phases/:id/edit", PhaseLive.Index, :edit
+    live("/phases", PhaseLive.Index, :index)
+    live("/phases/new", PhaseLive.Index, :new)
+    live("/phases/:id/edit", PhaseLive.Index, :edit)
 
-    live "/phases/:id", PhaseLive.Show, :show
-    live "/phases/:id/show/edit", PhaseLive.Show, :edit
-    live "/phases/:id/show/new", PhaseLive.Show, :new
+    live("/phases/:id", PhaseLive.Show, :show)
+    live("/phases/:id/show/edit", PhaseLive.Show, :edit)
+    live("/phases/:id/show/new", PhaseLive.Show, :new)
   end
 
   # # Other scopes may use custom stacks.
@@ -70,8 +70,8 @@ defmodule LifecycleWeb.Router do
     import Phoenix.LiveDashboard.Router
 
     scope "/" do
-      pipe_through :browser
-      live_dashboard "/dashboard", metrics: LifecycleWeb.Telemetry
+      pipe_through(:browser)
+      live_dashboard("/dashboard", metrics: LifecycleWeb.Telemetry)
     end
   end
 
@@ -81,9 +81,9 @@ defmodule LifecycleWeb.Router do
   # node running the Phoenix server.
   if Mix.env() == :dev do
     scope "/dev" do
-      pipe_through :browser
+      pipe_through(:browser)
 
-      forward "/mailbox", Plug.Swoosh.MailboxPreview
+      forward("/mailbox", Plug.Swoosh.MailboxPreview)
     end
   end
 end

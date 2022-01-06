@@ -1,4 +1,5 @@
 defmodule LifecycleWeb.EchoLive.Show do
+  @moduledoc false
   use LifecycleWeb, :live_view
 
   alias Lifecycle.Timeline

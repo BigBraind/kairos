@@ -1,9 +1,17 @@
 defmodule LifecycleWeb.Auth.Protocol do
-  import LifecycleWeb.Auth.Helpers
+  @moduledoc """
+    Auth.Protocol assigns the current user infomation into socket
+    the information can be accessed in Socket.assigns.user_info
+    Information accessible includes:
+    1. name
+    2. id
+    3. created_at
+  """
+  import Phoenix.LiveView
+  alias LifecycleWeb.Auth.Helpers
 
-  def mount(params, session, socket) do
+  def on_mount(:auth, params, session, socket) do
     %{assigns: assigns} = Helpers.assign_defaults(socket, session)
-    IO.inspect(assigns)
-    # {:ok, assign(socket, assigns: assigns)}
+    {:cont, assign(socket, user_info: assigns)}
   end
 end

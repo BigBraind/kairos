@@ -1,4 +1,8 @@
 defmodule Lifecycle.Timeline.Echo do
+  @moduledoc """
+    Schema table for Echo objects.
+    Echo => Chat message
+  """
   use Ecto.Schema
   import Ecto.Changeset
 
