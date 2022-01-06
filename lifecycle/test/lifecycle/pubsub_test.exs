@@ -20,8 +20,7 @@ defmodule Lifecycle.PubsubTest do
     test "subscribe/1 subscribe to new topic" do
       %{topic: topic} = pubsub_fixture()
 
-      assert Pubsub.subscribe(topic)  == :ok
+      assert Pubsub.subscribe(topic) == :ok
     end
-
   end
 end

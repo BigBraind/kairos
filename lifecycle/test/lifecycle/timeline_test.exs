@@ -2,15 +2,14 @@ defmodule Lifecycle.TimelineTest do
   use Lifecycle.DataCase
   alias Lifecycle.Timeline
   import Lifecycle.TimelineFixtures
-  setup do
-        # Explicitly get a connection before each test
-        :ok = Ecto.Adapters.SQL.Sandbox.checkout(Lifecycle.Repo)
-      end
 
+  setup do
+    # Explicitly get a connection before each test
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Lifecycle.Repo)
+  end
 
   describe "echoes" do
     alias Lifecycle.Timeline.Echo
-
 
     @invalid_attrs %{phase_id: nil, message: nil, name: nil, type: nil}
 
@@ -40,13 +39,13 @@ defmodule Lifecycle.TimelineTest do
 
     test "update_echo/2 with valid data updates the echo" do
       echo = echo_fixture()
-      update_attrs = %{ message: "some updated message", name: "some updated name"}
+      update_attrs = %{message: "some updated message", name: "some updated name"}
 
       assert {:ok, %Echo{} = echo} = Timeline.update_echo(echo, update_attrs)
-      #assert echo.phase == "some updated phase"
+      # assert echo.phase == "some updated phase"
       assert echo.message == "some updated message"
       assert echo.name == "some updated name"
-      #assert echo.type == "some updated type"
+      # assert echo.type == "some updated type"
     end
 
     test "update_echo/2 with invalid data returns error changeset" do
@@ -60,7 +59,6 @@ defmodule Lifecycle.TimelineTest do
       assert %Ecto.Changeset{} = Timeline.change_echo(echo)
     end
   end
-
 
   describe "phases" do
     alias Lifecycle.Timeline.Phase
@@ -94,7 +92,12 @@ defmodule Lifecycle.TimelineTest do
 
     test "update_phase/2 with valid data updates the phase" do
       phase = phase_fixture()
-      update_attrs = %{content: "some updated content", title: "some updated title", type: "some updated type"}
+
+      update_attrs = %{
+        content: "some updated content",
+        title: "some updated title",
+        type: "some updated type"
+      }
 
       assert {:ok, %Phase{} = phase} = Timeline.update_phase(phase, update_attrs)
       assert phase.content == "some updated content"

@@ -1,5 +1,8 @@
 import Config
 
+# Joken
+config :joken, default_signer: "secret"
+
 # Configure your database
 config :lifecycle, Lifecycle.Repo,
   username: "postgres",

@@ -1,4 +1,7 @@
 defmodule Lifecycle.Timeline.Phase do
+  @moduledoc """
+    Schema table for Phase Objects
+  """
   use Ecto.Schema
   import Ecto.Changeset
 

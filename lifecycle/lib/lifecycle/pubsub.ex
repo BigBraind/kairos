@@ -1,7 +1,8 @@
 defmodule Lifecycle.Pubsub do
-
+  @moduledoc """
+    This module includes the pub sub implementation
+  """
   def subscribe(topic) do
-    # IO.inspect topic
     Phoenix.PubSub.subscribe(Lifecycle.PubSub, topic)
   end
 
@@ -13,5 +14,4 @@ defmodule Lifecycle.Pubsub do
   def notify_subs({:error, reason}, _event) do
     {:error, reason}
   end
-
 end
