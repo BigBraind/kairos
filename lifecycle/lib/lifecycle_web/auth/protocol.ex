@@ -10,7 +10,7 @@ defmodule LifecycleWeb.Auth.Protocol do
   import Phoenix.LiveView
   alias LifecycleWeb.Auth.Helpers
 
-  def on_mount(:auth, params, session, socket) do
+  def on_mount(:auth, _params, session, socket) do
     %{assigns: assigns} = Helpers.assign_defaults(socket, session)
     {:cont, assign(socket, user_info: assigns)}
   end
