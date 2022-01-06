@@ -1,7 +1,7 @@
 defmodule LifecycleWeb.EchoLive.Index do
   @moduledoc false
   use LifecycleWeb, :live_view
-  use Phoenix.LiveView
+  # use Phoenix.LiveView
   use Timex
   on_mount({LifecycleWeb.Auth.Protocol, :auth})
 
@@ -22,6 +22,7 @@ defmodule LifecycleWeb.EchoLive.Index do
     timezone = socket.assigns.timezone
     timezone_offset = socket.assigns.timezone_offset
     changeset = Timeline.Echo.changeset(%Echo{})
+
     {:ok,
      assign(socket,
        echoes: list_echoes(),
