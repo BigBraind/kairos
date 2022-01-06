@@ -52,6 +52,7 @@ defmodule LifecycleWeb.EchoLive.Index do
     |> assign(:echo, nil)
   end
 
+  @impl true
   def handle_event("save", %{"echo" => echo_params}, socket) do
     echo_params = Map.put(echo_params, "name", socket.assigns.user_info.current_user.name)
 
@@ -72,8 +73,9 @@ defmodule LifecycleWeb.EchoLive.Index do
     end
   end
 
-  def handle_info({Pubsub, [:echo, :created], _message}, socket) do
-    {:noreply, assign(socket, :nowstream, [_message | socket.assigns.nowstream])}
+  @impl true
+  def handle_info({Pubsub, [:echo, :created], message}, socket) do
+    {:noreply, assign(socket, :nowstream, [message | socket.assigns.nowstream])}
   end
 
   defp list_echoes do
