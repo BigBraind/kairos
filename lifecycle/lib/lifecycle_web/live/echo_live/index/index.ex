@@ -29,8 +29,7 @@ defmodule LifecycleWeb.EchoLive.Index do
        timezone: timezone,
        changeset: changeset,
        nowstream: [],
-       timezone_offset: timezone_offset,
-       name: socket.assigns.user_info.current_user.name
+       timezone_offset: timezone_offset
      )}
   end
 
@@ -42,21 +41,17 @@ defmodule LifecycleWeb.EchoLive.Index do
   defp apply_action(socket, :new, _params) do
     socket
     |> assign(:page_title, "New Msg")
-    # |> assign(:name, socket.assigns.user_info.current_user.name)
     |> assign(:echo, %Echo{})
   end
 
   defp apply_action(socket, :index, _params) do
     socket
     |> assign(:page_title, "Message")
-    # |> assign(:name, socket.assigns.user_info.current_user.name)
     |> assign(:echo, nil)
   end
 
   @impl true
   def handle_event("save", %{"echo" => echo_params}, socket) do
-    echo_params = Map.put(echo_params, "name", socket.assigns.user_info.current_user.name)
-
     case Timeline.create_echo(echo_params) do
       {:ok, echo} ->
         {Pubsub.notify_subs({:ok, echo}, [:echo, :created], "1")}

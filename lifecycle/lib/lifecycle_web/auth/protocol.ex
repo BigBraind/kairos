@@ -12,6 +12,7 @@ defmodule LifecycleWeb.Auth.Protocol do
 
   def on_mount(:auth, _params, session, socket) do
     %{assigns: assigns} = Helpers.assign_defaults(socket, session)
-    {:cont, assign(socket, user_info: assigns)}
+    %{current_user: user} = assigns
+    {:cont, assign(socket, current_user: user)}
   end
 end

@@ -11,6 +11,7 @@ defmodule Lifecycle.Users.User do
     password_min_length: 8,
     password_max_length: 4096
 
+  @primary_key {:id, :binary_id, autogenerate: true}
   schema "users" do
     # field :custom_field, :string
 

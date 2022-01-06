@@ -1,6 +1,8 @@
 <h1>Echo History</h1>
 
 <.form let={f} for={@changeset} phx-submit="save">
+    <%= hidden_input f, :name, value: @current_user.name %>
+    <%= error_tag f, :name %>
     
     <%= label f, :message %>
     <%= text_input f, :message %>
