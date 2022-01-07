@@ -14,7 +14,7 @@ defmodule LifecycleWeb.Auth.Helpers do
     assign_new(socket, :current_user, fn -> get_user(socket, session) end)
   end
 
-  defp get_user(socket, session, config \\ [otp_app: :my_app])
+  defp get_user(socket, session, config \\ [otp_app: :lifecycle])
 
   defp get_user(socket, %{"lifecycle_auth" => signed_token}, config) do
     conn = struct!(Plug.Conn, secret_key_base: socket.endpoint.config(:secret_key_base))

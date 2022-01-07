@@ -32,6 +32,18 @@ services:
       - postgres
     restart: unless-stopped
 
+  sthree:
+    container_name: s3_container
+    image: minio/minio
+    ports:
+      - "9000:9000"
+    volumes:
+      - sthree:/data
+    environment:
+      MINIO_ACCESS_KEY: "minioadmin"
+      MINIO_SECRET_KEY: "minioadmin"
+    command: server /data
+
 networks:
   postgres:
     driver: bridge
@@ -39,3 +51,4 @@ networks:
 volumes:
     postgres:
     pgadmin:
+    sthree:

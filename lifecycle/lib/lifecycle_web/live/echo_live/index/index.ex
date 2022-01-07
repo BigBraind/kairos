@@ -2,7 +2,6 @@ defmodule LifecycleWeb.EchoLive.Index do
   @moduledoc false
   use LifecycleWeb, :live_view
   use Timex
-  on_mount({LifecycleWeb.Auth.Protocol, :auth})
 
   alias Lifecycle.Timezone
 

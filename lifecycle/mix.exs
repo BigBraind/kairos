@@ -51,8 +51,14 @@ defmodule Lifecycle.MixProject do
       {:plug_cowboy, "~> 2.5"},
       {:timex, "~> 3.0"},
       {:pow, "~> 1.0.18"},
-      {:joken, "~> 2.2"},
-      {:credo, "~> 1.6", only: [:dev, :test], runtime: false}
+      {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
+      # ImageStorage:
+      {:waffle, "~> 1.1"},
+      # For S3:
+      {:poison, "~> 3.0"},
+      {:ex_aws, "~> 2.1.2"},
+      {:ex_aws_s3, "~> 2.0"},
+      {:hackney, "~> 1.9"}
     ]
   end
 

@@ -34,18 +34,20 @@ defmodule LifecycleWeb.Router do
 
     get("/", PageController, :index)
 
-    live("/echoes", EchoLive.Index, :index)
-    live("/echoes/new", EchoLive.Index, :new)
-    live("/echoes/:id", EchoLive.Show, :show)
+    live_session :default, on_mount: {LifecycleWeb.Auth.Protocol, :auth} do
+      live("/echoes", EchoLive.Index, :index)
+      live("/echoes/new", EchoLive.Index, :new)
+      live("/echoes/:id", EchoLive.Show, :show)
 
-    live("/phases", PhaseLive.Index, :index)
-    live("/phases/new", PhaseLive.Index, :new)
-    live("/phases/:id/edit", PhaseLive.Index, :edit)
+      live("/phases", PhaseLive.Index, :index)
+      live("/phases/new", PhaseLive.Index, :new)
+      live("/phases/:id/edit", PhaseLive.Index, :edit)
 
-    live("/phases/:id", PhaseLive.Show, :show)
-    live("/phases/:id/show/edit", PhaseLive.Show, :edit)
-    live("/phases/:id/show/new", PhaseLive.Show, :new)
-  end
+      live("/phases/:id", PhaseLive.Show, :show)
+      live("/phases/:id/show/edit", PhaseLive.Show, :edit)
+      live("/phases/:id/show/new", PhaseLive.Show, :new)
+    end
+   end
 
   # # Other scopes may use custom stacks.
   # scope "/api", LifecycleWeb do
