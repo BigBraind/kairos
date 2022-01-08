@@ -16,6 +16,7 @@ defmodule LifecycleWeb.PhaseLive.Show do
     timezone_offset = socket.assigns.timezone_offset
     echo_changeset = Timeline.Echo.changeset(%Echo{})
     if connected?(socket), do: Pubsub.subscribe("phase:" <> id)
+    socket = allow_upload(socket, :transition, accept: ~w(.png .jpg .jpeg), max_entries: 1)
 
     {:ok,
      assign(socket,
@@ -23,7 +24,9 @@ defmodule LifecycleWeb.PhaseLive.Show do
        echo_changeset: echo_changeset,
        nowstream: [],
        timezone_offset: timezone_offset,
-       echoes: list_echoes(id)
+       echoes: list_echoes(id),
+       image_list: [],
+       transiting: false
      )}
   end
 
@@ -66,6 +69,20 @@ defmodule LifecycleWeb.PhaseLive.Show do
     # {:noreply, assign(socket, :nowstream, [_message | socket.assigns.nowstream])}
   end
 
+  def handle_event("transition", _params, socket) do
+    {:noreply,
+     socket
+     |> assign(:transiting, true)}
+  end
+
+  def handle_event("validate", _params, socket) do
+    {:noreply, socket}
+  end
+
+  def handle_event("cancel-upload", %{"ref" => ref}, socket) do
+    {:noreply, cancel_upload(socket, :transition, ref)}
+  end
+
   @impl true
   def handle_event("save", %{"echo" => echo_params}, socket) do
     echo_params = Map.put(echo_params, "phase_id", socket.assigns.phase.id)
@@ -83,6 +100,89 @@ defmodule LifecycleWeb.PhaseLive.Show do
     end
   end
 
+  @doc """
+  Construct the file path of the image uploaded, and save it to local file system
+  Create transition echo object
+  """
+  def handle_event("transit", _params, socket) do
+    # function to get the file path and save it to local file system
+    uploaded_files =
+      consume_uploaded_entries(socket, :transition, fn %{path: path}, entry ->
+        ext = entry.client_name
+        dest_path = path <> ext
+        # changes destination path name with extension for rendering
+        dest =
+          Path.join([:code.priv_dir(:lifecycle), "static", "uploads", Path.basename(dest_path)])
+
+        File.cp!(path, dest)
+        Routes.static_path(socket, "/uploads/#{Path.basename(dest)}")
+      end)
+
+    # convert list to string
+    image_list = Enum.join(uploaded_files, "##")
+
+    # construct echo_params for creating transition echo objects
+    echo_params = %{
+      "message" => image_list,
+      "type" => "transition",
+      "name" => socket.assigns.current_user.name,
+      "transited" => false,
+      "phase_id" => socket.assigns.phase.id
+    }
+
+    case Timeline.create_echo(echo_params) do
+      {:ok, echo} ->
+        {Pubsub.notify_subs({:ok, echo}, [:echo, :created], "phase:" <> socket.assigns.phase.id)}
+
+        {
+          :noreply,
+          socket
+          |> assign(:transiting, false)
+          |> put_flash(:info, "Transition Object Sent")
+        }
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        {:noreply, assign(socket, changeset: changeset)}
+    end
+  end
+
+  def handle_event("approve", %{"value" => id}, socket) do
+    echo = Timeline.get_echo!(id)
+
+    case echo.transited do
+      false ->
+        {
+          echo_params = %{
+            transited: true,
+            transiter: socket.assigns.current_user.name
+          }
+        }
+
+        case Timeline.update_transition(id, echo_params) do
+          {:ok, echo} ->
+            {Pubsub.notify_subs(
+               {:ok, echo},
+               [:echo, :created],
+               "phase:" <> socket.assigns.phase.id
+             )}
+
+            {:noreply,
+             socket
+             |> put_flash(:info, "Transition approved!")}
+
+          {:error, %Ecto.Changeset{} = changeset} ->
+            {:noreply, assign(socket, :changeset, changeset)}
+        end
+
+      true ->
+        {
+          :noreply,
+          socket
+          |> put_flash(:info, "Transition already approved!")
+        }
+    end
+  end
+
   defp list_echoes(phase_id) do
     Timeline.phase_recall(phase_id)
   end
@@ -95,4 +195,8 @@ defmodule LifecycleWeb.PhaseLive.Show do
   defp page_title(:show), do: "Show Phase"
   defp page_title(:edit), do: "Edit Phase"
   defp page_title(:new), do: "Child Phase"
+
+  def error_to_string(:too_large), do: "Too large"
+  def error_to_string(:too_many_files), do: "You have selected too many files"
+  def error_to_string(:not_accepted), do: "You have selected an unacceptable file type"
 end
