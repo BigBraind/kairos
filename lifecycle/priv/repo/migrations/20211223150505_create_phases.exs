@@ -17,3 +17,7 @@ defmodule Lifecycle.Repo.Migrations.CreatePhases do
     create index(:phases, [:child])
   end
 end
+
+
+# many_to_many :parent_of, UserRelations.Accounts.Person, join_through: "relationships", join_keys: [parent_id: :id, child_id: :id]
+# many_to_many :child_of, UserRelations.Accounts.Person, join_through: "relationships", join_keys: [child_id: :id, parent_id: :id]
