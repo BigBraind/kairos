@@ -19,7 +19,6 @@ defmodule LifecycleWeb.Router do
 
   pipeline :api do
     plug(:accepts, ["json"])
-    plug(LifecycleWeb.Auth.Plug, otp_app: :lifecycle)
   end
 
   scope "/" do
