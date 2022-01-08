@@ -7,6 +7,8 @@ defmodule Lifecycle.Repo.Migrations.CreateEchoes do
       add :phase_id, references("phases", column: :id, type: :binary_id, on_delete: :delete_all)
       add :type, :string
       add :name, :string
+      add :transited , :boolean
+      add :transiter , :string
 
       timestamps()
     end

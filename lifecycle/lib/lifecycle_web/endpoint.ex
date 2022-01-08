@@ -10,7 +10,15 @@ defmodule LifecycleWeb.Endpoint do
     signing_salt: "QVG/DLu3"
   ]
 
-  socket "/live", Phoenix.LiveView.Socket, websocket: [connect_info: [session: @session_options]]
+  @pow_config otp_app: :lifecycle
+
+  socket "/live", Phoenix.LiveView.Socket,
+    websocket: [
+      connect_info: [
+        session: @session_options,
+        pow_config: @pow_config
+      ]
+    ]
 
   # Serve at "/" the static files from "priv/static" directory.
   #
@@ -20,7 +28,7 @@ defmodule LifecycleWeb.Endpoint do
     at: "/",
     from: :lifecycle,
     gzip: false,
-    only: ~w(assets fonts images favicon.ico robots.txt)
+    only: ~w(assets uploads fonts images favicon.ico robots.txt)
 
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.
@@ -46,5 +54,6 @@ defmodule LifecycleWeb.Endpoint do
   plug Plug.MethodOverride
   plug Plug.Head
   plug Plug.Session, @session_options
+  plug Pow.Plug.Session, @pow_config
   plug LifecycleWeb.Router
 end

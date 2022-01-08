@@ -5,7 +5,11 @@ defmodule LifecycleWeb.PhaseLiveTest do
   import Lifecycle.TimelineFixtures
 
   @create_attrs %{content: "some content", title: "some title", type: "some type"}
-  @update_attrs %{content: "some updated content", title: "some updated title", type: "some updated type"}
+  @update_attrs %{
+    content: "some updated content",
+    title: "some updated title",
+    type: "some updated type"
+  }
   @invalid_attrs %{content: nil, title: nil, type: nil}
 
   defp create_phase(_) do

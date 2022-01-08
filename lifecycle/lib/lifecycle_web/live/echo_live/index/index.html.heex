@@ -1,18 +1,3 @@
-<h1>Echo History</h1>
-
-<.form let={f} for={@changeset} phx-submit="save">
-    <%= label f, :name %>
-    <%= text_input f, :name %>
-    <%= error_tag f, :name %>
-    
-    <%= label f, :message %>
-    <%= text_input f, :message %>
-    <%= error_tag f, :message %>
-
-    <div>
-      <%= submit "Save", phx_disable_with: "Sending..." %>
-    </div>
-</.form>
 
 <%= if @live_action in [:new, :edit] do %>
   <%= live_modal LifecycleWeb.EchoLive.FormComponent,
@@ -23,20 +8,115 @@
     return_to: Routes.echo_index_path(@socket, :index) %>
 <% end %>
 
+<h1>Echo History</h1>
+
+<%= unless @transiting do %>
+  <.form let={f} for={@changeset} phx-submit="save" id="echo_form">
+    <%= if @current_user  do %>
+      <%= hidden_input f, :name, value: @current_user.name %>
+      <%= error_tag f, :name %>
+    <% end %>
+
+    <%= label f, :message %>
+    <%= text_input f, :message %>
+    <%= error_tag f, :message %>
+
+    <div>
+      <%= submit "Send", phx_disable_with: "Sending..." %> <button phx-click="transition">Add Transition</button>
+    </div>
+  </.form>
+
+<% else %>
+  <section phx-drop-target={@uploads.transition.ref}>
+
+  <%# render each transition image entry %>
+  <%= for entry <- @uploads.transition.entries do %>
+      <article class="upload-entry">
+        <figure>
+          <%# Phoenix.LiveView.Helpers.live_img_preview/2 renders a client-side preview %>
+          <%= live_img_preview entry %>
+          <figcaption><%= entry.client_name %></figcaption>
+        </figure>
+
+        <%# entry.progress will update automatically for in-flight entries %>
+        <progress value={entry.progress} max="100"> <%= entry.progress %>% </progress>
+
+        <%# a regular click event whose handler will invoke Phoenix.LiveView.cancel_upload/3 %>
+        <button phx-click="cancel-upload" phx-value-ref={entry.ref} aria-label="cancel">&times;</button>
+
+        <%# Phoenix.LiveView.Helpers.upload_errors/2 returns a list of error atoms %>
+        <%= for err <- upload_errors(@uploads.transition, entry) do %>
+         <p class="alert alert-danger"><%= error_to_string(err) %></p>
+        <% end %>
+
+      </article>
+  <% end %>
+
+  </section>
+
+
+<form id="upload-form" phx-submit="transit" phx-change="validate">
+  <%= live_file_input @uploads.transition %>
+  <button type="submit">Transit</button>
+</form>
+
+<% end %>
+
+
 
 <ul id="msg-list" style="list-style: none; min-height:10px;">
   <%= for echo <- @nowstream do %>
-    <b><%= echo.name %></b>: <%= echo.message %> <i style="float:right;color: gray;"><%= timeFormat(echo.inserted_at, @timezone, @timezone_offset) %> </i>
-    <br>
-   <% end %>
-   <div style="width: 100%; height: 25px;  border-bottom: 1px solid gold; text-align: center"><span style="color:#192756; padding: 0 10px; font-style: oblique;">Session Genesis</span></div>
+    <%= unless echo.type == "transition" do %>
+      <b><%= echo.name %></b>: <%= echo.message %> <i style="float:right;color: gray;"><%= time_format(echo.inserted_at, @timezone, @timezone_offset) %> </i>
+      <br>
+    <% else %>
+        <b><%= echo.name %></b>:
+        <article class="column">
+        <img alt="product image"
+        src= {Routes.static_path(@socket, echo.message)}>
+        </article>
+        
+        <%= if echo.transited == false do %>
+          <button phx-click="approve" value={echo.id}>Approve?</button>
+          <br>  
+        <% else %>
+          <b>Approved by: <%= echo.transiter %></b> <br>
+        <% end %>
+
+      <% end %>
+
+  <% end %>
 </ul>
+
+ <div style="width: 100%; height: 25px;  border-bottom: 1px solid gold; text-align: center"><span style="color:#192756; padding: 0 10px; font-style: oblique;">Session Genesis</span></div>
 
 <ul id="msg-list" style="list-style: none; min-height:200px;">
   <%= for echo <- @echoes do %>
-    <b><%= echo.name %></b>: <%= echo.message %> <i style="float:right;color: gray;"><%= timeFormat(echo.inserted_at, @timezone, @timezone_offset) %> </i>
-    <br>
-   <% end %>
+    <%= if echo.type == "transition" do %>
+      <b><%= echo.transiter %></b>: <br>
+     
+      <article class="column">
+      <img alt="product image"
+      src= {Routes.static_path(@socket, echo.message)}>
+      </article>
+     
+      <i style="float:right;color: gray;"><%= time_format(echo.inserted_at, @timezone, @timezone_offset) %><br></i>
+      
+      <%= if echo.transited == false do %>
+        <button phx-click="approve" value={echo.id}>Approve?</button>
+        <br>  
+      <% else %>
+        <b>Approved by <%= echo.transiter %>!</b><br>
+      <% end %>
+
+      
+
+    <% end %>
+    <%= unless echo.type == "transition" do %>
+      <b><%= echo.name %></b>: <%= echo.message %> <i style="float:right;color: gray;"><%= time_format(echo.inserted_at, @timezone, @timezone_offset) %> </i>
+      <br>
+    <% end %>
+  <% end %>
 </ul>
 
 

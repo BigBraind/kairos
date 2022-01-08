@@ -8,7 +8,6 @@ defmodule Lifecycle.Timeline do
 
   alias Lifecycle.Timeline.Echo
 
-
   @doc """
   Returns the list of echoes.
 
@@ -19,7 +18,6 @@ defmodule Lifecycle.Timeline do
 
   """
   def list_echoes, do: Repo.all(Echo)
-
 
   @doc """
   Gets a single echo.
@@ -101,15 +99,20 @@ defmodule Lifecycle.Timeline do
   end
 
   def recall(limit \\ 8) do
-    query=from(e in Echo, order_by: [desc: e.inserted_at])
+    query = from(e in Echo, order_by: [desc: e.inserted_at])
     Lifecycle.Repo.all(query, limit: limit)
   end
 
   def phase_recall(id) do
-    query=from(e in Echo, where: e.phase_id == ^id , order_by: [desc: e.inserted_at])
+    query = from(e in Echo, where: e.phase_id == ^id, order_by: [desc: e.inserted_at])
     Lifecycle.Repo.all(query, limit: 8)
   end
 
+  @doc """
+    Approve the transiiton echo objects
+    A wrapper of update_echo
+  """
+  def update_transition(id, attrs), do: update_echo(get_echo!(id), attrs)
 
   alias Lifecycle.Timeline.Phase
 

@@ -24,13 +24,8 @@ config :lifecycle, Lifecycle.Repo,
   ssl: true,
   pool_size: 2
 
-
 # Do not print debug messages in production
 config :logger, level: :info
-
-
-
-
 
 # ## SSL Support
 #

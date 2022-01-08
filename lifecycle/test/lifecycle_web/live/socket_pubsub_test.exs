@@ -1,4 +1,3 @@
-
 defmodule LifecycleWeb.SocketPubsubTest do
   use Lifecycle.DataCase
   alias Lifecycle.Pubsub
@@ -19,7 +18,6 @@ defmodule LifecycleWeb.SocketPubsubTest do
 
     test "subscribes to echo events and receives an event upon publish", %{socket: socket} do
       socket = assign(socket, nowstream: [])
-      IO.inspect(socket)
       echo = echo_fixture()
 
       %{topic: topic, event: event} = pubsub_fixture()
@@ -27,9 +25,6 @@ defmodule LifecycleWeb.SocketPubsubTest do
       if connected?(socket), do: Pubsub.subscribe(topic)
 
       Pubsub.notify_subs({:ok, echo}, event, topic)
-
-      IO.inspect(socket.assigns.nowstream)
     end
   end
-
 end

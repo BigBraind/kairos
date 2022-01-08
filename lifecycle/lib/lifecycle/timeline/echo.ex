@@ -1,4 +1,8 @@
 defmodule Lifecycle.Timeline.Echo do
+  @moduledoc """
+    Schema table for Echo objects.
+    Echo => Chat message
+  """
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -7,6 +11,8 @@ defmodule Lifecycle.Timeline.Echo do
     field :message, :string
     field :name, :string
     field :type, :string
+    field :transited, :boolean
+    field :transiter , :string
     belongs_to :phase, Lifecycle.Timeline.Phase, foreign_key: :phase_id
     timestamps()
   end
@@ -14,7 +20,7 @@ defmodule Lifecycle.Timeline.Echo do
   @doc false
   def changeset(echo, attrs \\ %{}) do
     echo
-    |> cast(attrs, [:message, :phase_id, :type, :name])
+    |> cast(attrs, [:message, :phase_id, :type, :name, :transited, :transiter])
     # |> cast_assoc(attrs, [:journey])
     |> validate_required([:message, :name])
     # |> validate_required([:message, :journey, :type, :name])
