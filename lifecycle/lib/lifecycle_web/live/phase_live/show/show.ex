@@ -1,7 +1,7 @@
 defmodule LifecycleWeb.PhaseLive.Show do
   @moduledoc false
   use LifecycleWeb, :live_view
-  on_mount {LifecycleWeb.Auth.Protocol, :auth}
+  # on_mount {LifecycleWeb.Auth.Protocol, :auth}
 
   alias Lifecycle.Timeline
   alias Lifecycle.Pubsub
@@ -58,6 +58,12 @@ defmodule LifecycleWeb.PhaseLive.Show do
   @impl true
   def handle_info({Pubsub, [:echo, :created], _message}, socket) do
     {:noreply, assign(socket, :nowstream, [_message | socket.assigns.nowstream])}
+  end
+
+  @impl true
+  def handle_info({Pubsub, [:echo, :updated], _message}, socket) do
+    # TODO upodate the existing transition object
+    # {:noreply, assign(socket, :nowstream, [_message | socket.assigns.nowstream])}
   end
 
   @impl true

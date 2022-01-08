@@ -40,11 +40,11 @@ defmodule LifecycleWeb.EchoLiveTest do
     test "saves new echo", %{conn: conn} do
       {:ok, index_live, _html} = live(conn, Routes.echo_index_path(conn, :index))
       assert index_live
-             |> element("form")
+             |> element(~s{[id="echo_form"]})
              |> render_submit(echo: @invalid_attrs) =~ "can&#39;t be blank"
       {:ok, index_live, _html} = live(conn, Routes.echo_index_path(conn, :index))
       assert index_live
-             |> element("form")
+             |> element(~s{[id="echo_form"]})
              |> render_submit(echo: @create_attrs) =~ "Message Sent"
     end
   end
