@@ -19,6 +19,7 @@ defmodule LifecycleWeb.EchoLive.Index do
     timezone = socket.assigns.timezone
     timezone_offset = socket.assigns.timezone_offset
     changeset = Timeline.Echo.changeset(%Echo{})
+    socket = allow_upload(socket, :transition, accept: ~w(.jpg .jpeg), max_entries: 2)
 
     {:ok,
      assign(socket,
@@ -26,7 +27,8 @@ defmodule LifecycleWeb.EchoLive.Index do
        timezone: timezone,
        changeset: changeset,
        nowstream: [],
-       timezone_offset: timezone_offset
+       timezone_offset: timezone_offset,
+       image_list: []
      )}
   end
 
@@ -79,4 +81,30 @@ defmodule LifecycleWeb.EchoLive.Index do
     time
     |> Timezone.get_time(timezone, timezone_offset)
   end
+
+
+  def handle_event("validate", _params, socket) do
+    {:noreply, socket}
+  end
+
+
+  def handle_event("cancel-upload", %{"ref" => ref}, socket) do
+    {:noreply, cancel_upload(socket, :transition, ref)}
+  end
+
+  def handle_event("transit", _params, socket) do
+    uploaded_files =
+      consume_uploaded_entries(socket, :transition, fn %{path: path}, _entry ->
+        dest = Path.join([:code.priv_dir(:lifecycle), "static", "uploads", Path.basename(path)])
+        File.cp!(path, dest)
+        Routes.static_path(socket, "/#{Path.basename(dest)}")
+      end)
+
+    {:noreply, update(socket, :image_list, &(&1 ++ uploaded_files))}
+  end
+
+
+  def error_to_string(:too_large), do: "Too large"
+  def error_to_string(:too_many_files), do: "You have selected too many files"
+  def error_to_string(:not_accepted), do: "You have selected an unacceptable file type"
 end

@@ -2,18 +2,55 @@
 
 <.form let={f} for={@changeset} phx-submit="save">
   <%= if @current_user  do %>
-    <%= hidden_input f, :name, value: @current_user.name %>
-    <%= error_tag f, :name %>
+  <%= hidden_input f, :name, value: @current_user.name %>
+  <%= error_tag f, :name %>
   <% end %>
-    
-    <%= label f, :message %>
-    <%= text_input f, :message %>
-    <%= error_tag f, :message %>
 
-    <div>
-      <%= submit "Send", phx_disable_with: "Sending..." %>
-    </div>
+  <%= label f, :message %>
+  <%= text_input f, :message %>
+  <%= error_tag f, :message %>
+
+  <section phx-drop-target={@uploads.transition.ref}>
+
+    <%# render each transition image entry %>
+    <%= for entry <- @uploads.transition.entries do %>
+        <article class="upload-entry">
+
+          <figure>
+            <%# Phoenix.LiveView.Helpers.live_img_preview/2 renders a client-side preview %>
+            <%= live_img_preview entry %>
+            <figcaption><%= entry.client_name %></figcaption>
+          </figure>
+
+          <%# entry.progress will update automatically for in-flight entries %>
+          <progress value={entry.progress} max="100"> <%= entry.progress %>% </progress>
+
+          <%# a regular click event whose handler will invoke Phoenix.LiveView.cancel_upload/3 %>
+          <button phx-click="cancel-upload" phx-value-ref={entry.ref} aria-label="cancel">&times;</button>
+
+          <%# Phoenix.LiveView.Helpers.upload_errors/2 returns a list of error atoms %>
+          <%= for err <- upload_errors(@uploads.transition, entry) do %>
+              <p class="alert alert-danger"><%= error_to_string(err) %></p>
+              <% end %>
+
+        </article>
+        <% end %>
+
+  </section>
+
+  <div>
+    <%= submit "Send", phx_disable_with: "Sending..." %>
+  </div>
 </.form>
+
+<form id="upload-form" phx-submit="transit" phx-change="validate">
+  <%= live_file_input @uploads.transition %>
+  <button type="submit">Add Transition</button>
+</form>
+
+
+
+
 
 <%= if @live_action in [:new, :edit] do %>
   <%= live_modal LifecycleWeb.EchoLive.FormComponent,
