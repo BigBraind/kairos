@@ -61,6 +61,12 @@ defmodule LifecycleWeb.PhaseLive.Show do
   end
 
   @impl true
+  def handle_info({Pubsub, [:echo, :updated], _message}, socket) do
+    # TODO upodate the existing transition object
+    # {:noreply, assign(socket, :nowstream, [_message | socket.assigns.nowstream])}
+  end
+
+  @impl true
   def handle_event("save", %{"echo" => echo_params}, socket) do
     echo_params = Map.put(echo_params, "phase_id", socket.assigns.phase.id)
 

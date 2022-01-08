@@ -1,6 +1,6 @@
 <h1>Echo History</h1>
 
-<.form let={f} for={@changeset} phx-submit="save">
+<.form let={f} for={@changeset} phx-submit="save" id="echo_form">
   <%= if @current_user  do %>
   <%= hidden_input f, :name, value: @current_user.name %>
   <%= error_tag f, :name %>
@@ -66,10 +66,17 @@
     <% end %>
 
     <%= if echo.type == "transition" do %>
+      <b><%= echo.name %></b>:
+      
       <article class="column">
       <img alt="product image"
       src= {Routes.static_path(@socket, echo.message)}>
       </article>
+      
+      <%= if echo.transited == false do %>
+        <button phx-click="approve" value={echo.id}>Approve?</button>
+        <br>  
+      <% end %>
     <% end %>
 
   <% end %>
@@ -79,13 +86,19 @@
 <ul id="msg-list" style="list-style: none; min-height:200px;">
   <%= for echo <- @echoes do %>
     <%= if echo.type == "transition" do %>
-       <b><%= echo.name %></b>:
-       <article class="column">
+      <b><%= echo.name %></b>:
+     
+      <article class="column">
       <img alt="product image"
       src= {Routes.static_path(@socket, echo.message)}>
       </article>
+     
       <i style="float:right;color: gray;"><%= time_format(echo.inserted_at, @timezone, @timezone_offset) %> </i>
+      
+      <%= if echo.transited == false do %>
+      <button phx-click="approve" value={echo.id}>Approve?</button>
       <br>  
+      <% end %>
     <% end %>
     <%= unless echo.type == "transition" do %>
       <b><%= echo.name %></b>: <%= echo.message %> <i style="float:right;color: gray;"><%= time_format(echo.inserted_at, @timezone, @timezone_offset) %> </i>

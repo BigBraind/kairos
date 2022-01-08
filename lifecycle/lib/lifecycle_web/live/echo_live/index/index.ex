@@ -52,7 +52,6 @@ defmodule LifecycleWeb.EchoLive.Index do
 
   @impl true
   def handle_event("save", %{"echo" => echo_params}, socket) do
-
     case Timeline.create_echo(echo_params) do
       {:ok, echo} ->
         {Pubsub.notify_subs({:ok, echo}, [:echo, :created], "1")}
@@ -101,7 +100,9 @@ defmodule LifecycleWeb.EchoLive.Index do
         ext = entry.client_name
         dest_path = path <> ext
         # changes destination path name with extension for rendering
-        dest = Path.join([:code.priv_dir(:lifecycle), "static", "uploads", Path.basename(dest_path)])
+        dest =
+          Path.join([:code.priv_dir(:lifecycle), "static", "uploads", Path.basename(dest_path)])
+
         File.cp!(path, dest)
         Routes.static_path(socket, "/uploads/#{Path.basename(dest)}")
       end)
@@ -109,14 +110,12 @@ defmodule LifecycleWeb.EchoLive.Index do
     # convert list to string
     image_list = Enum.join(uploaded_files, "##")
 
-    # assign image path to socket
-    # socket = socket |> assign(image_list: file)
-
     # construct echo_params for creating transition echo objects
     echo_params = %{
       "message" => image_list,
       "type" => "transition",
-      "name" => socket.assigns.current_user.name
+      "name" => socket.assigns.current_user.name,
+      "transited" => false
     }
 
     case Timeline.create_echo(echo_params) do
@@ -131,6 +130,28 @@ defmodule LifecycleWeb.EchoLive.Index do
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, changeset: changeset)}
+    end
+  end
+
+  def handle_event("approve", %{"value" => id}, socket) do
+    echo = Timeline.get_echo!(id)
+    IO.inspect(echo)
+
+    echo_params = %{
+      transited: true,
+      transiter: socket.assigns.current_user.name
+    }
+
+    case Timeline.update_transition(id, echo_params) do
+      {:ok, echo} ->
+        {Pubsub.notify_subs({:ok, echo}, [:echo, :created], "1")}
+
+        {:noreply,
+         socket
+         |> put_flash(:info, "Transition approved!")}
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        {:noreply, assign(socket, :changeset, changeset)}
     end
   end
 
