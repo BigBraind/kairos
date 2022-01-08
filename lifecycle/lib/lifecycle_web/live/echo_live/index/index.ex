@@ -30,7 +30,8 @@ defmodule LifecycleWeb.EchoLive.Index do
        changeset: changeset,
        nowstream: [],
        timezone_offset: timezone_offset,
-       image_list: []
+       image_list: [],
+       transiting: false
      )}
   end
 
@@ -82,6 +83,12 @@ defmodule LifecycleWeb.EchoLive.Index do
     |> Timezone.get_time(timezone, timezone_offset)
   end
 
+  def handle_event("transition", _params, socket) do
+    {:noreply,
+     socket
+     |> assign(:transiting, true)}
+  end
+
   def handle_event("validate", _params, socket) do
     {:noreply, socket}
   end
@@ -126,6 +133,7 @@ defmodule LifecycleWeb.EchoLive.Index do
         {
           :noreply,
           socket
+          |> assign(:transiting, false)
           |> put_flash(:info, "Transition Object Sent")
         }
 
@@ -136,7 +144,6 @@ defmodule LifecycleWeb.EchoLive.Index do
 
   def handle_event("approve", %{"value" => id}, socket) do
     echo = Timeline.get_echo!(id)
-    IO.inspect(echo.transited)
 
     case echo.transited do
       false -> {
