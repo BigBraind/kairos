@@ -12,6 +12,7 @@ defmodule LifecycleWeb.EchoLive.Index do
 
   # TODO: separate msg by date
   # TODO: allow multiple images uploaded, currently multiple images name is concatenated with "##"
+  # TODO: modularize the code with functional components
 
   @impl true
   def mount(_params, _session, socket) do
@@ -29,7 +30,8 @@ defmodule LifecycleWeb.EchoLive.Index do
        changeset: changeset,
        nowstream: [],
        timezone_offset: timezone_offset,
-       image_list: []
+       image_list: [],
+       transiting: false
      )}
   end
 
@@ -81,6 +83,12 @@ defmodule LifecycleWeb.EchoLive.Index do
     |> Timezone.get_time(timezone, timezone_offset)
   end
 
+  def handle_event("transition", _params, socket) do
+    {:noreply,
+     socket
+     |> assign(:transiting, true)}
+  end
+
   def handle_event("validate", _params, socket) do
     {:noreply, socket}
   end
@@ -125,6 +133,7 @@ defmodule LifecycleWeb.EchoLive.Index do
         {
           :noreply,
           socket
+          |> assign(:transiting, false)
           |> put_flash(:info, "Transition Object Sent")
         }
 
@@ -135,23 +144,31 @@ defmodule LifecycleWeb.EchoLive.Index do
 
   def handle_event("approve", %{"value" => id}, socket) do
     echo = Timeline.get_echo!(id)
-    IO.inspect(echo)
 
-    echo_params = %{
-      transited: true,
-      transiter: socket.assigns.current_user.name
-    }
+    case echo.transited do
+      false -> {
+        echo_params = %{
+          transited: true,
+          transiter: socket.assigns.current_user.name
+        }}
 
-    case Timeline.update_transition(id, echo_params) do
-      {:ok, echo} ->
-        {Pubsub.notify_subs({:ok, echo}, [:echo, :created], "1")}
+        case Timeline.update_transition(id, echo_params) do
+          {:ok, echo} ->
+            {Pubsub.notify_subs({:ok, echo}, [:echo, :created], "1")}
 
-        {:noreply,
-         socket
-         |> put_flash(:info, "Transition approved!")}
+            {:noreply,
+             socket
+             |> put_flash(:info, "Transition approved!")}
 
-      {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, assign(socket, :changeset, changeset)}
+          {:error, %Ecto.Changeset{} = changeset} ->
+            {:noreply, assign(socket, :changeset, changeset)}
+        end
+
+      true -> {
+        :noreply,
+        socket
+        |> put_flash(:info, "Transition already approved!")
+      }
     end
   end
 
