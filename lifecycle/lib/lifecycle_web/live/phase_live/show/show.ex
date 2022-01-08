@@ -1,7 +1,7 @@
 defmodule LifecycleWeb.PhaseLive.Show do
   @moduledoc false
   use LifecycleWeb, :live_view
-  #on_mount {LifecycleWeb.Auth.Protocol, :auth}
+  # on_mount {LifecycleWeb.Auth.Protocol, :auth}
 
   alias Lifecycle.Timeline
   alias Lifecycle.Pubsub

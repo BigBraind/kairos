@@ -57,7 +57,8 @@ config :lifecycle, LifecycleWeb.Endpoint,
 config :lifecycle, LifecycleWeb.Endpoint,
   live_reload: [
     patterns: [
-      ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
+      ~r"priv/static/.*(js|css)$",
+      ~r"priv/static/static/images/.*(png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
       ~r"lib/lifecycle_web/(live|views)/.*(ex)$",
       ~r"lib/lifecycle_web/templates/.*(eex)$"

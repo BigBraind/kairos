@@ -31,10 +31,10 @@
           <%# Phoenix.LiveView.Helpers.upload_errors/2 returns a list of error atoms %>
           <%= for err <- upload_errors(@uploads.transition, entry) do %>
               <p class="alert alert-danger"><%= error_to_string(err) %></p>
-              <% end %>
+          <% end %>
 
         </article>
-        <% end %>
+    <% end %>
 
   </section>
 
@@ -48,10 +48,6 @@
   <button type="submit">Add Transition</button>
 </form>
 
-
-
-
-
 <%= if @live_action in [:new, :edit] do %>
   <%= live_modal LifecycleWeb.EchoLive.FormComponent,
     id: @echo.id || :new,
@@ -64,17 +60,38 @@
 
 <ul id="msg-list" style="list-style: none; min-height:10px;">
   <%= for echo <- @nowstream do %>
-    <b><%= echo.name %></b>: <%= echo.message %> <i style="float:right;color: gray;"><%= time_format(echo.inserted_at, @timezone, @timezone_offset) %> </i>
-    <br>
-   <% end %>
-   <div style="width: 100%; height: 25px;  border-bottom: 1px solid gold; text-align: center"><span style="color:#192756; padding: 0 10px; font-style: oblique;">Session Genesis</span></div>
+    <%= unless echo.type == "transition" do %>
+      <b><%= echo.name %></b>: <%= echo.message %> <i style="float:right;color: gray;"><%= time_format(echo.inserted_at, @timezone, @timezone_offset) %> </i>
+      <br>
+    <% end %>
+
+    <%= if echo.type == "transition" do %>
+      <article class="column">
+      <img alt="product image"
+      src= {Routes.static_path(@socket, echo.message)}>
+      </article>
+    <% end %>
+
+  <% end %>
+  <div style="width: 100%; height: 25px;  border-bottom: 1px solid gold; text-align: center"><span style="color:#192756; padding: 0 10px; font-style: oblique;">Session Genesis</span></div>
 </ul>
 
 <ul id="msg-list" style="list-style: none; min-height:200px;">
   <%= for echo <- @echoes do %>
-    <b><%= echo.name %></b>: <%= echo.message %> <i style="float:right;color: gray;"><%= time_format(echo.inserted_at, @timezone, @timezone_offset) %> </i>
-    <br>
-   <% end %>
+    <%= if echo.type == "transition" do %>
+       <b><%= echo.name %></b>:
+       <article class="column">
+      <img alt="product image"
+      src= {Routes.static_path(@socket, echo.message)}>
+      </article>
+      <i style="float:right;color: gray;"><%= time_format(echo.inserted_at, @timezone, @timezone_offset) %> </i>
+      <br>  
+    <% end %>
+    <%= unless echo.type == "transition" do %>
+      <b><%= echo.name %></b>: <%= echo.message %> <i style="float:right;color: gray;"><%= time_format(echo.inserted_at, @timezone, @timezone_offset) %> </i>
+      <br>
+    <% end %>
+  <% end %>
 </ul>
 
 

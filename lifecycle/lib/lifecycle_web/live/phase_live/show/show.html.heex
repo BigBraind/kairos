@@ -41,7 +41,7 @@
     <%= for echo <- @nowstream do %>
         <b><%= echo.name %></b>: <%= echo.message %> <i style="float:right;color: gray;"><%= time_format(echo.inserted_at, @timezone, @timezone_offset) %> </i>
         <br>
-        <% end %>
+    <% end %>
         <div style="width: 100%; height: 25px;  border-bottom: 1px solid gold; text-align: center"><span style="color:#192756; padding: 0 10px; font-style: oblique;">Session Genesis</span></div>
   </ul>
 
