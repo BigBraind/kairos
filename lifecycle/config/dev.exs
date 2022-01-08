@@ -1,5 +1,6 @@
 import Config
 
+
 # Configure your database
 config :lifecycle, Lifecycle.Repo,
   username: "postgres",
@@ -56,12 +57,27 @@ config :lifecycle, LifecycleWeb.Endpoint,
 config :lifecycle, LifecycleWeb.Endpoint,
   live_reload: [
     patterns: [
-      ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
+      ~r"priv/static/.*(js|css)$",
+      ~r"priv/static/static/images/.*(png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
       ~r"lib/lifecycle_web/(live|views)/.*(ex)$",
       ~r"lib/lifecycle_web/templates/.*(eex)$"
     ]
   ]
+
+config :ex_aws,
+  debug_requests: true,
+  region: "local"
+
+config :ex_aws, :s3, %{
+  access_key_id: "minioadmin",
+  secret_access_key: "minioadmin",
+  scheme: "http://",
+  host: "localhost",
+  port: 9000,
+  region: "local",
+  bucket: "uploads"
+}
 
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n"

@@ -32,7 +32,8 @@
         <td><%= phase.parent %></td>
 
         <td>
-          <span><%= live_redirect "Show", to: Routes.phase_show_path(@socket, :show, phase) %></span>
+          <span><%= live_redirect "Show", to: Routes.phase_show_path(@socket, :show, phase)%></span>
+          <br>
           <span><%= live_patch "Edit", to: Routes.phase_index_path(@socket, :edit, phase) %></span>
           <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: phase.id, data: [confirm: "Are you sure?"] %></span>
         </td>

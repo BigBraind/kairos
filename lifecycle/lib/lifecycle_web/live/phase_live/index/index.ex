@@ -1,6 +1,6 @@
 defmodule LifecycleWeb.PhaseLive.Index do
+  @moduledoc false
   use LifecycleWeb, :live_view
-
   alias Lifecycle.Timeline
   alias Lifecycle.Timeline.Phase
 
@@ -23,7 +23,6 @@ defmodule LifecycleWeb.PhaseLive.Index do
   defp apply_action(socket, :new, _params) do
     socket
     |> assign(:page_title, "New Phase")
-    |> assign(:title, "Hello")
     |> assign(:phase, %Phase{})
   end
 

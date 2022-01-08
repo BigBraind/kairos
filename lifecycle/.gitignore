@@ -25,6 +25,9 @@ lifecycle-*.tar
 # Ignore assets that are produced by build tools.
 /priv/static/assets/
 
+# upload images
+/priv/static/uploads/
+
 # Ignore digested assets cache.
 /priv/static/cache_manifest.json
 
@@ -32,3 +35,7 @@ lifecycle-*.tar
 npm-debug.log
 /assets/node_modules/
 
+/.vscode
+
+.DS_Store
+priv/.DS_Store

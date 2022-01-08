@@ -1,4 +1,5 @@
 defmodule LifecycleWeb.PhaseLive.FormComponent do
+  @moduledoc false
   use LifecycleWeb, :live_component
 
   alias Lifecycle.Timeline
@@ -46,8 +47,8 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
         {:noreply,
          socket
          |> put_flash(:info, "Phase created successfully")
-         |> push_redirect(to: Routes.phase_show_path(socket, :show, phase.id)) #"/phases/" <> phase.id
-        }
+         # "/phases/" <> phase.id
+         |> push_redirect(to: Routes.phase_show_path(socket, :show, phase.id))}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, changeset: changeset)}
