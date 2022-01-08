@@ -96,8 +96,8 @@
       <i style="float:right;color: gray;"><%= time_format(echo.inserted_at, @timezone, @timezone_offset) %> </i>
       
       <%= if echo.transited == false do %>
-      <button phx-click="approve" value={echo.id}>Approve?</button>
-      <br>  
+        <button phx-click="approve" value={echo.id}>Approve?</button>
+        <br>  
       <% end %>
     <% end %>
     <%= unless echo.type == "transition" do %>
