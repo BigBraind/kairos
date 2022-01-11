@@ -22,12 +22,19 @@
     <%= error_tag f, :message %>
 
     <div>
-      <%= submit "Send", phx_disable_with: "Sending..." %> <button phx-click="transition">Add Transition</button>
+      <%= submit "Send", phx_disable_with: "Sending..." %> <%#<button phx-click="transition">Add Transition</button> %>
+      <Transition.button/>
+
     </div>
   </.form>
 
 <% else %>
   <section phx-drop-target={@uploads.transition.ref}>
+
+<form id="upload-form" phx-submit="transit" phx-change="validate">
+  <%= live_file_input @uploads.transition %>
+  <button type="submit">Transit</button>
+</form>
 
   <%# render each transition image entry %>
   <%= for entry <- @uploads.transition.entries do %>
@@ -54,13 +61,8 @@
 
   </section>
 
-
-<form id="upload-form" phx-submit="transit" phx-change="validate">
-  <%= live_file_input @uploads.transition %>
-  <button type="submit">Transit</button>
-</form>
-
 <% end %>
+
 
 
 
