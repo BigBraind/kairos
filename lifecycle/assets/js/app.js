@@ -26,6 +26,15 @@ import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
 import topbar from "../vendor/topbar"
 
+let Hooks = {} // for creating hooks
+
+// hooks for emptying the input on the echo form
+Hooks.EmptyInput = {
+    updated(){
+        this.el.elements[2].value = " "
+    }
+  }
+
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 let liveSocket = new LiveSocket("/live", Socket,{
                                 params: 
@@ -41,7 +50,8 @@ let liveSocket = new LiveSocket("/live", Socket,{
                                             repeat: e.repeat
                                         }
                                     }
-                                 }
+                                 },
+                                hooks: Hooks
                                 }
                                )
 
