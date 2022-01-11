@@ -10,6 +10,8 @@ defmodule LifecycleWeb.EchoLive.Index do
   alias Lifecycle.Timeline
   alias Lifecycle.Timeline.Echo
 
+  alias LifecycleWeb.Modal.Button.Transition
+
   # TODO: separate msg by date
   # TODO: allow multiple images uploaded, currently multiple images name is concatenated with "##"
   # TODO: modularize the code with functional components
@@ -83,10 +85,11 @@ defmodule LifecycleWeb.EchoLive.Index do
     |> Timezone.get_time(timezone, timezone_offset)
   end
 
+  @doc """
+    button event by transition button
+  """
   def handle_event("transition", _params, socket) do
-    {:noreply,
-     socket
-     |> assign(:transiting, true)}
+    Transition.handle_button("transition", socket)
   end
 
   def handle_event("validate", _params, socket) do
