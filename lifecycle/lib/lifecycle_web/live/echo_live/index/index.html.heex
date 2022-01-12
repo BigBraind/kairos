@@ -63,30 +63,14 @@
 
 <% end %>
 
-
-
-
 <ul id="msg-list" style="list-style: none; min-height:10px;">
   <%= for echo <- @nowstream do %>
-    <%= unless echo.type == "transition" do %>
-      <b><%= echo.name %></b>: <%= echo.message %> <i style="float:right;color: gray;"><%= time_format(echo.inserted_at, @timezone, @timezone_offset) %> </i>
-      <br>
-    <% else %>
-        <b><%= echo.name %></b>:
-        <article class="column">
-        <img alt="product image"
-        src= {Routes.static_path(@socket, echo.message)}>
-        </article>
-        
-        <%= if echo.transited == false do %>
-          <button phx-click="approve" value={echo.id}>Approve?</button>
-          <br>  
-        <% else %>
-          <b>Approved by: <%= echo.transiter %></b> <br>
-        <% end %>
 
+    <%= if echo.type == "transition" do %>
+        <EchoList.transition_list echo={echo}, timezone={@timezone} timezone_offset={@timezone_offset}, image_path={Routes.static_path(@socket, echo.message)}/>
+      <% else %>
+        <EchoList.echo_list echo={echo} timezone={@timezone} timezone_offset={@timezone_offset}/>
       <% end %>
-
   <% end %>
 </ul>
 
@@ -95,38 +79,9 @@
 <ul id="msg-list" style="list-style: none; min-height:200px;">
   <%= for echo <- @echoes do %>
     <%= if echo.type == "transition" do %>
-      <b><%= echo.transiter %></b>: <br>
-     
-      <article class="column">
-      <img alt="product image"
-      src= {Routes.static_path(@socket, echo.message)}>
-      </article>
-     
-      <i style="float:right;color: gray;"><%= time_format(echo.inserted_at, @timezone, @timezone_offset) %><br></i>
-      
-      <%= if echo.transited == false do %>
-        <button phx-click="approve" value={echo.id}>Approve?</button>
-        <br>  
-      <% else %>
-        <b>Approved by <%= echo.transiter %>!</b><br>
-      <% end %>
-
-      
-
-    <% end %>
-    <%= unless echo.type == "transition" do %>
-      <b><%= echo.name %></b>: <%= echo.message %> <i style="float:right;color: gray;"><%= time_format(echo.inserted_at, @timezone, @timezone_offset) %> </i>
-      <br>
+      <EchoList.transition_list echo={echo}, timezone={@timezone} timezone_offset={@timezone_offset}, image_path={Routes.static_path(@socket, echo.message)}/>
+    <% else %>
+      <EchoList.echo_list echo={echo} timezone={@timezone} timezone_offset={@timezone_offset}/>
     <% end %>
   <% end %>
 </ul>
-
-
-  <%# <form phx-submit="enter" class="row">
-      <div class="col-xs-3" style="width: 25%; margin-left: 0;">
-          <input type="text" id="name" name="name" class="input" placeholder="Your Name" style="border: 2px gold solid; font-size: 1.3em;" autofocus>
-      </div> 
-      <div class="col-xs-9" style="width: 75%; margin-left: 1%; ">
-          <input type="text" id="msg" name="msg" class="input" placeholder="Shoutout here" style="border: 2px gold solid; font-size: 1.3em;">
-      </div>
-  </form> %>
