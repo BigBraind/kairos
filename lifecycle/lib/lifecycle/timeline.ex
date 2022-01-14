@@ -126,7 +126,7 @@ defmodule Lifecycle.Timeline do
 
   """
   def list_phases do
-    Repo.all(Phase)
+    Repo.all from p in Phase, preload: [:parent, :child]
   end
 
   @doc """
@@ -143,7 +143,7 @@ defmodule Lifecycle.Timeline do
       ** (Ecto.NoResultsError)
 
   """
-  def get_phase!(id), do: Repo.get!(Phase, id)
+  def get_phase!(id), do: Repo.get!(Phase, id) |> Repo.preload([:parent, :child])
 
   @doc """
   Creates a phase.

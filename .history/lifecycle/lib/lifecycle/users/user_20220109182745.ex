@@ -20,7 +20,6 @@ defmodule Lifecycle.Users.User do
     timestamps()
 
     has_many :party, Lifecycle.Users.Party
-
   end
 
   def changeset(user_or_changeset, attrs) do
