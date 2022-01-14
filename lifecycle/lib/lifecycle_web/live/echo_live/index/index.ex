@@ -19,6 +19,7 @@ defmodule LifecycleWeb.EchoLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
+    IO.inspect("mount")
     if connected?(socket), do: Pubsub.subscribe("1")
     socket = Timezone.get_timezone(socket)
     timezone = socket.assigns.timezone
@@ -40,6 +41,7 @@ defmodule LifecycleWeb.EchoLive.Index do
 
   @impl true
   def handle_event("save", %{"echo" => echo_params}, socket) do
+    IO.inspect("handle_event create echo")
     case Timeline.create_echo(echo_params) do
       {:ok, echo} ->
         {Pubsub.notify_subs({:ok, echo}, [:echo, :created], "1")}
@@ -57,12 +59,13 @@ defmodule LifecycleWeb.EchoLive.Index do
 
   @impl true
   def handle_info({Pubsub, [:echo, :created], message}, socket) do
+    IO.inspect("handle_info echo created")
     {:noreply, assign(socket, :nowstream, [message | socket.assigns.nowstream])}
   end
 
   @impl true
   def handle_info({Pubsub, [:transition, :approved], message}, socket) do
-
+    IO.inspect("handle info transition approved")
     params = %{
       id: message.id,
       transiter: socket.assigns.current_user.name,
@@ -106,6 +109,7 @@ defmodule LifecycleWeb.EchoLive.Index do
   end
 
   defp list_echoes do
+    IO.inspect("list echoes")
     Timeline.recall()
   end
 
@@ -118,23 +122,27 @@ defmodule LifecycleWeb.EchoLive.Index do
     button event by transition button
   """
   def handle_event("transition", _params, socket) do
+    IO.inspect("handle event transition")
     Transition.handle_button("transition", socket)
   end
 
   def handle_event("validate", _params, socket) do
+    IO.inspect("validate")
     {:noreply, socket}
   end
 
   def handle_event("cancel-upload", %{"ref" => ref}, socket) do
+    IO.inspect("cancel upload")
     {:noreply, cancel_upload(socket, :transition, ref)}
   end
 
   @doc """
-    new docs
+  new docs
   Construct the file path of the image uploaded, and save it to local file system
   Create transition echo object
   """
   def handle_event("transit", _params, socket) do
+    IO.inspect("handle evetnt transit")
     # function to get the file path and save it to local file system
     uploaded_files =
       consume_uploaded_entries(socket, :transition, fn %{path: path}, entry ->
@@ -176,6 +184,7 @@ defmodule LifecycleWeb.EchoLive.Index do
   end
 
   def handle_event("approve", %{"value" => id}, socket) do
+    IO.inspect("approvef")
     Approve.handle_button(%{"value" => id}, socket)
   end
 
