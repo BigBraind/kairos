@@ -28,13 +28,18 @@ defmodule LifecycleWeb.Modal.EchoList do
 
   def echo_list(assigns) do
     ~H"""
-      <b><%= @echo.name %></b>: <%= @echo.message %> <i style="float:right;color: gray;"><%= time_format(@echo.inserted_at, @timezone, @timezone_offset) %> </i><br>
+      <b><%= @echo.name %></b>: <%= @echo.message %> <i style="float:right;color: gray;"><%= date_format(@echo.inserted_at, @timezone, @timezone_offset) %> <%= time_format(@echo.inserted_at, @timezone, @timezone_offset) %> </i><br>
     """
   end
 
-  def time_format(time, timezone, timezone_offset) do
+  def date_format(time, timezone, timezone_offset) do
     time
-    |> Timezone.get_time(timezone, timezone_offset)
+    |> Timezone.get_date(timezone, timezone_offset)
   end
+
+  def time_format(time, timezone, timezone_offset) do
+    Timezone.get_time(time, timezone, timezone_offset)
+  end
+
 
 end
