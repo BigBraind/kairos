@@ -11,6 +11,7 @@
 <h3>Past Echoes</h3>
 
 <%= unless @transiting do %>
+<div>
   <.form let={f} for={@changeset} phx-submit="save", phx-hook="EmptyInput", id="echo_form">
     <%= if @current_user  do %>
       <%= hidden_input f, :name, value: @current_user.name %>
@@ -22,9 +23,11 @@
     <%= error_tag f, :message %>
 
     <div>
-      <%= submit "Send", phx_disable_with: "Sending..." %> 
+    <%= submit "Send", phx_disable_with: "Sending..." %>
     </div>
-  </.form> <Transition.button/>
+  </.form>
+  <Transition.button/>
+</div>
 
 <% else %>
 <section phx-drop-target={@uploads.transition.ref}>
