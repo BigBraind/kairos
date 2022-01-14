@@ -1,40 +1,33 @@
-
-<%= if @live_action in [:new, :edit] do %>
+<!--<%= if @live_action in [:new, :edit] do %>
   <%= live_modal LifecycleWeb.EchoLive.FormComponent,
     id: @echo.id || :new,
     title: @page_title,
     action: @live_action,
     echo: @echo,
     return_to: Routes.echo_index_path(@socket, :index) %>
-<% end %>
+<% end %> -->
 
-<h1>Echo History</h1>
+<div><h1>Echo History</h1></div>
+<h3>Past Echoes</h3>
 
 <%= unless @transiting do %>
-  <.form let={f} for={@changeset} phx-submit="save" id="echo_form">
+  <.form let={f} for={@changeset} phx-submit="save", phx-hook="EmptyInput", id="echo_form">
     <%= if @current_user  do %>
       <%= hidden_input f, :name, value: @current_user.name %>
       <%= error_tag f, :name %>
     <% end %>
 
     <%= label f, :message %>
-    <%= text_input f, :message %>
+    <%= text_input f, :message, autocomplete: "off", value: " "%>
     <%= error_tag f, :message %>
 
     <div>
-      <%= submit "Send", phx_disable_with: "Sending..." %> <%#<button phx-click="transition">Add Transition</button> %>
-      <Transition.button/>
-
+      <%= submit "Send", phx_disable_with: "Sending..." %> 
     </div>
-  </.form>
+  </.form> <Transition.button/>
 
 <% else %>
-  <section phx-drop-target={@uploads.transition.ref}>
-
-<form id="upload-form" phx-submit="transit" phx-change="validate">
-  <%= live_file_input @uploads.transition %>
-  <button type="submit">Transit</button>
-</form>
+<section phx-drop-target={@uploads.transition.ref}>
 
   <%# render each transition image entry %>
   <%= for entry <- @uploads.transition.entries do %>
@@ -61,7 +54,14 @@
 
   </section>
 
+<form id="upload-form" phx-submit="transit" phx-change="validate">
+  <%= live_file_input @uploads.transition %>
+  <button type="submit">Transit</button>
+</form>
+
 <% end %>
+
+<div>
 
 <ul id="msg-list" style="list-style: none; min-height:10px;">
   <%= for echo <- @nowstream do %>
@@ -85,3 +85,4 @@
     <% end %>
   <% end %>
 </ul>
+</div>
