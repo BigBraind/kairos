@@ -65,9 +65,6 @@
 <% end %>
 <div>
   <div align="right">
-    <%= if @phase.parent do %>
-    <span><%= live_patch "Jump to Parent", to: Routes.phase_show_path(@socket, :show, @phase.parent), class: "button" %></span> |
-    <% end %>
     <span><%= live_patch "+ Child Phase", to: Routes.phase_show_path(@socket, :new, @phase), class: "button" %></span> |
     <span><%= live_patch "Edit", to: Routes.phase_show_path(@socket, :edit, @phase), class: "button" %></span> |
     <span><%= live_redirect "Back", to: Routes.phase_index_path(@socket, :index), class: "button" %></span>

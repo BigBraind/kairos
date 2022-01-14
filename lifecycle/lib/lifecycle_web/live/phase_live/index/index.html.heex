@@ -29,7 +29,9 @@
         <td><%= phase.title %></td>
         <td><%= phase.content %></td>
         <td><%= phase.type %></td>
-        <td><%= phase.parent %></td>
+        <%= if phase.parent do %>
+          <td><%= phase.parent %></td>
+        <%= end %>
 
         <td>
           <span><%= live_redirect "Show", to: Routes.phase_show_path(@socket, :show, phase)%></span>
