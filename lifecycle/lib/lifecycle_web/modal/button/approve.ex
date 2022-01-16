@@ -1,11 +1,10 @@
 defmodule LifecycleWeb.Modal.Button.Approve do
   @moduledoc """
-  Approve button
+  Approve button and its handle_event(handle_button)
   """
   use LifecycleWeb, :live_component
 
   alias Lifecycle.Timeline
-  alias Lifecycle.Timeline.Echo
 
   alias Lifecycle.Pubsub
 
@@ -23,7 +22,7 @@ defmodule LifecycleWeb.Modal.Button.Approve do
 
   notify by pub sub
   """
-  def handle_button(%{"value" => id}, socket) do
+  def handle_button(%{"value" => id}, topic \\ "1", socket) do
     echo = Timeline.get_echo!(id)
 
     case echo.transited do
@@ -38,7 +37,7 @@ defmodule LifecycleWeb.Modal.Button.Approve do
         case Timeline.update_transition(id, echo_params) do
           {:ok, echo} ->
             # to be handled by `handle_info` in EchoLive/index.ex
-            {Pubsub.notify_subs({:ok, echo}, [:transition, :approved], "1")}
+            {Pubsub.notify_subs({:ok, echo}, [:transition, :approved], topic)}
 
             {:noreply,
              socket

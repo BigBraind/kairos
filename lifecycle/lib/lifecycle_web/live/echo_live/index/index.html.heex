@@ -59,20 +59,13 @@
 
 <div>
 
-<div id="msg-list-nowstream" style="list-style: none; min-height:10px;">
-  <%= for echo <- @nowstream do %>
-
-    <%= if echo.type == "transition" do %>
-        <EchoList.transition_list echo={echo}, timezone={@timezone} timezone_offset={@timezone_offset}, image_path={Routes.static_path(@socket, echo.message)}/>
-      <% else %>
-        <EchoList.echo_list echo={echo} timezone={@timezone} timezone_offset={@timezone_offset}/>
-      <% end %>
-  <% end %>
+<div id="echo-live-msg-list-nowstream" style="list-style: none; min-height:10px;">
+  <.live_component module={Echoes} id="nowstream" echoes={@nowstream} timezone={@timezone} timezone_offset={@timezone_offset} />
 </div>
 
  <div style="width: 100%; height: 25px;  border-bottom: 1px solid gold; text-align: center"><span style="color:#192756; padding: 0 10px; font-style: oblique;">Session Genesis</span></div>
 
-<div id="msg-list-echoes" style="list-style: none; min-height:200px;">
+<div id="echo-live-msg-list-echoes" style="list-style: none; min-height:200px;">
   <.live_component module={Echoes} id="echoes" echoes={@echoes} timezone={@timezone} timezone_offset={@timezone_offset} />
 </div>
 </div>
