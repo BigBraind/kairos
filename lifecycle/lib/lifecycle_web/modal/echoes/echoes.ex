@@ -1,4 +1,8 @@
 defmodule LifecycleWeb.Modal.Echoes.Echoes do
+  @moduledoc """
+  Live Component for rendeing Echoes
+  It calls normal echoes(message) object and transition object from modal/echo_list.ex
+  """
   use LifecycleWeb, :live_component
 
   alias LifecycleWeb.Modal.Echoes.EchoList
@@ -20,6 +24,7 @@ defmodule LifecycleWeb.Modal.Echoes.Echoes do
   end
 
   def render(assigns) do
+    # separating msg by date, done via phx-hook(JS interpolating)
     ~H"""
       <ul phx-hook="SeparatingMsg" id="echoes-list" style="list-style-type:none;">
         <%= for echo <- @echoes do %>

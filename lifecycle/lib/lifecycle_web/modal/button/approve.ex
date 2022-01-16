@@ -1,4 +1,7 @@
 defmodule LifecycleWeb.Modal.Button.Approve do
+  @moduledoc """
+  Approve button
+  """
   use LifecycleWeb, :live_component
 
   alias Lifecycle.Timeline
@@ -12,6 +15,14 @@ defmodule LifecycleWeb.Modal.Button.Approve do
     """
   end
 
+  @doc """
+  handle event for approve button
+  update the transition state by changing the
+    transited: true,
+    transiter: %User{}
+
+  notify by pub sub
+  """
   def handle_button(%{"value" => id}, socket) do
     echo = Timeline.get_echo!(id)
 
