@@ -1,4 +1,4 @@
-defmodule LifecycleWeb.Modal.EchoList do
+defmodule LifecycleWeb.Modal.Echoes.EchoList do
   use LifecycleWeb, :live_component
 
   use Timex
@@ -16,7 +16,6 @@ defmodule LifecycleWeb.Modal.EchoList do
       <i style="float:right;color: gray;"><%= time_format(@echo.inserted_at, @timezone, @timezone_offset) %><br></i>
 
       <%= if @echo.transited == false do %>
-        <!-- <button phx-click="approve" value={@echo.id}>Approve?</button> -->
         <Approve.button echo={@echo}/>
         <br>
       <% else %>
@@ -28,13 +27,8 @@ defmodule LifecycleWeb.Modal.EchoList do
 
   def echo_list(assigns) do
     ~H"""
-      <b><%= @echo.name %></b>: <%= @echo.message %> <i style="float:right;color: gray;"><%= date_format(@echo.inserted_at, @timezone, @timezone_offset) %> <%= time_format(@echo.inserted_at, @timezone, @timezone_offset) %> </i><br>
+      <b><%= @echo.name %></b>: <%= @echo.message %> <i style="float:right;color: gray;"><%= time_format(@echo.inserted_at, @timezone, @timezone_offset) %> </i><br>
     """
-  end
-
-  def date_format(time, timezone, timezone_offset) do
-    time
-    |> Timezone.get_date(timezone, timezone_offset)
   end
 
   def time_format(time, timezone, timezone_offset) do

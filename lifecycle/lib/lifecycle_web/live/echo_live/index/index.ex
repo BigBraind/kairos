@@ -12,9 +12,9 @@ defmodule LifecycleWeb.EchoLive.Index do
 
   alias LifecycleWeb.Modal.Button.Transition
   alias LifecycleWeb.Modal.Button.Approve
-  alias LifecycleWeb.Modal.EchoList
-  # TODO: separate msg by date
-  # TODO: allow multiple images uploaded, currently multiple images name is concatenated with "##"
+  alias LifecycleWeb.Modal.Echoes.Echoes
+  alias LifecycleWeb.Modal.Echoes.EchoList
+
   # TODO: modularize the code with functional components
 
   @impl true
@@ -82,14 +82,15 @@ defmodule LifecycleWeb.EchoLive.Index do
        }) do
     # pass back :ok, or :cont
     socket =
-    socket
-    |> assign(
-      echo_stream,
-      Enum.map(socket.assigns[echo_stream], fn
-        %Echo{id: id} = echo -> %Echo{echo | transiter: transiter, transited: true}
-        echo -> echo
-      end)
-    )
+      socket
+      |> assign(
+        echo_stream,
+        Enum.map(socket.assigns[echo_stream], fn
+          %Echo{id: id} = echo -> %Echo{echo | transiter: transiter, transited: true}
+          echo -> echo
+        end)
+      )
+
     {:noreply, socket}
   end
 
