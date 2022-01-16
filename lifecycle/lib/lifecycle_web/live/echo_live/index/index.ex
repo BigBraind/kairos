@@ -11,11 +11,9 @@ defmodule LifecycleWeb.EchoLive.Index do
   alias Lifecycle.Timeline.Echo
 
   alias LifecycleWeb.Modal.Button.Transition
-  alias LifecycleWeb.Modal.Button.Approve
   alias LifecycleWeb.Modal.Echoes.Echoes
   alias LifecycleWeb.Modal.Echoes.EchoList
-
-  # TODO: modularize the code with functional components
+  alias LifecycleWeb.Modal.Button.Approve
 
   @impl true
   def mount(_params, _session, socket) do
@@ -69,8 +67,10 @@ defmodule LifecycleWeb.EchoLive.Index do
       socket: socket
     }
 
-    replace_echoes(%{params | echo_stream: :nowstream})
-    replace_echoes(%{params | echo_stream: :echoes})
+    {:noreply,
+     socket
+     |> assign(:nowstream, replace_echoes(%{params | echo_stream: :nowstream}))
+     |> assign(:echoes, replace_echoes(%{params | echo_stream: :echoes}))}
   end
 
   defp replace_echoes(%{
@@ -81,17 +81,10 @@ defmodule LifecycleWeb.EchoLive.Index do
          socket: socket
        }) do
     # pass back :ok, or :cont
-    socket =
-      socket
-      |> assign(
-        echo_stream,
-        Enum.map(socket.assigns[echo_stream], fn
-          %Echo{id: id} = echo -> %Echo{echo | transiter: transiter, transited: true}
-          echo -> echo
-        end)
-      )
-
-    {:noreply, socket}
+    Enum.map(socket.assigns[echo_stream], fn
+      %Echo{id: id} = echo -> %Echo{echo | transiter: transiter, transited: true}
+      echo -> echo
+    end)
   end
 
   defp list_echoes do
@@ -160,7 +153,9 @@ defmodule LifecycleWeb.EchoLive.Index do
   end
 
   def handle_event("approve", %{"value" => id}, socket) do
-    Approve.handle_button(%{"value" => id}, socket)
+    topic = "1"
+    Approve.handle_button(%{"value" => id}, topic, socket)
+    # Approve.handle_button(%{"value" => id}, "1", socket)
   end
 
   def error_to_string(:too_large), do: "Too large"
