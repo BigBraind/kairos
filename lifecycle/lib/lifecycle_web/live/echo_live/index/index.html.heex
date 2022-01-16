@@ -1,13 +1,6 @@
-<!--<%= if @live_action in [:new, :edit] do %>
-  <%= live_modal LifecycleWeb.EchoLive.FormComponent,
-    id: @echo.id || :new,
-    title: @page_title,
-    action: @live_action,
-    echo: @echo,
-    return_to: Routes.echo_index_path(@socket, :index) %>
-<% end %> -->
-
-<div><h1>Echo History</h1></div>
+<div>
+  <h1>Echo History</h1>
+</div>
 <h3>Past Echoes</h3>
 
 <%= unless @transiting do %>
@@ -66,7 +59,7 @@
 
 <div>
 
-<ul id="msg-list" style="list-style: none; min-height:10px;">
+<div id="msg-list-nowstream" style="list-style: none; min-height:10px;">
   <%= for echo <- @nowstream do %>
 
     <%= if echo.type == "transition" do %>
@@ -75,17 +68,11 @@
         <EchoList.echo_list echo={echo} timezone={@timezone} timezone_offset={@timezone_offset}/>
       <% end %>
   <% end %>
-</ul>
+</div>
 
  <div style="width: 100%; height: 25px;  border-bottom: 1px solid gold; text-align: center"><span style="color:#192756; padding: 0 10px; font-style: oblique;">Session Genesis</span></div>
 
-<ul id="msg-list" style="list-style: none; min-height:200px;">
-  <%= for echo <- @echoes do %>
-    <%= if echo.type == "transition" do %>
-      <EchoList.transition_list echo={echo}, timezone={@timezone} timezone_offset={@timezone_offset}, image_path={Routes.static_path(@socket, echo.message)}/>
-    <% else %>
-      <EchoList.echo_list echo={echo} timezone={@timezone} timezone_offset={@timezone_offset}/>
-    <% end %>
-  <% end %>
-</ul>
+<div id="msg-list-echoes" style="list-style: none; min-height:200px;">
+  <.live_component module={Echoes} id="echoes" echoes={@echoes} timezone={@timezone} timezone_offset={@timezone_offset} />
+</div>
 </div>
