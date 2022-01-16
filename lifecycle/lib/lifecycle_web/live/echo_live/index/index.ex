@@ -10,9 +10,10 @@ defmodule LifecycleWeb.EchoLive.Index do
   alias Lifecycle.Timeline
   alias Lifecycle.Timeline.Echo
 
-  # TODO: separate msg by date
-  # TODO: allow multiple images uploaded, currently multiple images name is concatenated with "##"
-  # TODO: modularize the code with functional components
+  alias LifecycleWeb.Modal.Button.Transition
+  alias LifecycleWeb.Modal.Echoes.Echoes
+  alias LifecycleWeb.Modal.Echoes.EchoList
+  alias LifecycleWeb.Modal.Button.Approve
 
   @impl true
   def mount(_params, _session, socket) do
@@ -33,23 +34,6 @@ defmodule LifecycleWeb.EchoLive.Index do
        image_list: [],
        transiting: false
      )}
-  end
-
-  @impl true
-  def handle_params(params, _url, socket) do
-    {:noreply, apply_action(socket, socket.assigns.live_action, params)}
-  end
-
-  defp apply_action(socket, :new, _params) do
-    socket
-    |> assign(:page_title, "New Msg")
-    |> assign(:echo, %Echo{})
-  end
-
-  defp apply_action(socket, :index, _params) do
-    socket
-    |> assign(:page_title, "Message")
-    |> assign(:echo, nil)
   end
 
   @impl true
@@ -74,19 +58,44 @@ defmodule LifecycleWeb.EchoLive.Index do
     {:noreply, assign(socket, :nowstream, [message | socket.assigns.nowstream])}
   end
 
+  @impl true
+  def handle_info({Pubsub, [:transition, :approved], message}, socket) do
+    params = %{
+      id: message.id,
+      transiter: socket.assigns.current_user.name,
+      echo_stream: :placeholder,
+      socket: socket
+    }
+
+    {:noreply,
+     socket
+     |> assign(:nowstream, replace_echoes(%{params | echo_stream: :nowstream}))
+     |> assign(:echoes, replace_echoes(%{params | echo_stream: :echoes}))}
+  end
+
+  defp replace_echoes(%{
+         id: id,
+         transiter: transiter,
+         # list of [:nowstream, :echoes]
+         echo_stream: echo_stream,
+         socket: socket
+       }) do
+    # pass back :ok, or :cont
+    Enum.map(socket.assigns[echo_stream], fn
+      %Echo{id: id} = echo -> %Echo{echo | transiter: transiter, transited: true}
+      echo -> echo
+    end)
+  end
+
   defp list_echoes do
     Timeline.recall()
   end
 
-  def time_format(time, timezone, timezone_offset) do
-    time
-    |> Timezone.get_time(timezone, timezone_offset)
-  end
-
+  @doc """
+    button event by transition button
+  """
   def handle_event("transition", _params, socket) do
-    {:noreply,
-     socket
-     |> assign(:transiting, true)}
+    Transition.handle_button("transition", socket)
   end
 
   def handle_event("validate", _params, socket) do
@@ -98,6 +107,7 @@ defmodule LifecycleWeb.EchoLive.Index do
   end
 
   @doc """
+  new docs
   Construct the file path of the image uploaded, and save it to local file system
   Create transition echo object
   """
@@ -143,33 +153,9 @@ defmodule LifecycleWeb.EchoLive.Index do
   end
 
   def handle_event("approve", %{"value" => id}, socket) do
-    echo = Timeline.get_echo!(id)
-
-    case echo.transited do
-      false -> {
-        echo_params = %{
-          transited: true,
-          transiter: socket.assigns.current_user.name
-        }}
-
-        case Timeline.update_transition(id, echo_params) do
-          {:ok, echo} ->
-            {Pubsub.notify_subs({:ok, echo}, [:echo, :created], "1")}
-
-            {:noreply,
-             socket
-             |> put_flash(:info, "Transition approved!")}
-
-          {:error, %Ecto.Changeset{} = changeset} ->
-            {:noreply, assign(socket, :changeset, changeset)}
-        end
-
-      true -> {
-        :noreply,
-        socket
-        |> put_flash(:info, "Transition already approved!")
-      }
-    end
+    topic = "1"
+    Approve.handle_button(%{"value" => id}, topic, socket)
+    # Approve.handle_button(%{"value" => id}, "1", socket)
   end
 
   def error_to_string(:too_large), do: "Too large"
