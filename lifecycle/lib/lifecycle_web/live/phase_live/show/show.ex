@@ -1,12 +1,16 @@
 defmodule LifecycleWeb.PhaseLive.Show do
   @moduledoc false
   use LifecycleWeb, :live_view
-  # on_mount {LifecycleWeb.Auth.Protocol, :auth}
 
   alias Lifecycle.Timeline
   alias Lifecycle.Pubsub
   alias Lifecycle.Timeline.{Echo, Phase}
   alias Lifecycle.Timezone
+
+  alias LifecycleWeb.Modal.Button.Transition
+  alias LifecycleWeb.Modal.Echoes.Echoes
+  alias LifecycleWeb.Modal.Echoes.EchoList
+  alias LifecycleWeb.Modal.Button.Approve
 
   @impl true
   def mount(params, _session, socket) do
@@ -64,15 +68,39 @@ defmodule LifecycleWeb.PhaseLive.Show do
   end
 
   @impl true
-  def handle_info({Pubsub, [:echo, :updated], _message}, socket) do
-    # TODO upodate the existing transition object
-    # {:noreply, assign(socket, :nowstream, [_message | socket.assigns.nowstream])}
+  def handle_info({Pubsub, [:transition, :approved], message}, socket) do
+    params = %{
+      id: message.id,
+      transiter: socket.assigns.current_user.name,
+      echo_stream: :placeholder,
+      socket: socket
+    }
+
+    {:noreply,
+    socket
+    |> assign(:nowstream, replace_echoes(%{params | echo_stream: :nowstream}))
+    |> assign(:echoes, replace_echoes(%{params | echo_stream: :echoes}))}
   end
 
+  defp replace_echoes(%{
+         id: id,
+         transiter: transiter,
+         # list of [:nowstream, :echoes]
+         echo_stream: echo_stream,
+         socket: socket
+       }) do
+    # pass back :ok, or :cont
+    Enum.map(socket.assigns[echo_stream], fn
+      %Echo{id: id} = echo -> %Echo{echo | transiter: transiter, transited: true}
+      echo -> echo
+    end)
+  end
+
+  @doc """
+    button event by transition button
+  """
   def handle_event("transition", _params, socket) do
-    {:noreply,
-     socket
-     |> assign(:transiting, true)}
+    Transition.handle_button("transition", socket)
   end
 
   def handle_event("validate", _params, socket) do
@@ -146,41 +174,9 @@ defmodule LifecycleWeb.PhaseLive.Show do
     end
   end
 
-  def handle_event("approve", %{"value" => id}, socket) do
-    echo = Timeline.get_echo!(id)
-
-    case echo.transited do
-      false ->
-        {
-          echo_params = %{
-            transited: true,
-            transiter: socket.assigns.current_user.name
-          }
-        }
-
-        case Timeline.update_transition(id, echo_params) do
-          {:ok, echo} ->
-            {Pubsub.notify_subs(
-               {:ok, echo},
-               [:echo, :created],
-               "phase:" <> socket.assigns.phase.id
-             )}
-
-            {:noreply,
-             socket
-             |> put_flash(:info, "Transition approved!")}
-
-          {:error, %Ecto.Changeset{} = changeset} ->
-            {:noreply, assign(socket, :changeset, changeset)}
-        end
-
-      true ->
-        {
-          :noreply,
-          socket
-          |> put_flash(:info, "Transition already approved!")
-        }
-    end
+  def handle_event("approve", %{"value" => id} = params, socket) do
+    topic = "phase:" <> socket.assigns.phase.id
+    Approve.handle_button(params, topic, socket)
   end
 
   defp list_echoes(phase_id) do
