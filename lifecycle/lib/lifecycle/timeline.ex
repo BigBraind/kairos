@@ -163,12 +163,24 @@ alias Lifecycle.Bridge.Phasor
 
   """
   def create_phase(attrs \\ %{}) do
-    %Phase{}
-    |> Phase.changeset(attrs)
-    |> Repo.insert()
+    case attrs do
+      %{"parent" => parent_id } ->
+        {:ok, phase} = %Phase{}
+        |> Phase.changeset(attrs)
+        |> Repo.insert()
 
-    %Phasor{}
-    |> Phasor.changeset(attrs)
+        %Phasor{}
+        |> Phasor.changeset(%{parent_id: parent_id, child_id: phase.id})
+        |> Repo.insert()
+
+        {:ok, phase}
+
+      %{} ->
+        %Phase{}
+        |> Phase.changeset(attrs)
+        |> Repo.insert()
+
+    end
 
   end
 
