@@ -44,7 +44,6 @@ Hooks.SeparatingMsg = {
             li.innerHTML += '<div style="width: 100%; height: 25px;  border-bottom: 1px solid gold; text-align: center"><span style="color:#192756; padding: 0 10px; font-style: oblique;">' + current_date + '</span></div>'
 
         } else if (current_date !== date_cursor) {
-            console.log("wow")
             current_date = date_cursor;
             li.innerHTML += '<div style="width: 100%; height: 25px;  border-bottom: 1px solid gold; text-align: center"><span style="color:#192756; padding: 0 10px; font-style: oblique;">' + current_date + '</span></div>'
         }
@@ -55,7 +54,7 @@ Hooks.SeparatingMsg = {
 
     mounted() {
         var current_date;
-        let ul = document.getElementById("echoes-list").children; // getting the ul element of rendering the echoes object
+        let ul = document.getElementById("echoes-list-echoes").children; // getting the ul element of rendering the echoes object
 
         for (var i = 0; i < ul.length; i++) {
             var date_cursor;
