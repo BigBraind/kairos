@@ -22,7 +22,6 @@ defmodule LifecycleWeb.PhaseLive.Index do
 
   defp apply_action(socket, :new, _params) do
     IO.inspect socket
-    import IEx; IEx.pry()
     socket
     |> assign(:page_title, "New Phase")
     |> assign(:phase, %Phase{})

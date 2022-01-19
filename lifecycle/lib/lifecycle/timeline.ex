@@ -116,6 +116,11 @@ defmodule Lifecycle.Timeline do
 
   alias Lifecycle.Timeline.Phase
 
+
+
+
+alias Lifecycle.Bridge.Phasor
+
   @doc """
   Returns the list of phases.
 
@@ -126,7 +131,7 @@ defmodule Lifecycle.Timeline do
 
   """
   def list_phases do
-    Repo.all from p in Phase, preload: [:parent, :child]
+    phases = Repo.all(from(p in Phase , preload: [:parent, :child]))
   end
 
   @doc """
@@ -161,6 +166,10 @@ defmodule Lifecycle.Timeline do
     %Phase{}
     |> Phase.changeset(attrs)
     |> Repo.insert()
+
+    %Phasor{}
+    |> Phasor.changeset(attrs)
+
   end
 
   @doc """
