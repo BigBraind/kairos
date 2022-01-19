@@ -77,9 +77,9 @@ defmodule LifecycleWeb.PhaseLive.Show do
     }
 
     {:noreply,
-    socket
-    |> assign(:nowstream, replace_echoes(%{params | echo_stream: :nowstream}))
-    |> assign(:echoes, replace_echoes(%{params | echo_stream: :echoes}))}
+     socket
+     |> assign(:nowstream, replace_echoes(%{params | echo_stream: :nowstream}))
+     |> assign(:echoes, replace_echoes(%{params | echo_stream: :echoes}))}
   end
 
   defp replace_echoes(%{
