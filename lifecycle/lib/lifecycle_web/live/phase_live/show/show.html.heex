@@ -72,19 +72,28 @@
 
 
   <ul id="msg-list" style="list-style: none; min-height:10px;">
-    <%= for echo <- @nowstream do %>
-      <%= unless echo.type == "transition" do %>
-        <b><%= echo.name %></b>: <%= echo.message %> <i style="float:right;color: gray;"><%= time_format(echo.inserted_at, @timezone, @timezone_offset) %> </i>
-        <br>
-      <% end %>
+  <%= for echo <- @nowstream do %>
+                           <%= unless echo.type == "transition" do %>
+                                                              <b><%= echo.name %></b>: <%= echo.message %> <i style="float:right;color: gray;"><%= time_format(echo.inserted_at, @timezone, @timezone_offset) %> </i>
+                                                              <br>
+                                                              <% end %>
 
-      <%= if echo.type == "transition" do %>
-        <b><%= echo.name %></b>:
-        
+                           <%= if echo.type == "transition" do %>
+                                                          <b><%= echo.name %></b>:
+
         <article class="column">
-        <img alt="product image"
-        src= {Routes.static_path(@socket, echo.message)}>
-        </article>
+      <%= if Path.extname(echo.message) == ".mp3" do %>
+                                                <audio controls>
+                                                <source src= {Routes.static_path(@socket, echo.message)} type="audio/mpeg">
+                                                </audio>
+                                                <% else %>
+                                                 <img alt="product image"
+          src= {Routes.static_path(@socket, echo.message)}>
+        <% end %>
+
+      </article>
+
+        
         
         <%= if echo.transited == false do %>
           <button phx-click="approve" value={echo.id}>Approve?</button>
