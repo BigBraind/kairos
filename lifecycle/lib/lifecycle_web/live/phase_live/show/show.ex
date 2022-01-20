@@ -20,7 +20,12 @@ defmodule LifecycleWeb.PhaseLive.Show do
     timezone_offset = socket.assigns.timezone_offset
     echo_changeset = Timeline.Echo.changeset(%Echo{})
     if connected?(socket), do: Pubsub.subscribe("phase:" <> id)
-    socket = allow_upload(socket, :transition, accept: ~w(.png .jpg .jpeg .mp3 .m4a .aac .oga), max_entries: 1)
+
+    socket =
+      allow_upload(socket, :transition,
+        accept: ~w(.png .jpg .jpeg .mp3 .m4a .aac .oga),
+        max_entries: 1
+      )
 
     {:ok,
      assign(socket,
@@ -52,7 +57,7 @@ defmodule LifecycleWeb.PhaseLive.Show do
   defp apply_action(socket, :new, params) do
     parent_phase = Timeline.get_phase!(params["id"])
     parent_phase = %{parent_phase | parent: parent_phase.id}
-    IO.inspect parent_phase
+    IO.inspect(parent_phase)
 
     socket
     |> assign(:page_title, "Child Phase")
@@ -76,7 +81,7 @@ defmodule LifecycleWeb.PhaseLive.Show do
   def handle_info({Pubsub, [:transition, :approved], message}, socket) do
     params = %{
       id: message.id,
-      transiter: socket.assigns.current_user.name,
+      transiter: message.transiter,
       echo_stream: :placeholder,
       socket: socket
     }
@@ -88,7 +93,7 @@ defmodule LifecycleWeb.PhaseLive.Show do
   end
 
   defp replace_echoes(%{
-         id: id,
+         id: transition_id,
          transiter: transiter,
          # list of [:nowstream, :echoes]
          echo_stream: echo_stream,
@@ -96,8 +101,12 @@ defmodule LifecycleWeb.PhaseLive.Show do
        }) do
     # pass back :ok, or :cont
     Enum.map(socket.assigns[echo_stream], fn
-      %Echo{id: id} = echo -> %Echo{echo | transiter: transiter, transited: true}
-      echo -> echo
+      %Echo{id: id} = echo ->
+        if id == transition_id do
+          %Echo{echo | transiter: transiter, transited: true}
+        else
+          echo
+        end
     end)
   end
 
