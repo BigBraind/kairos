@@ -70,10 +70,12 @@
 <% end %>
 <div>
   <div align="right">
+
     <span><%= live_patch "+ Own Phase 🦋⚡", to: Routes.phase_show_path(@socket, :new, @phase), class: "button" %></span>
 <br>
 <span><%= live_patch "Edit", to: Routes.phase_show_path(@socket, :edit, @phase), class: "button" %></span>
 <br>
+<%= unless @live_action in [:new] do %>
 <%= if @phase.parent !== [] do %><b>Parent: </b>  <%= for parent <- @phase.parent do %>
 
        <span><%= live_redirect parent.title, to: Routes.phase_show_path(@socket, :show, parent), class: "button"%></span>
@@ -83,6 +85,7 @@
 <%= if @phase.child !== [] do %><b>Children: </b> <%= for child <- @phase.child do %>
        <span><%= live_redirect child.title, to: Routes.phase_show_path(@socket, :show, child), class: "button"%></span>
                              <% end %>
+<% end %>
 <% end %>
   </div>
 
