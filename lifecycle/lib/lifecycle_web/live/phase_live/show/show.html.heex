@@ -9,24 +9,27 @@
 
 
 
-<div align="left"><h1><%= @phase.title %></h1></div>
+<div align="left">
+  <h1><%= @phase.title %></h1>
+</div>
 <h3><%= @phase.content %></h3>
 
 <%= unless @transiting do %>
-<.form let={f} for={@echo_changeset} phx-submit="save">
+<.form let={f} for={@echo_changeset} phx-submit="save", phx-hook="EmptyInput", id="echo_form">
   <%= if @current_user  do %>
     <%= hidden_input f, :name, value: @current_user.name %>
     <%= error_tag f, :name %>
   <% end %>
 
   <%= label f, :message %>
-  <%= text_input f, :message %>
+  <%= text_input f, :message, autocomplete: "off", value: " "%>
   <%= error_tag f, :message %>
 
   <div>
-    <%= submit "Send", phx_disable_with: "Sending..." %> <button phx-click="transition">Add Transition</button>
+    <%= submit "Send", phx_disable_with: "Sending..." %> 
   </div>
-</.form>
+</.form> 
+<Transition.button/>
 
 <% else %>
 <section phx-drop-target={@uploads.transition.ref}>
@@ -70,66 +73,14 @@
     <span><%= live_redirect "Back", to: Routes.phase_index_path(@socket, :index), class: "button" %></span>
   </div>
 
-
-  <ul id="msg-list" style="list-style: none; min-height:10px;">
-  <%= for echo <- @nowstream do %>
-                           <%= unless echo.type == "transition" do %>
-                                                              <b><%= echo.name %></b>: <%= echo.message %> <i style="float:right;color: gray;"><%= time_format(echo.inserted_at, @timezone, @timezone_offset) %> </i>
-                                                              <br>
-                                                              <% end %>
-
-                           <%= if echo.type == "transition" do %>
-                                                          <b><%= echo.name %></b>:
-
-        <article class="column">
-      <%= if Path.extname(echo.message) == ".mp3" do %>
-                                                <audio controls>
-                                                <source src= {Routes.static_path(@socket, echo.message)} type="audio/mpeg">
-                                                </audio>
-                                                <% else %>
-                                                 <img alt="product image"
-          src= {Routes.static_path(@socket, echo.message)}>
-        <% end %>
-
-      </article>
-
-        
-        
-        <%= if echo.transited == false do %>
-          <button phx-click="approve" value={echo.id}>Approve?</button>
-          <br>  
-        <% else %>
-          <b>Approved by: <%= echo.transiter %></b> <br>
-        <% end %>
-
-      <% end %>
-    <% end %>
+  <ul id="phase-live-msg-list-nowstream" style="list-style: none; min-height:10px;">
+      <.live_component module={Echoes} id="nowstream" echoes={@nowstream} timezone={@timezone} timezone_offset={@timezone_offset} />
+    
         <div style="width: 100%; height: 25px;  border-bottom: 1px solid gold; text-align: center"><span style="color:#192756; padding: 0 10px; font-style: oblique;">Session Genesis</span></div>
   </ul>
 
 
-  <ul id="msg-list" style="list-style: none; min-height:200px;">
-    <%= for echo <- @echoes do %>
-      <%= if echo.type == "transition" do %>
-        <b><%= echo.name %></b>:
-     
-        <article class="column">
-        <img alt="product image" 
-            src= {Routes.static_path(@socket, echo.message)}>
-        </article>
-     
-        <i style="float:right;color: gray;"><%= time_format(echo.inserted_at, @timezone, @timezone_offset) %> </i>
-      
-        <%= if echo.transited == false do %>
-         <button phx-click="approve" value={echo.id}>Approve?</button>
-          <br>  
-        <% else %>
-          <b>Approved by: <%= echo.transiter %>!</b><br>
-        <% end %>
-      <% else %>
-        <b><%= echo.name %></b>: <%= echo.message %> <i style="float:right;color: gray;"><%= time_format(echo.inserted_at, @timezone, @timezone_offset) %> </i>
-        <br>
-      <% end %>
-    <% end %>
+  <ul id="phase-live-msg-list-echoes" style="list-style: none; min-height:200px;">
+    <.live_component module={Echoes} id="echoes" echoes={@echoes} timezone={@timezone} timezone_offset={@timezone_offset} />
   </ul>
 </div>
