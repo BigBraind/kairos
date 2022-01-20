@@ -22,7 +22,12 @@ defmodule LifecycleWeb.EchoLive.Index do
     timezone = socket.assigns.timezone
     timezone_offset = socket.assigns.timezone_offset
     changeset = Timeline.Echo.changeset(%Echo{})
-    socket = allow_upload(socket, :transition, accept: ~w(.png .jpg .jpeg .mp3 .m4a .aac .oga), max_entries: 1)
+
+    socket =
+      allow_upload(socket, :transition,
+        accept: ~w(.png .jpg .jpeg .mp3 .m4a .aac .oga),
+        max_entries: 1
+      )
 
     {:ok,
      assign(socket,
@@ -62,7 +67,7 @@ defmodule LifecycleWeb.EchoLive.Index do
   def handle_info({Pubsub, [:transition, :approved], message}, socket) do
     params = %{
       id: message.id,
-      transiter: socket.assigns.current_user.name,
+      transiter: message.transiter,
       echo_stream: :placeholder,
       socket: socket
     }
@@ -74,7 +79,7 @@ defmodule LifecycleWeb.EchoLive.Index do
   end
 
   defp replace_echoes(%{
-         id: id,
+         id: transition_id,
          transiter: transiter,
          # list of [:nowstream, :echoes]
          echo_stream: echo_stream,
@@ -82,8 +87,12 @@ defmodule LifecycleWeb.EchoLive.Index do
        }) do
     # pass back :ok, or :cont
     Enum.map(socket.assigns[echo_stream], fn
-      %Echo{id: id} = echo -> %Echo{echo | transiter: transiter, transited: true}
-      echo -> echo
+      %Echo{id: id} = echo ->
+        if id == transition_id do
+          %Echo{echo | transiter: transiter, transited: true}
+        else
+          echo
+        end
     end)
   end
 
