@@ -8,13 +8,6 @@ defmodule Lifecycle.TimelineTest do
     :ok = Ecto.Adapters.SQL.Sandbox.checkout(Lifecycle.Repo)
   end
 
-  describe "phase2phase" do
-    alias Lifecycle.Repo
-    import Ecto.Query
-    alias Lifecycle.Timeline.Phase
-    phase = Repo.all from Phase, preload: [:parent, :child]
-  end
-
   describe "echoes" do
     alias Lifecycle.Timeline.Echo
 
