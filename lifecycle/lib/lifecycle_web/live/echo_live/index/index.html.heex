@@ -30,7 +30,9 @@
       <article class="upload-entry">
         <figure>
           <%# Phoenix.LiveView.Helpers.live_img_preview/2 renders a client-side preview %>
-          <%= live_img_preview entry %>
+          <%= unless Path.extname(entry.client_name) in [".mp3", ".m4a" ,".aac", ".oga"] do %>
+            <%= live_img_preview entry %> <%# to be modified with audio file preview %>
+          <% end %>
           <figcaption><%= entry.client_name %></figcaption>
         </figure>
 
@@ -52,7 +54,7 @@
 
 <form id="upload-form" phx-submit="transit" phx-change="validate">
   <%= live_file_input @uploads.transition %>
-  <button type="submit">Transit</button>
+  <button type="submit">To the Moon ⛽🚀</button>
 </form>
 
 <% end %>

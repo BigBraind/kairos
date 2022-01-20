@@ -17,13 +17,13 @@ defmodule LifecycleWeb.PhaseLive.Index do
   defp apply_action(socket, :edit, %{"id" => id}) do
     socket
     |> assign(:page_title, "Edit Phase")
-    |> assign(:phase, Timeline.get_phase!(id))
+    |> assign(:phase, %{Timeline.get_phase!(id) | parent: []})
   end
 
   defp apply_action(socket, :new, _params) do
     socket
     |> assign(:page_title, "New Phase")
-    |> assign(:phase, %Phase{})
+    |> assign(:phase, %{%Phase{} | parent: []})
   end
 
   defp apply_action(socket, :index, _params) do
