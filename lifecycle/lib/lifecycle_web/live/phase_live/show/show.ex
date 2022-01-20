@@ -20,7 +20,7 @@ defmodule LifecycleWeb.PhaseLive.Show do
     timezone_offset = socket.assigns.timezone_offset
     echo_changeset = Timeline.Echo.changeset(%Echo{})
     if connected?(socket), do: Pubsub.subscribe("phase:" <> id)
-    socket = allow_upload(socket, :transition, accept: ~w(.png .jpg .jpeg), max_entries: 1)
+    socket = allow_upload(socket, :transition, accept: ~w(.png .jpg .jpeg .mp3 .m4a .aac .oga), max_entries: 1)
 
     {:ok,
      assign(socket,
@@ -35,6 +35,10 @@ defmodule LifecycleWeb.PhaseLive.Show do
   end
 
   @impl true
+  @spec handle_params(map, any, %{
+          :assigns => atom | %{:live_action => :edit | :new | :show, optional(any) => any},
+          optional(any) => any
+        }) :: {:noreply, map}
   def handle_params(%{"id" => id} = params, _, socket) do
     {:noreply, apply_action(socket, socket.assigns.live_action, params)}
   end
@@ -42,12 +46,13 @@ defmodule LifecycleWeb.PhaseLive.Show do
   defp apply_action(socket, :edit, %{"id" => id}) do
     socket
     |> assign(:page_title, "Edit Phase")
-    |> assign(:phase, Timeline.get_phase!(id))
+    |> assign(:phase, %{Timeline.get_phase!(id) | parent: []})
   end
 
   defp apply_action(socket, :new, params) do
     parent_phase = Timeline.get_phase!(params["id"])
     parent_phase = %{parent_phase | parent: parent_phase.id}
+    IO.inspect parent_phase
 
     socket
     |> assign(:page_title, "Child Phase")

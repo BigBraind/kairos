@@ -39,7 +39,9 @@
       <article class="upload-entry">
         <figure>
           <%# Phoenix.LiveView.Helpers.live_img_preview/2 renders a client-side preview %>
-          <%= live_img_preview entry %>
+          <%= unless Path.extname(entry.client_name) in [".mp3", ".m4a" ,".aac", ".oga"] do %>
+            <%= live_img_preview entry %>
+          <% end %>
           <figcaption><%= entry.client_name %></figcaption>
         </figure>
 
@@ -68,14 +70,10 @@
 <% end %>
 <div>
   <div align="right">
-    <%= if @phase.parent do %>
-    <span><%= live_patch "Jump to Parent", to: Routes.phase_show_path(@socket, :show, @phase.parent), class: "button" %></span> |
-    <% end %>
     <span><%= live_patch "+ Child Phase", to: Routes.phase_show_path(@socket, :new, @phase), class: "button" %></span> |
     <span><%= live_patch "Edit", to: Routes.phase_show_path(@socket, :edit, @phase), class: "button" %></span> |
     <span><%= live_redirect "Back", to: Routes.phase_index_path(@socket, :index), class: "button" %></span>
   </div>
-
 
   <ul id="phase-live-msg-list-nowstream" style="list-style: none; min-height:10px;">
       <.live_component module={Echoes} id="nowstream" echoes={@nowstream} timezone={@timezone} timezone_offset={@timezone_offset} />

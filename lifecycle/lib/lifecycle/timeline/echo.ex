@@ -6,6 +6,7 @@ defmodule Lifecycle.Timeline.Echo do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "echoes" do
     field :message, :string
