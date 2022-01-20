@@ -37,7 +37,7 @@ defmodule LifecycleWeb.Modal.Echoes.EchoList do
         <Approve.button echo={@echo}/>
         <br>
       <% else %>
-        <b>Approved by <%= @echo.transiter %>!</b><br>
+        <b style="color:#00A36C" >Reverberated by  <%= @echo.transiter %> 🌊🔉</b><br>
       <% end %>
 
     """
