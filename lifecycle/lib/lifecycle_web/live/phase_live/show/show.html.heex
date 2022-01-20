@@ -39,7 +39,9 @@
       <article class="upload-entry">
         <figure>
           <%# Phoenix.LiveView.Helpers.live_img_preview/2 renders a client-side preview %>
-          <%= live_img_preview entry %>
+          <%= unless Path.extname(entry.client_name) in [".mp3", ".m4a" ,".aac", ".oga"] do %>
+            <%= live_img_preview entry %>
+          <% end %>
           <figcaption><%= entry.client_name %></figcaption>
         </figure>
 

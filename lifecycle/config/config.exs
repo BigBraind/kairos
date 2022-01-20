@@ -55,3 +55,7 @@ config :lifecycle, :pow,
   user: Lifecycle.Users.User,
   repo: Lifecycle.Repo,
   web_module: LifecycleWeb
+
+config :mime, :types, %{
+  "audio/mp4" => ["m4a"]
+}
