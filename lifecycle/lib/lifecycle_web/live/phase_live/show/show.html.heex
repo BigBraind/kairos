@@ -64,24 +64,26 @@
 
 <form id="upload-form" phx-submit="transit" phx-change="validate">
   <%= live_file_input @uploads.transition %>
-  <button type="submit">Transit</button>
+  <button type="submit">To the Moon ⛽🚀</button>
 </form>
 
 <% end %>
 <div>
   <div align="right">
-    <span><%= live_patch "+ Own Phase", to: Routes.phase_show_path(@socket, :new, @phase), class: "button" %></span>
+    <span><%= live_patch "+ Own Phase 🦋⚡", to: Routes.phase_show_path(@socket, :new, @phase), class: "button" %></span>
+<br>
+<span><%= live_patch "Edit", to: Routes.phase_show_path(@socket, :edit, @phase), class: "button" %></span>
 <br>
 <%= if @phase.parent !== [] do %><b>Parent: </b>  <%= for parent <- @phase.parent do %>
 
        <span><%= live_redirect parent.title, to: Routes.phase_show_path(@socket, :show, parent), class: "button"%></span>
-                             <%= end %>
-<%= end %>
+                             <% end %>
+<% end %>
 <br>
 <%= if @phase.child !== [] do %><b>Children: </b> <%= for child <- @phase.child do %>
        <span><%= live_redirect child.title, to: Routes.phase_show_path(@socket, :show, child), class: "button"%></span>
-                             <%= end %>
-<%= end %>
+                             <% end %>
+<% end %>
   </div>
 
   <ul id="phase-live-msg-list-nowstream" style="list-style: none; min-height:10px;">

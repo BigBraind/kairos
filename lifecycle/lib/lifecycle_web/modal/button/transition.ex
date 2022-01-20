@@ -6,7 +6,7 @@ defmodule LifecycleWeb.Modal.Button.Transition do
 
   def button(assigns) do
     ~H"""
-      <button phx-click="transition">Add Beats</button>
+      <button phx-click="transition">Drop Beats 🖐🎤</button>
     """
   end
 
