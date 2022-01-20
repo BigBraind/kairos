@@ -37,6 +37,6 @@ defmodule Lifecycle.TimelineFixtures do
       })
       |> Lifecycle.Timeline.create_phase()
 
-    phase
+    phase = %{phase | parent: [], child: []} # add child and parent
   end
 end

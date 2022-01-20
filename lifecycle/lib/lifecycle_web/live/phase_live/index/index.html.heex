@@ -1,7 +1,8 @@
-<h1>Listing Phases</h1>
+<h1>Phases of Beatboxing</h1>
+
 
 <%= if @live_action in [:new, :edit] do %>
-  <%= live_modal LifecycleWeb.PhaseLive.FormComponent,
+                <%= live_modal LifecycleWeb.PhaseLive.FormComponent,
     id: @phase.id || :new,
     title: @page_title,
     action: @live_action,
@@ -10,36 +11,33 @@
     return_to: Routes.phase_index_path(@socket, :index) %>
 <% end %>
 
-<table>
-  <thead>
-    <tr>
-      <th>ID</th>
-      <th>Title</th>
-      <th>Content</th>
-      <th>Type</th>
-      <th>Parent</th>
+<table width="30%">
+<thead>
+<tr>
+<th>Title</th>
+<th>Content</th>
+<th>Parent</th>
+<th>Editorial</th>
+</tr>
+</thead>
+<tbody id="phases">
+<%= for phase <- @phases do %>
+    <tr id={"phase-#{phase.id}"}>
+    <td><span><%= live_redirect String.slice(phase.title, 0..20) <> " ...", to: Routes.phase_show_path(@socket, :show, phase), class: "button"%></span></td>
+    <td><%= phase.content %></td>
+    <%= if phase.parent do %>
+    <td><%= for parent <- phase.parent do %>
+       <span><%= live_redirect parent.title, to: Routes.phase_show_path(@socket, :show, parent), class: "button"%></span>
+    <%= end %></td>
+<%= end %>
+   <td>
 
-      <th></th>
-    </tr>
-  </thead>
-  <tbody id="phases">
-    <%= for phase <- @phases do %>
-      <tr id={"phase-#{phase.id}"}>
-        <td><%= phase.id %></td>
-        <td><%= phase.title %></td>
-        <td><%= phase.content %></td>
-        <td><%= phase.type %></td>
-        <td><%= phase.parent %></td>
-
-        <td>
-          <span><%= live_redirect "Show", to: Routes.phase_show_path(@socket, :show, phase)%></span>
-          <br>
-          <span><%= live_patch "Edit", to: Routes.phase_index_path(@socket, :edit, phase) %></span>
-          <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: phase.id, data: [confirm: "Are you sure?"] %></span>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
+   <span><%= live_patch "Edit", to: Routes.phase_index_path(@socket, :edit, phase), class: "button" %></span>
+   <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: phase.id, data: [confirm: "Are you sure? Priceton is watching"], class: "button" %></span>
+   </td>
+   </tr>
+   <% end %>
+</tbody>
 </table>
 
 <span><%= live_patch "New Phase", to: Routes.phase_index_path(@socket, :new) %></span>

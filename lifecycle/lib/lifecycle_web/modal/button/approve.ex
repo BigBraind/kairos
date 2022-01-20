@@ -10,7 +10,7 @@ defmodule LifecycleWeb.Modal.Button.Approve do
 
   def button(assigns) do
     ~H"""
-      <button phx-click="approve" value={@echo.id}>Approve?</button>
+      <button phx-click="approve" value={@echo.id}>Fire? 🔥</button>
     """
   end
 
