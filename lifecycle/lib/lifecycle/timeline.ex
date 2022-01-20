@@ -116,6 +116,11 @@ defmodule Lifecycle.Timeline do
 
   alias Lifecycle.Timeline.Phase
 
+
+
+
+alias Lifecycle.Bridge.Phasor
+
   @doc """
   Returns the list of phases.
 
@@ -126,7 +131,7 @@ defmodule Lifecycle.Timeline do
 
   """
   def list_phases do
-    Repo.all(Phase)
+    phases = Repo.all(from(p in Phase , preload: [:parent, :child]))
   end
 
   @doc """
@@ -143,7 +148,7 @@ defmodule Lifecycle.Timeline do
       ** (Ecto.NoResultsError)
 
   """
-  def get_phase!(id), do: Repo.get!(Phase, id)
+  def get_phase!(id), do: Repo.get!(Phase, id) |> Repo.preload([:parent, :child])
 
   @doc """
   Creates a phase.
@@ -158,9 +163,25 @@ defmodule Lifecycle.Timeline do
 
   """
   def create_phase(attrs \\ %{}) do
-    %Phase{}
-    |> Phase.changeset(attrs)
-    |> Repo.insert()
+    case attrs do
+      %{"parent" => parent_id } ->
+        {:ok, phase} = %Phase{}
+        |> Phase.changeset(attrs)
+        |> Repo.insert()
+
+        %Phasor{}
+        |> Phasor.changeset(%{parent_id: parent_id, child_id: phase.id})
+        |> Repo.insert()
+
+        {:ok, phase}
+
+      %{} ->
+        %Phase{}
+        |> Phase.changeset(attrs)
+        |> Repo.insert()
+
+    end
+
   end
 
   @doc """
