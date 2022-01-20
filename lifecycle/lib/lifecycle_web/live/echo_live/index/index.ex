@@ -22,7 +22,7 @@ defmodule LifecycleWeb.EchoLive.Index do
     timezone = socket.assigns.timezone
     timezone_offset = socket.assigns.timezone_offset
     changeset = Timeline.Echo.changeset(%Echo{})
-    socket = allow_upload(socket, :transition, accept: ~w(.png .jpg .jpeg .mp3), max_entries: 1)
+    socket = allow_upload(socket, :transition, accept: ~w(.png .jpg .jpeg .mp3 .m4a .aac .oga), max_entries: 1)
 
     {:ok,
      assign(socket,
