@@ -51,6 +51,7 @@ defmodule Lifecycle.Timeline do
     %Echo{}
     |> Echo.changeset(attrs)
     |> Repo.insert()
+
     # |> Pubsub.notify_subs([:echo, :created])
   end
 
@@ -116,10 +117,7 @@ defmodule Lifecycle.Timeline do
 
   alias Lifecycle.Timeline.Phase
 
-
-
-
-alias Lifecycle.Bridge.Phasor
+  alias Lifecycle.Bridge.Phasor
 
   @doc """
   Returns the list of phases.
@@ -131,7 +129,7 @@ alias Lifecycle.Bridge.Phasor
 
   """
   def list_phases do
-    phases = Repo.all(from(p in Phase , preload: [:parent, :child]))
+    phases = Repo.all(from(p in Phase, preload: [:parent, :child]))
   end
 
   @doc """
@@ -164,10 +162,11 @@ alias Lifecycle.Bridge.Phasor
   """
   def create_phase(attrs \\ %{}) do
     case attrs do
-      %{"parent" => parent_id } ->
-        {:ok, phase} = %Phase{}
-        |> Phase.changeset(attrs)
-        |> Repo.insert()
+      %{"parent" => parent_id} ->
+        {:ok, phase} =
+          %Phase{}
+          |> Phase.changeset(attrs)
+          |> Repo.insert()
 
         %Phasor{}
         |> Phasor.changeset(%{parent_id: parent_id, child_id: phase.id})
@@ -179,9 +178,7 @@ alias Lifecycle.Bridge.Phasor
         %Phase{}
         |> Phase.changeset(attrs)
         |> Repo.insert()
-
     end
-
   end
 
   @doc """
