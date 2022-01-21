@@ -7,6 +7,9 @@ defmodule Lifecycle.Application do
 
   @impl true
   def start(_type, _args) do
+
+    topologies = Application.get_env(:libcluster, :topologies) || []
+
     children = [
       # Start the Ecto repository
       Lifecycle.Repo,
@@ -15,9 +18,11 @@ defmodule Lifecycle.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: Lifecycle.PubSub},
       # Start the Endpoint (http/https)
-      LifecycleWeb.Endpoint
+      LifecycleWeb.Endpoint,
       # Start a worker by calling: Lifecycle.Worker.start_link(arg)
       # {Lifecycle.Worker, arg}
+      # setup for clustering
+      {Cluster.Supervisor, [topologies, [name: Lifecycle.ClusterSupervisor]]}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
