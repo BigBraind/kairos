@@ -1,13 +1,11 @@
-name: Viva Liveview in Gigalixir
+name: Viva Liveview in Flight
 
 on:
-  push:
-    branches: [ unstable/live/concoction ]
   pull_request:
-    branches: [ unstable/live/concoction ]
+    branches: [ fly/live/kairos ]
 
 jobs:
-  build:
+  test:
 
     name: Build and test
     runs-on: ubuntu-latest
@@ -54,21 +52,16 @@ jobs:
 
 
   deploy:
-    needs: build
+    needs: test
+    name: Build to Fly
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+      - name: Deployment with Fly
+        working-directory: ./lifecycle
+      - uses: superfly/flyctl-actions@master
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
         with:
-          python-version: '3.8.11'
-
-      - uses: mhanberg/gigalixir-action@v0.6.1
-        with:
-          APP_SUBFOLDER: lifecycle  # Add only if you want to deploy an app that is not at the root of your repository
-          GIGALIXIR_APP: satorotas # Feel free to also put this in your secrets
-          GIGALIXIR_CLEAN: true # defaults to false
-          GIGALIXIR_USERNAME: ${{ secrets.GIGALIXIR_USERNAME }}
-          GIGALIXIR_PASSWORD: ${{ secrets.GIGALIXIR_PASSWORD }}
-          MIGRATIONS: false  # defaults to true
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          args: "deploy"
