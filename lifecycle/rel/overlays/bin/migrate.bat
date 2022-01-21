@@ -1,0 +1,1 @@
+call "%~dp0\lifecycle" eval Lifecycle.Release.migrate
