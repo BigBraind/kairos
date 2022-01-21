@@ -42,7 +42,7 @@ defmodule Lifecycle.MixProject do
       {:phoenix_live_view, "~> 0.17"},
       {:floki, ">= 0.30.0", only: :test},
       {:phoenix_live_dashboard, "~> 0.6"},
-      {:esbuild, "~> 0.2", runtime: Mix.env() == :dev},
+      {:esbuild, "~> 0.4", runtime: Mix.env() == :dev},
       {:swoosh, "~> 1.3"},
       {:telemetry_metrics, "~> 0.6"},
       {:telemetry_poller, "~> 1.0"},
@@ -52,6 +52,7 @@ defmodule Lifecycle.MixProject do
       {:timex, "~> 3.0"},
       {:pow, "~> 1.0.18"},
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
+      {:libcluster, "~> 3.3"},
       # ImageStorage:
       {:waffle, "~> 1.1"},
       # For S3:
