@@ -7,6 +7,9 @@ defmodule Lifecycle.Timeline do
   alias Lifecycle.Repo
 
   alias Lifecycle.Timeline.Echo
+  alias Lifecycle.Timeline.Phase
+
+  alias Lifecycle.Bridge.Phasor
 
   @doc """
   Returns the list of echoes.
@@ -74,19 +77,6 @@ defmodule Lifecycle.Timeline do
   end
 
   @doc """
-  Deletes a echo.
-
-  ## Examples
-
-      iex> delete_echo(echo)
-      {:ok, %Echo{}}
-
-      iex> delete_echo(echo)
-      {:error, %Ecto.Changeset{}}
-
-  """
-
-  @doc """
   Returns an `%Ecto.Changeset{}` for tracking echo changes.
 
   ## Examples
@@ -115,10 +105,6 @@ defmodule Lifecycle.Timeline do
   """
   def update_transition(id, attrs), do: update_echo(get_echo!(id), attrs)
 
-  alias Lifecycle.Timeline.Phase
-
-  alias Lifecycle.Bridge.Phasor
-
   @doc """
   Returns the list of phases.
 
@@ -129,7 +115,7 @@ defmodule Lifecycle.Timeline do
 
   """
   def list_phases do
-    phases = Repo.all(from(p in Phase, preload: [:parent, :child]))
+    Repo.all(from(p in Phase, preload: [:parent, :child]))
   end
 
   @doc """
