@@ -1,0 +1,111 @@
+#+TITLE: Fly
+
+* Initial Set-Up
+
+Sets up fly.toml
+
+#+NAME: Launch Docker Image to Fly
+#+BEGIN_SRC shell
+fly launch --verbose
+#+END_SRC
+
+** Attaching to Database
+Adds DATABASE_URL SECRET to Application
+#+NAME: Attach Postgres database to Application
+#+BEGIN_SRC shell
+flyctl postgres attach --postgres-app kairos-db
+#+END_SRC
+
+
+*  Operations
+Uses fly.toml file in directory to resolve application or can be explicit using -a flag
+
+#+NAME: Deploy updated  docker image
+#+BEGIN_SRC shell
+fly deploy
+#+END_SRC
+
+#+NAME: Reveal general info
+#+BEGIN_SRC shell
+fly info
+#+END_SRC
+
+#+RESULTS: Reveal general info
+| [1mApp[0m      |                     |                |         |        |
+| Name               | =                   | kairos         |         |        |
+| Owner              | =                   | personal       |         |        |
+| Version            | =                   | 6              |         |        |
+| Status             | =                   | running        |         |        |
+| Hostname           | =                   | kairos.fly.dev |         |        |
+|                    |                     |                |         |        |
+| [1mServices[0m |                     |                |         |        |
+| PROTOCOL           | PORTS               |                |         |        |
+| TCP                | 80                  | =>             | 8080    | [HTTP] |
+| 443                | =>                  | 8080           | [TLS,   | HTTP]  |
+|                    |                     |                |         |        |
+| [1mIP            | Adresses[0m       |                |         |        |
+| TYPE               | ADDRESS             | REGION         | CREATED | AT     |
+| v4                 | 109.105.218.23      | 1h45m          | ago     |        |
+| v6                 | 2a09:8280:1::6:1b49 | 1h45m          | ago     |        |
+|                    |                     |                |         |        |
+#+NAME: Deployment status
+#+BEGIN_SRC shell
+fly status
+#+END_SRC
+
+#+RESULTS: Deployment status
+| [1mApp[0m       |             |                                      |           |              |         |        |          |          |           |   |      |     |
+| Name                | =           | kairos                               |           |              |         |        |          |          |           |   |      |     |
+| Owner               | =           | personal                             |           |              |         |        |          |          |           |   |      |     |
+| Version             | =           | 6                                    |           |              |         |        |          |          |           |   |      |     |
+| Status              | =           | running                              |           |              |         |        |          |          |           |   |      |     |
+| Hostname            | =           | kairos.fly.dev                       |           |              |         |        |          |          |           |   |      |     |
+|                     |             |                                      |           |              |         |        |          |          |           |   |      |     |
+| [1mDeployment     | Status[0m |                                      |           |              |         |        |          |          |           |   |      |     |
+| ID                  | =           | 3bb1eef5-4e31-cbfb-a8fd-4ebcdc20300c |           |              |         |        |          |          |           |   |      |     |
+| Version             | =           | v6                                   |           |              |         |        |          |          |           |   |      |     |
+| Status              | =           | successful                           |           |              |         |        |          |          |           |   |      |     |
+| Description         | =           | Deployment                           | completed | successfully |         |        |          |          |           |   |      |     |
+| Instances           | =           | 1                                    | desired,  | 2            | placed, |      2 | healthy, |        0 | unhealthy |   |      |     |
+|                     |             |                                      |           |              |         |        |          |          |           |   |      |     |
+| [1mInstances[0m |             |                                      |           |              |         |        |          |          |           |   |      |     |
+| ID                  | PROCESS     | VERSION                              | REGION    | DESIRED      | STATUS  | HEALTH | CHECKS   | RESTARTS | CREATED   |   |      |     |
+| ecc66056            | app         | 6                                    | sin       | run          | running |      1 | total,   |        1 | passing   | 0 | 1h4m | ago |
+|                     |             |                                      |           |              |         |        |          |          |           |   |      |     |
+
+#+NAME: Setting secrets $SECRET as 'TUNNEL'
+#+BEGIN_SRC shell
+flyctl --app kairos secrets set SECRET='TUNNEL'
+#+END_SRC
+
+
+#+NAME: Launch SSH session in Application
+#+BEGIN_SRC shell
+fly ssh console
+#+END_SRC
+
+** Wireguard Management
+
+#+NAME: Wireguard Create
+#+BEGIN_SRC shell
+fly wireguard create
+#+END_SRC
+
+#+NAME: Wireguard Interface up
+#+BEGIN_SRC shell
+wg-quick up kairos_bridge
+#+END_SRC
+
+#+NAME: Wireguard Interface down
+#+BEGIN_SRC shell
+wg-quick down kairos_bridge
+#+END_SRC
+
+#+NAME: Wireguard Interface up
+#+BEGIN_SRC shell
+fly wireguard list
+#+END_SRC
+
+#+RESULTS: Wireguard Interface up
+
+Then psql to access database

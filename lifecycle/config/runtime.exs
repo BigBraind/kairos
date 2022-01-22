@@ -6,6 +6,12 @@ import Config
 # and secrets from environment variables or elsewhere. Do not define
 # any compile-time configuration in here, as it won't be applied.
 # The block below contains prod specific runtime configuration.
+
+# Start the phoenix server if environment is set and running in a release
+# if System.get_env("PHX_SERVER") && System.get_env("RELEASE_NAME") do
+#   config :lifecycle, LifecycleWeb.Endpoint, server: true
+# end
+
 if config_env() == :prod do
   database_url =
     System.get_env("DATABASE_URL") ||
@@ -14,11 +20,13 @@ if config_env() == :prod do
       For example: ecto://USER:PASS@HOST/DATABASE
       """
 
+  maybe_ipv6 = if System.get_env("ECTO_IPV6"), do: [:inet6], else: []
+
   config :lifecycle, Lifecycle.Repo,
-    ssl: true,
-    # socket_options: [:inet6],
+    # ssl: true,
     url: database_url,
-    pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10")
+    pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
+    socket_options: maybe_ipv6
 
   # The secret key base is used to sign/encrypt cookies and other secrets.
   # A default value is used in config/dev.exs and config/test.exs but you
@@ -32,17 +40,38 @@ if config_env() == :prod do
       You can generate one by calling: mix phx.gen.secret
       """
 
+  host = System.get_env("FLY_APP_NAME") ||
+      raise "FLY_APP_NAME not available"
+
+  port = String.to_integer(System.get_env("PORT") || "4000")
+
   config :lifecycle, LifecycleWeb.Endpoint,
+    server: true,
+    #url: [host: "#{host}.fly.dev", port: 80],
+    url: [host: "bigbrain.link"],
     http: [
       # Enable IPv6 and bind on all interfaces.
       # Set it to  {0, 0, 0, 0, 0, 0, 0, 1} for local network only access.
       # See the documentation on https://hexdocs.pm/plug_cowboy/Plug.Cowboy.html
       # for details about using IPv6 vs IPv4 and loopback vs public addresses.
       ip: {0, 0, 0, 0, 0, 0, 0, 0},
-      port: String.to_integer(System.get_env("PORT") || "4000")
+      port: port
     ],
     secret_key_base: secret_key_base
 
+  config :libcluster,
+    debug: true,
+    topologies: [
+      fly6pn: [
+        strategy: Cluster.Strategy.DNSPoll,
+        config: [
+          polling_interval: 5_000,
+          query: "#{host}.internal",
+          node_basename: host
+        ]
+      ]
+    ]
+end
   # ## Using releases
   #
   # If you are doing OTP releases, you need to instruct Phoenix
@@ -70,4 +99,3 @@ if config_env() == :prod do
   #     config :swoosh, :api_client, Swoosh.ApiClient.Hackney
   #
   # See https://hexdocs.pm/swoosh/Swoosh.html#module-installation for details.
-end
