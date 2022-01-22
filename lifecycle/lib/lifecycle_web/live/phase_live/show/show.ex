@@ -2,15 +2,16 @@ defmodule LifecycleWeb.PhaseLive.Show do
   @moduledoc false
   use LifecycleWeb, :live_view
 
-  alias Lifecycle.Timeline
   alias Lifecycle.Pubsub
-  alias Lifecycle.Timeline.{Echo, Phase}
+  alias Lifecycle.Timeline
+  alias Lifecycle.Timeline.{Echo}
   alias Lifecycle.Timezone
 
   alias LifecycleWeb.Modal.Button.Transition
   alias LifecycleWeb.Modal.Echoes.Echoes
-  alias LifecycleWeb.Modal.Echoes.EchoList
   alias LifecycleWeb.Modal.Button.Approve
+  alias LifecycleWeb.Modal.Button.Phases
+  alias LifecycleWeb.Modal.Pubsub.Pubs
 
   @impl true
   def mount(params, _session, socket) do
@@ -40,11 +41,7 @@ defmodule LifecycleWeb.PhaseLive.Show do
   end
 
   @impl true
-  @spec handle_params(map, any, %{
-          :assigns => atom | %{:live_action => :edit | :new | :show, optional(any) => any},
-          optional(any) => any
-        }) :: {:noreply, map}
-  def handle_params(%{"id" => id} = params, _, socket) do
+  def handle_params(params, _, socket) do
     {:noreply, apply_action(socket, socket.assigns.live_action, params)}
   end
 
@@ -57,7 +54,6 @@ defmodule LifecycleWeb.PhaseLive.Show do
   defp apply_action(socket, :new, params) do
     parent_phase = Timeline.get_phase!(params["id"])
     parent_phase = %{parent_phase | parent: parent_phase.id}
-    IO.inspect(parent_phase)
 
     socket
     |> assign(:page_title, "Child Phase")
@@ -73,46 +69,15 @@ defmodule LifecycleWeb.PhaseLive.Show do
   end
 
   @impl true
-  def handle_info({Pubsub, [:echo, :created], _message}, socket) do
-    {:noreply, assign(socket, :nowstream, [_message | socket.assigns.nowstream])}
+  def handle_info({Pubsub, [:echo, :created], message}, socket) do
+    Pubs.handle_echo_created(socket, message)
   end
 
   @impl true
   def handle_info({Pubsub, [:transition, :approved], message}, socket) do
-    params = %{
-      id: message.id,
-      transiter: message.transiter,
-      echo_stream: :placeholder,
-      socket: socket
-    }
-
-    {:noreply,
-     socket
-     |> assign(:nowstream, replace_echoes(%{params | echo_stream: :nowstream}))
-     |> assign(:echoes, replace_echoes(%{params | echo_stream: :echoes}))}
+    Pubs.handle_transition_approved(socket, message)
   end
 
-  defp replace_echoes(%{
-         id: transition_id,
-         transiter: transiter,
-         # list of [:nowstream, :echoes]
-         echo_stream: echo_stream,
-         socket: socket
-       }) do
-    # pass back :ok, or :cont
-    Enum.map(socket.assigns[echo_stream], fn
-      %Echo{id: id} = echo ->
-        if id == transition_id do
-          %Echo{echo | transiter: transiter, transited: true}
-        else
-          echo
-        end
-    end)
-  end
-
-  @doc """
-    button event by transition button
-  """
   def handle_event("transition", _params, socket) do
     Transition.handle_button("transition", socket)
   end
@@ -128,68 +93,15 @@ defmodule LifecycleWeb.PhaseLive.Show do
   @impl true
   def handle_event("save", %{"echo" => echo_params}, socket) do
     echo_params = Map.put(echo_params, "phase_id", socket.assigns.phase.id)
-
-    case Timeline.create_echo(echo_params) do
-      {:ok, echo} ->
-        {Pubsub.notify_subs({:ok, echo}, [:echo, :created], "phase:" <> socket.assigns.phase.id)}
-
-        {:noreply,
-         socket
-         |> put_flash(:info, "Message Sent")}
-
-      {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, assign(socket, changeset: changeset)}
-    end
+    Echoes.send_echo(echo_params, socket)
   end
 
-  @doc """
-  Construct the file path of the image uploaded, and save it to local file system
-  Create transition echo object
-  """
-  def handle_event("transit", _params, socket) do
-    # function to get the file path and save it to local file system
-    uploaded_files =
-      consume_uploaded_entries(socket, :transition, fn %{path: path}, entry ->
-        ext = entry.client_name
-        dest_path = path <> ext
-        # changes destination path name with extension for rendering
-        dest =
-          Path.join([:code.priv_dir(:lifecycle), "static", "uploads", Path.basename(dest_path)])
-
-        File.cp!(path, dest)
-        Routes.static_path(socket, "/uploads/#{Path.basename(dest)}")
-      end)
-
-    # convert list to string
-    image_list = Enum.join(uploaded_files, "##")
-
-    # construct echo_params for creating transition echo objects
-    echo_params = %{
-      "message" => image_list,
-      "type" => "transition",
-      "name" => socket.assigns.current_user.name,
-      "transited" => false,
-      "phase_id" => socket.assigns.phase.id
-    }
-
-    case Timeline.create_echo(echo_params) do
-      {:ok, echo} ->
-        {Pubsub.notify_subs({:ok, echo}, [:echo, :created], "phase:" <> socket.assigns.phase.id)}
-
-        {
-          :noreply,
-          socket
-          |> assign(:transiting, false)
-          |> put_flash(:info, "Transition Object Sent")
-        }
-
-      {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, assign(socket, changeset: changeset)}
-    end
+  def handle_event("upload", _params, socket) do
+    Transition.handle_upload("upload", socket)
   end
 
-  def handle_event("approve", %{"value" => id} = params, socket) do
-    topic = "phase:" <> socket.assigns.phase.id
+  def handle_event("approve", params, socket) do
+    topic = Pubs.get_topic(socket)
     Approve.handle_button(params, topic, socket)
   end
 
@@ -201,10 +113,6 @@ defmodule LifecycleWeb.PhaseLive.Show do
     time
     |> Timezone.get_time(timezone, timezone_offset)
   end
-
-  defp page_title(:show), do: "Show Phase"
-  defp page_title(:edit), do: "Edit Phase"
-  defp page_title(:new), do: "Child Phase"
 
   def error_to_string(:too_large), do: "Too large"
   def error_to_string(:too_many_files), do: "You have selected too many files"

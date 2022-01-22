@@ -5,6 +5,10 @@ defmodule LifecycleWeb.Modal.Echoes.Echoes do
   """
   use LifecycleWeb, :live_component
 
+  alias Lifecycle.Timeline
+  alias Lifecycle.Pubsub
+
+  alias LifecycleWeb.Modal.Pubsub.Pubs
   alias LifecycleWeb.Modal.Echoes.EchoList
 
   use Timex
@@ -13,7 +17,10 @@ defmodule LifecycleWeb.Modal.Echoes.Echoes do
     {:ok, socket}
   end
 
-  def update(%{echoes: echoes, id: id, timezone: timezone, timezone_offset: timezone_offset}, socket) do
+  def update(
+        %{echoes: echoes, id: id, timezone: timezone, timezone_offset: timezone_offset},
+        socket
+      ) do
     {:ok,
      assign(socket,
        id: id,
@@ -40,5 +47,23 @@ defmodule LifecycleWeb.Modal.Echoes.Echoes do
         <% end %>
         </ul>
     """
+  end
+
+  def send_echo(echo_params, socket) do
+    topic = Pubs.get_topic(socket)
+
+    case Timeline.create_echo(echo_params) do
+      {:ok, echo} ->
+        {Pubsub.notify_subs({:ok, echo}, [:echo, :created], topic)}
+
+        {
+          :noreply,
+          socket
+          |> put_flash(:info, "Message Sent")
+        }
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        {:noreply, assign(socket, changeset: changeset)}
+    end
   end
 end
