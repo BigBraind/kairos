@@ -1,4 +1,7 @@
 defmodule LifecycleWeb.Modal.Button.Phases do
+  @moduledoc """
+    Button to on phase/show page to show the parent and children button
+  """
   use LifecycleWeb, :live_component
 
   def mount(socket) do
