@@ -2,14 +2,13 @@ defmodule LifecycleWeb.PhaseLive.Show do
   @moduledoc false
   use LifecycleWeb, :live_view
 
-  alias Lifecycle.Timeline
   alias Lifecycle.Pubsub
-  alias Lifecycle.Timeline.{Echo, Phase}
+  alias Lifecycle.Timeline
+  alias Lifecycle.Timeline.{Echo}
   alias Lifecycle.Timezone
 
   alias LifecycleWeb.Modal.Button.Transition
   alias LifecycleWeb.Modal.Echoes.Echoes
-  alias LifecycleWeb.Modal.Echoes.EchoList
   alias LifecycleWeb.Modal.Button.Approve
   alias LifecycleWeb.Modal.Button.Phases
   alias LifecycleWeb.Modal.Pubsub.Pubs
@@ -42,11 +41,7 @@ defmodule LifecycleWeb.PhaseLive.Show do
   end
 
   @impl true
-  @spec handle_params(map, any, %{
-          :assigns => atom | %{:live_action => :edit | :new | :show, optional(any) => any},
-          optional(any) => any
-        }) :: {:noreply, map}
-  def handle_params(%{"id" => id} = params, _, socket) do
+  def handle_params(params, _, socket) do
     {:noreply, apply_action(socket, socket.assigns.live_action, params)}
   end
 
@@ -59,7 +54,6 @@ defmodule LifecycleWeb.PhaseLive.Show do
   defp apply_action(socket, :new, params) do
     parent_phase = Timeline.get_phase!(params["id"])
     parent_phase = %{parent_phase | parent: parent_phase.id}
-    IO.inspect(parent_phase)
 
     socket
     |> assign(:page_title, "Child Phase")
@@ -84,27 +78,6 @@ defmodule LifecycleWeb.PhaseLive.Show do
     Pubs.handle_transition_approved(socket, message)
   end
 
-  defp replace_echoes(%{
-         id: transition_id,
-         transiter: transiter,
-         # list of [:nowstream, :echoes]
-         echo_stream: echo_stream,
-         socket: socket
-       }) do
-    # pass back :ok, or :cont
-    Enum.map(socket.assigns[echo_stream], fn
-      %Echo{id: id} = echo ->
-        if id == transition_id do
-          %Echo{echo | transiter: transiter, transited: true}
-        else
-          echo
-        end
-    end)
-  end
-
-  @doc """
-    button event by transition button
-  """
   def handle_event("transition", _params, socket) do
     Transition.handle_button("transition", socket)
   end
@@ -151,10 +124,6 @@ defmodule LifecycleWeb.PhaseLive.Show do
     time
     |> Timezone.get_time(timezone, timezone_offset)
   end
-
-  defp page_title(:show), do: "Show Phase"
-  defp page_title(:edit), do: "Edit Phase"
-  defp page_title(:new), do: "Child Phase"
 
   def error_to_string(:too_large), do: "Too large"
   def error_to_string(:too_many_files), do: "You have selected too many files"
