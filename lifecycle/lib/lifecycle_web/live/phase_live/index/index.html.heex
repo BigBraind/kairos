@@ -1,4 +1,4 @@
-<h1>Phases 🌙</h1>
+<h1>Phases of Beatboxing</h1>
 
 
 <%= if @live_action in [:new, :edit] do %>
@@ -23,13 +23,13 @@
 <tbody id="phases">
 <%= for phase <- @phases do %>
     <tr id={"phase-#{phase.id}"}>
-    <td><span><%= live_redirect phase.title, to: Routes.phase_show_path(@socket, :show, phase), class: "button"%></span></td>
+    <td><span><%= live_redirect String.slice(phase.title, 0..20) <> " ...", to: Routes.phase_show_path(@socket, :show, phase), class: "button"%></span></td>
     <td><%= phase.content %></td>
     <%= if phase.parent do %>
     <td><%= for parent <- phase.parent do %>
        <span><%= live_redirect parent.title, to: Routes.phase_show_path(@socket, :show, parent), class: "button"%></span>
-    <% end %></td>
-<% end %>
+    <%= end %></td>
+<%= end %>
    <td>
 
    <span><%= live_patch "Edit", to: Routes.phase_index_path(@socket, :edit, phase), class: "button" %></span>

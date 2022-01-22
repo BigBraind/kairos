@@ -24,15 +24,11 @@ defmodule Lifecycle.Timeline.Phase do
     timestamps()
   end
 
-  @max_len 21
-
-
   @doc false
   def changeset(phase, attrs) do
     phase
     |> cast(attrs, [:content, :title, :type])
     #|> cast_assoc(:parent)
-    |> validate_length(:title, max: @max_len)
     |> validate_required([:content, :title, :type])
   end
 end
