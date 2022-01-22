@@ -14,6 +14,7 @@ defmodule LifecycleWeb.EchoLive.Index do
   alias LifecycleWeb.Modal.Echoes.Echoes
   alias LifecycleWeb.Modal.Echoes.EchoList
   alias LifecycleWeb.Modal.Button.Approve
+  alias LifecycleWeb.Modal.Pubsub.Pubs
 
   @impl true
   def mount(_params, _session, socket) do
@@ -156,9 +157,14 @@ defmodule LifecycleWeb.EchoLive.Index do
           |> put_flash(:info, "Transition Object Sent")
         }
 
-      {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, assign(socket, changeset: changeset)}
-    end
+  @impl true
+  def handle_info({Pubsub, [:echo, :created], message}, socket) do
+    Pubs.handle_echo_created(socket, message)
+  end
+
+  @impl true
+  def handle_info({Pubsub, [:transition, :approved], message}, socket) do
+    Pubs.handle_transition_approved(socket, message)
   end
 
   def handle_event("approve", %{"value" => id}, socket) do
