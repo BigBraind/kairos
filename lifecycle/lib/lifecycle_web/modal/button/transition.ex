@@ -8,6 +8,8 @@ defmodule LifecycleWeb.Modal.Button.Transition do
   alias Lifecycle.Pubsub
   alias Lifecycle.Timeline
 
+  alias LifecycleWeb.Modal.Pubsub.Pubs
+
   def button(assigns) do
     ~H"""
       <button phx-click="transition">Drop Beats 🖐🎤</button>
@@ -53,12 +55,7 @@ defmodule LifecycleWeb.Modal.Button.Transition do
       "transited" => false
     }
 
-    topic =
-      if Map.has_key?(socket.assigns, :phase) do
-        "phase:" <> socket.assigns.phase.id
-      else
-        "1"
-      end
+    topic = Pubs.get_topic(socket)
 
     case Timeline.create_echo(echo_params) do
       {:ok, echo} ->
