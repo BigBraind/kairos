@@ -13,7 +13,7 @@ defmodule Lifecycle.Timeline.Echo do
     field :name, :string
     field :type, :string
     field :transited, :boolean
-    field :transiter , :string
+    field :transiter, :string
     belongs_to :phase, Lifecycle.Timeline.Phase, foreign_key: :phase_id
     timestamps()
   end
@@ -24,6 +24,7 @@ defmodule Lifecycle.Timeline.Echo do
     |> cast(attrs, [:message, :phase_id, :type, :name, :transited, :transiter])
     # |> cast_assoc(attrs, [:journey])
     |> validate_required([:message, :name])
+
     # |> validate_required([:message, :journey, :type, :name])
   end
 end

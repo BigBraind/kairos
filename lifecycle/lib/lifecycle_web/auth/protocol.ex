@@ -10,7 +10,6 @@ defmodule LifecycleWeb.Auth.Protocol do
   alias LifecycleWeb.Auth.Helpers
 
   def on_mount(:auth, _params, session, socket) do
-
     {:cont, Helpers.assign_defaults(socket, session)}
   end
 end

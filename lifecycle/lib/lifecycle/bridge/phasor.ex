@@ -1,5 +1,8 @@
 defmodule Lifecycle.Bridge.Phasor do
-
+  @moduledoc """
+    Schema for Phasor object
+    Link between phases
+  """
   use Ecto.Schema
   import Ecto.Changeset
   alias Lifecycle.Timeline.Phase
@@ -17,7 +20,8 @@ defmodule Lifecycle.Bridge.Phasor do
     link
     |> cast(attrs, [:parent_id, :child_id])
     |> validate_required([:parent_id, :child_id])
-    #|> unique_constraint([:parent_id, :child_id], name: :parent_to_child)
-    #|> unique_constraint([:child_id, :parent_id], name: :child_to_parent)
+
+    # |> unique_constraint([:parent_id, :child_id], name: :parent_to_child)
+    # |> unique_constraint([:child_id, :parent_id], name: :child_to_parent)
   end
 end

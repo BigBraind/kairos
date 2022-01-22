@@ -7,7 +7,6 @@ defmodule Lifecycle.Users.Party do
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "parties" do
-
     belongs_to :users, Lifecycle.Users.User
 
     timestamps()
