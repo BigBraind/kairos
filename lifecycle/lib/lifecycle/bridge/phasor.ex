@@ -1,4 +1,8 @@
 defmodule Lifecycle.Bridge.Phasor do
+  @moduledoc """
+    Schema for Phasor object
+    Link between phases
+  """
   use Ecto.Schema
   import Ecto.Changeset
   alias Lifecycle.Timeline.Phase

@@ -2,7 +2,6 @@ defmodule LifecycleWeb.Modal.Button.Transition do
   @moduledoc """
   Transition button
   """
-  # use Phoenix.Component
   use LifecycleWeb, :live_view
 
   alias Lifecycle.Pubsub
