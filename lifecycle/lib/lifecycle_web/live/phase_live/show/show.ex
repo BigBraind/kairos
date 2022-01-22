@@ -93,18 +93,7 @@ defmodule LifecycleWeb.PhaseLive.Show do
   @impl true
   def handle_event("save", %{"echo" => echo_params}, socket) do
     echo_params = Map.put(echo_params, "phase_id", socket.assigns.phase.id)
-
-    case Timeline.create_echo(echo_params) do
-      {:ok, echo} ->
-        {Pubsub.notify_subs({:ok, echo}, [:echo, :created], "phase:" <> socket.assigns.phase.id)}
-
-        {:noreply,
-         socket
-         |> put_flash(:info, "Message Sent")}
-
-      {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, assign(socket, changeset: changeset)}
-    end
+    Echoes.send_echo(echo_params, socket)
   end
 
   def handle_event("upload", _params, socket) do
@@ -112,7 +101,7 @@ defmodule LifecycleWeb.PhaseLive.Show do
   end
 
   def handle_event("approve", params, socket) do
-    topic = "phase:" <> socket.assigns.phase.id
+    topic = Pubs.get_topic(socket)
     Approve.handle_button(params, topic, socket)
   end
 

@@ -45,4 +45,12 @@ defmodule LifecycleWeb.Modal.Pubsub.Pubs do
         end
     end)
   end
+
+  def get_topic(socket) do
+    if Map.has_key?(socket.assigns, :phase) do
+      "phase:" <> socket.assigns.phase.id
+    else
+      "1"
+    end
+  end
 end

@@ -22,7 +22,7 @@ defmodule LifecycleWeb.Modal.Button.Approve do
 
   notify by pub sub
   """
-  def handle_button(%{"value" => id}, topic \\ "1", socket) do
+  def handle_button(%{"value" => id}, topic, socket) do
     echo = Timeline.get_echo!(id)
 
     case echo.transited do

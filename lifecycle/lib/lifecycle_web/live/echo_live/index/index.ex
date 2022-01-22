@@ -43,19 +43,7 @@ defmodule LifecycleWeb.EchoLive.Index do
 
   @impl true
   def handle_event("save", %{"echo" => echo_params}, socket) do
-    case Timeline.create_echo(echo_params) do
-      {:ok, echo} ->
-        {Pubsub.notify_subs({:ok, echo}, [:echo, :created], "1")}
-
-        {
-          :noreply,
-          socket
-          |> put_flash(:info, "Message Sent")
-        }
-
-      {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, assign(socket, changeset: changeset)}
-    end
+    Echoes.send_echo(echo_params, socket)
   end
 
   def handle_event("transition", _params, socket) do
@@ -75,7 +63,8 @@ defmodule LifecycleWeb.EchoLive.Index do
   end
 
   def handle_event("approve", %{"value" => id}, socket) do
-    Approve.handle_button(%{"value" => id}, "1", socket)
+    topic = Pubs.get_topic(socket)
+    Approve.handle_button(%{"value" => id}, topic, socket)
   end
 
   @impl true

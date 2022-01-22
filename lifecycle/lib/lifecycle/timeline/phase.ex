@@ -28,7 +28,7 @@ defmodule Lifecycle.Timeline.Phase do
   def changeset(phase, attrs) do
     phase
     |> cast(attrs, [:content, :title, :type])
-    #|> cast_assoc(:parent)
+    # |> cast_assoc(:parent)
     |> validate_required([:content, :title, :type])
   end
 end
