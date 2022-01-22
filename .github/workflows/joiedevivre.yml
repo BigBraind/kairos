@@ -53,15 +53,14 @@ jobs:
 
   deploy:
     needs: test
-    name: Build to Fly
+    name: Build & Deploy to Fly
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
-      - name: Deployment with Fly
-        working-directory: ./lifecycle
       - uses: superfly/flyctl-actions@master
         env:
+          FLY_PROJECT_PATH: lifecycle
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
         with:
           args: "deploy"
