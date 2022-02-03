@@ -10,16 +10,16 @@ defmodule Lifecycle.Users.Party do
   # @foreign_key_type :binary_id
   schema "parties" do
     field :name, :string
-    belongs_to :users, User
+    belongs_to :users, Lifecycle.Users.User
     many_to_many :user, User, join_through: Partyer
 
 
     timestamps()
   end
 
-  @doc false
-  def changeset(party, attrs) do
-    party
-    |> cast(attrs, [:users])
-  end
+  # @doc false
+  # def changeset(party, attrs) do
+  #   party
+  #   |> cast(attrs, [:users])
+  # end
 end

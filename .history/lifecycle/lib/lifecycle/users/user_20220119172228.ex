@@ -3,8 +3,7 @@ defmodule Lifecycle.Users.User do
   Schema table for user object
   """
   use Ecto.Schema
-  alias Lifecycle.Bridge.Partyer
-  alias Lifecycle.Users.Party
+
   use Pow.Ecto.Schema,
     user_id_field: :name,
     password_hash_methods:
@@ -17,16 +16,15 @@ defmodule Lifecycle.Users.User do
     # field :custom_field, :string
 
     pow_user_fields()
-    has_many :parties, Party, foreign_key: :id
-    many_to_many :party, Party, join_through: Partyer
 
     timestamps()
 
-    # has_many :party, Lifecycle.Users.Party
+    many_to_many :phases, Lifecycle.Timeline.Phase, join_through: "phase_user_link"
 
   end
 
   def changeset(user_or_changeset, attrs) do
     pow_changeset(user_or_changeset, attrs)
+
   end
 end
