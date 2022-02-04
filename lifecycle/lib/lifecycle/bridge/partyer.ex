@@ -19,7 +19,7 @@ defmodule Lifecycle.Bridge.Partyer do
   @doc false
   def changeset(link, attrs \\ %{}) do
     link
-    |> cast (attrs, [:party_id, :user_id])
+    |> cast(attrs, [:party_id, :user_id])
     |> validate_required([:party_id, :user_id])
   end
 end
