@@ -3,6 +3,7 @@ defmodule Lifecycle.Users.Party do
   Schema table for party object
   """
   use Ecto.Schema
+  import Ecto.Changeset
   alias Lifecycle.Users.User
   alias Lifecycle.Bridge.Partyer
 
@@ -18,7 +19,7 @@ defmodule Lifecycle.Users.Party do
   end
 
   @doc false
-  def changeset(party, attrs) do
+  def changeset(party, attrs \\ %{}) do
     party
     |> cast(attrs, [:users])
   end
