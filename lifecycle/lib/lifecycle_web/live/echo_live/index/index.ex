@@ -43,6 +43,7 @@ defmodule LifecycleWeb.EchoLive.Index do
 
   @impl true
   def handle_event("save", %{"echo" => echo_params}, socket) do
+
     Echoes.send_echo(echo_params, socket)
   end
 

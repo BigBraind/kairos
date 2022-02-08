@@ -11,7 +11,7 @@ import "../css/app.css"
 // The simplest option is to put them in assets/vendor and
 // import them using relative paths:
 //
-//     import "./vendor/some-package.js"
+//     import "./vesavendor/some-package.js"
 //
 // Alternatively, you can `npm install some-package` and import
 // them using a path starting with the package name:
@@ -25,6 +25,7 @@ import "phoenix_html"
 import { Socket } from "phoenix"
 import { LiveSocket } from "phoenix_live_view"
 import topbar from "../vendor/topbar"
+//import {InitCheckout} from "./init_checkout"
 
 let Hooks = {} // for creating hooks
 

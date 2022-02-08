@@ -47,6 +47,8 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
+# config/config.exs
+config :stripity_stripe, api_key: System.get_env("STRIPE_SECRET")
 
 # Pow Configuration
 config :lifecycle, :pow,

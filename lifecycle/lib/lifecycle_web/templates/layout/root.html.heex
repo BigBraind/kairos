@@ -26,6 +26,8 @@
             <%= if function_exported?(Routes, :live_dashboard_path, 2) do %>
               <li><%= link "LiveDashboard", to: Routes.live_dashboard_path(@conn, :home) %></li>
             <% end %>
+            <li><%= link "Billing", to: Routes.billing_index_path(@conn, :index) %></li>
+
           </ul>
         </nav>
         <a href="/" class="phx-logo">

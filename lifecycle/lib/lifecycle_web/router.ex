@@ -45,6 +45,9 @@ defmodule LifecycleWeb.Router do
       live("/phases/:id", PhaseLive.Show, :show)
       live("/phases/:id/show/edit", PhaseLive.Show, :edit)
       live("/phases/:id/show/new", PhaseLive.Show, :new)
+
+      live("/billing", BillingLive.Index, :index)
+
     end
    end
 
