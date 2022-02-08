@@ -3,8 +3,8 @@ defmodule Lifecycle.Users.User do
   Schema table for user object
   """
   use Ecto.Schema
-  alias Lifecycle.Bridge.Partyer
   alias Lifecycle.Users.Party
+  alias Lifecycle.Bridge.Membership
   use Pow.Ecto.Schema,
     user_id_field: :name,
     password_hash_methods:
@@ -18,7 +18,7 @@ defmodule Lifecycle.Users.User do
 
     pow_user_fields()
     has_many :parties, Party, foreign_key: :id
-    many_to_many :party, Party, join_through: Partyer
+    many_to_many :party, Party, join_through: Membership
 
     timestamps()
 

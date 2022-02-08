@@ -1,0 +1,19 @@
+defmodule Lifecycle.Repo.Migrations.PartyMembership do
+  use Ecto.Migration
+
+  def change do
+
+    create_query = "CREATE TYPE party_role AS ENUM ('lead', 'whip', 'pleb')"
+    drop_query = "DROP TYPE party_role"
+    execute(create_query, drop_query)
+
+    create table(:party_membership, primary_key: :false) do
+      add :party_id, references(:parties, column: :id, on_delete: :nothing, type: :binary_id)
+      add :user_id, references(:users, column: :id, on_delete: :nothing, type: :binary_id)
+      add :role, :party_role
+    end
+
+    create index(:party_membership, [:party_id, :user_id])
+    create index(:party_membership, [:user_id, :party_id])
+  end
+end

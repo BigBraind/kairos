@@ -1,7 +1,7 @@
-defmodule Lifecycle.Bridge.Partyer do
+defmodule Lifecycle.Bridge.Membership do
   @moduledoc """
-    Schema for Partyer object
-    Link between Party (Group) and Users
+    Schema for Partyer-Membership
+    Link between Party (Group) & Users through Membership => Roles in Realm
   """
 
   use Ecto.Schema
@@ -11,7 +11,8 @@ defmodule Lifecycle.Bridge.Partyer do
 
   @primary_key false
   @foreign_key_type :binary_id
-  schema "party_user_link" do
+  schema "party_membership" do
+    field :role, Ecto.Enum, values: [:lead, :whip, :pleb]
     belongs_to :party, Party
     belongs_to :user, User
   end
@@ -19,7 +20,7 @@ defmodule Lifecycle.Bridge.Partyer do
   @doc false
   def changeset(link, attrs \\ %{}) do
     link
-    |> cast(attrs, [:party_id, :user_id])
-    |> validate_required([:party_id, :user_id])
+    |> cast(attrs, [:party_id, :user_id, :role])
+    |> validate_required([:party_id, :user_id, :role])
   end
 end
