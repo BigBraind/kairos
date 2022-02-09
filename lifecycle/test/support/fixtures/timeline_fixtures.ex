@@ -13,7 +13,7 @@ defmodule Lifecycle.TimelineFixtures do
     {:ok, echo} =
       attrs
       |> Enum.into(%{
-        phase: phase.id,
+        phase_id: phase.id,
         message: "some message",
         name: "some name"
         # type: "type"
@@ -37,6 +37,6 @@ defmodule Lifecycle.TimelineFixtures do
       })
       |> Lifecycle.Timeline.create_phase()
 
-    phase = %{phase | parent: [], child: []} # add child and parent
+   %{phase | parent: [], child: []} # add child and parent
   end
 end
