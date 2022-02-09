@@ -40,7 +40,7 @@ defmodule LifecycleWeb.Modal.Button.Transition do
           Path.join([:code.priv_dir(:lifecycle), "static", "uploads", Path.basename(dest_path)])
 
         File.cp!(path, dest)
-        Routes.static_path(socket, "/uploads/#{Path.basename(dest)}")
+        {:ok, Routes.static_path(socket, "/uploads/#{Path.basename(dest)}")}
       end)
 
     # convert list to string
@@ -51,7 +51,8 @@ defmodule LifecycleWeb.Modal.Button.Transition do
       "message" => image_list,
       "type" => "transition",
       "name" => socket.assigns.current_user.name,
-      "transited" => false
+      "transited" => false,
+      "phase_id" => socket.assigns.phase.id
     }
 
     topic = Pubs.get_topic(socket)

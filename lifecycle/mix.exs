@@ -7,6 +7,7 @@ defmodule Lifecycle.MixProject do
       version: "0.1.0",
       elixir: "~> 1.12",
       elixirc_paths: elixirc_paths(Mix.env()),
+      elixirc_options: [debug_info: Mix.env() == :dev],
       compilers: [:gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
