@@ -5,6 +5,8 @@ defmodule Lifecycle.Timezone do
   """
   use LifecycleWeb, :live_view
 
+  use Timex
+
   @default_locale "en"
   @default_timezone "UTC"
   @default_timezone_offset 0
