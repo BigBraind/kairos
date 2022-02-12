@@ -22,6 +22,7 @@ defmodule Lifecycle.Users.Party do
   def changeset(party, attrs \\ %{}) do
     party
     |> cast(attrs, [:name, :banner])
+    |> validate_required([:banner, :name])
     |> unique_constraint(:name)
   end
 end
