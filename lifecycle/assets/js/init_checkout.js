@@ -1,6 +1,4 @@
 // The public key can be found in the Stripe Dashboard
-const stripe = Stripe('pk_test_51HSLYOJuBzfbzD5Jra9Sy7DhnZxBmoLU6jLEevb7YNcMa2QUGBZoiAC254s0pNbuxYWDj1OZ4IScKanyvFv2ahw700wbNW6oza')
-
 export const InitCheckout = {
   mounted() {
     const successCallback = paymentIntent => { this.pushEvent('payment-success', paymentIntent) }
@@ -9,6 +7,10 @@ export const InitCheckout = {
 }
 
 const init = (form, successCallback) => {
+
+  const stripe = Stripe('pk_test_51HSLYOJuBzfbzD5Jra9Sy7DhnZxBmoLU6jLEevb7YNcMa2QUGBZoiAC254s0pNbuxYWDj1OZ4IScKanyvFv2ahw700wbNW6oza')
+
+  console.log("ni hao")
   const clientSecret = form.dataset.secret
 
   // Create an instance of Elements.
@@ -31,7 +33,7 @@ const init = (form, successCallback) => {
   });
 
   // Handle form submission.
-  form.addEventListener('submit', function(event) {
+  form.addEventListener('submitStripe', function(event) {
     event.preventDefault()
 
     stripe.confirmCardPayment(clientSecret, {

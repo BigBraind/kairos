@@ -60,7 +60,8 @@ defmodule Lifecycle.MixProject do
       {:ex_aws, "~> 2.1.2"},
       {:ex_aws_s3, "~> 2.0"},
       {:hackney, "~> 1.9"},
-      {:stripity_stripe, "~> 2.0"}
+      {:stripity_stripe, "~> 2.0"},
+      {:dotenv_parser, "~> 2.0", runtime: Mix.env() == :dev}
     ]
   end
 

@@ -25,9 +25,10 @@ import "phoenix_html"
 import { Socket } from "phoenix"
 import { LiveSocket } from "phoenix_live_view"
 import topbar from "../vendor/topbar"
-//import {InitCheckout} from "./init_checkout"
+import {InitCheckout} from "./init_checkout"
 
 let Hooks = {} // for creating hooks
+Hooks.InitCheckout = InitCheckout
 
 // hooks for emptying the input on the echo form
 Hooks.EmptyInput = {
@@ -35,6 +36,8 @@ Hooks.EmptyInput = {
         this.el.elements[2].value = " "
     }
 }
+
+
 
 // hooks for separating msg on rendering echoes
 Hooks.SeparatingMsg = {

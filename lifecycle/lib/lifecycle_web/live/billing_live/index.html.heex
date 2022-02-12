@@ -1,8 +1,5 @@
-<script src="https://js.stripe.com/v3/"></script>
- 
-
 <div>
-    <.form let={f} for={@changeset} phx-submit="submit", phx-hook="EmptyInput", id="echo_form">
+    <.form let={f} for={@changeset} phx-submit="submitStripe", phx-hook="EmptyInput", id="echo_form">
       <%= hidden_input f, :amount, value: "1099" %>
       <%= hidden_input f, :currency, value: "USD" %>
       
