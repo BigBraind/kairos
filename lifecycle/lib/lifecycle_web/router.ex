@@ -49,6 +49,7 @@ defmodule LifecycleWeb.Router do
       live("/party", PartyLive.Index, :index)
       live("/party/new", PartyLive.Index, :new)
       live("/party/:party_name/edit", PartyLive.Index, :edit)
+      live("/party/:party_name/show/edit", PartyLive.Show, :edit)
       live("/party/:party_name/", PartyLive.Show, :show)
 
     end
