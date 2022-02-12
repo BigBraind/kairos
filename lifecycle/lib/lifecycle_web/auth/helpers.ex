@@ -22,7 +22,6 @@ defmodule LifecycleWeb.Auth.Helpers do
 
     with {:ok, token} <- Pow.Plug.verify_token(conn, salt, signed_token, config),
          {user, _metadata} <- CredentialsCache.get([backend: EtsCache], token) do
-      IO.inspect(user)
       user
     else
       _ -> nil

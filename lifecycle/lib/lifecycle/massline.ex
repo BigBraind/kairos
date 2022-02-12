@@ -45,8 +45,10 @@ defmodule Lifecycle.Massline do
       [%Party{}, ...]
 
   """
-  def add_members do
-    #Repo.all(from(p in Party, preload: [:user]))
+  def add_member(attrs \\ %{}) do
+    %Membership{}
+        |> Membership.changeset(attrs)
+        |> Repo.insert()
   end
 
   @doc """
@@ -58,8 +60,8 @@ defmodule Lifecycle.Massline do
       [%Party{}, ...]
 
   """
-  def subtract_members do
-    #Repo.all(from(p in Party, preload: [:user]))
+  def subtract_member(%Membership{} = member) do
+    Repo.delete(member)
   end
 
   @doc """
@@ -99,7 +101,7 @@ defmodule Lifecycle.Massline do
           |> Repo.insert()
 
         %Membership{}
-        |> Membership.changeset(%{role: "lead", party_id: party.id, user_id: user_id  })
+        |> Membership.changeset(%{role: "lead", party_id: party.id, user_id: user_id})
         |> Repo.insert()
 
         {:ok, party}
@@ -145,5 +147,18 @@ defmodule Lifecycle.Massline do
     Repo.delete(party)
   end
 
+
+    @doc """
+  Returns an `%Ecto.Changeset{}` for tracking party changes.
+
+  ## Examples
+
+      iex> change_party(party)
+      %Ecto.Changeset{data: %Party{}}
+
+  """
+  def change_party(%Party{} = party, attrs \\ %{}) do
+    Party.changeset(party, attrs)
+  end
 
 end
