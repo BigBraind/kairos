@@ -8,7 +8,7 @@ defmodule Lifecycle.Repo.Migrations.PartyMembership do
     execute(create_query, drop_query)
 
     create table(:party_membership, primary_key: :false) do
-      add :party_id, references(:parties, column: :id, on_delete: :nothing, type: :binary_id)
+      add :party_id, references(:parties, column: :id, on_delete: :delete_all, type: :binary_id)
       add :user_id, references(:users, column: :id, on_delete: :nothing, type: :binary_id)
       add :role, :party_role
     end
