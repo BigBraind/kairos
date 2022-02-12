@@ -1,4 +1,4 @@
-<h1>Party</h1>
+<h1><%= @page_title %></h1>
 
 
 <%= if @live_action in [:new, :edit] do %>
@@ -6,7 +6,9 @@
     id: @party.id || :new,
     title: @page_title,
     action: @live_action,
-    party: @all_party,
+    parties: @all_party,
+    party: @party,
+    current_user: @current_user,
     return_to: Routes.party_index_path(@socket, :index) %>
 <% end %>
 
@@ -25,7 +27,7 @@
     <%= for party <- @all_party do %>
         <tr id={"party-#{party.id}"}>
             <td><span><%= live_redirect party.name, to: Routes.party_show_path(@socket, :show, party), class: "button"%></span></td>
-            <td><%= party.name %></td>
+            <td><%= party.banner %></td>
             <td>Query to be done</td>
             <td>
                 <%= for user <- party.user do %>
