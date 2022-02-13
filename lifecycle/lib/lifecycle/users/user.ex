@@ -17,7 +17,7 @@ defmodule Lifecycle.Users.User do
     # field :custom_field, :string
 
     pow_user_fields()
-    has_many :parties, Party, foreign_key: :id
+    has_many :parties, Membership, foreign_key: :user_id
     many_to_many :party, Party, join_through: Membership
 
     timestamps()
