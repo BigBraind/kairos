@@ -33,7 +33,6 @@ defmodule LifecycleWeb.PartyLive.FormComponent do
     party_params =
     party_params
     |> Map.put("founder_id", socket.assigns.current_user.id)
-    IO.inspect(party_params)
 
     case Massline.create_party(party_params) do
       {:ok, party} ->
@@ -59,5 +58,5 @@ defmodule LifecycleWeb.PartyLive.FormComponent do
         {:noreply, assign(socket, :changeset, changeset)}
     end
   end
-  
+
 end

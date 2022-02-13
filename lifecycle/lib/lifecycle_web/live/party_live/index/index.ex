@@ -3,8 +3,6 @@ defmodule LifecycleWeb.PartyLive.Index do
 
   use LifecycleWeb, :live_view
 
-  alias Lifecycle.Timezone
-
   alias Lifecycle.Massline
   alias Lifecycle.Users.Party
 
@@ -35,10 +33,9 @@ defmodule LifecycleWeb.PartyLive.Index do
     |> assign(:party, %Party{})
   end
 
-  defp apply_action(socket, :show, params) do
-    IO.socket(params)
+  defp apply_action(socket, :show, _params) do
     socket
-    |> assign(:page_title ,"Party Time")
+    |> assign(:page_title, "Party Time")
   end
 
   defp apply_action(socket, :edit, %{"party_name" => id}) do

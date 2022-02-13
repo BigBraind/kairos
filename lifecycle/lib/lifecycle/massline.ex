@@ -1,3 +1,4 @@
+
 defmodule Lifecycle.Massline do
   @moduledoc """
   The Massline User/Party context.
@@ -68,10 +69,27 @@ defmodule Lifecycle.Massline do
 
   """
   def add_member(attrs \\ %{}) do
-    %Membership{}
+    case attrs do
+      %{"user_name" => user_name} ->
+        case get_user_by_name(user_name) do
+          %User{:id => user_id } ->
+            attrs = Map.put(attrs, "user_id", user_id )
+            %Membership{}
+            |> Membership.changeset(attrs)
+            |> Repo.insert()
+
+          {:error, reason} ->
+            {:error, reason}
+        end
+
+      %{"user_id" => _user_id} ->
+        %Membership{}
         |> Membership.changeset(attrs)
         |> Repo.insert()
+    end
   end
+
+  def get_member!(attrs), do: Repo.get_by!(Membership, [party_id: attrs["party_id"], user_id: attrs["user_id"]])
 
   @doc """
   Returns the list of members
@@ -82,8 +100,23 @@ defmodule Lifecycle.Massline do
       [%Party{}, ...]
 
   """
-  def subtract_member(%Membership{} = member) do
-    Repo.delete(member)
+  def subtract_member(attrs \\ %{}) do
+    case attrs do
+      %{"user_name" => user_name, "party_id" => _party_id} ->
+        IO.puts("before username")
+        case get_user_by_name(user_name) do
+          %User{:id => user_id } ->
+            attrs = Map.put(attrs, "user_id", user_id )
+            import IEx; IEx.pry()
+            Repo.delete(get_member!(attrs))
+
+          {:error, reason} ->
+            {:error, reason}
+        end
+      %{"user_id" => _user_id, "party_id" => _party_id} ->
+        Repo.delete(get_member!(attrs))
+
+    end
   end
 
   @doc """
@@ -109,9 +142,9 @@ defmodule Lifecycle.Massline do
   @doc """
   Gets user's id by passing in user's name
   """
-  def get_user_name(name) do
+  def get_user_by_name(name) do
     try do
-      Repo.get_by(User, name: name)
+      Repo.get_by!(User, name: name)
     rescue
       Ecto.NoResultsError ->
         {:error, "user not found, make sure you enter the correct user name"}
