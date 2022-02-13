@@ -16,8 +16,8 @@ defmodule Lifecycle.Massline do
 
   ## Examples
 
-      iex> list_parties()
-      [%Party{}, ...]
+  iex> list_parties()
+  [%Party{}, ...]
 
   """
   def list_parties do
@@ -29,8 +29,8 @@ defmodule Lifecycle.Massline do
 
   ## Examples
 
-      iex> list_members(id)
-      [%Party{}, ...]
+  iex> list_members(id)
+  [%Party{}, ...]
 
   """
   def list_members(id) do
@@ -41,17 +41,17 @@ defmodule Lifecycle.Massline do
     Repo.all(query, limit: 8)
   end
 
-    @doc """
+  @doc """
   Returns the list of members
 
   ## Examples
 
-      iex> list_members(id)
-      [%Party{}, ...]
+  iex> list_members(id)
+  [%Party{}, ...]
 
   """
   def list_my_parties(id) do
-      #includes role information
+    #includes role information
     query = Membership
     |> where([e], e.user_id == ^id)
     |> order_by([e], desc: e.inserted_at)
@@ -64,8 +64,8 @@ defmodule Lifecycle.Massline do
 
   ## Examples
 
-      iex> list_parties()
-      [%Party{}, ...]
+  iex> list_parties()
+  [%Party{}, ...]
 
   """
   def add_member(attrs \\ %{}) do
@@ -96,25 +96,27 @@ defmodule Lifecycle.Massline do
 
   ## Examples
 
-      iex> list_parties()
-      [%Party{}, ...]
+  iex> list_parties()
+  [%Party{}, ...]
 
   """
   def subtract_member(attrs \\ %{}) do
     case attrs do
-      %{"user_name" => user_name, "party_id" => _party_id} ->
-        IO.puts("before username")
+      %{"user_name" => user_name, "party_id" => party_id} ->
         case get_user_by_name(user_name) do
           %User{:id => user_id } ->
-            attrs = Map.put(attrs, "user_id", user_id )
-            import IEx; IEx.pry()
-            Repo.delete(get_member!(attrs))
+            from(m in Membership, where: m.party_id == ^party_id and m.user_id == ^user_id)
+            |> Repo.delete_all()
+            {:ok, "member kicked"}
 
           {:error, reason} ->
             {:error, reason}
         end
-      %{"user_id" => _user_id, "party_id" => _party_id} ->
-        Repo.delete(get_member!(attrs))
+      %{"user_id" => user_id, "party_id" => party_id} ->
+        from(m in Membership, where: m.party_id == ^party_id and m.user_id == ^user_id)
+        |> Repo.delete_all()
+
+        {:ok, "member kicked"}
 
     end
   end
@@ -125,18 +127,18 @@ defmodule Lifecycle.Massline do
 
   ## Examples
 
-      iex> get_party!(123)
-      %Party{}
+  iex> get_party!(123)
+  %Party{}
 
-      iex> get_party!(456)
-      ** (Ecto.NoResultsError)
+  iex> get_party!(456)
+  ** (Ecto.NoResultsError)
 
   """
   def get_party!(id), do: Repo.get!(Party, id) |> Repo.preload([:user])
 
-   @doc """
-   Gets party's id by passing in party's name
-   """
+  @doc """
+  Gets party's id by passing in party's name
+  """
   def get_party_name!(name), do: Repo.get_by!(Party, name: name) |> Repo.preload([:user])
 
   @doc """
@@ -148,7 +150,7 @@ defmodule Lifecycle.Massline do
     rescue
       Ecto.NoResultsError ->
         {:error, "user not found, make sure you enter the correct user name"}
-      end
+    end
   end
 
   @doc """
@@ -156,31 +158,31 @@ defmodule Lifecycle.Massline do
 
   ## Examples
 
-      iex> create_party(%{field: value})
-      {:ok, %Party{}}
+  iex> create_party(%{field: value})
+  {:ok, %Party{}}
 
-      iex> create_party(%{field: bad_value})
-      {:error, %Ecto.Changeset{}}
+  iex> create_party(%{field: bad_value})
+  {:error, %Ecto.Changeset{}}
 
   """
   def create_party(attrs \\ %{}) do
     case attrs do
       %{"founder_id" => user_id} ->
-          %Party{}
-          |> Party.changeset(attrs)
-          |> Repo.insert()
-          |> case do
-            {:ok, party} ->
-              %Membership{}
-              |> Membership.changeset(%{role: "lead", party_id: party.id, user_id: user_id})
-              |> Repo.insert()
-              |> case do
-                {:ok, _} -> {:ok, party}
+        %Party{}
+        |> Party.changeset(attrs)
+        |> Repo.insert()
+        |> case do
+             {:ok, party} ->
+               %Membership{}
+               |> Membership.changeset(%{role: "lead", party_id: party.id, user_id: user_id})
+               |> Repo.insert()
+               |> case do
+                    {:ok, _} -> {:ok, party}
 
-                {:error,  %Ecto.Changeset{} = changeset} -> {:error, changeset}
-              end
-            {:error, %Ecto.Changeset{} = changeset} -> {:error, changeset}
-          end
+                    {:error,  %Ecto.Changeset{} = changeset} -> {:error, changeset}
+                  end
+             {:error, %Ecto.Changeset{} = changeset} -> {:error, changeset}
+           end
 
       %{} ->
         %Party{}
@@ -194,11 +196,11 @@ defmodule Lifecycle.Massline do
 
   ## Examples
 
-      iex> update_party(party, %{field: new_value})
-      {:ok, %Party{}}
+  iex> update_party(party, %{field: new_value})
+  {:ok, %Party{}}
 
-      iex> update_party(party, %{field: bad_value})
-      {:error, %Ecto.Changeset{}}
+  iex> update_party(party, %{field: bad_value})
+  {:error, %Ecto.Changeset{}}
 
   """
   def update_party(%Party{} = party, attrs) do
@@ -212,11 +214,11 @@ defmodule Lifecycle.Massline do
 
   ## Examples
 
-      iex> delete_party(party)
-      {:ok, %Party{}}
+  iex> delete_party(party)
+  {:ok, %Party{}}
 
-      iex> delete_party(party)
-      {:error, %Ecto.Changeset{}}
+  iex> delete_party(party)
+  {:error, %Ecto.Changeset{}}
 
   """
   def delete_party(%Party{} = party) do
@@ -224,13 +226,13 @@ defmodule Lifecycle.Massline do
   end
 
 
-    @doc """
+  @doc """
   Returns an `%Ecto.Changeset{}` for tracking party changes.
 
   ## Examples
 
-      iex> change_party(party)
-      %Ecto.Changeset{data: %Party{}}
+  iex> change_party(party)
+  %Ecto.Changeset{data: %Party{}}
 
   """
   def change_party(%Party{} = party, attrs \\ %{}) do
