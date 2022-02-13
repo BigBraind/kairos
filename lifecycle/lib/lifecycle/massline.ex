@@ -80,9 +80,22 @@ defmodule Lifecycle.Massline do
   """
   def get_party!(id), do: Repo.get!(Party, id) |> Repo.preload([:user])
 
+   @doc """
+   Gets party's id by passing in party's name
+   """
   def get_party_name!(name), do: Repo.get_by!(Party, name: name) |> Repo.preload([:user])
 
-  def get_user_name!(name), do: Repo.get_by!(User, name: name)
+  @doc """
+  Gets user's id by passing in user's name
+  """
+  def get_user_name(name) do
+    try do
+      Repo.get_by(User, name: name)
+    rescue
+      Ecto.NoResultsError ->
+        {:error, "user not found, make sure you enter the correct user name"}
+      end
+  end
 
   @doc """
   Creates a party.

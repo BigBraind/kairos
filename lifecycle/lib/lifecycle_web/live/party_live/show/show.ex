@@ -4,6 +4,7 @@ defmodule LifecycleWeb.PartyLive.Show do
   use LifecycleWeb, :live_view
 
   alias Lifecycle.Users.Party
+  alias Lifecycle.Users.User
   alias Lifecycle.Massline
 
 
@@ -46,22 +47,28 @@ defmodule LifecycleWeb.PartyLive.Show do
   end
 
   def handle_event("add_member", %{"party" => party_params}, socket) do
-    party_params =
-      party_params
-      |> Map.put("role", "pleb")
+    party_id = party_params["party_id"]
+    case get_user_id(party_params["user_name"]) do
+      %User{} = user ->
+        IO.inspect user
+        party_params =
+          party_params
+          |> Map.put("role", "pleb")
+          |> Map.put("user_id", user.id)
 
-    IO.inspect party_params
+        case add_member(party_params) do
+          {:ok, _} ->
+            {:noreply, assign(socket, :party, get_party(party_id))}
 
-    id = party_params["party_id"]
-    IO.inspect id
+          {:error, %Ecto.Changeset{} = changeset} ->
+            {:noreply, assign(socket, changeset: changeset)}
+        end
 
-    case add_member(party_params) do
-      {:ok, _} ->
-        {:no_reply, assign(socket, :party, get_party(id))}
-
-    end
-
-    {:noreply, socket}
+      {:error, reason} ->
+        {:noreply,
+          socket
+          |> put_flash(:error, reason)}
+      end
   end
 
   def handle_event("subtract_member", %{"party" => party_params}, socket) do
@@ -79,6 +86,7 @@ defmodule LifecycleWeb.PartyLive.Show do
   defp list_party, do: Massline.list_parties()
   defp add_member(party_params), do: Massline.add_member(party_params)
   defp subtract_member(party_params), do: Massline.subtract_member(party_params)
+  defp get_user_id(user_name), do: Massline.get_user_name(user_name)
 
 
 end

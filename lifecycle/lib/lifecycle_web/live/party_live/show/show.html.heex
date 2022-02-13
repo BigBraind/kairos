@@ -28,8 +28,8 @@
         <%= error_tag f, :party_id %>
     
         <%= label f, :new_member %>
-        <%= text_input f, :user_id, autocomplete: "off"%>
-        <%= error_tag f, :user_id %>
+        <%= text_input f, :user_name, autocomplete: "off"%>
+        <%= error_tag f, :user_name %>
     </.form>
     
     <.form let={f} for={@party_changeset} phx-submit="subtract_member", id="subtract_member_form">
@@ -37,8 +37,8 @@
         <%= error_tag f, :party_id %>
     
         <%= label f, :remove_member %>
-        <%= text_input f, :user_id, autocomplete: "off"%>
-        <%= error_tag f, :user_id %>
+        <%= text_input f, :user_name, autocomplete: "off"%>
+        <%= error_tag f, :user_name %>
     </.form>
     <span><%= link "+ Members", to: "#", phx_click: "add_members", data: [confirm: "To be done!"] %></span>
 </div>
