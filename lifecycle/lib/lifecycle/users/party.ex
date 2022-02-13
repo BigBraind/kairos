@@ -23,6 +23,6 @@ defmodule Lifecycle.Users.Party do
     party
     |> cast(attrs, [:name, :banner])
     |> validate_required([:banner, :name])
-    |> unique_constraint(:name)
+    |> unique_constraint(:name, name: :parties_name_index)
   end
 end
