@@ -1,3 +1,8 @@
+<%# the live layout - this is the layout which wraps a LiveView and is rendered as part of the LiveView life-cycle. 
+It must be opt-in by passing the :layout option on use Phoenix.LiveView. 
+It is typically set to "live.html.heex"in your MyAppWeb.LayoutView. %>
+
+
 <main class="container">
   <p class="alert alert-info" role="alert"
     phx-click="lv:clear-flash"
@@ -7,5 +12,7 @@
     phx-click="lv:clear-flash"
     phx-value-key="error"><%= live_flash(@flash, :error) %></p>
 
+
   <%= @inner_content %>
+  <%#  Glen: All layouts must call this ^ to inject the content rendered by the layout. %>
 </main>
