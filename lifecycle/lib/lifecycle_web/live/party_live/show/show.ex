@@ -75,21 +75,18 @@ defmodule LifecycleWeb.PartyLive.Show do
     # party_params = Map.put(party_params, "role", "pleb")
     IO.inspect(party_params)
     party_id = party_params["party_id"]
-    # IO.inspect(Massline.subtract_member(party_params))
-    case Massline.subtract_member(party_params) do
-      %User{} = user ->
-        party_params =
-          party_params
-          # |> Map.put("role", "pleb")
-          |> Map.put("user_id", user.id)
+    case subtract_member(party_params) do
+      {:ok, message} ->
+        {:noreply,
+         socket
+         |> assign(:party, get_party(party_id))
+         |> put_flash(:info, message)}
 
       {:error, reason} ->
         {:noreply,
          socket
          |> put_flash(:error, reason)}
     end
-
-    {:noreply, socket}
   end
 
   # Query
