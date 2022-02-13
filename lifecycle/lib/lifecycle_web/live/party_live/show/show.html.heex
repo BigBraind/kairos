@@ -23,5 +23,22 @@
 </div>
 
 <div align="left">
+    <.form let={f} for={@party_changeset} phx-submit="add_member", id="add_member_form">
+        <%= hidden_input f, :party_id, value: @party.id %>
+        <%= error_tag f, :party_id %>
+    
+        <%= label f, :new_member %>
+        <%= text_input f, :user_id, autocomplete: "off"%>
+        <%= error_tag f, :user_id %>
+    </.form>
+    
+    <.form let={f} for={@party_changeset} phx-submit="subtract_member", id="subtract_member_form">
+        <%= hidden_input f, :party_id, value: @party.id %>
+        <%= error_tag f, :party_id %>
+    
+        <%= label f, :remove_member %>
+        <%= text_input f, :user_id, autocomplete: "off"%>
+        <%= error_tag f, :user_id %>
+    </.form>
     <span><%= link "+ Members", to: "#", phx_click: "add_members", data: [confirm: "To be done!"] %></span>
 </div>

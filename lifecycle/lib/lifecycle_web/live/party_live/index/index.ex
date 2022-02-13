@@ -37,7 +37,6 @@ defmodule LifecycleWeb.PartyLive.Index do
 
   defp apply_action(socket, :show, params) do
     IO.socket(params)
-    import IEx; IEx.pry()
     socket
     |> assign(:page_title ,"Party Time")
   end
