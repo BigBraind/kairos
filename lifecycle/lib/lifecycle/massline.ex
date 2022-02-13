@@ -95,16 +95,21 @@ defmodule Lifecycle.Massline do
   def create_party(attrs \\ %{}) do
     case attrs do
       %{"founder_id" => user_id} ->
-        {:ok, party} =
           %Party{}
           |> Party.changeset(attrs)
           |> Repo.insert()
+          |> case do
+            {:ok, party} ->
+              %Membership{}
+              |> Membership.changeset(%{role: "lead", party_id: party.id, user_id: user_id})
+              |> Repo.insert()
+              |> case do
+                {:ok, _} -> {:ok, party}
 
-        %Membership{}
-        |> Membership.changeset(%{role: "lead", party_id: party.id, user_id: user_id})
-        |> Repo.insert()
-
-        {:ok, party}
+                {:error,  %Ecto.Changeset{} = changeset} -> {:error, changeset}
+              end
+            {:error, %Ecto.Changeset{} = changeset} -> {:error, changeset}
+          end
 
       %{} ->
         %Party{}
