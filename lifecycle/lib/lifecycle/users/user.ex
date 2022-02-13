@@ -5,6 +5,7 @@ defmodule Lifecycle.Users.User do
   use Ecto.Schema
   alias Lifecycle.Users.Party
   alias Lifecycle.Bridge.Membership
+
   use Pow.Ecto.Schema,
     user_id_field: :name,
     password_hash_methods:
@@ -23,6 +24,7 @@ defmodule Lifecycle.Users.User do
     timestamps()
 
     # has_many :party, Lifecycle.Users.Party
+
 
   end
 

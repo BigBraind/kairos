@@ -14,10 +14,8 @@ defmodule Lifecycle.Users.Party do
     field :banner, :string
     many_to_many :user, User, join_through: Membership
 
-
     timestamps()
   end
-
   @doc false
   def changeset(party, attrs \\ %{}) do
     party

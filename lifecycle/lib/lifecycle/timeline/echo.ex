@@ -23,8 +23,8 @@ defmodule Lifecycle.Timeline.Echo do
     echo
     |> cast(attrs, [:message, :phase_id, :type, :name, :transited, :transiter])
     # |> cast_assoc(attrs, [:journey])
-    |> validate_required([:message, :name])
 
+    |> validate_required([:message, :name, :phase_id])
     # |> validate_required([:message, :journey, :type, :name])
   end
 end
