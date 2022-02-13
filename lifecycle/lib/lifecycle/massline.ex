@@ -80,6 +80,10 @@ defmodule Lifecycle.Massline do
   """
   def get_party!(id), do: Repo.get!(Party, id) |> Repo.preload([:user])
 
+  def get_party_name!(name), do: Repo.get_by!(Party, name: name) |> Repo.preload([:user])
+
+  def get_user_name!(name), do: Repo.get_by!(User, name: name)
+
   @doc """
   Creates a party.
 
