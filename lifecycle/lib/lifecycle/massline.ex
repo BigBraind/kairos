@@ -28,12 +28,34 @@ defmodule Lifecycle.Massline do
 
   ## Examples
 
-      iex> list_parties()
+      iex> list_members(id)
       [%Party{}, ...]
 
   """
-  def list_members do
-    Repo.all(from(p in Party, preload: [:user]))
+  def list_members(id) do
+    query = Membership
+    |> where([e], e.party_id == ^id)
+    |> order_by([e], desc: e.inserted_at)
+    |> preload(:user)
+    Repo.all(query, limit: 8)
+  end
+
+    @doc """
+  Returns the list of members
+
+  ## Examples
+
+      iex> list_members(id)
+      [%Party{}, ...]
+
+  """
+  def list_my_parties(id) do
+      #includes role information
+    query = Membership
+    |> where([e], e.user_id == ^id)
+    |> order_by([e], desc: e.inserted_at)
+    |> preload(:party)
+    Repo.all(query, limit: 8)
   end
 
   @doc """
@@ -66,7 +88,6 @@ defmodule Lifecycle.Massline do
 
   @doc """
   Gets a single party.
-
   Raises `Ecto.NoResultsError` if the Party does not exist.
 
   ## Examples
