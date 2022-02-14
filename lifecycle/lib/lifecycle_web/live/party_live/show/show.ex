@@ -3,12 +3,10 @@ defmodule LifecycleWeb.PartyLive.Show do
 
   use LifecycleWeb, :live_view
 
-  alias Lifecycle.Users.Party
-  alias Lifecycle.Users.User
   alias Lifecycle.Bridge.Membership
-
-  alias Lifecycle.Pubsub
   alias Lifecycle.Massline
+  alias Lifecycle.Pubsub
+  alias Lifecycle.Users.Party
 
   alias LifecycleWeb.Modal.Pubsub.PartyPubs
 
@@ -47,7 +45,7 @@ defmodule LifecycleWeb.PartyLive.Show do
 
     {:noreply,
      socket
-     |> assign(:all_parties, list_party)
+     |> assign(:all_parties, list_party())
      |> put_flash(:info, "Party deleted... 😭 ")
      |> push_redirect(to: Routes.party_index_path(socket, :index))}
   end
@@ -63,11 +61,9 @@ defmodule LifecycleWeb.PartyLive.Show do
       {:ok, %Membership{} = membership} ->
         {Pubsub.notify_subs({:ok, membership}, [:member, :added], topic)}
 
-
         {:noreply,
          socket
-         |> put_flash(:info, "member added")
-        }
+         |> put_flash(:info, "member added")}
 
       nil ->
         {:noreply,
@@ -85,18 +81,16 @@ defmodule LifecycleWeb.PartyLive.Show do
   end
 
   def handle_event("subtract_member", %{"party" => party_params}, socket) do
-    IO.inspect("from handle_event substract member")
     party_id = party_params["party_id"]
     topic = PartyPubs.get_topic(socket)
 
     case subtract_member(party_params) do
       {:ok, message} ->
-        {IO.inspect("from ok msg")}
         {Pubsub.notify_subs({:ok, message}, [:member, :removed], topic)}
 
         {:noreply,
          socket
-        #  |> assign(:party, get_party(party_id))
+         #  |> assign(:party, get_party(party_id))
          |> put_flash(:info, message)}
 
       {:error, reason} ->
@@ -120,7 +114,5 @@ defmodule LifecycleWeb.PartyLive.Show do
   defp get_party(id), do: Massline.get_party!(id)
   defp delete_party(party), do: Massline.delete_party(party)
   defp list_party, do: Massline.list_parties()
-  defp get_user_id(user_name), do: Massline.get_user_by_name(user_name)
-  defp add_member(party_params), do: Massline.add_member(party_params)
   defp subtract_member(party_params), do: Massline.subtract_member(party_params)
 end

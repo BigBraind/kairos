@@ -4,11 +4,11 @@ defmodule Lifecycle.Massline do
   """
 
   import Ecto.Query, warn: false
-  alias Lifecycle.Repo
 
-  alias Lifecycle.Users.User
-  alias Lifecycle.Users.Party
   alias Lifecycle.Bridge.Membership
+  alias Lifecycle.Repo
+  alias Lifecycle.Users.Party
+  alias Lifecycle.Users.User
 
   @doc """
   Returns the list of all parties
@@ -193,12 +193,10 @@ defmodule Lifecycle.Massline do
   Gets user's id by passing in user's name
   """
   def get_user_by_name(name) do
-    try do
       Repo.get_by!(User, name: name)
     rescue
       Ecto.NoResultsError ->
         {:error, "user not found, make sure you enter the correct user name"}
-    end
   end
 
   @doc """

@@ -26,7 +26,6 @@ defmodule Lifecycle.Timeline.Phase do
 
   @max_len 21
 
-
   @doc false
   def changeset(phase, attrs) do
     phase

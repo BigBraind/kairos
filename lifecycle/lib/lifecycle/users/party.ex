@@ -3,9 +3,12 @@ defmodule Lifecycle.Users.Party do
   Schema table for party object
   """
   use Ecto.Schema
+
   import Ecto.Changeset
-  alias Lifecycle.Users.User
+
   alias Lifecycle.Bridge.Membership
+  alias Lifecycle.Users.User
+
 
   @primary_key {:id, :binary_id, autogenerate: true}
   # @foreign_key_type :binary_id

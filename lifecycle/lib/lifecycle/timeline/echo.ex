@@ -28,7 +28,3 @@ defmodule Lifecycle.Timeline.Echo do
     # |> validate_required([:message, :journey, :type, :name])
   end
 end
-
-# new_attrs = %{journeyType: "testType", journeyTitle: "testTitle", journeyContent: "testContent", id: Ecto.UUID.generate()}
-# {:ok, journey} = Lifecycle.Timeline.create_journey(new_attrs)
-# echo_attrs = %{message: "testMessage", journey: "", type: "testType", name: "testName"}

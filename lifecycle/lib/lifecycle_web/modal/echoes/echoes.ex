@@ -4,14 +4,13 @@ defmodule LifecycleWeb.Modal.Echoes.Echoes do
   It calls normal echoes(message) object and transition object from modal/echo_list.ex
   """
   use LifecycleWeb, :live_component
-
-  alias Lifecycle.Timeline
-  alias Lifecycle.Pubsub
-
-  alias LifecycleWeb.Modal.Pubsub.Pubs
-  alias LifecycleWeb.Modal.Echoes.EchoList
-
   use Timex
+
+  alias Lifecycle.Pubsub
+  alias Lifecycle.Timeline
+
+  alias LifecycleWeb.Modal.Echoes.EchoList
+  alias LifecycleWeb.Modal.Pubsub.Pubs
 
   def mount(socket) do
     {:ok, socket}

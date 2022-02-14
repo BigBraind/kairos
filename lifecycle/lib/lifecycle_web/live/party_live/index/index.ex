@@ -3,8 +3,8 @@ defmodule LifecycleWeb.PartyLive.Index do
 
   use LifecycleWeb, :live_view
 
-  alias Lifecycle.Pubsub
   alias Lifecycle.Massline
+  alias Lifecycle.Pubsub
   alias Lifecycle.Users.Party
 
   alias LifecycleWeb.Modal.Pubsub.PartyPubs

@@ -3,8 +3,8 @@ defmodule Lifecycle.Users.User do
   Schema table for user object
   """
   use Ecto.Schema
-  alias Lifecycle.Users.Party
   alias Lifecycle.Bridge.Membership
+  alias Lifecycle.Users.Party
 
   use Pow.Ecto.Schema,
     user_id_field: :name,
@@ -24,8 +24,6 @@ defmodule Lifecycle.Users.User do
     timestamps()
 
     # has_many :party, Lifecycle.Users.Party
-
-
   end
 
   def changeset(user_or_changeset, attrs) do

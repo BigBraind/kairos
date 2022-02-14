@@ -4,8 +4,8 @@ defmodule LifecycleWeb.Auth.Helpers do
   """
   import Phoenix.LiveView
 
-  alias Pow.Store.CredentialsCache
   alias Pow.Store.Backend.EtsCache
+  alias Pow.Store.CredentialsCache
 
   @doc """
   Fetches current user details from session, if present

@@ -3,8 +3,8 @@ defmodule LifecycleWeb.PartyLive.FormComponent do
 
   use LifecycleWeb, :live_component
 
-  alias Lifecycle.Pubsub
   alias Lifecycle.Massline
+  alias Lifecycle.Pubsub
 
   @impl true
   def update(%{party: party} = assigns, socket) do
@@ -32,17 +32,17 @@ defmodule LifecycleWeb.PartyLive.FormComponent do
 
   defp save_party(socket, :new, party_params) do
     party_params =
-    party_params
-    |> Map.put("founder_id", socket.assigns.current_user.id)
+      party_params
+      |> Map.put("founder_id", socket.assigns.current_user.id)
 
     case Massline.create_party(party_params) do
       {:ok, party} ->
         {Pubsub.notify_subs({:ok, party}, [:party, :created], "party:index")}
-        
+
         {:noreply,
-          socket
-          |> put_flash(:info, "Party created successfully! :)")
-          |> push_redirect(to: Routes.party_show_path(socket, :show, party.id))}
+         socket
+         |> put_flash(:info, "Party created successfully! :)")
+         |> push_redirect(to: Routes.party_show_path(socket, :show, party.id))}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, changeset: changeset)}
@@ -61,5 +61,4 @@ defmodule LifecycleWeb.PartyLive.FormComponent do
         {:noreply, assign(socket, :changeset, changeset)}
     end
   end
-
 end
