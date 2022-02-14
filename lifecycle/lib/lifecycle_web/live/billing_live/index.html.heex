@@ -25,7 +25,7 @@
 </div>
 
 
-<form action="#" phx-submit="post" data-secret={@intent.client_secret} phx-hook="InitCheckout" id="payment-form">
+<form action="#" method="post" data-secret={@intent.client_secret} phx-hook="InitCheckout" id="payment-form">
   <div class="form-row mb-4">
     <label for="card-element" class="tag-label">
       Credit or debit card
