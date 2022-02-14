@@ -1,6 +1,7 @@
 defmodule LifecycleWeb.PhaseLive.Index do
   @moduledoc false
   use LifecycleWeb, :live_view
+
   alias Lifecycle.Timeline
   alias Lifecycle.Timeline.Phase
 

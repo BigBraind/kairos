@@ -3,8 +3,9 @@ defmodule Lifecycle.Users.User do
   Schema table for user object
   """
   use Ecto.Schema
-  alias Lifecycle.Users.Party
   alias Lifecycle.Bridge.Membership
+  alias Lifecycle.Users.Party
+
   use Pow.Ecto.Schema,
     user_id_field: :name,
     password_hash_methods:
@@ -17,13 +18,12 @@ defmodule Lifecycle.Users.User do
     # field :custom_field, :string
 
     pow_user_fields()
-    has_many :parties, Party, foreign_key: :id
+    has_many :parties, Membership, foreign_key: :user_id
     many_to_many :party, Party, join_through: Membership
 
     timestamps()
 
     # has_many :party, Lifecycle.Users.Party
-
   end
 
   def changeset(user_or_changeset, attrs) do

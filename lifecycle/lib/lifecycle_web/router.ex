@@ -45,10 +45,10 @@ defmodule LifecycleWeb.Router do
       live("/phases/:id", PhaseLive.Show, :show)
       live("/phases/:id/show/edit", PhaseLive.Show, :edit)
       live("/phases/:id/show/new", PhaseLive.Show, :new)
-
       live("/party", PartyLive.Index, :index)
       live("/party/new", PartyLive.Index, :new)
       live("/party/:party_name/edit", PartyLive.Index, :edit)
+      live("/party/:party_name/show/edit", PartyLive.Show, :edit)
       live("/party/:party_name/", PartyLive.Show, :show)
 
     end

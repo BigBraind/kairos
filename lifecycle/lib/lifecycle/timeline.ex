@@ -101,6 +101,7 @@ defmodule Lifecycle.Timeline do
 
   @doc """
     Approve the transition echo objects
+
     A wrapper of update_echo
   """
   def update_transition(id, attrs), do: update_echo(get_echo!(id), attrs)

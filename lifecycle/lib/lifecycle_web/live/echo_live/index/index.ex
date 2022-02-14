@@ -3,16 +3,14 @@ defmodule LifecycleWeb.EchoLive.Index do
   use LifecycleWeb, :live_view
   use Timex
 
-  alias Lifecycle.Timezone
-
   alias Lifecycle.Pubsub
-
   alias Lifecycle.Timeline
   alias Lifecycle.Timeline.Echo
+  alias Lifecycle.Timezone
 
+  alias LifecycleWeb.Modal.Button.Approve
   alias LifecycleWeb.Modal.Button.Transition
   alias LifecycleWeb.Modal.Echoes.Echoes
-  alias LifecycleWeb.Modal.Button.Approve
   alias LifecycleWeb.Modal.Pubsub.Pubs
 
   @impl true

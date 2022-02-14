@@ -15,6 +15,7 @@ defmodule Lifecycle.Bridge.Membership do
     field :role, Ecto.Enum, values: [:lead, :whip, :pleb]
     belongs_to :party, Party
     belongs_to :user, User
+    timestamps()
   end
 
   @doc false
@@ -22,5 +23,6 @@ defmodule Lifecycle.Bridge.Membership do
     link
     |> cast(attrs, [:party_id, :user_id, :role])
     |> validate_required([:party_id, :user_id, :role])
+    |> unique_constraint(:membership_overload, name: :my_membership)
   end
 end
