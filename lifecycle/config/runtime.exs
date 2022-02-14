@@ -13,7 +13,9 @@ import Config
 # end
 unless Config.config_env() == :prod do
   #dotenv Parsing .env file
-  DotenvParser.load_file('../.env')
+  DotenvParser.load_file('.env')
+
+  config :stripity_stripe, api_key: System.get_env("STRIPE_SECRET")
 
 end
 

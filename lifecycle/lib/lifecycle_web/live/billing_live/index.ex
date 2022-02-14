@@ -24,25 +24,10 @@ defmodule LifecycleWeb.BillingLive.Index do
 
         {:noreply, assign(socket, checkout: checkout, changeset: Money.change_billing(checkout))}
       {:error, %Ecto.Changeset{} = changeset} ->
-        IO.inspect(changeset)
         {:noreply, assign(socket, :changeset, changeset)}
     end
   end
 
-
-  @impl true
-  def handle_event("submitStripe", %{"checkout" => checkout_params}, socket) do
-        case Money.create_billing(checkout_params) do
-      {:ok, checkout} ->
-        send(self(), {:create_payment_intent, checkout}) # Run this async
-        IO.puts('submiting Stripe details')
-
-        {:noreply, assign(socket, checkout: checkout, changeset: Checkouts.change_checkout(checkout))}
-      {:error, %Ecto.Changeset{} = changeset} ->
-        IO.inspect('hello this NO works')
-        {:noreply, assign(socket, :changeset, changeset)}
-    end
-  end
 
   @impl true
   def handle_info({:create_payment_intent, %{email: email, name: name, amount: amount, currency: currency} = checkout}, socket) do
@@ -52,6 +37,7 @@ defmodule LifecycleWeb.BillingLive.Index do
       # Update the checkout
       Money.update_billing(checkout, %{payment_intent_id: payment_intent.id})
 
+
       {:noreply, assign(socket, :intent, payment_intent)}
     else
       _ ->
@@ -59,7 +45,7 @@ defmodule LifecycleWeb.BillingLive.Index do
     end
   end
 
-  def handle_event("payment-success", %{"payment_method" => payment_method_id, "status" => status}, socket) do
+  def handle_event("paymentSuccess", %{"payment_method" => payment_method_id, "status" => status}, socket) do
     checkout = socket.assigns.checkout
     # Update the checkout with the result
     {:ok, checkout} = Money.update_billing(checkout, %{payment_method_id: payment_method_id, status: status})

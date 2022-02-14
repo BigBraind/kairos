@@ -20,7 +20,7 @@ defmodule Lifecycle.MixProject do
   def application do
     [
       mod: {Lifecycle.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools],
     ]
   end
 
