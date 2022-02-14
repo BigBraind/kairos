@@ -71,8 +71,8 @@ defmodule Lifecycle.Massline do
   Adding user to a party
 
   Input: %{"role" => "pleb",
-          "party_id" => :string,
-          "user_id" => :string}
+          "party_id" => :binary_id,
+          "user_id" => :binary_id}
 
   ## Examples
 

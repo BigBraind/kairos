@@ -14,7 +14,7 @@ defmodule LifecycleWeb.PartyLive.Index do
     if connected?(socket), do: Pubsub.subscribe("party:index")
     current_user_id = socket.assigns.current_user.id
 
-    IO.inspect(Massline.list_my_parties(current_user_id))
+    memberships = Massline.list_my_parties(current_user_id)
 
     {:ok, assign(socket,
       all_parties: Massline.list_parties()
