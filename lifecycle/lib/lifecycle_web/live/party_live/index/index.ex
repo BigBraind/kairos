@@ -11,7 +11,7 @@ defmodule LifecycleWeb.PartyLive.Index do
 
 
     {:ok, assign(socket,
-      all_party: list_party()
+      all_parties: list_party()
     )}
   end
 

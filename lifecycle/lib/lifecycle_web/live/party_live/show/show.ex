@@ -7,10 +7,15 @@ defmodule LifecycleWeb.PartyLive.Show do
   alias Lifecycle.Users.User
   alias Lifecycle.Bridge.Membership
 
+  alias Lifecycle.Pubsub
   alias Lifecycle.Massline
+
+  alias LifecycleWeb.Modal.Pubsub.PartyPubs
 
   @impl true
   def mount(%{"party_name" => id}, _session, socket) do
+    if connected?(socket), do: Pubsub.subscribe("party:" <> id)
+
     {:ok,
      assign(socket,
        party: get_party(id),
@@ -39,10 +44,10 @@ defmodule LifecycleWeb.PartyLive.Show do
   def handle_event("delete", %{"id" => id}, socket) do
     party = get_party(id)
     {:ok, _} = delete_party(party)
-    # {:noreply, assign(socket, :all_party, list_party())}
+
     {:noreply,
      socket
-     |> assign(:all_party, list_party)
+     |> assign(:all_parties, list_party)
      |> put_flash(:info, "Party deleted... 😭 ")
      |> push_redirect(to: Routes.party_index_path(socket, :index))}
   end
@@ -52,9 +57,17 @@ defmodule LifecycleWeb.PartyLive.Show do
 
     party_params = Map.put(party_params, "role", "pleb")
 
+    topic = PartyPubs.get_topic(socket)
+
     case Massline.add_member(party_params) do
-      {:ok, %Membership{} = _membership} ->
-        {:noreply, assign(socket, :party, get_party(party_id))}
+      {:ok, %Membership{} = membership} ->
+        {Pubsub.notify_subs({:ok, membership}, [:member, :added], topic)}
+
+
+        {:noreply,
+         socket
+         |> put_flash(:info, "member added")
+        }
 
       nil ->
         {:noreply,
@@ -72,14 +85,18 @@ defmodule LifecycleWeb.PartyLive.Show do
   end
 
   def handle_event("subtract_member", %{"party" => party_params}, socket) do
-    # party_params = Map.put(party_params, "role", "pleb")
-    IO.inspect(party_params)
+    IO.inspect("from handle_event substract member")
     party_id = party_params["party_id"]
+    topic = PartyPubs.get_topic(socket)
+
     case subtract_member(party_params) do
       {:ok, message} ->
+        {IO.inspect("from ok msg")}
+        {Pubsub.notify_subs({:ok, message}, [:member, :removed], topic)}
+
         {:noreply,
          socket
-         |> assign(:party, get_party(party_id))
+        #  |> assign(:party, get_party(party_id))
          |> put_flash(:info, message)}
 
       {:error, reason} ->
@@ -89,6 +106,16 @@ defmodule LifecycleWeb.PartyLive.Show do
     end
   end
 
+  @impl true
+  def handle_info({Pubsub, [:member, :added], message}, socket) do
+    PartyPubs.handle_member_added(socket, message)
+  end
+
+  @impl true
+  def handle_info({Pubsub, [:member, :removed], message}, socket) do
+    PartyPubs.handle_member_removed(socket, message)
+  end
+
   # Query
   defp get_party(id), do: Massline.get_party!(id)
   defp delete_party(party), do: Massline.delete_party(party)
@@ -96,10 +123,4 @@ defmodule LifecycleWeb.PartyLive.Show do
   defp get_user_id(user_name), do: Massline.get_user_by_name(user_name)
   defp add_member(party_params), do: Massline.add_member(party_params)
   defp subtract_member(party_params), do: Massline.subtract_member(party_params)
-
-  %{
-    "role" => "pleb",
-    "party_id" => "38017bff-9560-4888-bfa4-bc8357bacf2d",
-    "user_id" => "39116133-3ded-455b-b972-198c54552cdf"
-  }
 end
