@@ -3,15 +3,21 @@ defmodule LifecycleWeb.PartyLive.Index do
 
   use LifecycleWeb, :live_view
 
+  alias Lifecycle.Pubsub
   alias Lifecycle.Massline
   alias Lifecycle.Users.Party
 
+  alias LifecycleWeb.Modal.Pubsub.PartyPubs
+
   @impl true
   def mount(_params, _session, socket) do
+    if connected?(socket), do: Pubsub.subscribe("party:index")
+    current_user_id = socket.assigns.current_user.id
 
+    IO.inspect(Massline.list_my_parties(current_user_id))
 
     {:ok, assign(socket,
-      all_parties: list_party()
+      all_parties: Massline.list_parties()
     )}
   end
 
@@ -48,7 +54,12 @@ defmodule LifecycleWeb.PartyLive.Index do
   def handle_event("delete", %{"id" => id}, socket) do
     party = Massline.get_party!(id)
     {:ok, _} = Massline.delete_party(party)
-    {:noreply, assign(socket, :all_party, list_party())}
+    {:noreply, assign(socket, :all_parties, list_party())}
+  end
+
+  @impl true
+  def handle_info({Pubsub, [:party, :created], message}, socket) do
+    PartyPubs.handle_party_created(socket, message)
   end
 
   defp list_party, do: Massline.list_parties()

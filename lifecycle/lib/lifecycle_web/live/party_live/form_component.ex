@@ -3,6 +3,7 @@ defmodule LifecycleWeb.PartyLive.FormComponent do
 
   use LifecycleWeb, :live_component
 
+  alias Lifecycle.Pubsub
   alias Lifecycle.Massline
 
   @impl true
@@ -36,6 +37,8 @@ defmodule LifecycleWeb.PartyLive.FormComponent do
 
     case Massline.create_party(party_params) do
       {:ok, party} ->
+        {Pubsub.notify_subs({:ok, party}, [:party, :created], "party:index")}
+        
         {:noreply,
           socket
           |> put_flash(:info, "Party created successfully! :)")
