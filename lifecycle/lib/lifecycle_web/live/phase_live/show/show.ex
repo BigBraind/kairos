@@ -7,23 +7,20 @@ defmodule LifecycleWeb.PhaseLive.Show do
   alias Lifecycle.Timeline.Echo
   alias Lifecycle.Timezone
 
-  alias LifecycleWeb.Modal.View.Button.Approve
   alias LifecycleWeb.Modal.View.Button.Phases
   alias LifecycleWeb.Modal.View.Button.Transition
   alias LifecycleWeb.Modal.View.Echoes.Echoes
-  
-  alias LifecycleWeb.Modal.Function.Component.Flash
-  alias LifecycleWeb.Modal.Function.Echoes.EchoHandler
+
   alias LifecycleWeb.Modal.Function.Button.ApproveHandler
   alias LifecycleWeb.Modal.Function.Button.TransitionHandler
+  alias LifecycleWeb.Modal.Function.Component.Flash
+  alias LifecycleWeb.Modal.Function.Echoes.EchoHandler
   alias LifecycleWeb.Modal.Function.Pubsub.Pubs
 
   @impl true
   def mount(params, _session, socket) do
     id = params["id"]
     socket = Timezone.get_timezone(socket)
-    timezone = socket.assigns.timezone
-    timezone_offset = socket.assigns.timezone_offset
     echo_changeset = Timeline.Echo.changeset(%Echo{})
     if connected?(socket), do: Pubsub.subscribe("phase:" <> id)
 
@@ -35,10 +32,8 @@ defmodule LifecycleWeb.PhaseLive.Show do
 
     {:ok,
      assign(socket,
-       timezone: timezone,
        echo_changeset: echo_changeset,
        nowstream: [],
-       timezone_offset: timezone_offset,
        echoes: list_echoes(id),
        image_list: [],
        transiting: false

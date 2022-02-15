@@ -13,7 +13,6 @@ defmodule LifecycleWeb.PartyLive.Show do
 
   @impl true
   def mount(%{"party_name" => name}, _session, socket) do
-    # Process.send_after(self(), :clear_flash, 3000)
     parties = get_party_by_name(name)
 
     if connected?(socket) do
