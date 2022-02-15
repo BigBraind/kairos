@@ -8,20 +8,20 @@ export const InitCheckout = {
 }
 
 const init = (form, successCallback) => {
-const stripe = Stripe('pk_test_51HSLYOJuBzfbzD5Jra9Sy7DhnZxBmoLU6jLEevb7YNcMa2QUGBZoiAC254s0pNbuxYWDj1OZ4IScKanyvFv2ahw700wbNW6oza')
-const clientSecret = form.dataset.secret
+  const stripe = Stripe('pk_test_51HSLYOJuBzfbzD5Jra9Sy7DhnZxBmoLU6jLEevb7YNcMa2QUGBZoiAC254s0pNbuxYWDj1OZ4IScKanyvFv2ahw700wbNW6oza')
+  const clientSecret = form.dataset.secret
 
   // Create an instance of Elements.
   var elements = stripe.elements();
 
   // Create an instance of the card Element.
-  var card = elements.create('card', {style: style});
+  var card = elements.create('card', { style: style });
 
   // Add an instance of the card Element into the `card-element` <div>.
   card.mount('#card-element');
 
   // Handle real-time validation errors from the card Element.
-  card.on('change', function(event) {
+  card.on('change', function (event) {
     var displayError = document.getElementById('card-errors');
     if (event.error) {
       displayError.textContent = event.error.message;
@@ -31,14 +31,14 @@ const clientSecret = form.dataset.secret
   });
 
   // Handle form submission.
-  form.addEventListener('submit', function(event) {
+  form.addEventListener('submit', function (event) {
     event.preventDefault()
 
     stripe.confirmCardPayment(clientSecret, {
       payment_method: {
         card: card
       }
-    }).then(function(result) {
+    }).then(function (result) {
       if (result.error) {
         // Show error to your customer (e.g., insufficient funds)
         console.log(result.error.message);

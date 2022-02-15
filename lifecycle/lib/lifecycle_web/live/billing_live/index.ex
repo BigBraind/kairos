@@ -21,6 +21,7 @@ defmodule LifecycleWeb.BillingLive.Index do
         case Money.create_billing(billing_params) do
       {:ok, checkout} ->
         send(self(), {:create_payment_intent, checkout}) # Run this async
+        IO.puts("Submit Stripe success")
 
         {:noreply, assign(socket, checkout: checkout, changeset: Money.change_billing(checkout))}
       {:error, %Ecto.Changeset{} = changeset} ->
@@ -46,7 +47,6 @@ defmodule LifecycleWeb.BillingLive.Index do
   end
 
   def handle_event("paymentSuccess", %{"payment_method" => payment_method_id, "status" => status}, socket) do
-    import IEx; IEx.pry()
     checkout = socket.assigns.checkout
     # Update the checkout with the result
     {:ok, checkout} = Money.update_billing(checkout, %{payment_method_id: payment_method_id, status: status})

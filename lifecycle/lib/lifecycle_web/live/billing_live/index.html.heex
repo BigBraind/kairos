@@ -20,11 +20,7 @@
 </div>
   
 <%= if @intent do %>
-<div>
-  hello world
-</div>
-
-
+<hr>
 <form action="#" method="post" data-secret={@intent.client_secret} phx-hook="InitCheckout" id="payment-form">
   <div class="form-row mb-4">
     <label for="card-element" class="tag-label">
@@ -33,7 +29,7 @@
     <div id="card-element" class="tag-input">
       <!-- A Stripe Element will be inserted here. -->
     </div>
-
+    <br>
     <!-- Used to display form errors. -->
     <div id="card-errors" class="tag-label" role="alert"></div>
   </div>
