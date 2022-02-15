@@ -72,7 +72,7 @@ defmodule Lifecycle.Massline do
 
   Input: %{"role" => "pleb",
           "party_id" => :binary_id,
-          "user_id" => :binary_id}
+          "user_id" => :}
 
   ## Examples
 

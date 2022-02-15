@@ -24,5 +24,6 @@ defmodule Lifecycle.Bridge.Membership do
     |> cast(attrs, [:party_id, :user_id, :role])
     |> validate_required([:party_id, :user_id, :role])
     |> unique_constraint(:membership_overload, name: :my_membership)
+    |> unique_constraint(:name, name: :party_membership_party_id_user_id_index)
   end
 end

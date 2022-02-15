@@ -12,7 +12,11 @@ defmodule LifecycleWeb.PartyLive.Show do
 
   @impl true
   def mount(%{"party_name" => id}, _session, socket) do
-    if connected?(socket), do: Pubsub.subscribe("party:" <> id)
+    # Process.send_after(self(), :clear_flash, 3000)
+    if connected?(socket) do
+      Pubsub.subscribe("party:" <> id)
+      Process.send_after(self(), :clear_flash, 1000)
+    end
 
     {:ok,
      assign(socket,
@@ -51,13 +55,12 @@ defmodule LifecycleWeb.PartyLive.Show do
   end
 
   def handle_event("add_member", %{"party" => party_params}, socket) do
-    party_id = party_params["party_id"]
-
     party_params = Map.put(party_params, "role", "pleb")
 
     topic = PartyPubs.get_topic(socket)
 
     case Massline.add_member(party_params) do
+      # happy case
       {:ok, %Membership{} = membership} ->
         {Pubsub.notify_subs({:ok, membership}, [:member, :added], topic)}
 
@@ -65,23 +68,25 @@ defmodule LifecycleWeb.PartyLive.Show do
          socket
          |> put_flash(:info, "member added")}
 
-      nil ->
+      # handle adding duplcate member to the party
+      {:error, %Ecto.Changeset{} = changeset} ->
+        Process.send_after(self(), :clear_flash, 3000)
         {:noreply,
          socket
-         |> put_flash(:error, "user not found")}
+         |> assign(:changeset, changeset)
+         |> put_flash(:error, "member existed!")}
 
+      # handle the user not found error from massline.get_user_by_name
+      # please leave this function at the end of the case statement, or
+      # it will overwrite the %Ecto.Changeset
       {:error, reason} ->
         {:noreply,
          socket
          |> put_flash(:error, reason)}
-
-      {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, assign(socket, :changeset, changeset)}
     end
   end
 
   def handle_event("subtract_member", %{"party" => party_params}, socket) do
-    party_id = party_params["party_id"]
     topic = PartyPubs.get_topic(socket)
 
     case subtract_member(party_params) do
@@ -90,13 +95,13 @@ defmodule LifecycleWeb.PartyLive.Show do
 
         {:noreply,
          socket
-         #  |> assign(:party, get_party(party_id))
          |> put_flash(:info, message)}
 
       {:error, reason} ->
         {:noreply,
          socket
-         |> put_flash(:error, reason)}
+         |> put_flash(:error, reason)
+        }
     end
   end
 
@@ -108,6 +113,10 @@ defmodule LifecycleWeb.PartyLive.Show do
   @impl true
   def handle_info({Pubsub, [:member, :removed], message}, socket) do
     PartyPubs.handle_member_removed(socket, message)
+  end
+
+  def handle_info(:clear_flash, socket) do
+    {:noreply, clear_flash(socket)}
   end
 
   # Query
