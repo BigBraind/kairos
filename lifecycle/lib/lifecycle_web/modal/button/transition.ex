@@ -7,6 +7,7 @@ defmodule LifecycleWeb.Modal.Button.Transition do
   alias Lifecycle.Pubsub
   alias Lifecycle.Timeline
 
+  alias LifecycleWeb.Modal.Component.Flash
   alias LifecycleWeb.Modal.Pubsub.Pubs
 
   def button(assigns) do
@@ -66,7 +67,7 @@ defmodule LifecycleWeb.Modal.Button.Transition do
           :noreply,
           socket
           |> assign(:transiting, false)
-          |> put_flash(:info, "Transition Object Sent")
+          |> Flash.insert_flash(:info, "Transition Object Sent", self())
         }
 
       {:error, %Ecto.Changeset{} = changeset} ->

@@ -4,9 +4,10 @@ defmodule LifecycleWeb.Modal.Button.Approve do
   """
   use LifecycleWeb, :live_component
 
+  alias Lifecycle.Pubsub
   alias Lifecycle.Timeline
 
-  alias Lifecycle.Pubsub
+  alias LifecycleWeb.Modal.Component.Flash
 
   def button(assigns) do
     ~H"""
@@ -41,7 +42,7 @@ defmodule LifecycleWeb.Modal.Button.Approve do
 
             {:noreply,
              socket
-             |> put_flash(:info, "Transition approved!")}
+             |> Flash.insert_flash(:info, "Transition approved!", self())}
 
           {:error, %Ecto.Changeset{} = changeset} ->
             {:noreply, assign(socket, :changeset, changeset)}
@@ -51,7 +52,7 @@ defmodule LifecycleWeb.Modal.Button.Approve do
         {
           :noreply,
           socket
-          |> put_flash(:info, "Transition already approved!")
+          |> Flash.insert_flash(:info, "Transition already approved!", self())
         }
     end
   end
