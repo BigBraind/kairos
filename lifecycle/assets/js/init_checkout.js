@@ -15,13 +15,13 @@ const clientSecret = form.dataset.secret
   var elements = stripe.elements();
 
   // Create an instance of the card Element.
-  var card = elements.create('card', {style: style});
+  var card = elements.create('card', { style: style });
 
   // Add an instance of the card Element into the `card-element` <div>.
   card.mount('#card-element');
 
   // Handle real-time validation errors from the card Element.
-  card.on('change', function(event) {
+  card.on('change', function (event) {
     var displayError = document.getElementById('card-errors');
     if (event.error) {
       displayError.textContent = event.error.message;
@@ -31,14 +31,14 @@ const clientSecret = form.dataset.secret
   });
 
   // Handle form submission.
-  form.addEventListener('submit', function(event) {
+  form.addEventListener('submit', function (event) {
     event.preventDefault()
 
     stripe.confirmCardPayment(clientSecret, {
       payment_method: {
         card: card
       }
-    }).then(function(result) {
+    }).then(function (result) {
       if (result.error) {
         // Show error to your customer (e.g., insufficient funds)
         console.log(result.error.message);
