@@ -1,4 +1,3 @@
-#
 defmodule LifecycleWeb.BillingLive.Index do
   use LifecycleWeb, :live_view
 
@@ -46,11 +45,13 @@ defmodule LifecycleWeb.BillingLive.Index do
   end
 
   def handle_event("paymentSuccess", %{"payment_method" => payment_method_id, "status" => status}, socket) do
-    import IEx; IEx.pry()
     checkout = socket.assigns.checkout
     # Update the checkout with the result
     {:ok, checkout} = Money.update_billing(checkout, %{payment_method_id: payment_method_id, status: status})
 
-    {:noreply, assign(socket, :checkout, checkout)}
+    {:noreply,
+ push_redirect(socket
+      |> put_flash(:info, "Billing Working")
+      |> assign(:checkout, checkout), to: "/")}
   end
 end

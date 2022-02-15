@@ -8,7 +8,7 @@ export const InitCheckout = {
 }
 
 const init = (form, successCallback) => {
-const stripe = Stripe('pk_test_51HSLYOJuBzfbzD5Jra9Sy7DhnZxBmoLU6jLEevb7YNcMa2QUGBZoiAC254s0pNbuxYWDj1OZ4IScKanyvFv2ahw700wbNW6oza')
+const stripe = Stripe('pk_test_51KMjftEhbwcgc0l8C3th3MBwVv3XwHPYNugpBx9mCU7a5MhBWGcWLZTkZhupARsH4ImjO7J636QLcihA9DFZ3n4900vCEJGpXW')
 const clientSecret = form.dataset.secret
 
   // Create an instance of Elements.
