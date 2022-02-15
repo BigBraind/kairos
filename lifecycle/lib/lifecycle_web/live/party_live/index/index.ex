@@ -12,7 +12,6 @@ defmodule LifecycleWeb.PartyLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
-    IO.inspect(self())
     if connected?(socket), do: Pubsub.subscribe("party:index")
 
     {:ok,
