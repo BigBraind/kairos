@@ -1,6 +1,8 @@
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
+/* @import "./phoenix.css" is deleted 
+making the phoenix.css file useless.*/
 
 /* This file is for your main application CSS */
 
