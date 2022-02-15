@@ -26,7 +26,7 @@
 <tbody id="parties">
     <%= for party <- @all_parties do %>
         <tr id={"party-#{party.id}"}>
-            <td><span><%= live_redirect party.name, to: Routes.party_show_path(@socket, :show, party), class: "button"%></span></td>
+            <td><span><%= live_redirect party.name, to: Routes.party_show_path(@socket, :show, party.name), class: "button"%></span></td>
             <td><%= party.banner %></td>
             <td>Query to be done</td>
             <td>

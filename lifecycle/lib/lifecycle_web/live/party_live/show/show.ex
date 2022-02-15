@@ -11,16 +11,21 @@ defmodule LifecycleWeb.PartyLive.Show do
   alias LifecycleWeb.Modal.Pubsub.PartyPubs
 
   @impl true
-  def mount(%{"party_name" => id}, _session, socket) do
+  def mount(%{"party_name" => name}, _session, socket) do
     # Process.send_after(self(), :clear_flash, 3000)
+    parties = get_party_by_name(name)
     if connected?(socket) do
-      Pubsub.subscribe("party:" <> id)
-      Process.send_after(self(), :clear_flash, 1000)
+      Pubsub.subscribe("party:" <> parties.id)
+      {:ok,
+     assign(socket,
+       party: parties,
+       party_changeset: Party.changeset(%Party{})
+     )}
     end
 
     {:ok,
      assign(socket,
-       party: get_party(id),
+       party: parties,
        party_changeset: Party.changeset(%Party{})
      )}
   end
@@ -30,16 +35,16 @@ defmodule LifecycleWeb.PartyLive.Show do
     {:noreply, apply_action(socket, socket.assigns.live_action, params)}
   end
 
-  defp apply_action(socket, :show, %{"party_name" => id}) do
+  defp apply_action(socket, :show, %{"party_name" => name}) do
     socket
     |> assign(:page_title, "Show Party")
-    |> assign(:party, get_party(id))
+    |> assign(:party, get_party_by_name(name))
   end
 
-  defp apply_action(socket, :edit, %{"party_name" => id}) do
+  defp apply_action(socket, :edit, %{"party_name" => name}) do
     socket
     |> assign(:page_title, "Edit Party")
-    |> assign(:party, get_party(id))
+    |> assign(:party, get_party_by_name(name))
   end
 
   @impl true
@@ -74,7 +79,7 @@ defmodule LifecycleWeb.PartyLive.Show do
         {:noreply,
          socket
          |> assign(:changeset, changeset)
-         |> put_flash(:error, "member existed!")}
+         |> put_flash(:warn, "member is already in the party")}
 
       # handle the user not found error from massline.get_user_by_name
       # please leave this function at the end of the case statement, or
@@ -121,6 +126,7 @@ defmodule LifecycleWeb.PartyLive.Show do
 
   # Query
   defp get_party(id), do: Massline.get_party!(id)
+  defp get_party_by_name(name), do: Massline.get_party_by_name!(name)
   defp delete_party(party), do: Massline.delete_party(party)
   defp list_party, do: Massline.list_parties()
   defp subtract_member(party_params), do: Massline.subtract_member(party_params)
