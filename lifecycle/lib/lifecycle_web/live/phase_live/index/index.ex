@@ -5,7 +5,7 @@ defmodule LifecycleWeb.PhaseLive.Index do
   alias Lifecycle.Timeline
   alias Lifecycle.Timeline.Phase
 
-  alias LifecycleWeb.Modal.Component.Flash
+  alias LifecycleWeb.Modal.Function.Component.Flash
 
   @impl true
   def mount(_params, _session, socket) do

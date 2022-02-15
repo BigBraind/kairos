@@ -7,9 +7,9 @@ defmodule LifecycleWeb.PartyLive.Index do
   alias Lifecycle.Pubsub
   alias Lifecycle.Users.Party
 
-  alias LifecycleWeb.Modal.Component.Flash
-  alias LifecycleWeb.Modal.Party.PartyEventHandler
-  alias LifecycleWeb.Modal.Pubsub.PartyPubs
+  alias LifecycleWeb.Modal.Function.Component.Flash
+  alias LifecycleWeb.Modal.Function.Party.PartyEventHandler
+  alias LifecycleWeb.Modal.Function.Pubsub.PartyPubs
 
   @impl true
   def mount(_params, _session, socket) do
@@ -57,8 +57,8 @@ defmodule LifecycleWeb.PartyLive.Index do
   end
 
   @impl true
-  def handle_info({Pubsub, [:party, :created], message}, socket) do
-    PartyPubs.handle_party_created(socket, message)
+  def handle_info({Pubsub, [:party, :created], _message}, socket) do
+    PartyPubs.handle_party_created(socket)
   end
 
   @impl true

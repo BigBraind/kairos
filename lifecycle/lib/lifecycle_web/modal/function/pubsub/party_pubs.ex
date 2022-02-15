@@ -1,6 +1,6 @@
-defmodule LifecycleWeb.Modal.Pubsub.PartyPubs do
+defmodule LifecycleWeb.Modal.Function.Pubsub.PartyPubs do
   @moduledoc """
-    handle party pubs
+    Function component to handle party pubs
   """
 
   use Phoenix.Component
@@ -10,7 +10,7 @@ defmodule LifecycleWeb.Modal.Pubsub.PartyPubs do
   @doc """
     Handle create new party event at PartyLive.Index
   """
-  def handle_party_created(socket, _message) do
+  def handle_party_created(socket) do
     {:noreply, assign(socket, all_parties: Massline.list_parties())}
   end
 
@@ -25,10 +25,13 @@ defmodule LifecycleWeb.Modal.Pubsub.PartyPubs do
   @doc """
     Handle removed member for party
   """
-  def handle_member_removed(socket, _message) do
+  def handle_member_removed(socket) do
     {:noreply, assign(socket, :party, Massline.get_party!(socket.assigns.party.id))}
   end
 
+  @doc """
+    Get the topic of the phase from the socket
+  """
   def get_topic(socket) do
     if Map.has_key?(socket.assigns, :party), do: "party:" <> socket.assigns.party.id
   end

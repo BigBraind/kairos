@@ -13,10 +13,12 @@ defmodule Lifecycle.Massline do
   @doc """
   Returns the list of all parties
 
+  Input: None
+
   ## Examples
 
-  iex> list_parties()
-  [%Party{}, ...]
+    iex> list_parties()
+    [%Party{}, ...]
 
   """
   def list_parties do
@@ -31,7 +33,7 @@ defmodule Lifecycle.Massline do
 
   ## Examples
 
-  iex> list_members(id)
+  iex> list_members(id)    
   [%User{}, ...]
 
   """
@@ -47,6 +49,7 @@ defmodule Lifecycle.Massline do
 
   @doc """
   Returns the list of membership associated with the input user
+
   Input:
     user_id: :binary_id
 

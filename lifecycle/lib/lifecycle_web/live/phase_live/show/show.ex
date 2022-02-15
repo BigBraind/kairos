@@ -7,12 +7,16 @@ defmodule LifecycleWeb.PhaseLive.Show do
   alias Lifecycle.Timeline.Echo
   alias Lifecycle.Timezone
 
-  alias LifecycleWeb.Modal.Button.Approve
-  alias LifecycleWeb.Modal.Button.Phases
-  alias LifecycleWeb.Modal.Button.Transition
-  alias LifecycleWeb.Modal.Component.Flash
-  alias LifecycleWeb.Modal.Echoes.Echoes
-  alias LifecycleWeb.Modal.Pubsub.Pubs
+  alias LifecycleWeb.Modal.View.Button.Approve
+  alias LifecycleWeb.Modal.View.Button.Phases
+  alias LifecycleWeb.Modal.View.Button.Transition
+  alias LifecycleWeb.Modal.View.Echoes.Echoes
+  
+  alias LifecycleWeb.Modal.Function.Component.Flash
+  alias LifecycleWeb.Modal.Function.Echoes.EchoHandler
+  alias LifecycleWeb.Modal.Function.Button.ApproveHandler
+  alias LifecycleWeb.Modal.Function.Button.TransitionHandler
+  alias LifecycleWeb.Modal.Function.Pubsub.Pubs
 
   @impl true
   def mount(params, _session, socket) do
@@ -83,7 +87,7 @@ defmodule LifecycleWeb.PhaseLive.Show do
   def handle_info(:clear_flash, socket), do: Flash.handle_flash(socket)
 
   def handle_event("transition", _params, socket) do
-    Transition.handle_button("transition", socket)
+    TransitionHandler.handle_button("transition", socket)
   end
 
   def handle_event("validate", _params, socket) do
@@ -97,26 +101,21 @@ defmodule LifecycleWeb.PhaseLive.Show do
   @impl true
   def handle_event("save", %{"echo" => echo_params}, socket) do
     echo_params = Map.put(echo_params, "phase_id", socket.assigns.phase.id)
-    Echoes.send_echo(echo_params, socket)
+    EchoHandler.send_echo(echo_params, socket)
   end
 
   def handle_event("upload", _params, socket) do
-    Transition.handle_upload("upload", socket)
+    TransitionHandler.handle_upload("upload", socket)
   end
 
   def handle_event("approve", params, socket) do
     topic = Pubs.get_topic(socket)
-    Approve.handle_button(params, topic, socket)
+    ApproveHandler.handle_button(params, topic, socket)
   end
 
-  defp list_echoes(phase_id) do
-    Timeline.phase_recall(phase_id)
-  end
+  defp list_echoes(phase_id), do: Timeline.phase_recall(phase_id)
 
-  def time_format(time, timezone, timezone_offset) do
-    time
-    |> Timezone.get_time(timezone, timezone_offset)
-  end
+  def time_format(time, timezone, timezone_offset), do: Timezone.get_time(time, timezone, timezone_offset)
 
   def error_to_string(:too_large), do: "Too large"
   def error_to_string(:too_many_files), do: "You have selected too many files"

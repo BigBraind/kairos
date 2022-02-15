@@ -6,7 +6,7 @@ defmodule LifecycleWeb.PartyLive.FormComponent do
   alias Lifecycle.Massline
   alias Lifecycle.Pubsub
 
-  alias LifecycleWeb.Modal.Component.Flash
+  alias LifecycleWeb.Modal.Function.Component.Flash
 
   @impl true
   def update(%{party: party} = assigns, socket) do

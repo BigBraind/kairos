@@ -1,19 +1,14 @@
-defmodule LifecycleWeb.Modal.Button.Approve do
+defmodule LifecycleWeb.Modal.Function.Button.ApproveHandler do
   @moduledoc """
-  Approve button and its handle_event(handle_button)
+  Handle approve button
   """
+
   use LifecycleWeb, :live_component
 
   alias Lifecycle.Pubsub
   alias Lifecycle.Timeline
 
-  alias LifecycleWeb.Modal.Component.Flash
-
-  def button(assigns) do
-    ~H"""
-      <button phx-click="approve" value={@echo.id}>Fire? 🔥</button>
-    """
-  end
+  alias LifecycleWeb.Modal.Function.Component.Flash
 
   @doc """
   handle event for approve button

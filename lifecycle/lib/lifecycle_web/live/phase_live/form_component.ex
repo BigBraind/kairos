@@ -4,7 +4,7 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
 
   alias Lifecycle.Timeline
 
-  alias LifecycleWeb.Modal.Component.Flash
+  alias LifecycleWeb.Modal.Function.Component.Flash
 
   @impl true
   def update(%{phase: phase} = assigns, socket) do

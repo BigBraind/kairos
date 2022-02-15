@@ -3,14 +3,13 @@ defmodule LifecycleWeb.PartyLive.Show do
 
   use LifecycleWeb, :live_view
 
-  alias Lifecycle.Bridge.Membership
   alias Lifecycle.Massline
   alias Lifecycle.Pubsub
   alias Lifecycle.Users.Party
 
-  alias LifecycleWeb.Modal.Component.Flash
-  alias LifecycleWeb.Modal.Party.PartyEventHandler
-  alias LifecycleWeb.Modal.Pubsub.PartyPubs
+  alias LifecycleWeb.Modal.Function.Component.Flash
+  alias LifecycleWeb.Modal.Function.Party.PartyEventHandler
+  alias LifecycleWeb.Modal.Function.Pubsub.PartyPubs
 
   @impl true
   def mount(%{"party_name" => name}, _session, socket) do
@@ -71,7 +70,7 @@ defmodule LifecycleWeb.PartyLive.Show do
 
   @impl true
   def handle_info({Pubsub, [:member, :removed], message}, socket) do
-    PartyPubs.handle_member_removed(socket, message)
+    PartyPubs.handle_member_removed(socket)
   end
 
   @impl true

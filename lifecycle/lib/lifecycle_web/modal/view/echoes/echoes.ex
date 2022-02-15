@@ -1,22 +1,19 @@
-defmodule LifecycleWeb.Modal.Echoes.Echoes do
+defmodule LifecycleWeb.Modal.View.Echoes.Echoes do
   @moduledoc """
-  Live Component for rendeing Echoes
-  It calls normal echoes(message) object and transition object from modal/echo_list.ex
+  Live View Component for rendering Echoes
+  It calls normal echoes(message) object and transition object(image/audio) from modal/echo_list.ex
   """
   use LifecycleWeb, :live_component
   use Timex
 
-  alias Lifecycle.Pubsub
-  alias Lifecycle.Timeline
-
-  alias LifecycleWeb.Modal.Component.Flash
-  alias LifecycleWeb.Modal.Echoes.EchoList
-  alias LifecycleWeb.Modal.Pubsub.Pubs
+  alias LifecycleWeb.Modal.View.Echoes.EchoList
 
   def mount(socket) do
     {:ok, socket}
   end
 
+  # the update function is invoked with all the assigns given to live_compoennt/1,
+  # refer to the documentation for phoenix about the live_component life-cycle.
   def update(
         %{echoes: echoes, id: id, timezone: timezone, timezone_offset: timezone_offset},
         socket
@@ -47,23 +44,5 @@ defmodule LifecycleWeb.Modal.Echoes.Echoes do
         <% end %>
         </ul>
     """
-  end
-
-  def send_echo(echo_params, socket) do
-    topic = Pubs.get_topic(socket)
-
-    case Timeline.create_echo(echo_params) do
-      {:ok, echo} ->
-        {Pubsub.notify_subs({:ok, echo}, [:echo, :created], topic)}
-
-        {
-          :noreply,
-          socket
-          |> Flash.insert_flash(:info, "Message Sent", self())
-        }
-
-      {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, assign(socket, changeset: changeset)}
-    end
   end
 end

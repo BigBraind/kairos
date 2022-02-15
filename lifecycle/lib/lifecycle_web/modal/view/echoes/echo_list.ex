@@ -1,4 +1,4 @@
-defmodule LifecycleWeb.Modal.Echoes.EchoList do
+defmodule LifecycleWeb.Modal.View.Echoes.EchoList do
   @moduledoc """
   View component for individual echoes object and transition. being invoke in nowstream(echo_live/index.ex, phase_live/show.ex) construction and rendering echoes(echo_live/index.ex, phase_live/show.ex)
   """
@@ -7,10 +7,10 @@ defmodule LifecycleWeb.Modal.Echoes.EchoList do
   use Timex
   alias Lifecycle.Timezone
 
-  alias LifecycleWeb.Modal.Button.Approve
+  alias LifecycleWeb.Modal.View.Button.Approve
 
   @doc """
-  Transition object
+  Display transition object, including image/audio uploaded
 
   checking transition state,
     if true, display the button to approve,
@@ -31,7 +31,7 @@ defmodule LifecycleWeb.Modal.Echoes.EchoList do
         <% end %>
       </article>
 
-      <i style="float:right;color: gray;"><%= time_format(@echo.inserted_at, @timezone, @timezone_offset) %><br></i>
+      <i style="float:right;color: gray;"><%= Timezone.get_time(@echo.inserted_at, @timezone, @timezone_offset) %><br></i>
 
       <%= if @echo.transited == false do %>
         <Approve.button echo={@echo}/>
@@ -48,11 +48,8 @@ defmodule LifecycleWeb.Modal.Echoes.EchoList do
   """
   def echo_list(assigns) do
     ~H"""
-      <b><%= @echo.name %></b>: <%= @echo.message %> <i style="float:right;color: gray;"><%= time_format(@echo.inserted_at, @timezone, @timezone_offset) %> </i><br>
+      <b><%= @echo.name %></b>: <%= @echo.message %> <i style="float:right;color: gray;"><%= Timezone.get_time(@echo.inserted_at, @timezone, @timezone_offset) %> </i><br>
     """
   end
 
-  defp time_format(time, timezone, timezone_offset) do
-    Timezone.get_time(time, timezone, timezone_offset)
-  end
 end

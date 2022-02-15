@@ -1,4 +1,4 @@
-defmodule LifecycleWeb.Modal.Component.Flash do
+defmodule LifecycleWeb.Modal.Function.Component.Flash do
   @moduledoc """
     Handle put flash and clear flash
   """

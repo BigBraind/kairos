@@ -1,6 +1,6 @@
-defmodule LifecycleWeb.Modal.Party.PartyEventHandler do
+defmodule LifecycleWeb.Modal.Function.Party.PartyEventHandler do
   @moduledoc """
-    event handler for party form event
+    function component for event handler for party form event
   """
 
   use LifecycleWeb, :live_view
@@ -9,8 +9,8 @@ defmodule LifecycleWeb.Modal.Party.PartyEventHandler do
   alias Lifecycle.Massline
   alias Lifecycle.Pubsub
 
-  alias LifecycleWeb.Modal.Component.Flash
-  alias LifecycleWeb.Modal.Pubsub.PartyPubs
+  alias LifecycleWeb.Modal.Function.Component.Flash
+  alias LifecycleWeb.Modal.Function.Pubsub.PartyPubs
 
   @doc """
   Handle delete meember event

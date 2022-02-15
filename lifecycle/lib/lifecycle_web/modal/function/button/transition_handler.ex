@@ -1,20 +1,16 @@
-defmodule LifecycleWeb.Modal.Button.Transition do
+defmodule LifecycleWeb.Modal.Function.Button.TransitionHandler do
   @moduledoc """
-  Transition button
+  Handle transition button event
   """
-  use LifecycleWeb, :live_view
+
+  # use Phoenix.Component
+  use LifecycleWeb, :live_component
 
   alias Lifecycle.Pubsub
   alias Lifecycle.Timeline
 
-  alias LifecycleWeb.Modal.Component.Flash
-  alias LifecycleWeb.Modal.Pubsub.Pubs
-
-  def button(assigns) do
-    ~H"""
-      <button phx-click="transition">Drop Beats 🖐🎤</button>
-    """
-  end
+  alias LifecycleWeb.Modal.Function.Component.Flash
+  alias LifecycleWeb.Modal.Function.Pubsub.Pubs
 
   @doc """
   handle event for approve button
@@ -74,4 +70,6 @@ defmodule LifecycleWeb.Modal.Button.Transition do
         {:noreply, assign(socket, changeset: changeset)}
     end
   end
+
+
 end
