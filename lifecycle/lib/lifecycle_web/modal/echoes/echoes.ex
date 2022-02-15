@@ -9,6 +9,7 @@ defmodule LifecycleWeb.Modal.Echoes.Echoes do
   alias Lifecycle.Pubsub
   alias Lifecycle.Timeline
 
+  alias LifecycleWeb.Modal.Component.Flash
   alias LifecycleWeb.Modal.Echoes.EchoList
   alias LifecycleWeb.Modal.Pubsub.Pubs
 
@@ -58,7 +59,7 @@ defmodule LifecycleWeb.Modal.Echoes.Echoes do
         {
           :noreply,
           socket
-          |> put_flash(:info, "Message Sent")
+          |> Flash.insert_flash(:info, "Message Sent", self())
         }
 
       {:error, %Ecto.Changeset{} = changeset} ->

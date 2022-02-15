@@ -8,6 +8,7 @@ defmodule LifecycleWeb.PartyLive.Show do
   alias Lifecycle.Pubsub
   alias Lifecycle.Users.Party
 
+  alias LifecycleWeb.Modal.Component.Flash
   alias LifecycleWeb.Modal.Pubsub.PartyPubs
 
   @impl true
@@ -55,7 +56,7 @@ defmodule LifecycleWeb.PartyLive.Show do
     {:noreply,
      socket
      |> assign(:all_parties, list_party())
-     |> put_flash(:info, "Party deleted... 😭 ")
+     |> Flash.insert_flash(:info, "Party deleted... 😭 ", self())
      |> push_redirect(to: Routes.party_index_path(socket, :index))}
   end
 
@@ -71,15 +72,16 @@ defmodule LifecycleWeb.PartyLive.Show do
 
         {:noreply,
          socket
-         |> put_flash(:info, "member added")}
+         |> Flash.insert_flash(:info, "member added", self())}
 
       # handle adding duplcate member to the party
       {:error, %Ecto.Changeset{} = changeset} ->
-        Process.send_after(self(), :clear_flash, 3000)
+        # Process.send_after(self(), :clear_flash, 3000)
         {:noreply,
          socket
          |> assign(:changeset, changeset)
-         |> put_flash(:warn, "member is already in the party")}
+         |> Flash.insert_flash(:info, "member already in party", self())}
+
 
       # handle the user not found error from massline.get_user_by_name
       # please leave this function at the end of the case statement, or
@@ -87,7 +89,7 @@ defmodule LifecycleWeb.PartyLive.Show do
       {:error, reason} ->
         {:noreply,
          socket
-         |> put_flash(:error, reason)}
+         |> Flash.insert_flash(:error, reason, self())}
     end
   end
 
@@ -100,13 +102,12 @@ defmodule LifecycleWeb.PartyLive.Show do
 
         {:noreply,
          socket
-         |> put_flash(:info, message)}
+          |> Flash.insert_flash(:info, message, self())}
 
       {:error, reason} ->
         {:noreply,
          socket
-         |> put_flash(:error, reason)
-        }
+          |> Flash.insert_flash(:error, reason, self())}
     end
   end
 
@@ -120,9 +121,8 @@ defmodule LifecycleWeb.PartyLive.Show do
     PartyPubs.handle_member_removed(socket, message)
   end
 
-  def handle_info(:clear_flash, socket) do
-    {:noreply, clear_flash(socket)}
-  end
+  @impl true
+  def handle_info(:clear_flash, socket), do: Flash.handle_flash(socket)
 
   # Query
   defp get_party(id), do: Massline.get_party!(id)

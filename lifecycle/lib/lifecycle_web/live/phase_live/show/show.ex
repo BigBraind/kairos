@@ -10,11 +10,14 @@ defmodule LifecycleWeb.PhaseLive.Show do
   alias LifecycleWeb.Modal.Button.Approve
   alias LifecycleWeb.Modal.Button.Phases
   alias LifecycleWeb.Modal.Button.Transition
+  alias LifecycleWeb.Modal.Component.Flash
   alias LifecycleWeb.Modal.Echoes.Echoes
   alias LifecycleWeb.Modal.Pubsub.Pubs
 
   @impl true
   def mount(params, _session, socket) do
+    IO.inspect(socket.root_pid)
+    IO.inspect(socket.parent_pid)
     id = params["id"]
     socket = Timezone.get_timezone(socket)
     timezone = socket.assigns.timezone
@@ -77,6 +80,9 @@ defmodule LifecycleWeb.PhaseLive.Show do
   def handle_info({Pubsub, [:transition, :approved], message}, socket) do
     Pubs.handle_transition_approved(socket, message)
   end
+
+  @impl true
+  def handle_info(:clear_flash, socket), do: Flash.handle_flash(socket)
 
   def handle_event("transition", _params, socket) do
     Transition.handle_button("transition", socket)

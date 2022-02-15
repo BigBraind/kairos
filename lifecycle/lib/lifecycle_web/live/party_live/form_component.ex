@@ -6,6 +6,8 @@ defmodule LifecycleWeb.PartyLive.FormComponent do
   alias Lifecycle.Massline
   alias Lifecycle.Pubsub
 
+  alias LifecycleWeb.Modal.Component.Flash
+
   @impl true
   def update(%{party: party} = assigns, socket) do
     changeset = Massline.change_party(party)
@@ -41,8 +43,8 @@ defmodule LifecycleWeb.PartyLive.FormComponent do
 
         {:noreply,
          socket
-         |> put_flash(:info, "Party created successfully! :)")
-         |> push_redirect(to: Routes.party_show_path(socket, :show, party.id))}
+         |> push_redirect(to: Routes.party_show_path(socket, :show, party.name))
+         |> Flash.insert_flash(:info, "Party created successfully! :)", self())}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, changeset: changeset)}
@@ -54,8 +56,9 @@ defmodule LifecycleWeb.PartyLive.FormComponent do
       {:ok, _party} ->
         {:noreply,
          socket
-         |> put_flash(:info, "Party updated successfully")
-         |> push_redirect(to: socket.assigns.return_to)}
+         |> push_redirect(to: socket.assigns.return_to)
+         # ! flash doesnt work on edit button on party.index
+         |> Flash.insert_flash(:info, "Party updated successfully", self())}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, :changeset, changeset)}
