@@ -16,8 +16,6 @@ defmodule LifecycleWeb.PhaseLive.Show do
 
   @impl true
   def mount(params, _session, socket) do
-    IO.inspect(socket.root_pid)
-    IO.inspect(socket.parent_pid)
     id = params["id"]
     socket = Timezone.get_timezone(socket)
     timezone = socket.assigns.timezone

@@ -8,6 +8,7 @@ defmodule LifecycleWeb.PartyLive.Index do
   alias Lifecycle.Users.Party
 
   alias LifecycleWeb.Modal.Component.Flash
+  alias LifecycleWeb.Modal.Party.PartyEventHandler
   alias LifecycleWeb.Modal.Pubsub.PartyPubs
 
   @impl true
@@ -52,13 +53,7 @@ defmodule LifecycleWeb.PartyLive.Index do
 
   @impl true
   def handle_event("delete", %{"id" => id}, socket) do
-    party = Massline.get_party!(id)
-    {:ok, _} = Massline.delete_party(party)
-
-    {:noreply,
-     socket
-     |> assign(:all_parties, list_party())
-     |> Flash.insert_flash(:info, "Party deleted...", self())}
+    PartyEventHandler.handle_delete_member(socket, id)
   end
 
   @impl true
@@ -68,6 +63,4 @@ defmodule LifecycleWeb.PartyLive.Index do
 
   @impl true
   def handle_info(:clear_flash, socket), do: Flash.handle_flash(socket)
-
-  defp list_party, do: Massline.list_parties()
 end

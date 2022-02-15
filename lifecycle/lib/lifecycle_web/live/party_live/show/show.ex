@@ -9,19 +9,22 @@ defmodule LifecycleWeb.PartyLive.Show do
   alias Lifecycle.Users.Party
 
   alias LifecycleWeb.Modal.Component.Flash
+  alias LifecycleWeb.Modal.Party.PartyEventHandler
   alias LifecycleWeb.Modal.Pubsub.PartyPubs
 
   @impl true
   def mount(%{"party_name" => name}, _session, socket) do
     # Process.send_after(self(), :clear_flash, 3000)
     parties = get_party_by_name(name)
+
     if connected?(socket) do
       Pubsub.subscribe("party:" <> parties.id)
+
       {:ok,
-     assign(socket,
-       party: parties,
-       party_changeset: Party.changeset(%Party{})
-     )}
+       assign(socket,
+         party: parties,
+         party_changeset: Party.changeset(%Party{})
+       )}
     end
 
     {:ok,
@@ -50,65 +53,15 @@ defmodule LifecycleWeb.PartyLive.Show do
 
   @impl true
   def handle_event("delete", %{"id" => id}, socket) do
-    party = get_party(id)
-    {:ok, _} = delete_party(party)
-
-    {:noreply,
-     socket
-     |> assign(:all_parties, list_party())
-     |> Flash.insert_flash(:info, "Party deleted... 😭 ", self())
-     |> push_redirect(to: Routes.party_index_path(socket, :index))}
+    PartyEventHandler.handle_delete_member(socket, id)
   end
 
   def handle_event("add_member", %{"party" => party_params}, socket) do
-    party_params = Map.put(party_params, "role", "pleb")
-
-    topic = PartyPubs.get_topic(socket)
-
-    case Massline.add_member(party_params) do
-      # happy case
-      {:ok, %Membership{} = membership} ->
-        {Pubsub.notify_subs({:ok, membership}, [:member, :added], topic)}
-
-        {:noreply,
-         socket
-         |> Flash.insert_flash(:info, "member added", self())}
-
-      # handle adding duplcate member to the party
-      {:error, %Ecto.Changeset{} = changeset} ->
-        # Process.send_after(self(), :clear_flash, 3000)
-        {:noreply,
-         socket
-         |> assign(:changeset, changeset)
-         |> Flash.insert_flash(:info, "member already in party", self())}
-
-
-      # handle the user not found error from massline.get_user_by_name
-      # please leave this function at the end of the case statement, or
-      # it will overwrite the %Ecto.Changeset
-      {:error, reason} ->
-        {:noreply,
-         socket
-         |> Flash.insert_flash(:error, reason, self())}
-    end
+    PartyEventHandler.handle_add_member(socket, party_params)
   end
 
   def handle_event("subtract_member", %{"party" => party_params}, socket) do
-    topic = PartyPubs.get_topic(socket)
-
-    case subtract_member(party_params) do
-      {:ok, message} ->
-        {Pubsub.notify_subs({:ok, message}, [:member, :removed], topic)}
-
-        {:noreply,
-         socket
-          |> Flash.insert_flash(:info, message, self())}
-
-      {:error, reason} ->
-        {:noreply,
-         socket
-          |> Flash.insert_flash(:error, reason, self())}
-    end
+    PartyEventHandler.handle_subtract_member(socket, party_params)
   end
 
   @impl true
@@ -124,10 +77,5 @@ defmodule LifecycleWeb.PartyLive.Show do
   @impl true
   def handle_info(:clear_flash, socket), do: Flash.handle_flash(socket)
 
-  # Query
-  defp get_party(id), do: Massline.get_party!(id)
   defp get_party_by_name(name), do: Massline.get_party_by_name!(name)
-  defp delete_party(party), do: Massline.delete_party(party)
-  defp list_party, do: Massline.list_parties()
-  defp subtract_member(party_params), do: Massline.subtract_member(party_params)
 end

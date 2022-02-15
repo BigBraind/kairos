@@ -1,6 +1,6 @@
 defmodule LifecycleWeb.Modal.Echoes.EchoList do
   @moduledoc """
-  Function component for individual echoes object and transition. being invoke in nowstream(echo_live/index.ex, phase_live/show.ex) construction and rendering echoes(echo_live/index.ex, phase_live/show.ex)
+  View component for individual echoes object and transition. being invoke in nowstream(echo_live/index.ex, phase_live/show.ex) construction and rendering echoes(echo_live/index.ex, phase_live/show.ex)
   """
   use LifecycleWeb, :live_component
 
