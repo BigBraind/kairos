@@ -37,4 +37,8 @@ npm-debug.log
 
 .DS_Store
 priv/.DS_Store
+
 .env
+../.history
+../.vscode
+

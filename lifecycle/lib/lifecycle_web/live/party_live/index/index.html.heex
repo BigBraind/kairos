@@ -1,0 +1,74 @@
+<%= if @live_action in [:new, :edit] do %>
+                <%= live_modal LifecycleWeb.PartyLive.FormComponent,
+    id: @party.id || :new,
+    title: @page_title,
+    action: @live_action,
+    parties: @all_parties,
+    party: @party,
+    current_user: @current_user,
+    return_to: Routes.party_index_path(@socket, :index) %>
+<% end %>
+
+
+<h2>My Parties 🥳 </h2>
+
+<table width="30%">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>My Role</th>
+            <th>ID</th>
+        </tr>
+    </thead>
+
+<tbody id="parties">
+    <%= for m <- @my_parties do %>
+        <tr id={"membership-#{m.party_id}"}>
+            <td><span><%= live_redirect m.party.name, to: Routes.party_show_path(@socket, :show, m.party.name), class: "button"%></span></td>
+            <td><%= m.party.banner %></td>
+            <td><%= m.role %></td>
+            <td>
+                <span><%= live_patch "Edit", to: Routes.party_index_path(@socket, :edit, m.party.name), class: "button" %></span>
+                <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: m.party.id, data: [confirm: "Are you sure? 👀 "], class: "button" %></span>
+            </td>
+        </tr>
+   <% end %>
+</tbody>
+
+</table>
+
+<h2>All Parties 🎎</h2>
+
+<table width="30%">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Members</th>
+            <th>ID</th>
+        </tr>
+    </thead>
+
+<tbody id="parties">
+    <%= for party <- @all_parties do %>
+        <tr id={"party-#{party.id}"}>
+            <td><span><%= live_redirect party.name, to: Routes.party_show_path(@socket, :show, party.name), class: "button"%></span></td>
+            <td><%= party.banner %></td>
+            <td>
+                <%= for user <- party.user do %>
+                    <%= user.name %>
+                <% end %>
+            </td>
+            <td><%= party.id %></td>
+    
+            <td>
+                <span><%= live_patch "Edit", to: Routes.party_index_path(@socket, :edit, party), class: "button" %></span>
+                <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: party.id, data: [confirm: "Are you sure? 👀 "], class: "button" %></span>
+            </td>
+        </tr>
+   <% end %>
+</tbody>
+
+</table>
+<span><%= live_patch "New Party", to: Routes.party_index_path(@socket, :new) %></span>

@@ -7,7 +7,7 @@ defmodule LifecycleWeb.SocketPubsubTest do
   import Lifecycle.PubsubFixtures
   use LifecycleWeb, :live_view
 
-  defp create_socket() do
+  defp create_socket do
     %{socket: %Phoenix.LiveView.Socket{}}
   end
 

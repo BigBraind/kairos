@@ -1,4 +1,4 @@
-defmodule LifecycleWeb.Modal.Pubsub.Pubs do
+defmodule LifecycleWeb.Modal.Function.Pubsub.Pubs do
   @moduledoc """
     handle pubs
   """

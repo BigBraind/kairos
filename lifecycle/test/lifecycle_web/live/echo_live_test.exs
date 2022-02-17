@@ -36,8 +36,8 @@ defmodule LifecycleWeb.EchoLiveTest do
   end
 
   describe "Index" do
-    setup [:create_echo, :create_phase]
 
+    setup [:create_echo, :create_phase]
     test "lists all echoes", %{conn: conn, echo: echo} do
       {:ok, _index_live, html} = live(conn, Routes.echo_index_path(conn, :index))
 

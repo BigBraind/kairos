@@ -1,4 +1,4 @@
-defmodule LifecycleWeb.Modal.Button.Phases do
+defmodule LifecycleWeb.Modal.View.Button.Phases do
   @moduledoc """
     Button to on phase/show page to show the parent and children button
   """

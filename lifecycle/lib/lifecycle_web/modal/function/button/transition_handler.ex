@@ -1,19 +1,16 @@
-defmodule LifecycleWeb.Modal.Button.Transition do
+defmodule LifecycleWeb.Modal.Function.Button.TransitionHandler do
   @moduledoc """
-  Transition button
+  Handle transition button event
   """
-  use LifecycleWeb, :live_view
+
+  # use Phoenix.Component
+  use LifecycleWeb, :live_component
 
   alias Lifecycle.Pubsub
   alias Lifecycle.Timeline
 
-  alias LifecycleWeb.Modal.Pubsub.Pubs
-
-  def button(assigns) do
-    ~H"""
-      <button phx-click="transition">Drop Beats 🖐🎤</button>
-    """
-  end
+  alias LifecycleWeb.Modal.Function.Component.Flash
+  alias LifecycleWeb.Modal.Function.Pubsub.Pubs
 
   @doc """
   handle event for approve button
@@ -40,6 +37,7 @@ defmodule LifecycleWeb.Modal.Button.Transition do
           Path.join([:code.priv_dir(:lifecycle), "static", "uploads", Path.basename(dest_path)])
 
         File.cp!(path, dest)
+
         {:ok, Routes.static_path(socket, "/uploads/#{Path.basename(dest)}")}
       end)
 
@@ -65,11 +63,13 @@ defmodule LifecycleWeb.Modal.Button.Transition do
           :noreply,
           socket
           |> assign(:transiting, false)
-          |> put_flash(:info, "Transition Object Sent")
+          |> Flash.insert_flash(:info, "Transition Object Sent", self())
         }
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, changeset: changeset)}
     end
   end
+
+
 end

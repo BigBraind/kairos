@@ -4,9 +4,12 @@ defmodule Lifecycle.Repo.Migrations.CreateParties do
   def change do
     create table(:parties, primary_key: false) do
       add :id, :binary_id, primary_key: true
-      add :owner, references(:users, column: :id, on_delete: :nothing, type: :binary_id)
+      add :name, :string, null: false
+      add :banner, :string, null: false
 
       timestamps()
     end
+
+    create unique_index(:parties, [:name])
   end
 end
