@@ -1,3 +1,5 @@
+<%# Main Page, the sign in page %>
+
 <h1>Sign in</h1>
 
 <%= form_for @changeset, @action, [as: :user], fn f -> %>
@@ -15,10 +17,16 @@
   <%= password_input f, :password %>
   <%= error_tag f, :password %>
 
-  <div>
-    <%= submit "Sign in" %>
-  </div>
+  <%# <button class="px-4 py-1 text-sm bg-purple-600 text-white font-semibold rounded-full border border-white hover:text-purple-600 hover:bg-white hover:border-transparent focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 hover:border-purple-200" > Sign In
+
+  </button> %>
+
+  <%= submit class: "px-4 py-1 text-sm bg-purple-600 text-white font-semibold rounded-full border border-white hover:text-purple-600 hover:bg-white hover:border-transparent focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 hover:border-purple-200" do %>
+    Sign in
+  <% end %>
 <% end %>
 
 
-<span><%= link "Register", to: Routes.pow_registration_path(@conn, :new) %></span>
+
+
+<button class="px-4 py-1 text-sm text-purple-600 font-semibold rounded-full border border-purple-200 hover:text-white hover:bg-purple-600 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-offset-2"><%= link "Register", to: Routes.pow_registration_path(@conn, :new) %></button>
