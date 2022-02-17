@@ -1,11 +1,15 @@
 defmodule Lifecycle.TimelineTest do
+  @moduledoc false
+
   use Lifecycle.DataCase
   alias Lifecycle.Timeline
   import Lifecycle.TimelineFixtures
 
+  alias Ecto.Adapters.SQL.Sandbox
+
   setup do
     # Explicitly get a connection before each test
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Lifecycle.Repo)
+    :ok = Sandbox.checkout(Lifecycle.Repo)
   end
 
   describe "echoes" do

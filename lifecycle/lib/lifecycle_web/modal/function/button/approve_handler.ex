@@ -1,18 +1,14 @@
-defmodule LifecycleWeb.Modal.Button.Approve do
+defmodule LifecycleWeb.Modal.Function.Button.ApproveHandler do
   @moduledoc """
-  Approve button and its handle_event(handle_button)
+  Handle approve button
   """
+
   use LifecycleWeb, :live_component
 
+  alias Lifecycle.Pubsub
   alias Lifecycle.Timeline
 
-  alias Lifecycle.Pubsub
-
-  def button(assigns) do
-    ~H"""
-      <button phx-click="approve" value={@echo.id}>Fire? 🔥</button>
-    """
-  end
+  alias LifecycleWeb.Modal.Function.Component.Flash
 
   @doc """
   handle event for approve button
@@ -41,7 +37,7 @@ defmodule LifecycleWeb.Modal.Button.Approve do
 
             {:noreply,
              socket
-             |> put_flash(:info, "Transition approved!")}
+             |> Flash.insert_flash(:info, "Transition approved!", self())}
 
           {:error, %Ecto.Changeset{} = changeset} ->
             {:noreply, assign(socket, :changeset, changeset)}
@@ -51,7 +47,7 @@ defmodule LifecycleWeb.Modal.Button.Approve do
         {
           :noreply,
           socket
-          |> put_flash(:info, "Transition already approved!")
+          |> Flash.insert_flash(:info, "Transition already approved!", self())
         }
     end
   end

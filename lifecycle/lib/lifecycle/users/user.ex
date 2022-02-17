@@ -3,12 +3,16 @@ defmodule Lifecycle.Users.User do
   Schema table for user object
   """
   use Ecto.Schema
-  alias Lifecycle.Bridge.Partyer
+
+  alias Lifecycle.Bridge.Membership
   alias Lifecycle.Users.Party
+
+  alias Pow.Ecto.Schema.Password
+
   use Pow.Ecto.Schema,
     user_id_field: :name,
     password_hash_methods:
-      {&Pow.Ecto.Schema.Password.pbkdf2_hash/1, &Pow.Ecto.Schema.Password.pbkdf2_verify/2},
+      {&Password.pbkdf2_hash/1, &Password.pbkdf2_verify/2},
     password_min_length: 8,
     password_max_length: 4096
 
@@ -17,13 +21,11 @@ defmodule Lifecycle.Users.User do
     # field :custom_field, :string
 
     pow_user_fields()
-    has_many :parties, Party, foreign_key: :id
-    many_to_many :party, Party, join_through: Partyer
+
+    has_many :parties, Membership, foreign_key: :user_id
+    many_to_many :party, Party, join_through: Membership
 
     timestamps()
-
-    # has_many :party, Lifecycle.Users.Party
-
   end
 
   def changeset(user_or_changeset, attrs) do

@@ -3,7 +3,6 @@ defmodule LifecycleWeb.EchoLiveTest do
   This module tests on the Echoes object
   """
   use LifecycleWeb.ConnCase
-
   import Phoenix.LiveViewTest
   import Lifecycle.TimelineFixtures
   import Lifecycle.PubsubFixtures
@@ -13,14 +12,23 @@ defmodule LifecycleWeb.EchoLiveTest do
   import ExUnit.CaptureLog
   require Logger
 
-  @create_attrs %{message: "some message", name: "some name"}
+  @create_attrs %{
+    message: "some message",
+    name: "some name"
+  }
   @update_attrs %{
     journey: "some updated journey",
     message: "some updated message",
     name: "some updated name",
     type: "some updated type"
   }
+
   @invalid_attrs %{message: nil}
+
+  defp create_phase(_) do
+    phase = phase_fixture()
+    %{phase: phase}
+  end
 
   defp create_echo(_) do
     echo = echo_fixture()
@@ -28,8 +36,8 @@ defmodule LifecycleWeb.EchoLiveTest do
   end
 
   describe "Index" do
-    setup [:create_echo]
 
+    setup [:create_echo, :create_phase]
     test "lists all echoes", %{conn: conn, echo: echo} do
       {:ok, _index_live, html} = live(conn, Routes.echo_index_path(conn, :index))
 
@@ -37,15 +45,18 @@ defmodule LifecycleWeb.EchoLiveTest do
       assert html =~ echo.message
     end
 
-    test "saves new echo", %{conn: conn} do
+    test "saves new echo", %{conn: conn, phase: phase} do
       {:ok, index_live, _html} = live(conn, Routes.echo_index_path(conn, :index))
+
       assert index_live
              |> element(~s{[id="echo_form"]})
              |> render_submit(echo: @invalid_attrs) =~ "can&#39;t be blank"
+
       {:ok, index_live, _html} = live(conn, Routes.echo_index_path(conn, :index))
+
       assert index_live
              |> element(~s{[id="echo_form"]})
-             |> render_submit(echo: @create_attrs) =~ "Message Sent"
+             |> render_submit(echo: Map.merge(@create_attrs, %{phase_id: phase.id})) =~ "Message Sent"
     end
   end
 

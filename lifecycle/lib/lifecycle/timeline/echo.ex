@@ -23,12 +23,8 @@ defmodule Lifecycle.Timeline.Echo do
     echo
     |> cast(attrs, [:message, :phase_id, :type, :name, :transited, :transiter])
     # |> cast_assoc(attrs, [:journey])
-    |> validate_required([:message, :name])
 
+    |> validate_required([:message, :name, :phase_id])
     # |> validate_required([:message, :journey, :type, :name])
   end
 end
-
-# new_attrs = %{journeyType: "testType", journeyTitle: "testTitle", journeyContent: "testContent", id: Ecto.UUID.generate()}
-# {:ok, journey} = Lifecycle.Timeline.create_journey(new_attrs)
-# echo_attrs = %{message: "testMessage", journey: "", type: "testType", name: "testName"}

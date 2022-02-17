@@ -4,7 +4,6 @@ defmodule Lifecycle.Timezone do
     Currently it's displayed as DD-MM-YYYY
   """
   use LifecycleWeb, :live_view
-
   @default_locale "en"
   @default_timezone "UTC"
   @default_timezone_offset 0
