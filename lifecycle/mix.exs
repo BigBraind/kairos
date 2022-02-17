@@ -21,7 +21,7 @@ defmodule Lifecycle.MixProject do
   def application do
     [
       mod: {Lifecycle.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools],
     ]
   end
 
@@ -60,7 +60,9 @@ defmodule Lifecycle.MixProject do
       {:poison, "~> 3.0"},
       {:ex_aws, "~> 2.1.2"},
       {:ex_aws_s3, "~> 2.0"},
-      {:hackney, "~> 1.9"}
+      {:hackney, "~> 1.9"},
+      {:stripity_stripe, "~> 2.0"},
+      {:dotenv_parser, "~> 2.0", runtime: Mix.env() == :dev}
     ]
   end
 

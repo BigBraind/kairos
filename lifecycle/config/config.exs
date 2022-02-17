@@ -47,7 +47,6 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
-
 # Pow Configuration
 config :lifecycle, :pow,
   user: Lifecycle.Users.User,
