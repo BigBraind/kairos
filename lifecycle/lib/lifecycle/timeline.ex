@@ -8,7 +8,7 @@ defmodule Lifecycle.Timeline do
 
   alias Lifecycle.Timeline.Echo
   alias Lifecycle.Timeline.Phase
-
+  alias Lifecycle.Timeline.Transition
   alias Lifecycle.Bridge.Phasor
 
   @doc """
@@ -213,5 +213,17 @@ defmodule Lifecycle.Timeline do
   """
   def change_phase(%Phase{} = phase, attrs \\ %{}) do
     Phase.changeset(phase, attrs)
+  end
+
+  def create_transition(attrs \\ %{}) do
+    %Transition{}
+    |> Transition.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  def update_transition(%Transition{} = transition, attrs) do
+    transition
+    |> Transition.changeset(attrs)
+    |> Repo.update()
   end
 end
