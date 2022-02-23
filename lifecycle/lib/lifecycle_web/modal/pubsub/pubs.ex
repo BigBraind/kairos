@@ -28,7 +28,7 @@ defmodule LifecycleWeb.Modal.Pubsub.Pubs do
 
   defp replace_echoes(%{
          id: transition_id,
-         transiter: transiter,
+        #  transiter: transiter,
          # list of [:nowstream, :echoes]
          echo_stream: echo_stream,
          socket: socket
@@ -36,14 +36,14 @@ defmodule LifecycleWeb.Modal.Pubsub.Pubs do
     # pass back :ok, or :cont
 
     # looping through the socket.assigns.echoes/nowstream echoes object, then find the approved transition object to be updated
-    Enum.map(socket.assigns[echo_stream], fn
-      %Echo{id: id} = echo ->
-        if id == transition_id do
-          %Echo{echo | transiter: transiter, transited: true}
-        else
-          echo
-        end
-    end)
+    # Enum.map(socket.assigns[echo_stream], fn
+    #   %Echo{id: id} = echo ->
+    #     if id == transition_id do
+    #       %Echo{echo | transiter: transiter, transited: true}
+    #     else
+    #       echo
+    #     end
+    # end)
   end
 
   def get_topic(socket) do

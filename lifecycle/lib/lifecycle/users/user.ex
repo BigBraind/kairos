@@ -5,6 +5,7 @@ defmodule Lifecycle.Users.User do
   use Ecto.Schema
   alias Lifecycle.Bridge.Membership
   alias Lifecycle.Users.Party
+  alias Lifecycle.Timeline.Transition
 
   use Pow.Ecto.Schema,
     user_id_field: :name,
@@ -20,6 +21,8 @@ defmodule Lifecycle.Users.User do
     pow_user_fields()
     has_many :parties, Membership, foreign_key: :user_id
     many_to_many :party, Party, join_through: Membership
+    has_many :transitions, Transition, foreign_key: :transition_id
+    has_many :transits, Transition, foreign_key: :transit_id
 
     timestamps()
 

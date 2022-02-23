@@ -226,4 +226,10 @@ defmodule Lifecycle.Timeline do
     |> Transition.changeset(attrs)
     |> Repo.update()
   end
+
+  def get_transition(attrs \\ %{}) do
+    %Transition{}
+    |> Transition.changeset(attrs)
+    |> Repo.get()
+  end
 end
