@@ -5,6 +5,8 @@ defmodule LifecycleWeb.PhaseLive.Index do
   alias Lifecycle.Timeline
   alias Lifecycle.Timeline.Phase
 
+  alias LifecycleWeb.Modal.Function.Component.Flash
+
   @impl true
   def mount(_params, _session, socket) do
     {:ok, assign(socket, :phases, list_phases())}
@@ -38,8 +40,15 @@ defmodule LifecycleWeb.PhaseLive.Index do
     phase = Timeline.get_phase!(id)
     {:ok, _} = Timeline.delete_phase(phase)
 
-    {:noreply, assign(socket, :phases, list_phases())}
+    # {:noreply, assign(socket, :phases, list_phases())}
+    {:noreply,
+     socket
+     |> assign(:phases, list_phases())
+     |> Flash.insert_flash(:info, "Phase deleted", self())}
   end
+
+  @impl true
+  def handle_info(:clear_flash, socket), do: Flash.handle_flash(socket)
 
   defp list_phases do
     Timeline.list_phases()

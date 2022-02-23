@@ -3,7 +3,8 @@ defmodule Lifecycle.Timezone do
     The timezone module is to customize the time format that we want.
     Currently it's displayed as DD-MM-YYYY
   """
-  use LifecycleWeb, :live_view
+  # use LifecycleWeb, :live_view
+  use Phoenix.Component
   @default_locale "en"
   @default_timezone "UTC"
   @default_timezone_offset 0

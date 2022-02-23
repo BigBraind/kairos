@@ -8,17 +8,18 @@ defmodule LifecycleWeb.EchoLive.Index do
   alias Lifecycle.Timeline.Echo
   alias Lifecycle.Timezone
 
-  alias LifecycleWeb.Modal.Button.Approve
-  alias LifecycleWeb.Modal.Button.Transition
-  alias LifecycleWeb.Modal.Echoes.Echoes
-  alias LifecycleWeb.Modal.Pubsub.Pubs
+  alias LifecycleWeb.Modal.View.Button.Transition
+  alias LifecycleWeb.Modal.View.Echoes.Echoes
+
+  alias LifecycleWeb.Modal.Function.Button.ApproveHandler
+  alias LifecycleWeb.Modal.Function.Button.TransitionHandler
+  alias LifecycleWeb.Modal.Function.Echoes.EchoHandler
+  alias LifecycleWeb.Modal.Function.Pubsub.Pubs
 
   @impl true
   def mount(_params, _session, socket) do
     if connected?(socket), do: Pubsub.subscribe("1")
     socket = Timezone.get_timezone(socket)
-    timezone = socket.assigns.timezone
-    timezone_offset = socket.assigns.timezone_offset
     changeset = Timeline.Echo.changeset(%Echo{})
 
     socket =
@@ -30,10 +31,8 @@ defmodule LifecycleWeb.EchoLive.Index do
     {:ok,
      assign(socket,
        echoes: list_echoes(),
-       timezone: timezone,
        changeset: changeset,
        nowstream: [],
-       timezone_offset: timezone_offset,
        image_list: [],
        transiting: false
      )}
@@ -41,11 +40,12 @@ defmodule LifecycleWeb.EchoLive.Index do
 
   @impl true
   def handle_event("save", %{"echo" => echo_params}, socket) do
-    Echoes.send_echo(echo_params, socket)
+
+    EchoHandler.send_echo(echo_params, socket)
   end
 
   def handle_event("transition", _params, socket) do
-    Transition.handle_button("transition", socket)
+    TransitionHandler.handle_button("transition", socket)
   end
 
   def handle_event("validate", _params, socket) do
@@ -57,12 +57,12 @@ defmodule LifecycleWeb.EchoLive.Index do
   end
 
   def handle_event("upload", _params, socket) do
-    Transition.handle_upload("upload", socket)
+    TransitionHandler.handle_upload("upload", socket)
   end
 
   def handle_event("approve", %{"value" => id}, socket) do
     topic = Pubs.get_topic(socket)
-    Approve.handle_button(%{"value" => id}, topic, socket)
+    ApproveHandler.handle_button(%{"value" => id}, topic, socket)
   end
 
   @impl true

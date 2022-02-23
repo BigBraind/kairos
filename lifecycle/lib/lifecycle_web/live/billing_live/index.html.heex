@@ -1,0 +1,50 @@
+<div>
+  <.form let={f} for={@changeset} phx-submit="submitStripe", phx-hook="EmptyInput", id="echo_form">
+    <%= hidden_input f, :amount, value: "1099" %>
+    <%= hidden_input f, :currency, value: "USD" %>
+    
+    <%= label f, :email %>
+    <%= text_input f, :email, placeholder: "Ex. james@bond.com", disabled: !is_nil(@checkout) %>
+    <%= error_tag f, :email %>
+
+    <%= label f, "Name (same as your credit card)" %>
+    <%= text_input f, :name, class: "tag-input", placeholder: "Ex. James Bond", disabled: !is_nil(@checkout) %>
+    <%= error_tag f, :name %>
+    
+    <%= if is_nil(@checkout) do %>
+      <div>
+      <%= submit "Send", phx_disable_with: "Sending..." %>
+      </div>
+    <% end %>
+  </.form>
+</div>
+  
+<%= if @intent do %>
+<h2>Payment Details</h2>
+
+
+<hr>
+<form action="#" method="post" data-secret={@intent.client_secret} phx-hook="InitCheckout" id="payment-form">
+  <div class="form-row mb-4">
+    <label for="card-element" class="tag-label">
+      Credit or debit card
+    </label>
+    <div id="card-element" class="tag-input">
+      <!-- A Stripe Element will be inserted here. -->
+    </div>
+    <br>
+    <!-- Used to display form errors. -->
+    <div id="card-errors" class="tag-label" role="alert"></div>
+  </div>
+
+  <button class="btn btn-primary w-full">Submit Payment</button>
+</form>
+<% end %>
+
+
+
+
+<%= unless @checkout && @checkout.status == "succeeded" do %>
+    <script src="https://js.stripe.com/v3/"></script>
+      <!-- rest of the code with the forms -->
+<% end %>

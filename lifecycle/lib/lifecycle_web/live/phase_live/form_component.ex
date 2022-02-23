@@ -4,6 +4,8 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
 
   alias Lifecycle.Timeline
 
+  alias LifecycleWeb.Modal.Function.Component.Flash
+
   @impl true
   def update(%{phase: phase} = assigns, socket) do
     changeset = Timeline.change_phase(phase)
@@ -33,8 +35,8 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
       {:ok, _phase} ->
         {:noreply,
          socket
-         |> put_flash(:info, "Phase updated successfully")
-         |> push_redirect(to: socket.assigns.return_to)}
+         |> push_redirect(to: socket.assigns.return_to)
+         |> Flash.insert_flash(:info, "Phase updated successfully", self())}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, :changeset, changeset)}
@@ -46,12 +48,14 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
       {:ok, phase} ->
         {:noreply,
          socket
-         |> put_flash(:info, "Phase created successfully")
          # "/phases/" <> phase.id
-         |> push_redirect(to: Routes.phase_show_path(socket, :show, phase.id))}
+         |> push_redirect(to: Routes.phase_show_path(socket, :show, phase.id))
+         |> Flash.insert_flash(:info, "Phase created successfully", self())}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, changeset: changeset)}
     end
   end
+
+  def handle_flash(socket), do: {:noreply, clear_flash(socket)}
 end

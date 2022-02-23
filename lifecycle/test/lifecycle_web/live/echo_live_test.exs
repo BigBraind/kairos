@@ -29,7 +29,7 @@ defmodule LifecycleWeb.EchoLiveTest do
     phase = phase_fixture()
     %{phase: phase}
   end
-  
+
   defp create_echo(_) do
     echo = echo_fixture()
     %{echo: echo}

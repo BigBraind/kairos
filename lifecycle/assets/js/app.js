@@ -1,6 +1,6 @@
 // We import the CSS which is extracted to its own file by esbuild.
 // Remove this line if you add a your own CSS build pipeline (e.g postcss).
-import "../css/app.css"
+// import "../css/app.css"
 
 // If you want to use Phoenix channels, run `mix help phx.gen.channel`
 // to get started and then uncomment the line below.
@@ -11,7 +11,7 @@ import "../css/app.css"
 // The simplest option is to put them in assets/vendor and
 // import them using relative paths:
 //
-//     import "./vendor/some-package.js"
+//     import "./vesavendor/some-package.js"
 //
 // Alternatively, you can `npm install some-package` and import
 // them using a path starting with the package name:
@@ -25,8 +25,10 @@ import "phoenix_html"
 import { Socket } from "phoenix"
 import { LiveSocket } from "phoenix_live_view"
 import topbar from "../vendor/topbar"
+import {InitCheckout} from "./init_checkout"
 
 let Hooks = {} // for creating hooks
+Hooks.InitCheckout = InitCheckout
 
 // hooks for emptying the input on the echo form
 Hooks.EmptyInput = {
@@ -34,6 +36,8 @@ Hooks.EmptyInput = {
         this.el.elements[2].value = " "
     }
 }
+
+
 
 // hooks for separating msg on rendering echoes
 Hooks.SeparatingMsg = {

@@ -36,7 +36,7 @@ defmodule Lifecycle.TimelineFixtures do
         id: Ecto.UUID.generate()
       })
       |> Lifecycle.Timeline.create_phase()
-      
+
    %{phase | parent: [], child: []} # add child and parent
   end
 end

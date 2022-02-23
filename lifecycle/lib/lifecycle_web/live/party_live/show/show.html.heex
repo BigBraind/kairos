@@ -5,20 +5,20 @@
     action: @live_action,
     party: @party,
     current_user: @current_user,
-    return_to: Routes.party_show_path(@socket, :show, @party.id) %>
+    return_to: Routes.party_show_path(@socket, :show, @party.name) %>
 <% end %>
 
 <div align="left">
   <h1>Name: <%= @party.name %></h1>
 </div>
 <h3>Description: <%= @party.banner %></h3>
-<h3>Creator:  Query is on it's way</h3>
-<%= for user <- @party.user do %>
-    <h3>Members: <%= user.name %></h3>
-<% end %>
+<h3>Members:</h3>
+<h4><%= for user <- @party.user do %>
+<%= user.name %>,
+<% end %></h4>
 
 <div align="right">
-    <span><%= live_patch "Edit", to: Routes.party_show_path(@socket, :edit, @party), class: "button" %></span>
+    <span><%= live_patch "Edit", to: Routes.party_show_path(@socket, :edit, @party.name), class: "button" %></span>
     <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: @party.id, data: [confirm: "Are you sure? 👀 "], return_to: Routes.party_index_path(@socket, :index), class: "button" %></span>
 </div>
 
