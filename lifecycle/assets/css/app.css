@@ -1,7 +1,13 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+/* @import "./phoenix.css" is deleted 
+making the phoenix.css file useless.*/
+
 /* This file is for your main application CSS */
-@import "./phoenix.css";
 
 /* Alerts and form errors used by phx.new */
+/* sample text */
 .alert {
   padding: 15px;
   margin-bottom: 20px;
@@ -87,3 +93,4 @@
   text-decoration: none;
   cursor: pointer;
 }
+

@@ -39,6 +39,15 @@ config :esbuild,
     env: %{"NODE_PATH" => Path.expand("../deps", __DIR__)}
   ]
 
+# slightly changed dir to fit our directory
+config :tailwind, version: "3.0.18", default: [
+  args: ~w(
+    --config=tailwind.config.js
+    --input=../assets/css/app.css
+    --output=../priv/static/assets/app.css
+  ),
+  cd: Path.expand("../assets", __DIR__)
+]
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
@@ -46,7 +55,6 @@ config :logger, :console,
 
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
-
 
 # Pow Configuration
 config :lifecycle, :pow,

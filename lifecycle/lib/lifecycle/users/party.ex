@@ -3,6 +3,9 @@ defmodule Lifecycle.Users.Party do
   Schema table for party object
   """
   use Ecto.Schema
+  import Ecto.Changeset
+  alias Lifecycle.Users.User
+  alias Lifecycle.Bridge.Partyer
 
   import Ecto.Changeset
 
@@ -13,6 +16,7 @@ defmodule Lifecycle.Users.Party do
   # @foreign_key_type :binary_id
   schema "parties" do
     field :name, :string
+
     field :banner, :string
     many_to_many :user, User, join_through: Membership
 

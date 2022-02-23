@@ -1,4 +1,12 @@
 <!DOCTYPE html>
+<%# the root layout - this is a layout used by both LiveView and regular views.
+This layout typically contains the <html> definition alongside the head and body tags. 
+Any content defined in the root layout will remain the same, even as you live navigate across LiveViews.
+All LiveViews defined at the router must have a root layout. 
+The root layout is typically declared on the router with 
+put_root_layout and defined as "root.html.heex" in your MyAppWeb.LayoutView.
+It may also be given via the :root_layout option to a live_session macro in the router. %>
+
 <html lang="en">
   <head>
     <meta charset="utf-8"/>
@@ -27,9 +35,11 @@
             <%= if function_exported?(Routes, :live_dashboard_path, 2) do %>
               <li><%= link "LiveDashboard", to: Routes.live_dashboard_path(@conn, :home) %></li>
             <% end %>
+            <li><%= link "Billing", to: Routes.billing_index_path(@conn, :index) %></li>
+
           </ul>
         </nav>
-        <a href="/" class="phx-logo">
+        <a href="/" class="p-6 max-w-sm mx-auto bg-white rounded-xl shadow-lg flex items-center space-x-4">
           <img src={Routes.static_path(@conn, "/images/bigbrain.png")} alt="Phoenix Framework Logo"/>
         </a>
       </section>
