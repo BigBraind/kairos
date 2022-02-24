@@ -10,6 +10,7 @@ defmodule Lifecycle.Massline do
   alias Lifecycle.Users.Party
   alias Lifecycle.Users.User
 
+
   @doc """
   Returns the list of all parties
 
@@ -33,7 +34,7 @@ defmodule Lifecycle.Massline do
 
   ## Examples
 
-  iex> list_members(id)    
+  iex> list_members(id)
   [%User{}, ...]
 
   """
