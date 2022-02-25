@@ -20,6 +20,7 @@ defmodule Lifecycle.Timeline.Phase do
     many_to_many :parent, Phase, join_through: Phasor, join_keys: [child_id: :id, parent_id: :id]
 
     # many_to_many :child, Lifecycle.Bridge.Phase, join_through: "phase_phase_link"
+    field :template, :map
 
     timestamps()
   end
@@ -29,9 +30,9 @@ defmodule Lifecycle.Timeline.Phase do
   @doc false
   def changeset(phase, attrs) do
     phase
-    |> cast(attrs, [:content, :title, :type])
+    |> cast(attrs, [:content, :title, :type, :template])
     #|> cast_assoc(:parent)
     |> validate_length(:title, max: @max_len)
-    |> validate_required([:content, :title, :type])
+    |> validate_required([:content, :title, :type, :template])
   end
 end

@@ -21,6 +21,15 @@
     <%= text_input f, :type, phx_debounce: "blur" %>
     <%= error_tag f, :type %>
 
+    <%= label f, :water %>
+    <%= checkbox f, :water %>
+
+    <%= label f, :grain %>
+    <%= checkbox f, :grain %>
+
+    <%= label f, :coconut %>
+    <%= checkbox f, :coconut %>
+
     <%= hidden_input f, :parent %>
     <%= error_tag f, :parent  %>
 

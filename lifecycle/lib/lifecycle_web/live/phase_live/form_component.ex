@@ -44,6 +44,22 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
   end
 
   defp save_phase(socket, :new, phase_params) do
+    template =
+      %{}
+      |> check_true_value("water", phase_params["water"])
+      |> check_true_value("grain", phase_params["grain"])
+      |> check_true_value("coconut", phase_params["coconut"])
+
+    # creating a new map to pass into create_phase
+    phase_params =
+      %{}
+      |> Map.put("template", template)
+      |> Map.put("content", phase_params["content"])
+      |> Map.put("title", phase_params["title"])
+      |> Map.put("type", phase_params["type"])
+      |> Map.put("parent", phase_params["parent"])
+
+
     case Timeline.create_phase(phase_params) do
       {:ok, phase} ->
         {:noreply,
@@ -58,4 +74,14 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
   end
 
   def handle_flash(socket), do: {:noreply, clear_flash(socket)}
+
+  defp check_true_value(map, key, value) do
+    case value do
+      "true" ->
+        Map.merge(map, %{String.to_atom(key) => ""})
+
+      _ ->
+        map
+    end
+  end
 end
