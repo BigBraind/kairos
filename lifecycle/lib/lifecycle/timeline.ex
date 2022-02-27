@@ -10,6 +10,7 @@ defmodule Lifecycle.Timeline do
   alias Lifecycle.Timeline.Phase
   alias Lifecycle.Timeline.Transition
   alias Lifecycle.Bridge.Phasor
+  alias Lifecycle.Users.User
 
   @doc """
   Returns the list of echoes.
@@ -104,7 +105,8 @@ defmodule Lifecycle.Timeline do
 
     A wrapper of update_echo
   """
-  def update_transition(id, attrs), do: update_echo(get_echo!(id), attrs)
+
+  # def update_transition(id, attrs), do: update_echo(get_echo!(id), attrs)
 
   @doc """
   Returns the list of phases.
@@ -227,9 +229,21 @@ defmodule Lifecycle.Timeline do
     |> Repo.update()
   end
 
-  def get_transition(attrs \\ %{}) do
-    %Transition{}
-    |> Transition.changeset(attrs)
-    |> Repo.get()
+  def get_transition_list(id) do
+    query =
+      Transition
+      |> where([e], e.phase_id == ^id)
+      |> order_by([e], desc: e.inserted_at)
+      |> preload([:transiter, :initiator])
+
+    Repo.all(query, limit: 8)
   end
+
+  def get_transition_by_id(id), do: Repo.get!(Transition, id)
+
+  def change_transition(%Transition{} = transition, attrs \\ %{}) do
+    Transition.changeset(transition, attrs)
+  end
+
+  def get_user_by_id(id), do: Repo.get!(User, id)
 end

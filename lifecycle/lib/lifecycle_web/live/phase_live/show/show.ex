@@ -5,11 +5,13 @@ defmodule LifecycleWeb.PhaseLive.Show do
   alias Lifecycle.Pubsub
   alias Lifecycle.Timeline
   alias Lifecycle.Timeline.Echo
+  alias Lifecycle.Timeline.Transition
   alias Lifecycle.Timezone
 
   alias LifecycleWeb.Modal.View.Button.Phases
-  alias LifecycleWeb.Modal.View.Button.Transition
+  alias LifecycleWeb.Modal.View.Button.Transitions
   alias LifecycleWeb.Modal.View.Echoes.Echoes
+  alias LifecycleWeb.Modal.View.Transition.PhaseTransition
 
   alias LifecycleWeb.Modal.Function.Button.ApproveHandler
   alias LifecycleWeb.Modal.Function.Button.TransitionHandler
@@ -36,13 +38,27 @@ defmodule LifecycleWeb.PhaseLive.Show do
        nowstream: [],
        echoes: list_echoes(id),
        image_list: [],
-       transiting: false
+       transiting: false,
+       transitions: Timeline.get_transition_list(id)
      )}
   end
 
   @impl true
   def handle_params(params, _, socket) do
     {:noreply, apply_action(socket, socket.assigns.live_action, params)}
+  end
+
+  defp apply_action(socket, :transition_new, %{"id" => id}) do
+    template =
+      Timeline.get_phase!(id).template
+      |> Map.keys()
+
+    socket
+    |> assign(:phase, Timeline.get_phase!(id))
+    |> assign(:template, template)
+    |> assign(:title, "Transition")
+    |> assign(:current_user, socket.assigns.current_user)
+    |> assign(:changeset, Timeline.change_transition(%Transition{}))
   end
 
   defp apply_action(socket, :edit, %{"id" => id}) do
@@ -89,6 +105,10 @@ defmodule LifecycleWeb.PhaseLive.Show do
     {:noreply, socket}
   end
 
+  def handle_event("transit", %{"value" => transition_id}, socket) do
+    TransitionHandler.handle_button(:transit, transition_id, socket)
+  end
+
   def handle_event("cancel-upload", %{"ref" => ref}, socket) do
     {:noreply, cancel_upload(socket, :transition, ref)}
   end
@@ -99,7 +119,7 @@ defmodule LifecycleWeb.PhaseLive.Show do
     EchoHandler.send_echo(echo_params, socket)
   end
 
-  def handle_event("upload", _params, socket) do
+  def handle_event("upload", params, socket) do
     TransitionHandler.handle_upload("upload", socket)
   end
 
@@ -110,7 +130,8 @@ defmodule LifecycleWeb.PhaseLive.Show do
 
   defp list_echoes(phase_id), do: Timeline.phase_recall(phase_id)
 
-  def time_format(time, timezone, timezone_offset), do: Timezone.get_time(time, timezone, timezone_offset)
+  def time_format(time, timezone, timezone_offset),
+    do: Timezone.get_time(time, timezone, timezone_offset)
 
   def error_to_string(:too_large), do: "Too large"
   def error_to_string(:too_many_files), do: "You have selected too many files"

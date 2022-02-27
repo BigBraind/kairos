@@ -7,6 +7,18 @@
     return_to: Routes.phase_show_path(@socket, :show, @phase.id) %>
 <% end %>
 
+<%= if @live_action in [:transition_new ] do %>
+   <%= live_modal LifecycleWeb.TransitionLive.FormComponent,
+   id: :transition_new,
+   title: @title,
+   template: @template,
+   phase: @phase,
+   current_user: @current_user,
+   changeset: @changeset,
+   action: @live_action,
+   return_to: Routes.phase_show_path(@socket, :show, @phase.id) %>
+<% end %>
+
 
 
 <div align="left">
@@ -29,9 +41,11 @@
     <%= submit "Send", phx_disable_with: "Sending..." %> 
   </div>
 </.form> 
-<Transition.button/>
+<Transitions.button/>
 
 <% else %>
+<span><%= live_patch "Transition", to: Routes.phase_show_path(@socket, :transition_new, @phase.id), class: "button" %></span>
+
 <section phx-drop-target={@uploads.transition.ref}>
 
   <%# render each transition image entry %>
@@ -68,6 +82,7 @@
 </form>
 
 <% end %>
+
 <div>
   <div align="right">
 
@@ -80,7 +95,10 @@
   <.live_component id="phases-button" module={Phases} phase={@phase}/>
 
 <% end %>
+
   </div>
+
+  <PhaseTransition.button transitions={@transitions} timezone={@timezone} timezone_offset={@timezone_offset}/>
 
   <ul id="phase-live-msg-list-nowstream" style="list-style: none; min-height:10px;">
       <.live_component module={Echoes} id="nowstream" echoes={@nowstream} timezone={@timezone} timezone_offset={@timezone_offset} />

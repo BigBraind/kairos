@@ -13,6 +13,31 @@ defmodule LifecycleWeb.Modal.Function.Button.TransitionHandler do
   alias LifecycleWeb.Modal.Function.Pubsub.Pubs
 
   @doc """
+  Approve transition event
+  """
+  def handle_button(:transit, transition_id, socket) do
+    transition = Timeline.get_transition_by_id(transition_id)
+
+    params =
+      %{}
+      |> Map.put(:transiter_id, socket.assigns.current_user.id)
+      |> Map.put(:transited, true)
+      
+    case Timeline.update_transition(transition, params) do
+      # TODO: to be added pub sub
+      {:ok, transition} ->
+        {:noreply,
+         socket
+         |> assign(transitions: transition)}
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        {:noreply,
+         socket
+         |> assign(changeset: changeset)}
+    end
+  end
+
+  @doc """
   handle event for approve button
   assign transiting to true, such that users can upload image to be approved
   """
@@ -70,6 +95,4 @@ defmodule LifecycleWeb.Modal.Function.Button.TransitionHandler do
         {:noreply, assign(socket, changeset: changeset)}
     end
   end
-
-
 end

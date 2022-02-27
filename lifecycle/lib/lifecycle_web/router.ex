@@ -45,15 +45,18 @@ defmodule LifecycleWeb.Router do
       live("/phases/:id", PhaseLive.Show, :show)
       live("/phases/:id/show/edit", PhaseLive.Show, :edit)
       live("/phases/:id/show/new", PhaseLive.Show, :new)
+      live("/phases/:id/show/transition", PhaseLive.Show, :transition_new)
 
       live("/party", PartyLive.Index, :index)
       live("/party/new", PartyLive.Index, :new)
       live("/party/:party_name/edit", PartyLive.Index, :edit)
-      
+
       live("/party/:party_name/show/edit", PartyLive.Show, :edit)
       live("/party/:party_name/", PartyLive.Show, :show)
-      
+
       live("/billing", BillingLive.Index, :index)
+
+      live("/transition", TransitionLive.Index, :index)
 
     end
    end

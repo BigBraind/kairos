@@ -1,0 +1,26 @@
+<div>
+    <h2><%= @title %> </h2>
+    <.form
+        let={f}
+        for={@changeset}
+        id="transition-form"
+        phx-target={@myself}
+        phx-change="validate"
+        phx-submit="save">
+
+        <%= for temp <- @template  do %>
+            <%= label f, String.to_atom(temp) %>
+            <%= number_input f, String.to_atom(temp), phx_debounce: "blur"%>
+            <%= error_tag f, String.to_atom(temp) %> <br>
+        <% end %>
+
+        <%= label f, :comment %>
+        <%= textarea f, :comment, phx_debounce: "blur" %>
+        <%= error_tag f, :comment %>
+        <div>
+            <%= submit  "Save", phx_disable_with: "Saving"%>
+        </div>
+
+    </.form>
+    
+</div>

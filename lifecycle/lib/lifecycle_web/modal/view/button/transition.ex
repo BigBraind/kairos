@@ -1,4 +1,4 @@
-defmodule LifecycleWeb.Modal.View.Button.Transition do
+defmodule LifecycleWeb.Modal.View.Button.Transitions do
   @moduledoc """
   Transition button
   """
