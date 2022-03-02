@@ -246,4 +246,6 @@ defmodule Lifecycle.Timeline do
   end
 
   def get_user_by_id(id), do: Repo.get!(User, id)
+
+  def delete_transition(%Transition{} = transition), do: Repo.delete(transition)
 end

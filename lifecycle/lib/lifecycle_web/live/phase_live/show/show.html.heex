@@ -8,13 +8,27 @@
     return_to: Routes.phase_show_path(@socket, :show, @phase.id) %>
 <% end %>
 
-<%= if @live_action in [:transition_new ] do %>
+<%= if @live_action in [:transition_new] do %>
    <%= live_modal LifecycleWeb.TransitionLive.FormComponent,
    id: :transition_new,
    title: @title,
    template: @template,
    phase: @phase,
    current_user: @current_user,
+   # transition: @transition,
+   changeset: @changeset,
+   action: @live_action,
+   return_to: Routes.phase_show_path(@socket, :show, @phase.id) %>
+<% end %>
+
+<%= if @live_action in [:transition_edit] do %>
+   <%= live_modal LifecycleWeb.TransitionLive.FormComponent,
+   id: @transition.id,
+   title: @title,
+   template: @template,
+   phase: @phase,
+   current_user: @current_user,
+   transition: @transition,
    changeset: @changeset,
    action: @live_action,
    return_to: Routes.phase_show_path(@socket, :show, @phase.id) %>
@@ -100,7 +114,7 @@
 
   </div>
 
-  <PhaseTransition.button transitions={@transitions} timezone={@timezone} timezone_offset={@timezone_offset}/>
+  <.live_component module={Transition_List} id="transition" transitions={@transitions} timezone={@timezone} timezone_offset={@timezone_offset} phase={@phase}/>
 
   <ul id="phase-live-msg-list-nowstream" style="list-style: none; min-height:10px;">
       <.live_component module={Echoes} id="nowstream" echoes={@nowstream} timezone={@timezone} timezone_offset={@timezone_offset} />

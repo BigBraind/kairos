@@ -3,20 +3,28 @@
     <.form
         let={f}
         for={@changeset}
-        id="transition-form"
+        id={@id}
         phx-target={@myself}
         phx-change="validate"
         phx-submit="save">
 
-        <%= for temp <- @template  do %>
-            <%= label f, String.to_atom(temp) %>
-            <%= number_input f, String.to_atom(temp), phx_debounce: "blur"%>
-            <%= error_tag f, String.to_atom(temp) %> <br>
-        <% end %>
+            <%= for {key, value} <- @template  do %>
+                <%= label f, String.to_atom(key) %>
+                <%= if @action == :transition_edit do %>
+                    <%= number_input f, String.to_atom(key), phx_debounce: "blur", value: @transition.answers[key] %>
+                <% else %>
+                    <%= number_input f, String.to_atom(key), phx_debounce: "blur", value: value %>
+                <% end %>
+                <br>
+            <% end %>
 
         <%= label f, :comment %>
-        <%= textarea f, :comment, phx_debounce: "blur" %>
-        <%= error_tag f, :comment %>
+        <%= if @action == :transition_edit do %>
+            <%= textarea f, :comment, phx_debounce: "blur", value:  @transition.answers["comment"] %>
+        <% else %>
+            <%= textarea f, :comment, phx_debounce: "blur" %>
+        <% end %>
+
         <div>
             <%= submit  "Save", phx_disable_with: "Saving"%>
         </div>

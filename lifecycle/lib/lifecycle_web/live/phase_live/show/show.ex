@@ -12,6 +12,7 @@ defmodule LifecycleWeb.PhaseLive.Show do
   alias LifecycleWeb.Modal.View.Button.Transitions
   alias LifecycleWeb.Modal.View.Echoes.Echoes
   alias LifecycleWeb.Modal.View.Transition.PhaseTransition
+  alias LifecycleWeb.Modal.View.Transition.Transition_List
 
   alias LifecycleWeb.Modal.Function.Button.ApproveHandler
   alias LifecycleWeb.Modal.Function.Button.TransitionHandler
@@ -32,6 +33,8 @@ defmodule LifecycleWeb.PhaseLive.Show do
         max_entries: 1
       )
 
+    # import IEx; IEx.pry()
+
     {:ok,
      assign(socket,
        echo_changeset: echo_changeset,
@@ -49,9 +52,7 @@ defmodule LifecycleWeb.PhaseLive.Show do
   end
 
   defp apply_action(socket, :transition_new, %{"id" => id}) do
-    template =
-      Timeline.get_phase!(id).template
-      |> Map.keys()
+    template = Timeline.get_phase!(id).template
 
     socket
     |> assign(:phase, Timeline.get_phase!(id))
@@ -59,6 +60,21 @@ defmodule LifecycleWeb.PhaseLive.Show do
     |> assign(:title, "Transition")
     |> assign(:current_user, socket.assigns.current_user)
     |> assign(:changeset, Timeline.change_transition(%Transition{}))
+  end
+
+  defp apply_action(socket, :transition_edit, %{
+         "id" => phase_id,
+         "transition_id" => transition_id
+       }) do
+    phase = Timeline.get_phase!(phase_id)
+
+    socket
+    |> assign(:title, "Edit Transition")
+    |> assign(:transition, Timeline.get_transition_by_id(transition_id))
+    |> assign(:phase, phase)
+    |> assign(:current_user, socket.assigns.current_user)
+    |> assign(:changeset, Timeline.change_transition(%Transition{}))
+    |> assign(:template, phase.template)
   end
 
   defp apply_action(socket, :edit, %{"id" => id}) do
@@ -70,14 +86,14 @@ defmodule LifecycleWeb.PhaseLive.Show do
   # for creating child phase
   defp apply_action(socket, :new, params) do
     parent_phase = Timeline.get_phase!(params["id"])
-    map = parent_phase.template # to get the properties and inherit to child phase
 
     parent_phase = %{parent_phase | parent: parent_phase.id}
 
     socket
     |> assign(:page_title, "Child Phase")
     |> assign(:phase, parent_phase)
-    |> assign(:template, map)
+    # to get the properties and inherit to child phase
+    |> assign(:template, parent_phase.template)
   end
 
   defp apply_action(socket, :show, %{"id" => id}) do
@@ -85,6 +101,15 @@ defmodule LifecycleWeb.PhaseLive.Show do
     |> assign(:page_title, "Show Phase")
     |> assign(:phase, Timeline.get_phase!(id))
     |> assign(:echoes, list_echoes(id))
+  end
+
+  def handle_event("delete-transition", %{"id" => transition_id} = params, socket) do
+    transition = Timeline.get_transition_by_id(transition_id)
+    {:ok, _} = Timeline.delete_transition(transition)
+
+    {:noreply,
+     socket
+     |> assign(:transitions, Timeline.get_transition_list(socket.assigns.phase.id))}
   end
 
   @impl true

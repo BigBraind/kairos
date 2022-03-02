@@ -14,7 +14,8 @@ defmodule LifecycleWeb.Modal.View.Transition.PhaseTransition do
                 Approved by: <%= transition.transiter.name %><br>
             <% end %>
             inserted at: <%= Timezone.get_date(transition.inserted_at, assigns.timezone, assigns.timezone_offset) %><br>
-            <button phx-click="transit", value={transition.id} > Approve?</button>
+            <button phx-click="transit", value={transition}>Approve?</button><br>
+            <br>
         <% end %>
       """
     end

@@ -22,13 +22,13 @@ defmodule LifecycleWeb.Modal.Function.Button.TransitionHandler do
       %{}
       |> Map.put(:transiter_id, socket.assigns.current_user.id)
       |> Map.put(:transited, true)
-      
+
     case Timeline.update_transition(transition, params) do
       # TODO: to be added pub sub
       {:ok, transition} ->
         {:noreply,
-         socket
-         |> assign(transitions: transition)}
+         socket}
+        #  |> assign(transitions: transition)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply,
