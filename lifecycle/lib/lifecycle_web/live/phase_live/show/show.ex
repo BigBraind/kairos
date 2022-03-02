@@ -67,14 +67,17 @@ defmodule LifecycleWeb.PhaseLive.Show do
     |> assign(:phase, %{Timeline.get_phase!(id) | parent: []})
   end
 
+  # for creating child phase
   defp apply_action(socket, :new, params) do
     parent_phase = Timeline.get_phase!(params["id"])
+    map = parent_phase.template # to get the properties and inherit to child phase
+
     parent_phase = %{parent_phase | parent: parent_phase.id}
 
     socket
     |> assign(:page_title, "Child Phase")
-    |> assign(:title, "Hello")
     |> assign(:phase, parent_phase)
+    |> assign(:template, map)
   end
 
   defp apply_action(socket, :show, %{"id" => id}) do
@@ -119,7 +122,7 @@ defmodule LifecycleWeb.PhaseLive.Show do
     EchoHandler.send_echo(echo_params, socket)
   end
 
-  def handle_event("upload", params, socket) do
+  def handle_event("upload", _params, socket) do
     TransitionHandler.handle_upload("upload", socket)
   end
 

@@ -12,26 +12,48 @@
     <%= label f, :title %>
     <%= text_input f, :title, phx_debounce: "blur"%>
     <%= error_tag f, :title %>
+
+    <br>
   
     <%= label f, :content %>
     <%= text_input f, :content, phx_debounce: "blur" %>
     <%= error_tag f, :content %>
+
+    <br>
   
     <%= label f, :type %>
     <%= text_input f, :type, phx_debounce: "blur" %>
     <%= error_tag f, :type %>
+    <br>
 
-    <%= label f, :water %>
-    <%= checkbox f, :water %>
+    <%= unless @id == :new do %>
+      <%= for {key, value} <- @template do %>
+          <%= label f, String.to_atom(key) %>
+          <%= number_input f, String.to_atom(key), value: value %>
+          <br>
+      <% end %>
 
-    <%= label f, :grain %>
-    <%= checkbox f, :grain %>
+    <% else %>
+      <%= label f, :water %>
+      <%= number_input f, :water, placeholder: "enter a default value" %>
 
-    <%= label f, :coconut %>
-    <%= checkbox f, :coconut %>
+      <br>
+
+      <%= label f, :grain %>
+      <%= number_input f, :grain, placeholder: "enter a default value" %>
+
+      <br>
+
+      <%= label f, :coconut %>
+      <%= number_input f, :coconut, placeholder: "enter a default value" %>
+
+      <br>
+    <% end %>
 
     <%= hidden_input f, :parent %>
     <%= error_tag f, :parent  %>
+
+    <br>
 
     <div>
       <%= submit "Save", phx_disable_with: "Saving..." %>

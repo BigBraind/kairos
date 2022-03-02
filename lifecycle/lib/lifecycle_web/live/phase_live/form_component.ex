@@ -43,12 +43,18 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
     end
   end
 
+  """
+    TODO:
+      Future improvement:
+        1. Create a list of properties(water, grain, coconut, peanuts, tea etc)
+        2. Loop through the list to get the properties
+  """
   defp save_phase(socket, :new, phase_params) do
     template =
       %{}
-      |> check_true_value("water", phase_params["water"])
-      |> check_true_value("grain", phase_params["grain"])
-      |> check_true_value("coconut", phase_params["coconut"])
+      |> check_string_value("water", phase_params["water"])
+      |> check_string_value("grain", phase_params["grain"])
+      |> check_string_value("coconut", phase_params["coconut"])
 
     # creating a new map to pass into create_phase
     phase_params =
@@ -59,12 +65,10 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
       |> Map.put("type", phase_params["type"])
       |> Map.put("parent", phase_params["parent"])
 
-
     case Timeline.create_phase(phase_params) do
       {:ok, phase} ->
         {:noreply,
          socket
-         # "/phases/" <> phase.id
          |> push_redirect(to: Routes.phase_show_path(socket, :show, phase.id))
          |> Flash.insert_flash(:info, "Phase created successfully", self())}
 
@@ -75,10 +79,11 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
 
   def handle_flash(socket), do: {:noreply, clear_flash(socket)}
 
-  defp check_true_value(map, key, value) do
-    case value do
-      "true" ->
-        Map.merge(map, %{String.to_atom(key) => ""})
+  defp check_string_value(map, key, value) do
+    # using regex to check if this string contains a number
+    case String.match?(value, ~r/\d+/) do
+      true ->
+        Map.merge(map, %{String.to_atom(key) => value})
 
       _ ->
         map

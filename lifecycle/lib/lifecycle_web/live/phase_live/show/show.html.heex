@@ -4,6 +4,7 @@
     title: @page_title,
     action: @live_action,
     phase: @phase,
+    template: @template,
     return_to: Routes.phase_show_path(@socket, :show, @phase.id) %>
 <% end %>
 
@@ -28,7 +29,7 @@
 
 <%= unless @transiting do %>
 <.form let={f} for={@echo_changeset} phx-submit="save", phx-hook="EmptyInput", id="echo_form">
-  <%= if @current_user  do %>
+  <%= if @current_user do %>
     <%= hidden_input f, :name, value: @current_user.name %>
     <%= error_tag f, :name %>
   <% end %>
@@ -90,6 +91,7 @@
 <br>
 <span><%= live_patch "Edit", to: Routes.phase_show_path(@socket, :edit, @phase), class: "button" %></span>
 <br>
+
 <%= unless @live_action in [:new] do %>
 
   <.live_component id="phases-button" module={Phases} phase={@phase}/>
