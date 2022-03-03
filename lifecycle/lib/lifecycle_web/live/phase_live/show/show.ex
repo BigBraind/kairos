@@ -33,8 +33,6 @@ defmodule LifecycleWeb.PhaseLive.Show do
         max_entries: 1
       )
 
-    # import IEx; IEx.pry()
-
     {:ok,
      assign(socket,
        echo_changeset: echo_changeset,

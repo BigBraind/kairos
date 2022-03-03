@@ -32,9 +32,7 @@ defmodule LifecycleWeb.Modal.Function.Button.TransitionHandler do
     case Timeline.update_transition(transition, attrs) do
       # TODO: to be added pub sub
       {:ok, _transition} ->
-        IO.inspect(action)
         if action == :edit_transition do
-          IO.inspect(socket.assigns.return_to)
           {:noreply,
            socket
            |> push_redirect(to: socket.assigns.return_to)}

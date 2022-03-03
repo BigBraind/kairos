@@ -2,9 +2,12 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
   @moduledoc false
   use LifecycleWeb, :live_component
 
+  alias Lifecycle.Pubsub
   alias Lifecycle.Timeline
 
   alias LifecycleWeb.Modal.Function.Component.Flash
+
+  @topic "phase_index"
 
   @impl true
   def update(%{phase: phase} = assigns, socket) do
@@ -32,7 +35,9 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
 
   defp save_phase(socket, :edit, phase_params) do
     case Timeline.update_phase(socket.assigns.phase, phase_params) do
-      {:ok, _phase} ->
+      {:ok, phase} ->
+        {Pubsub.notify_subs({:ok, phase}, [:phase, :edited], @topic)}
+
         {:noreply,
          socket
          |> push_redirect(to: socket.assigns.return_to)
@@ -49,6 +54,7 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
         1. Create a list of properties(water, grain, coconut, peanuts, tea etc)
         2. Loop through the list to get the properties
   """
+
   defp save_phase(socket, :new, phase_params) do
     template =
       %{}
@@ -67,6 +73,8 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
 
     case Timeline.create_phase(phase_params) do
       {:ok, phase} ->
+        {Pubsub.notify_subs({:ok, phase}, [:phase, :created], "phase_index")}
+
         {:noreply,
          socket
          |> push_redirect(to: Routes.phase_show_path(socket, :show, phase.id))
