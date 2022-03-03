@@ -134,7 +134,8 @@ defmodule LifecycleWeb.PhaseLive.Show do
   end
 
   def handle_event("transit", %{"value" => transition_id}, socket) do
-    TransitionHandler.handle_button(:transit, transition_id, socket)
+    params = Map.put(%{}, "transition", transition_id)
+    TransitionHandler.handle_transition(:assign_transiter, params, socket)
   end
 
   def handle_event("cancel-upload", %{"ref" => ref}, socket) do

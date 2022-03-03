@@ -11,7 +11,6 @@ defmodule LifecycleWeb.Modal.View.Transition.Transition_List do
         %{transitions: transitions, id: id, timezone: timezone, timezone_offset: timezone_offset, phase: phase},
         socket
       ) do
-      # import IEx; IEx.pry()
 
     {:ok,
      assign(socket,
@@ -37,20 +36,21 @@ defmodule LifecycleWeb.Modal.View.Transition.Transition_List do
                 creator: <%= transition.initiator.name %><br>
                 transited: <%= transition.transited %><br>
 
+                created at: <%= Timezone.get_date(transition.inserted_at, assigns.timezone, assigns.timezone_offset) %><br>
+
                 <%= if transition.transited do %>
                     Approved by: <%= transition.transiter.name %><br>
+                <% else %>
+                    <button phx-click="transit", value={transition.id}>Approve?</button><br>
                 <% end %>
 
-                inserted at: <%= Timezone.get_date(transition.inserted_at, assigns.timezone, assigns.timezone_offset) %><br>
 
                 <span><%= live_patch "Edit Transition", to: Routes.phase_show_path(@socket, :transition_edit, @phase.id, transition.id), class: "button" %></span>
 
                 <br>
 
                 <span><%= link "Delete", to: "#", phx_click: "delete-transition", phx_value_id: transition.id, data: [confirm: "Are you sure?"], class: "button" %></span>
-
                 <br>
-                <button phx-click="transit", value={transition.id}>Approve?</button><br>
                 <br>
             <% end %>
         </div>

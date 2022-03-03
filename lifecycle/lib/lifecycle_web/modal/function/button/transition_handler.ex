@@ -13,22 +13,34 @@ defmodule LifecycleWeb.Modal.Function.Button.TransitionHandler do
   alias LifecycleWeb.Modal.Function.Pubsub.Pubs
 
   @doc """
-  Approve transition event
+  Approve transition event in phase show for transition object
   """
-  def handle_button(:transit, transition_id, socket) do
-    transition = Timeline.get_transition_by_id(transition_id)
+  def handle_transition(action, params, socket) do
+    attrs =
+      case action do
+        :assign_transiter ->
+          %{}
+          |> Map.put(:transiter_id, socket.assigns.current_user.id)
+          |> Map.put(:transited, true)
 
-    params =
-      %{}
-      |> Map.put(:transiter_id, socket.assigns.current_user.id)
-      |> Map.put(:transited, true)
+        :edit_transition ->
+          Map.put(%{}, "answers", params["answers"])
+      end
 
-    case Timeline.update_transition(transition, params) do
+    transition = Timeline.get_transition_by_id(params["transition"])
+
+    case Timeline.update_transition(transition, attrs) do
       # TODO: to be added pub sub
-      {:ok, transition} ->
-        {:noreply,
-         socket}
-        #  |> assign(transitions: transition)}
+      {:ok, _transition} ->
+        IO.inspect(action)
+        if action == :edit_transition do
+          IO.inspect(socket.assigns.return_to)
+          {:noreply,
+           socket
+           |> push_redirect(to: socket.assigns.return_to)}
+        else
+          {:noreply, socket}
+        end
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply,
