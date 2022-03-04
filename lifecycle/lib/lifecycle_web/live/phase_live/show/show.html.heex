@@ -1,4 +1,4 @@
-<%= if @live_action in [:new, :edit] do %>
+<%= if @live_action in [:new_child, :edit] do %>
   <%= live_modal LifecycleWeb.PhaseLive.FormComponent,
     id: @phase.id || :new,
     title: @page_title,
@@ -40,6 +40,11 @@
   <h1><%= @phase.title %></h1>
 </div>
 <h3><%= @phase.content %></h3>
+
+<%= for {key, value} <- @phase.template do %>
+  <%= key %> :  <%= value %><br>
+<% end %>
+
 
 <%= unless @transiting do %>
 <.form let={f} for={@echo_changeset} phx-submit="save", phx-hook="EmptyInput", id="echo_form">
@@ -101,12 +106,12 @@
 <div>
   <div align="right">
 
-    <span><%= live_patch "+ Own Phase 🦋⚡", to: Routes.phase_show_path(@socket, :new, @phase), class: "button" %></span>
+    <span><%= live_patch "+ Child Phase 🦋⚡", to: Routes.phase_show_path(@socket, :new_child, @phase), class: "button" %></span>
 <br>
-<span><%= live_patch "Edit", to: Routes.phase_show_path(@socket, :edit, @phase), class: "button" %></span>
+<span><%= live_patch "Edit Template", to: Routes.phase_show_path(@socket, :edit, @phase), class: "button" %></span>
 <br>
 
-<%= unless @live_action in [:new] do %>
+<%= unless @live_action in [:new_child] do %>
 
   <.live_component id="phases-button" module={Phases} phase={@phase}/>
 

@@ -22,7 +22,6 @@ defmodule LifecycleWeb.Modal.Function.Pubsub.PhasePubs do
     Notify other users on the phase being deleted
     """
     def handle_phase_deleted(socket, _message) do
-        IO.puts("delete phaser pubs")
         {:noreply, assign(socket, phases: Timeline.list_phases())}
     end
 end

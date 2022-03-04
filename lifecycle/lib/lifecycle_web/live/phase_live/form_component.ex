@@ -62,6 +62,31 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
       |> check_string_value("grain", phase_params["grain"])
       |> check_string_value("coconut", phase_params["coconut"])
 
+    phase_params =
+      %{}
+      |> Map.put("template", template)
+      |> Map.put("content", phase_params["content"])
+      |> Map.put("title", phase_params["title"])
+      |> Map.put("type", phase_params["type"])
+      |> Map.put("parent", phase_params["parent"])
+
+    create_phase(:new, phase_params, socket)
+  end
+
+  defp save_phase(socket, :new_child, phase_params) do
+    properties = Map.keys(socket.assigns.phase.template)
+
+    attrs =
+      for key <- properties do
+        [key, phase_params[key]]
+      end
+
+    template =
+      attrs
+      |> List.flatten()
+      |> Enum.chunk_every(2)
+      |> Map.new(fn [k, v] -> {k, v} end)
+
     # creating a new map to pass into create_phase
     phase_params =
       %{}
@@ -71,9 +96,23 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
       |> Map.put("type", phase_params["type"])
       |> Map.put("parent", phase_params["parent"])
 
+    create_phase(:new_child, phase_params, socket)
+  end
+
+  defp create_phase(action, phase_params, socket) do
     case Timeline.create_phase(phase_params) do
       {:ok, phase} ->
-        {Pubsub.notify_subs({:ok, phase}, [:phase, :created], "phase_index")}
+        case action do
+          :new ->
+            {Pubsub.notify_subs({:ok, phase}, [:phase, :created], "phase_index")}
+
+          :new_child ->
+            {Pubsub.notify_subs(
+               {:ok, phase},
+               [:phase, :created],
+               "phase:" <> socket.assigns.phase.id
+             )}
+        end
 
         {:noreply,
          socket

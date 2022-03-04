@@ -239,13 +239,13 @@ defmodule Lifecycle.Timeline do
     Repo.all(query, limit: 8)
   end
 
-  def get_transition_by_id(id), do: Repo.get!(Transition, id)
+  def get_transition_by_id(id), do: Repo.get!(Transition, id) |> Repo.preload([:transiter, :initiator])
 
   def change_transition(%Transition{} = transition, attrs \\ %{}) do
     Transition.changeset(transition, attrs)
   end
 
-  def get_user_by_id(id), do: Repo.get!(User, id)
+  def get_user_by_id(id), do: Repo.get!(User, id) |> preload([:transiter, :initiator])
 
   def delete_transition(%Transition{} = transition), do: Repo.delete(transition)
 end

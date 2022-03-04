@@ -1,6 +1,5 @@
 <h1>Phases 🌙</h1>
 
-
 <%= if @live_action in [:new, :edit] do %>
                 <%= live_modal LifecycleWeb.PhaseLive.FormComponent,
     id: @phase.id || :new,

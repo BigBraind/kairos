@@ -2,6 +2,7 @@ defmodule LifecycleWeb.TransitionLive.FormComponent do
   @moduledoc false
   use LifecycleWeb, :live_component
 
+  alias Lifecycle.Pubsub
   alias Lifecycle.Timeline
   alias Lifecycle.Timeline.Transition
 
@@ -15,9 +16,9 @@ defmodule LifecycleWeb.TransitionLive.FormComponent do
      |> assign(:changeset, Timeline.change_transition(%Transition{}))}
   end
 
-  def handle_event("validate", %{"transition" => transition}, socket) do
-    save_transition(socket, socket.assigns.action, transition)
-  end
+  # def handle_event("validate", %{"transition" => transition}, socket) do
+  #   save_transition(socket, socket.assigns.action, transition)
+  # end
 
   def handle_event("save", %{"transition" => transition}, socket) do
     save_transition(socket, socket.assigns.action, transition)
@@ -32,8 +33,12 @@ defmodule LifecycleWeb.TransitionLive.FormComponent do
       |> Map.put(:phase_id, socket.assigns.phase.id)
 
     case Timeline.create_transition(params) do
-      {:ok, _transition} ->
-        IO.puts("transition create event")
+      {:ok, transition} ->
+        {Pubsub.notify_subs(
+           {:ok, transition},
+           [:transition, :created],
+           "phase:" <> socket.assigns.phase.id
+         )}
 
         {:noreply,
          socket
@@ -49,6 +54,7 @@ defmodule LifecycleWeb.TransitionLive.FormComponent do
       %{}
       |> Map.put("answers", params)
       |> Map.put("transition", socket.assigns.transition.id)
+
     TransitionHandler.handle_transition(:edit_transition, params, socket)
   end
 end

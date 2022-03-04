@@ -24,14 +24,29 @@ defmodule LifecycleWeb.Modal.Function.Button.TransitionHandler do
           |> Map.put(:transited, true)
 
         :edit_transition ->
-          Map.put(%{}, "answers", params["answers"])
+          %{"answers" => params["answers"]}
       end
 
     transition = Timeline.get_transition_by_id(params["transition"])
 
     case Timeline.update_transition(transition, attrs) do
-      # TODO: to be added pub sub
-      {:ok, _transition} ->
+      {:ok, transition} ->
+        case action do
+          :edit_transition ->
+            {{Pubsub.notify_subs(
+                {:ok, transition},
+                [:transition, :updated],
+                "phase:" <> transition.phase_id
+              )}}
+
+          :assign_transiter ->
+            {Pubsub.notify_subs(
+               {:ok, transition},
+               [:transition, :approved],
+               "phase:" <> transition.phase_id
+             )}
+        end
+
         if action == :edit_transition do
           {:noreply,
            socket

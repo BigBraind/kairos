@@ -11,7 +11,6 @@ defmodule LifecycleWeb.PhaseLive.Show do
   alias LifecycleWeb.Modal.View.Button.Phases
   alias LifecycleWeb.Modal.View.Button.Transitions
   alias LifecycleWeb.Modal.View.Echoes.Echoes
-  alias LifecycleWeb.Modal.View.Transition.PhaseTransition
   alias LifecycleWeb.Modal.View.Transition.Transition_List
 
   alias LifecycleWeb.Modal.Function.Button.ApproveHandler
@@ -19,6 +18,7 @@ defmodule LifecycleWeb.PhaseLive.Show do
   alias LifecycleWeb.Modal.Function.Component.Flash
   alias LifecycleWeb.Modal.Function.Echoes.EchoHandler
   alias LifecycleWeb.Modal.Function.Pubsub.Pubs
+  alias LifecycleWeb.Modal.Function.Pubsub.TransitionPubs
 
   @impl true
   def mount(params, _session, socket) do
@@ -78,11 +78,12 @@ defmodule LifecycleWeb.PhaseLive.Show do
   defp apply_action(socket, :edit, %{"id" => id}) do
     socket
     |> assign(:page_title, "Edit Phase")
+    |> assign(:template, Timeline.get_phase!(id).template)
     |> assign(:phase, %{Timeline.get_phase!(id) | parent: []})
   end
 
   # for creating child phase
-  defp apply_action(socket, :new, params) do
+  defp apply_action(socket, :new_child, params) do
     parent_phase = Timeline.get_phase!(params["id"])
 
     parent_phase = %{parent_phase | parent: parent_phase.id}
@@ -101,27 +102,48 @@ defmodule LifecycleWeb.PhaseLive.Show do
     |> assign(:echoes, list_echoes(id))
   end
 
-  def handle_event("delete-transition", %{"id" => transition_id} = params, socket) do
-    transition = Timeline.get_transition_by_id(transition_id)
-    {:ok, _} = Timeline.delete_transition(transition)
-
-    {:noreply,
-     socket
-     |> assign(:transitions, Timeline.get_transition_list(socket.assigns.phase.id))}
-  end
-
   @impl true
   def handle_info({Pubsub, [:echo, :created], message}, socket) do
     Pubs.handle_echo_created(socket, message)
   end
 
+  # ! this is now the actual transition instead of the echo transition
   @impl true
   def handle_info({Pubsub, [:transition, :approved], message}, socket) do
-    Pubs.handle_transition_approved(socket, message)
+    # Pubs.handle_transition_approved(socket, message)
+    TransitionPubs.handle_transition_updated(socket, message)
   end
+
+  def handle_info({Pubsub, [:transition, :updated], message}, socket) do
+    TransitionPubs.handle_transition_updated(socket, message)
+  end
+
+  def handle_info({Pubsub, [:transition, :created], message}, socket) do
+    TransitionPubs.handle_transition_created(socket, message)
+  end
+
+  def handle_info({Pubsub, [:transition, :deleted], message}, socket) do
+    TransitionPubs.handle_transition_deleted(socket, message)
+  end
+
 
   @impl true
   def handle_info(:clear_flash, socket), do: Flash.handle_flash(socket)
+
+  def handle_event("delete-transition", %{"id" => transition_id} = params, socket) do
+    transition = Timeline.get_transition_by_id(transition_id)
+    {:ok, deleted_transition} = Timeline.delete_transition(transition)
+
+    {Pubsub.notify_subs(
+       {:ok, deleted_transition},
+       [:transition, :deleted],
+       "phase:" <> deleted_transition.phase_id
+     )}
+
+    {:noreply,
+     socket
+     |> assign(:transitions, Timeline.get_transition_list(socket.assigns.phase.id))}
+  end
 
   def handle_event("transition", _params, socket) do
     TransitionHandler.handle_button("transition", socket)
