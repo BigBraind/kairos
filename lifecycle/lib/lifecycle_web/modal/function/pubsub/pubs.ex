@@ -4,12 +4,14 @@ defmodule LifecycleWeb.Modal.Function.Pubsub.Pubs do
   """
   use Phoenix.Component
 
+  alias Lifecycle.Timeline
   alias Lifecycle.Timeline.Echo
 
   def handle_echo_created(socket, message) do
+    new_echo = Timeline.get_echo!(message.id)
     {:noreply,
      socket
-     |> assign(:nowstream, [message | socket.assigns.nowstream])}
+     |> assign(:nowstream, [new_echo | socket.assigns.nowstream])}
   end
 
   def handle_transition_approved(socket, message) do
@@ -28,7 +30,7 @@ defmodule LifecycleWeb.Modal.Function.Pubsub.Pubs do
 
   defp replace_echoes(%{
          id: transition_id,
-        #  transiter: transiter,
+        #  transiter: tran,
          # list of [:nowstream, :echoes]
          echo_stream: echo_stream,
          socket: socket
