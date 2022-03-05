@@ -36,7 +36,7 @@ defmodule LifecycleWeb.Modal.View.Transition.Transition_List do
                 creator: <%= transition.initiator.name %><br>
                 transited: <%= transition.transited %><br>
 
-                created at: <%= Timezone.get_date(transition.inserted_at, assigns.timezone, assigns.timezone_offset) %><br>
+                created at: <%= Timezone.get_date(transition.inserted_at, assigns.timezone, assigns.timezone_offset) %> <%= Timezone.get_time(transition.inserted_at, assigns.timezone, assigns.timezone_offset) %><br>
 
                 <%= if transition.transited do %>
                     Approved by: <%= transition.transiter.name %><br>
@@ -45,7 +45,7 @@ defmodule LifecycleWeb.Modal.View.Transition.Transition_List do
                 <% end %>
 
 
-                <span><%= live_patch "Edit Transition", to: Routes.phase_show_path(@socket, :transition_edit, @phase.id, transition.id), class: "button" %></span>
+                <span><%= live_patch "Edit Transition", to: Routes.phase_show_path(@socket, :transition_edit, transition.phase_id, transition.id), class: "button" %></span>
 
                 <br>
 

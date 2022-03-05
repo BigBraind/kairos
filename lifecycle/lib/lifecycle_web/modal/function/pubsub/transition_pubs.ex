@@ -4,6 +4,7 @@ defmodule LifecycleWeb.Modal.Function.Pubsub.TransitionPubs do
   alias Lifecycle.Timeline
   alias Lifecycle.Timeline.Transition
 
+  # TODO: can do it like how we handle echo in pubs.ex -> handle echo created, dont reload the whole thing
   def handle_transition_created(socket, message) do
     {:noreply, assign(socket, transitions: Timeline.get_transition_list(message.phase_id))}
   end

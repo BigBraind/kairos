@@ -49,8 +49,8 @@
 <%= unless @transiting do %>
 <.form let={f} for={@echo_changeset} phx-submit="save", phx-hook="EmptyInput", id="echo_form">
   <%= if @current_user do %>
-    <%= hidden_input f, :name, value: @current_user.name %>
-    <%= error_tag f, :name %>
+    <%= hidden_input f, :poster_id, value: @current_user.id %>
+    <%= error_tag f, :poster_id %>
   <% end %>
 
   <%= label f, :message %>

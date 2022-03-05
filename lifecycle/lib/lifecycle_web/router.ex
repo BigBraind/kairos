@@ -14,7 +14,7 @@ defmodule LifecycleWeb.Router do
 
   pipeline :authenticated do
     plug Pow.Plug.RequireAuthenticated,
-     error_handler: Pow.Phoenix.PlugErrorHandler
+      error_handler: Pow.Phoenix.PlugErrorHandler
   end
 
   pipeline :api do
@@ -58,9 +58,8 @@ defmodule LifecycleWeb.Router do
       live("/billing", BillingLive.Index, :index)
 
       live("/transition", TransitionLive.Index, :index)
-
     end
-   end
+  end
 
   # # Other scopes may use custom stacks.
   # scope "/api", LifecycleWeb do
