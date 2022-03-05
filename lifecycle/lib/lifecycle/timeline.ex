@@ -135,7 +135,7 @@ defmodule Lifecycle.Timeline do
       ** (Ecto.NoResultsError)
 
   """
-  def get_phase!(id), do: Repo.get!(Phase, id) |> Repo.preload([:parent, :child])
+  def get_phase!(id), do: Repo.get!(Phase, id) |> Repo.preload([:parent, :child, :traits])
 
   @doc """
   Creates a phase.
