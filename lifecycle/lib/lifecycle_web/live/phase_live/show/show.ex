@@ -172,6 +172,7 @@ defmodule LifecycleWeb.PhaseLive.Show do
   end
 
   def handle_event("upload", _params, socket) do
+    # ! obselete echo transition handler! To be removed
     TransitionHandler.handle_upload("upload", socket)
   end
 

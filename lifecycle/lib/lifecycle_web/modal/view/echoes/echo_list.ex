@@ -32,14 +32,6 @@ defmodule LifecycleWeb.Modal.View.Echoes.EchoList do
       </article>
 
       <i style="float:right;color: gray;"><%= Timezone.get_time(@echo.inserted_at, @timezone, @timezone_offset) %><br></i>
-
-      <%= if @echo.transited == false do %>
-        <Approve.button echo={@echo}/>
-        <br>
-      <% else %>
-        <b style="color:#00A36C" >Reverberated by  <%= @echo.transiter %> 🌊🔉</b><br>
-      <% end %>
-
     """
   end
 

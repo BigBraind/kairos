@@ -97,9 +97,8 @@ defmodule LifecycleWeb.Modal.Function.Button.TransitionHandler do
     # construct echo_params for creating transition echo objects
     echo_params = %{
       "message" => image_list,
-      "type" => "transition",
-      "name" => socket.assigns.current_user.name,
-      "transited" => false,
+      "type" => "image", # ! to be changed
+      "poster_id" => socket.assigns.current_user.id,
       "phase_id" => socket.assigns.phase.id
     }
 
