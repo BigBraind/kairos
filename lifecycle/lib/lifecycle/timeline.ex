@@ -6,10 +6,10 @@ defmodule Lifecycle.Timeline do
   import Ecto.Query, warn: false
   alias Lifecycle.Repo
 
+  alias Lifecycle.Bridge.Phasor
   alias Lifecycle.Timeline.Echo
   alias Lifecycle.Timeline.Phase
   alias Lifecycle.Timeline.Transition
-  alias Lifecycle.Bridge.Phasor
   alias Lifecycle.Users.User
 
   @doc """
@@ -37,7 +37,7 @@ defmodule Lifecycle.Timeline do
       ** (Ecto.NoResultsError)
 
   """
-  def get_echo!(id), do: Repo.get!(Echo, id)
+  def get_echo!(id), do: Repo.get!(Echo, id)|> Repo.preload([:poster])
 
   @doc """
   Creates a echo.
@@ -97,7 +97,7 @@ defmodule Lifecycle.Timeline do
 
   def phase_recall(id) do
     query = from(e in Echo, where: e.phase_id == ^id, order_by: [desc: e.inserted_at])
-    Lifecycle.Repo.all(query, limit: 8)
+    Lifecycle.Repo.all(query, limit: 8) |> Repo.preload([:poster])
   end
 
   @doc """
@@ -237,6 +237,14 @@ defmodule Lifecycle.Timeline do
       |> preload([:transiter, :initiator])
 
     Repo.all(query, limit: 8)
+  end
+
+  def get_transition_by_date(begin_date, end_date) do
+    query = Transition
+    |> where([e], e.inserted_at >= ^begin_date and e.inserted_at <= ^end_date )
+    |> order_by([e], desc: e.inserted_at)
+    Repo.all(query, limit: 8 )
+    |> Repo.preload([:initiator, :transiter])
   end
 
   def get_transition_by_id(id), do: Repo.get!(Transition, id) |> Repo.preload([:transiter, :initiator])

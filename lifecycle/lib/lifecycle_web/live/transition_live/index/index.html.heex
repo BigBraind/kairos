@@ -1,0 +1,18 @@
+<div class="px-8 border-l border-gray-100">
+    <header class="mb-8">
+        <h3 class="text-lg font-semibold text-gray-900">Select a date & time</h3>
+    </header>
+</div>
+
+ <Month.calendar
+    id="calendar"
+    current_path={Routes.transition_index_path(@socket, :index)}
+    previous_month={@previous_month}
+    next_month={@next_month}
+    current={@current}
+    end_of_month={@end_of_month}
+    beginning_of_month={@beginning_of_month}
+    timezone={@timezone} />
+
+<.live_component module={Transition_List} id="transition_by_date" transitions={@transitions_by_date} timezone={@timezone} timezone_offset={@timezone_offset} phase={nil}/>
+

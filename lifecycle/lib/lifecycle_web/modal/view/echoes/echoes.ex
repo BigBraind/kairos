@@ -28,27 +28,22 @@ defmodule LifecycleWeb.Modal.View.Echoes.Echoes do
   end
 
   def render(assigns) do
-    ~H"""
-      <div>
-        Hllow
-      </div>
-    """
     # separating msg by date, done via phx-hook(JS interpolating)
 
-    # ~H"""
-    #     <ul phx-hook={"#{if @id == "echoes", do: "SeparatingMsg"}"} id={"echoes-list-#{@id}"} style="list-style-type:none;">
-    #     <%= for echo <- @echoes do %>
+    ~H"""
+        <ul phx-hook={"#{if @id == "echoes", do: "SeparatingMsg"}"} id={"echoes-list-#{@id}"} style="list-style-type:none;">
+        <%= for echo <- @echoes do %>
 
-    #       <li data-date={"#{echo.inserted_at}"} id={"echo-#{echo.id}"}>
+          <li data-date={"#{echo.inserted_at}"} id={"echo-#{echo.id}"}>
 
-    #         <%= if echo.type == "transition" do %>
-    #           <EchoList.transition_list echo={echo}, timezone={@timezone} timezone_offset={@timezone_offset}, assets_path={Routes.static_path(@socket, echo.message)}/>
-    #         <% else %>
-    #           <EchoList.echo_list echo={echo} timezone={@timezone} timezone_offset={@timezone_offset}/>
-    #         <% end %>
-    #       </li>
-    #     <% end %>
-    #     </ul>
-    # """
+            <%= if echo.type == "transition" do %>
+              <EchoList.transition_list echo={echo}, timezone={@timezone} timezone_offset={@timezone_offset}, assets_path={Routes.static_path(@socket, echo.message)}/>
+            <% else %>
+              <EchoList.echo_list echo={echo} timezone={@timezone} timezone_offset={@timezone_offset}/>
+            <% end %>
+          </li>
+        <% end %>
+        </ul>
+    """
   end
 end

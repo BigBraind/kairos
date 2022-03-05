@@ -20,7 +20,7 @@ defmodule LifecycleWeb.Modal.View.Echoes.EchoList do
   """
   def transition_list(assigns) do
     ~H"""
-      <b><%= @echo.name %></b>: <br>
+      <b> <%= @echo.poster.name %> </b> : <br>
       <article class="column">
         <%= if Path.extname(@echo.message) in [".mp3", ".m4a" ,".aac", ".oga"] do %>
           <audio controls>
@@ -48,7 +48,7 @@ defmodule LifecycleWeb.Modal.View.Echoes.EchoList do
   """
   def echo_list(assigns) do
     ~H"""
-      <b><%= @echo.name %></b>: <%= @echo.message %> <i style="float:right;color: gray;"><%= Timezone.get_time(@echo.inserted_at, @timezone, @timezone_offset) %> </i><br>
+      <b><%= @echo.poster.name %></b>: <%= @echo.message %> <i style="float:right;color: gray;"><%= Timezone.get_time(@echo.inserted_at, @timezone, @timezone_offset) %> </i><br>
     """
   end
 

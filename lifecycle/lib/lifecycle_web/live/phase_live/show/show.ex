@@ -37,7 +37,7 @@ defmodule LifecycleWeb.PhaseLive.Show do
      assign(socket,
        echo_changeset: echo_changeset,
        nowstream: [],
-       echoes: list_echoes(id),
+       echoes: Timeline.phase_recall(id),
        image_list: [],
        transiting: false,
        transitions: Timeline.get_transition_list(id)
@@ -99,7 +99,7 @@ defmodule LifecycleWeb.PhaseLive.Show do
     socket
     |> assign(:page_title, "Show Phase")
     |> assign(:phase, Timeline.get_phase!(id))
-    |> assign(:echoes, list_echoes(id))
+    |> assign(:echoes, Timeline.phase_recall(id))
   end
 
   @impl true
@@ -125,7 +125,6 @@ defmodule LifecycleWeb.PhaseLive.Show do
   def handle_info({Pubsub, [:transition, :deleted], message}, socket) do
     TransitionPubs.handle_transition_deleted(socket, message)
   end
-
 
   @impl true
   def handle_info(:clear_flash, socket), do: Flash.handle_flash(socket)
@@ -164,7 +163,11 @@ defmodule LifecycleWeb.PhaseLive.Show do
 
   @impl true
   def handle_event("save", %{"echo" => echo_params}, socket) do
-    echo_params = Map.put(echo_params, "phase_id", socket.assigns.phase.id)
+    echo_params =
+      echo_params
+      |> Map.put("phase_id", socket.assigns.phase.id)
+      |> Map.put("type", "public")
+
     EchoHandler.send_echo(echo_params, socket)
   end
 
@@ -176,8 +179,6 @@ defmodule LifecycleWeb.PhaseLive.Show do
     topic = Pubs.get_topic(socket)
     ApproveHandler.handle_button(params, topic, socket)
   end
-
-  defp list_echoes(phase_id), do: Timeline.phase_recall(phase_id)
 
   def time_format(time, timezone, timezone_offset),
     do: Timezone.get_time(time, timezone, timezone_offset)
