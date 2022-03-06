@@ -32,8 +32,8 @@ defmodule LifecycleWeb.PhaseLive.Index do
   defp apply_action(socket, :new, _params) do
     socket
     |> assign(:page_title, "New Phase")
-    |> assign(:template, nil) #so that i can pass through the index.html
-    |> assign(:phase, %{%Phase{} | parent: []})
+    #|> assign(:template, nil) #so that i can pass through the index.html
+    |> assign(:phase, %{%Phase{traits: []} | parent: []})
   end
 
   defp apply_action(socket, :index, _params) do

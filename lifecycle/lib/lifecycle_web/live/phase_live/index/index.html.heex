@@ -1,13 +1,12 @@
 <h1>Phases 🌙</h1>
 
 <%= if @live_action in [:new, :edit] do %>
-                <%= live_modal LifecycleWeb.PhaseLive.FormComponent,
+    <%= live_modal LifecycleWeb.PhaseLive.FormComponent,
     id: @phase.id || :new,
     title: @page_title,
     action: @live_action,
     phase: @phase,
     phases: @phases,
-    template: @template,
     return_to: Routes.phase_index_path(@socket, :index) %>
 <% end %>
 
