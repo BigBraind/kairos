@@ -6,6 +6,7 @@ defmodule Lifecycle.Repo.Migrations.CreateTraits do
       add :name, :string
       add :value, :string, null: false
       add :type, :string
+      add :unit, :string
       add :phase_id, references(:phases,type: :binary_id, on_delete: :delete_all)
 
       timestamps()

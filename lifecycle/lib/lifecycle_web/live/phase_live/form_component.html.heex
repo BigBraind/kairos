@@ -1,5 +1,5 @@
 <div>
-  <h2><%= @title %></h2>
+  <h2 class="mt-2 font-bold"><%= @title %></h2>
 
   <.form
     let={f}
@@ -7,7 +7,8 @@
     id="phase-form"
     phx-target={@myself}
     phx-change="validate"
-    phx-submit="save">
+    phx-submit="save"
+    >
 
     <%= label f, :title %>
     <%= text_input f, :title, phx_debounce: "blur"%>
@@ -34,19 +35,34 @@
       <% end %>
 
     <% else %>
-      <%= label f, :water %>
-      <%= number_input f, :water, placeholder: "enter a default value" %>
+    <p class="mt-2 font-bold">Traits</p>
+      <%= inputs_for f, :traits, fn t -> %>
+    <div class="flex flex-wrap -mx-1 overflow-hidden">
+      <div class="form-group px-1 w-3/6">
+        <%= label t, :name %>
+        <%= text_input t, :name, class: "form-control" %>
+        <%= error_tag t, :name %>
+      </div>
 
-      <br>
+      <div class="form-group w-2/6">
+        <%= label t, :value %>
+        <%= text_input t, :value, class: "form-control" %>
+        <%= error_tag t, :value %>
+      </div>
 
-      <%= label f, :grain %>
-      <%= number_input f, :grain, placeholder: "enter a default value" %>
+      <div class="form-group w-1/6">
+        <%= label t, :goodbye %><br>
+        <%= if is_nil(t.data.tracker) do %>
+          <%= checkbox t, :deletion %>
+        <% else %>
+          <%= hidden_input t, :tracker %>
+          <a href="#" phx-target={@myself} phx-click="remove-trait" phx-value-remove={t.data.tracker}>&times</a>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
 
-      <br>
-
-      <%= label f, :coconut %>
-      <%= number_input f, :coconut, placeholder: "enter a default value" %>
-
+  <a href="#" phx-target={@myself} phx-click="add-trait">Add a variant</a>
       <br>
     <% end %>
 

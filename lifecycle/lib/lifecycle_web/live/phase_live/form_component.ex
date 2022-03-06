@@ -4,6 +4,8 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
 
   alias Lifecycle.Pubsub
   alias Lifecycle.Timeline
+  alias Lifecycle.Timeline.Phase
+  alias Lifecycle.Timeline.Phase.Trait
 
   alias LifecycleWeb.Modal.Function.Component.Flash
 
@@ -12,6 +14,7 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
   @impl true
   def update(%{phase: phase} = assigns, socket) do
     changeset = Timeline.change_phase(phase)
+    |> Ecto.Changeset.put_assoc(:traits, phase.traits)
 
     {:ok,
      socket
@@ -31,6 +34,36 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
 
   def handle_event("save", %{"phase" => phase_params}, socket) do
     save_phase(socket, socket.assigns.action, phase_params)
+  end
+
+  def handle_event("add-trait", _, socket) do
+    existing_traits = Map.get(socket.assigns.changeset.changes, :traits, socket.assigns.phase.traits)
+
+    traits =
+      existing_traits
+      |> Enum.concat([
+        Phase.change_trait(%Trait{tracker: gen_tracker()})
+      ])
+
+    changeset =
+      socket.assigns.changeset
+      |> Ecto.Changeset.put_assoc(:traits, traits)
+
+    {:noreply, assign(socket, changeset: changeset)}
+  end
+
+  def handle_event("remove-trait", %{"remove" => remove_id}, socket) do
+    traits =
+      socket.assigns.changeset.changes.traits
+      |> Enum.reject(fn %{data: trait} ->
+        trait.tracker == remove_id
+      end)
+
+    changeset =
+      socket.assigns.changeset
+      |> Ecto.Changeset.put_assoc(:traits, traits)
+
+    {:noreply, assign(socket, changeset: changeset)}
   end
 
   defp save_phase(socket, :edit, phase_params) do
@@ -56,15 +89,8 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
   """
 
   defp save_phase(socket, :new, phase_params) do
-    template =
-      %{}
-      |> check_string_value("water", phase_params["water"])
-      |> check_string_value("grain", phase_params["grain"])
-      |> check_string_value("coconut", phase_params["coconut"])
-
     phase_params =
       %{}
-      |> Map.put("template", template)
       |> Map.put("content", phase_params["content"])
       |> Map.put("title", phase_params["title"])
       |> Map.put("type", phase_params["type"])
@@ -136,4 +162,7 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
         map
     end
   end
+
+  defp gen_tracker, do: :crypto.strong_rand_bytes(5) |> Base.url_encode64 |> binary_part(0, 5)
+
 end

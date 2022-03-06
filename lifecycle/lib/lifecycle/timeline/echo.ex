@@ -10,7 +10,7 @@ defmodule Lifecycle.Timeline.Echo do
   @foreign_key_type :binary_id
   schema "echoes" do
     field :message, :string
-    belongs_to :poster, Lifecycle.Users.User, foreign_key: :poster_id
+    belongs_to :user, Lifecycle.Users.User, foreign_key: :user_name, type: :string
     field :type, :string
     belongs_to :phase, Lifecycle.Timeline.Phase, foreign_key: :phase_id
     timestamps()
@@ -19,7 +19,7 @@ defmodule Lifecycle.Timeline.Echo do
   @doc false
   def changeset(echo, attrs \\ %{}) do
     echo
-    |> cast(attrs, [:message, :phase_id, :type, :poster_id])
-    |> validate_required([:message, :poster_id, :phase_id])
+    |> cast(attrs, [:message, :phase_id, :type, :user_name])
+    |> validate_required([:message, :phase_id, :user_name])
   end
 end

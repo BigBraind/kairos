@@ -37,7 +37,7 @@ defmodule Lifecycle.Timeline do
       ** (Ecto.NoResultsError)
 
   """
-  def get_echo!(id), do: Repo.get!(Echo, id)|> Repo.preload([:poster])
+  def get_echo!(id), do: Repo.get!(Echo, id)
 
   @doc """
   Creates a echo.
@@ -97,7 +97,7 @@ defmodule Lifecycle.Timeline do
 
   def phase_recall(id) do
     query = from(e in Echo, where: e.phase_id == ^id, order_by: [desc: e.inserted_at])
-    Lifecycle.Repo.all(query, limit: 8) |> Repo.preload([:poster])
+    Lifecycle.Repo.all(query, limit: 8)
   end
 
   @doc """
@@ -135,7 +135,7 @@ defmodule Lifecycle.Timeline do
       ** (Ecto.NoResultsError)
 
   """
-  def get_phase!(id), do: Repo.get!(Phase, id) |> Repo.preload([:parent, :child])
+  def get_phase!(id), do: Repo.get!(Phase, id) |> Repo.preload([:parent, :child, :traits])
 
   @doc """
   Creates a phase.
