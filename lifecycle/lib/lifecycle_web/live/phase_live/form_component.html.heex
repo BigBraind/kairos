@@ -27,44 +27,35 @@
     <%= error_tag f, :type %>
     <br>
 
-    <%= unless @id == :new do %>
-      <%= for {key, value} <- @template do %>
-          <%= label f, String.to_atom(key) %>
-          <%= number_input f, String.to_atom(key), value: value %>
-          <br>
-      <% end %>
-
-    <% else %>
     <p class="mt-2 font-bold">Traits</p>
       <%= inputs_for f, :traits, fn t -> %>
-    <div class="flex flex-wrap -mx-1 overflow-hidden">
-      <div class="form-group px-1 w-3/6">
-        <%= label t, :name %>
-        <%= text_input t, :name, class: "form-control" %>
-        <%= error_tag t, :name %>
-      </div>
+        <div class="flex flex-wrap -mx-1 overflow-hidden">
+          <div class="form-group px-1 w-3/6">
+            <%= label t, :name %>
+            <%= text_input t, :name, class: "form-control" %>
+            <%= error_tag t, :name %>
+          </div>
 
-      <div class="form-group w-2/6">
-        <%= label t, :value %>
-        <%= text_input t, :value, class: "form-control" %>
-        <%= error_tag t, :value %>
-      </div>
+          <div class="form-group w-2/6">
+            <%= label t, :value %>
+            <%= text_input t, :value, class: "form-control" %>
+            <%= error_tag t, :value %>
+          </div>
 
-      <div class="form-group w-1/6">
-        <%= label t, :goodbye %><br>
-        <%= if is_nil(t.data.tracker) do %>
-          <%= checkbox t, :deletion %>
-        <% else %>
-          <%= hidden_input t, :tracker %>
-          <a href="#" phx-target={@myself} phx-click="remove-trait" phx-value-remove={t.data.tracker}>&times</a>
-        <% end %>
-      </div>
-    </div>
-  <% end %>
+          <div class="form-group w-1/6">
+            <%= label t, :goodbye %><br>
+            <%= if is_nil(t.data.tracker) do %>
+              <%= checkbox t, :deletion %>
+            <% else %>
+              <%= hidden_input t, :tracker %>
+              <a href="#" phx-target={@myself} phx-click="remove-trait" phx-value-remove={t.data.tracker}>&times</a>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
 
-  <a href="#" phx-target={@myself} phx-click="add-trait">Add a variant</a>
+    <a href="#" phx-target={@myself} phx-click="add-trait">Add a variant</a>
       <br>
-    <% end %>
 
     <%= hidden_input f, :parent %>
     <%= error_tag f, :parent  %>

@@ -5,9 +5,10 @@ defmodule Lifecycle.Timeline.Phase do
   use Ecto.Schema
   import Ecto.Changeset
   import Ecto.Query, warn: false
+
   alias Lifecycle.Bridge.Phasor
-  alias Lifecycle.Timeline.Phase
   alias Lifecycle.Repo
+  alias Lifecycle.Timeline.Phase
   alias Lifecycle.Timeline.Phase.Trait
 
   @primary_key {:id, :binary_id, autogenerate: true}
@@ -37,7 +38,6 @@ defmodule Lifecycle.Timeline.Phase do
     |> validate_required([:content, :title, :type])
   end
 
-
   @doc """
   Returns the list of traits.
 
@@ -66,7 +66,7 @@ defmodule Lifecycle.Timeline.Phase do
       ** (Ecto.NoResultsError)
 
   """
-  def get_trait!(phase_id, id),  do: Repo.get_by!(Trait, phase_id: phase_id, id: id)
+  def get_trait!(phase_id, id), do: Repo.get_by!(Trait, phase_id: phase_id, id: id)
 
   @doc """
   Creates a trait.

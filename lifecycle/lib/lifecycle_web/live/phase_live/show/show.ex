@@ -5,6 +5,7 @@ defmodule LifecycleWeb.PhaseLive.Show do
   alias Lifecycle.Pubsub
   alias Lifecycle.Timeline
   alias Lifecycle.Timeline.Echo
+  alias Lifecycle.Timeline.Phase
   alias Lifecycle.Timeline.Transition
   alias Lifecycle.Timezone
 
@@ -22,10 +23,10 @@ defmodule LifecycleWeb.PhaseLive.Show do
 
   @impl true
   def mount(params, _session, socket) do
-    id = params["id"]
+    phase_id = params["phase_id"]
     socket = Timezone.get_timezone(socket)
     echo_changeset = Timeline.Echo.changeset(%Echo{})
-    if connected?(socket), do: Pubsub.subscribe("phase:" <> id)
+    if connected?(socket), do: Pubsub.subscribe("phase:" <> phase_id)
 
     socket =
       allow_upload(socket, :transition,
@@ -37,10 +38,11 @@ defmodule LifecycleWeb.PhaseLive.Show do
      assign(socket,
        echo_changeset: echo_changeset,
        nowstream: [],
-       echoes: Timeline.phase_recall(id),
+       echoes: Timeline.phase_recall(phase_id),
        image_list: [],
        transiting: false,
-       transitions: Timeline.get_transition_list(id)
+       transitions: Timeline.get_transition_list(phase_id)
+       #  template: Phase.list_traits(id)
      )}
   end
 
@@ -49,19 +51,17 @@ defmodule LifecycleWeb.PhaseLive.Show do
     {:noreply, apply_action(socket, socket.assigns.live_action, params)}
   end
 
-  defp apply_action(socket, :transition_new, %{"id" => id}) do
-    template = Timeline.get_phase!(id).template
-
+  defp apply_action(socket, :transition_new, %{"phase_id" => phase_id}) do
     socket
-    |> assign(:phase, Timeline.get_phase!(id))
-    |> assign(:template, template)
+    |> assign(:phase, Timeline.get_phase!(phase_id))
+    |> assign(:template, Phase.list_traits(phase_id))
     |> assign(:title, "Transition")
     |> assign(:current_user, socket.assigns.current_user)
     |> assign(:changeset, Timeline.change_transition(%Transition{}))
   end
 
   defp apply_action(socket, :transition_edit, %{
-         "id" => phase_id,
+         "phase_id" => phase_id,
          "transition_id" => transition_id
        }) do
     phase = Timeline.get_phase!(phase_id)
@@ -72,19 +72,23 @@ defmodule LifecycleWeb.PhaseLive.Show do
     |> assign(:phase, phase)
     |> assign(:current_user, socket.assigns.current_user)
     |> assign(:changeset, Timeline.change_transition(%Transition{}))
-    |> assign(:template, phase.template)
+    # TODO: HOW TO GET THE TRAIT ID HERE?
+    # TODO: MIGHT WANNA MODIFIED PHASE TO HAVE AN ATTRIBUTE OF ID
+    # |> assign(:template, Phase.get_trait!(phase.id, ?))
+    |> assign(:template, Phase.list_traits(phase_id))
   end
 
-  defp apply_action(socket, :edit, %{"id" => id}) do
+  defp apply_action(socket, :edit, %{"phase_id" => phase_id}) do
     socket
     |> assign(:page_title, "Edit Phase")
-    |> assign(:template, Timeline.get_phase!(id).template)
-    |> assign(:phase, %{Timeline.get_phase!(id) | parent: []})
+    # TODO: HOW TO GET THE TRAITS AS TEMPLATE
+    |> assign(:template, Phase.list_traits(phase_id))
+    |> assign(:phase, %{Timeline.get_phase!(phase_id) | parent: []})
   end
 
   # for creating child phase
   defp apply_action(socket, :new_child, params) do
-    parent_phase = Timeline.get_phase!(params["id"])
+    parent_phase = Timeline.get_phase!(params["phase_id"])
 
     parent_phase = %{parent_phase | parent: parent_phase.id}
 
@@ -95,11 +99,13 @@ defmodule LifecycleWeb.PhaseLive.Show do
     |> assign(:template, parent_phase.template)
   end
 
-  defp apply_action(socket, :show, %{"id" => id}) do
+  defp apply_action(socket, :show, %{"phase_id" => phase_id}) do
+    IO.inspect(phase_id)
+
     socket
     |> assign(:page_title, "Show Phase")
-    |> assign(:phase, Timeline.get_phase!(id))
-    |> assign(:echoes, Timeline.phase_recall(id))
+    |> assign(:phase, Timeline.get_phase!(phase_id))
+    |> assign(:echoes, Timeline.phase_recall(phase_id))
   end
 
   @impl true
@@ -129,7 +135,7 @@ defmodule LifecycleWeb.PhaseLive.Show do
   @impl true
   def handle_info(:clear_flash, socket), do: Flash.handle_flash(socket)
 
-  def handle_event("delete-transition", %{"id" => transition_id} = params, socket) do
+  def handle_event("delete-transition", %{"id" => transition_id} = _params, socket) do
     transition = Timeline.get_transition_by_id(transition_id)
     {:ok, deleted_transition} = Timeline.delete_transition(transition)
 

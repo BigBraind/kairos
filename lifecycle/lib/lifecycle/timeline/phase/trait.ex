@@ -6,7 +6,7 @@ defmodule Lifecycle.Timeline.Phase.Trait do
   @foreign_key_type :binary_id
   schema "traits" do
     field :name, :string
-    field :type, :string
+    field :type, Ecto.Enum, values: [:num, :txt, :img, :bool]#Enum
     field :value, :string
     field :unit, :string
     field :tracker, :string, virtual: true
@@ -22,7 +22,7 @@ defmodule Lifecycle.Timeline.Phase.Trait do
     trait
     |> Map.put(:tracker, (trait.tracker || attrs["tracker"]))
     |> cast(attrs, [:name, :value, :type, :phase_id, :unit, :deletion])
-    |> validate_required([:name, :value, :type])
+    |> validate_required([:name, :value]) # :type
     |> unique_constraint(:name, name: :variants_name_value_product_id_index)
     |> delete()
   end

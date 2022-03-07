@@ -22,11 +22,14 @@ defmodule LifecycleWeb.PhaseLive.Index do
     {:noreply, apply_action(socket, socket.assigns.live_action, params)}
   end
 
-  defp apply_action(socket, :edit, %{"id" => id}) do
+  # ! when i create new trait from here, somehow it was automatically being recorded into the database
+  # ! why is this happening?
+  # ! also cnnot delete traits on :edit
+  defp apply_action(socket, :edit, %{"phase_id" => phase_id}) do
     socket
     |> assign(:page_title, "Edit Phase")
-    |> assign(:template, Timeline.get_phase!(id).template)
-    |> assign(:phase, %{Timeline.get_phase!(id) | parent: []})
+    |> assign(:template, Phase.list_traits(phase_id))
+    |> assign(:phase, %{Timeline.get_phase!(phase_id) | parent: []})
   end
 
   defp apply_action(socket, :new, _params) do

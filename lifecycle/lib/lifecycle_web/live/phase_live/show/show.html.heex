@@ -39,8 +39,8 @@
 </div>
 <h3><%= @phase.content %></h3>
 
-<%= for {key, value} <- @phase.traits do %>
-  <%= key %> :  <%= value %><br>
+<%= for trait <- @phase.traits do %>
+  <%= trait.name %> :  <%= trait.value %><br>
 <% end %>
 
 

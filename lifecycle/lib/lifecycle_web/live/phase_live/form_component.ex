@@ -13,8 +13,9 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
 
   @impl true
   def update(%{phase: phase} = assigns, socket) do
-    changeset = Timeline.change_phase(phase)
-    |> Ecto.Changeset.put_assoc(:traits, phase.traits)
+    changeset =
+      Timeline.change_phase(phase)
+      |> Ecto.Changeset.put_assoc(:traits, phase.traits)
 
     {:ok,
      socket
@@ -37,7 +38,8 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
   end
 
   def handle_event("add-trait", _, socket) do
-    existing_traits = Map.get(socket.assigns.changeset.changes, :traits, socket.assigns.phase.traits)
+    existing_traits =
+      Map.get(socket.assigns.changeset.changes, :traits, socket.assigns.phase.traits)
 
     traits =
       existing_traits
@@ -53,6 +55,7 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
   end
 
   def handle_event("remove-trait", %{"remove" => remove_id}, socket) do
+    # remove_id => tracker_id to be removed
     traits =
       socket.assigns.changeset.changes.traits
       |> Enum.reject(fn %{data: trait} ->
@@ -67,6 +70,9 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
   end
 
   defp save_phase(socket, :edit, phase_params) do
+    IO.inspect(socket.assigns.changeset)
+    IO.inspect(phase_params)
+    # TODO: add change_trait when updating trait
     case Timeline.update_phase(socket.assigns.phase, phase_params) do
       {:ok, phase} ->
         {Pubsub.notify_subs({:ok, phase}, [:phase, :edited], @topic)}
@@ -128,6 +134,12 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
   defp create_phase(action, phase_params, socket) do
     case Timeline.create_phase(phase_params) do
       {:ok, phase} ->
+        # TODO: TYPE AND UNIT NOT IMPLEMENTED YET
+        trait_map =
+          socket.assigns.changeset.changes.traits
+          |> Enum.map(fn t -> t.changes end)
+          |> Enum.map(fn t -> Phase.create_trait(t, phase) end)
+
         case action do
           :new ->
             {Pubsub.notify_subs({:ok, phase}, [:phase, :created], "phase_index")}
@@ -163,6 +175,5 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
     end
   end
 
-  defp gen_tracker, do: :crypto.strong_rand_bytes(5) |> Base.url_encode64 |> binary_part(0, 5)
-
+  defp gen_tracker, do: :crypto.strong_rand_bytes(5) |> Base.url_encode64() |> binary_part(0, 5)
 end
