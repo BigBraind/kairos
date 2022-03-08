@@ -8,6 +8,8 @@ defmodule Lifecycle.Users.User do
   alias Lifecycle.Timeline.Transition
   alias Lifecycle.Users.Party
 
+  import Ecto.Changeset
+
   alias Pow.Ecto.Schema.Password
 
   use Pow.Ecto.Schema,
@@ -31,6 +33,8 @@ defmodule Lifecycle.Users.User do
   end
 
   def changeset(user_or_changeset, attrs) do
-    pow_changeset(user_or_changeset, attrs)
+    user_or_changeset
+    |> pow_changeset(attrs)
+    |> unique_constraint(:name, name: :user_name_index)
   end
 end
