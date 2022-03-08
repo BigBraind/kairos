@@ -86,13 +86,13 @@ defmodule LifecycleWeb.PhaseLive.Show do
   defp apply_action(socket, :new_child, params) do
     parent_phase = Timeline.get_phase!(params["phase_id"])
 
-    parent_phase = %{parent_phase | parent: parent_phase.id}
+    parent_phase_map = %{parent_phase | parent: parent_phase.id}
 
     socket
     |> assign(:page_title, "Child Phase")
-    |> assign(:phase, parent_phase)
+    |> assign(:phase, parent_phase_map)
     # to get the properties and inherit to child phase
-    |> assign(:template, parent_phase.template)
+    |> assign(:template, Phase.list_traits(parent_phase.id))
   end
 
   defp apply_action(socket, :show, %{"phase_id" => phase_id}) do

@@ -37,14 +37,15 @@
           </div>
 
           <div class="form-group w-2/6">
-            <%= label trait, :value %>
+            <%= label trait, :default_value %>
             <%= text_input trait, :value, class: "form-control" %>
             <%= error_tag trait, :value %>
           </div>
 
           <div class="form-group w-2/6">
             <%= label trait, :type %>
-            <%= text_input trait, :type, class: "form-control" %>
+            <%= select(trait, :type, ["Text": "txt", "Numeric": "num", "Image": "img", "True/False": "bool"]) %>
+            <%# <%= text_input trait, :type, class: "form-control" %> 
             <%= error_tag trait, :type %>
           </div>
 

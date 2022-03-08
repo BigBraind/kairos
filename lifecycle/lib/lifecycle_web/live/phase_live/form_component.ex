@@ -73,20 +73,24 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
         %{"phase-id" => phase_id, "trait-id" => trait_id},
         socket
       ) do
-    trait_deleted =
+    {:ok, trait_deleted} =
       phase_id
       |> Phase.get_trait!(trait_id)
       |> Phase.delete_trait()
 
     IO.inspect(socket.assigns)
 
-    socket =
+    updated_traits =
       socket.assigns.phase.traits
-      |> Enum.reject(fn %{data: trait} ->
-        trait.id == trait_deleted.id
+      |> Enum.reject(fn %{id: id} ->
+        id == trait_deleted.id
       end)
+      import IEx; IEx.pry()
+      changeset =
+        socket.assigns.changeset
+        |> Changeset.put_assoc(:traits, updated_traits)
 
-    {:noreply, socket}
+    {:noreply, assign(socket, changeset: changeset)}
   end
 
   defp save_phase(socket, :edit, phase_params) do
