@@ -1,4 +1,7 @@
 defmodule Lifecycle.Money.Billing do
+  @moduledoc """
+    Schema table for Billing Objects
+  """
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -17,7 +20,16 @@ defmodule Lifecycle.Money.Billing do
   @doc false
   def changeset(billing, attrs) do
     billing
-    |> cast(attrs, [:email, :name, :amount, :currency, :payment_intent_id, :payment_method_id, :status])
-    |> validate_required([:email, :name, :amount, :currency])#, :payment_intent_id, :payment_method_id, :status])
+    |> cast(attrs, [
+      :email,
+      :name,
+      :amount,
+      :currency,
+      :payment_intent_id,
+      :payment_method_id,
+      :status
+    ])
+    # , :payment_intent_id, :payment_method_id, :status])
+    |> validate_required([:email, :name, :amount, :currency])
   end
 end

@@ -4,10 +4,6 @@ defmodule Lifecycle.Users.Party do
   """
   use Ecto.Schema
   import Ecto.Changeset
-  alias Lifecycle.Users.User
-  alias Lifecycle.Bridge.Partyer
-
-  import Ecto.Changeset
 
   alias Lifecycle.Bridge.Membership
   alias Lifecycle.Users.User
@@ -19,9 +15,10 @@ defmodule Lifecycle.Users.Party do
 
     field :banner, :string
     many_to_many :user, User, join_through: Membership
-
+    has_many :journey, Lifecycle.Users.Journey, foreign_key: :journey_id
     timestamps()
   end
+
   @doc false
   def changeset(party, attrs \\ %{}) do
     party

@@ -14,7 +14,7 @@ defmodule Lifecycle.Bridge.Membership do
   @foreign_key_type :binary_id
 
   schema "party_membership" do
-    field :role, Ecto.Enum, values: [:lead, :whip, :pleb]
+    field :role, Ecto.Enum, values: [:lead, :whip, :pleb] # ! What the heck is this whip??? :/
     belongs_to :party, Party
     belongs_to :user, User
     timestamps()

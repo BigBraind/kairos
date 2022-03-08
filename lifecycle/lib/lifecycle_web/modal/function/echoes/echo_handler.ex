@@ -32,5 +32,4 @@ defmodule LifecycleWeb.Modal.Function.Echoes.EchoHandler do
         {:noreply, assign(socket, changeset: changeset)}
     end
   end
-
 end

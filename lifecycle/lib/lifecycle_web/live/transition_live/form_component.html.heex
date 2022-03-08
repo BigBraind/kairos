@@ -1,0 +1,33 @@
+<div>
+    <h2><%= @title %> </h2>
+    <.form
+        let={f}
+        for={@changeset}
+        id={@id}
+        phx-target={@myself}
+        phx-submit="save">
+
+            <%= for trait <- @phase.traits  do %>
+                <%= label f, String.to_atom(trait.name) %>
+                <%= if @action == :transition_edit do %>
+                    <%= number_input f, String.to_atom(trait.name), phx_debounce: "blur", value: @transition.answers[trait.name] %>
+                <% else %>
+                    <%= number_input f, String.to_atom(trait.name), phx_debounce: "blur", value: trait.value %>
+                <% end %>
+                <br>
+            <% end %>
+
+        <%= label f, :comment %>
+        <%= if @action == :transition_edit do %>
+            <%= textarea f, :comment, phx_debounce: "blur", value:  @transition.answers["comment"] %>
+        <% else %>
+            <%= textarea f, :comment, phx_debounce: "blur" %>
+        <% end %>
+
+        <div>
+            <%= submit  "Save", phx_disable_with: "Saving"%>
+        </div>
+
+    </.form>
+    
+</div>

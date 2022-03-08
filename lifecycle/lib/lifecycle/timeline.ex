@@ -6,10 +6,11 @@ defmodule Lifecycle.Timeline do
   import Ecto.Query, warn: false
   alias Lifecycle.Repo
 
+  alias Lifecycle.Bridge.Phasor
   alias Lifecycle.Timeline.Echo
   alias Lifecycle.Timeline.Phase
-
-  alias Lifecycle.Bridge.Phasor
+  alias Lifecycle.Timeline.Transition
+  alias Lifecycle.Users.User
 
   @doc """
   Returns the list of echoes.
@@ -91,12 +92,12 @@ defmodule Lifecycle.Timeline do
 
   def recall(limit \\ 8) do
     query = from(e in Echo, order_by: [desc: e.inserted_at])
-    Lifecycle.Repo.all(query, limit: limit)
+    Repo.all(query, limit: limit)
   end
 
   def phase_recall(id) do
     query = from(e in Echo, where: e.phase_id == ^id, order_by: [desc: e.inserted_at])
-    Lifecycle.Repo.all(query, limit: 8)
+    Repo.all(query, limit: 8)
   end
 
   @doc """
@@ -104,7 +105,8 @@ defmodule Lifecycle.Timeline do
 
     A wrapper of update_echo
   """
-  def update_transition(id, attrs), do: update_echo(get_echo!(id), attrs)
+
+  # def update_transition(id, attrs), do: update_echo(get_echo!(id), attrs)
 
   @doc """
   Returns the list of phases.
@@ -133,7 +135,7 @@ defmodule Lifecycle.Timeline do
       ** (Ecto.NoResultsError)
 
   """
-  def get_phase!(id), do: Repo.get!(Phase, id) |> Repo.preload([:parent, :child])
+  def get_phase!(id), do: Repo.get!(Phase, id) |> Repo.preload([:parent, :child, :traits])
 
   @doc """
   Creates a phase.
@@ -214,4 +216,44 @@ defmodule Lifecycle.Timeline do
   def change_phase(%Phase{} = phase, attrs \\ %{}) do
     Phase.changeset(phase, attrs)
   end
+
+  def create_transition(attrs \\ %{}) do
+    %Transition{}
+    |> Transition.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  def update_transition(%Transition{} = transition, attrs) do
+    transition
+    |> Transition.changeset(attrs)
+    |> Repo.update()
+  end
+
+  def get_transition_list(id) do
+    query =
+      Transition
+      |> where([e], e.phase_id == ^id)
+      |> order_by([e], desc: e.inserted_at)
+      |> preload([:transiter, :initiator])
+
+    Repo.all(query, limit: 8)
+  end
+
+  def get_transition_by_date(begin_date, end_date) do
+    query = Transition
+    |> where([e], e.inserted_at >= ^begin_date and e.inserted_at <= ^end_date )
+    |> order_by([e], desc: e.inserted_at)
+    Repo.all(query, limit: 8 )
+    |> Repo.preload([:initiator, :transiter])
+  end
+
+  def get_transition_by_id(id), do: Repo.get!(Transition, id) |> Repo.preload([:transiter, :initiator])
+
+  def change_transition(%Transition{} = transition, attrs \\ %{}) do
+    Transition.changeset(transition, attrs)
+  end
+
+  def get_user_by_id(id), do: Repo.get!(User, id) |> preload([:transiter, :initiator])
+
+  def delete_transition(%Transition{} = transition), do: Repo.delete(transition)
 end

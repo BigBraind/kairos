@@ -5,10 +5,14 @@ defmodule Lifecycle.Timezone do
   """
   # use LifecycleWeb, :live_view
   use Phoenix.Component
+
+  use Timex
+
   @default_locale "en"
   @default_timezone "UTC"
   @default_timezone_offset 0
 
+  # get_connect_params can only be called during mount
   defp assign_locale(socket) do
     locale = get_connect_params(socket)["locale"] || @default_locale
     assign(socket, locale: locale)
@@ -25,10 +29,31 @@ defmodule Lifecycle.Timezone do
   end
 
   def get_timezone(socket) do
+    socket =
+      socket
+      |> assign_locale()
+      |> assign_timezone()
+      |> assign_timezone_offset()
+
     socket
-    |> assign_locale()
-    |> assign_timezone()
-    |> assign_timezone_offset()
+  end
+
+  @doc """
+  get_connect_params can only be called during mount, to avoid error, I purposely splitted out getting the date to query transition list here
+  """
+  def get_current_end_date(socket, timezone) do
+    current_date =
+      timezone
+      |> Timex.today()
+      |> Timex.to_naive_datetime()
+
+    end_date =
+      timezone
+      |> Timex.today()
+      |> Timex.shift(days: 1)
+      |> Timex.to_naive_datetime()
+
+    assign(socket, current_date: current_date, end_date: end_date)
   end
 
   @doc """
@@ -38,7 +63,7 @@ defmodule Lifecycle.Timezone do
     time
     |> DateTime.from_naive!(timezone)
     |> Timex.shift(hours: timezone_offset)
-    |> Timex.format("{YYYY}-{0M}-{D}")
+    |> Timex.format("{D}-{0M}-{YYYY}")
     |> elem(1)
   end
 

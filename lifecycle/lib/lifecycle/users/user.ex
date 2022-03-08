@@ -5,6 +5,7 @@ defmodule Lifecycle.Users.User do
   use Ecto.Schema
 
   alias Lifecycle.Bridge.Membership
+  alias Lifecycle.Timeline.Transition
   alias Lifecycle.Users.Party
 
   import Ecto.Changeset
@@ -13,8 +14,7 @@ defmodule Lifecycle.Users.User do
 
   use Pow.Ecto.Schema,
     user_id_field: :name,
-    password_hash_methods:
-      {&Password.pbkdf2_hash/1, &Password.pbkdf2_verify/2},
+    password_hash_methods: {&Password.pbkdf2_hash/1, &Password.pbkdf2_verify/2},
     password_min_length: 8,
     password_max_length: 4096
 
@@ -26,6 +26,8 @@ defmodule Lifecycle.Users.User do
 
     has_many :parties, Membership, foreign_key: :user_id
     many_to_many :party, Party, join_through: Membership
+    has_many :transitions, Transition, foreign_key: :transition_id
+    has_many :transits, Transition, foreign_key: :transit_id
 
     timestamps()
   end

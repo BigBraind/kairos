@@ -41,6 +41,7 @@ It may also be given via the :root_layout option to a live_session macro in the 
               <li class="mt-2"><%= link "Phases", to: Routes.phase_index_path(@conn, :index) %></li>
               <li class="mt-2"><%= link "Party", to: Routes.party_index_path(@conn, :index) %></li>
               <li class="mt-2"><%= link "Billing", to: Routes.billing_index_path(@conn, :index) %></li>
+              <li class="mt-2"><%= link "View Transition", to: Routes.transition_index_path(@conn, :index) %></li>
             <% else %>
               <p class = "mt-2 bg-red-300 p-2 max-w-sm text-center rounded-md "> Haha loser u dont have access yet </p>
             <% end %>
