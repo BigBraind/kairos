@@ -31,7 +31,7 @@ defmodule LifecycleWeb.PhaseLive.Show do
     socket =
       allow_upload(socket, :transition,
         accept: ~w(.png .jpg .jpeg .mp3 .m4a .aac .oga),
-        max_entries: 1
+        max_entries: 2
       )
 
     {:ok,

@@ -5,6 +5,7 @@
         for={@changeset}
         id={@id}
         phx-target={@myself}
+        phx-change="validate"
         phx-submit="save">
 
             <%= for trait <- @phase.traits  do %>
@@ -15,6 +16,7 @@
                     <%= number_input f, String.to_atom(trait.name), phx_debounce: "blur", value: trait.value %>
                 <% end %>
                 <br>
+                <%= live_file_input @uploads.transition %>
             <% end %>
 
         <%= label f, :comment %>
@@ -23,6 +25,35 @@
         <% else %>
             <%= textarea f, :comment, phx_debounce: "blur" %>
         <% end %>
+
+        <section phx-drop-target={@uploads.transition.ref}>
+
+            <%# render each transition image entry %>
+            <%= for entry <- @uploads.transition.entries do %>
+                <article class="upload-entry">
+                    <figure>
+                    <%# Phoenix.LiveView.Helpers.live_img_preview/2 renders a client-side preview %>
+                    <%= unless Path.extname(entry.client_name) in [".mp3", ".m4a" ,".aac", ".oga"] do %>
+                        <%= live_img_preview entry %>
+                    <% end %>
+                    <figcaption><%= entry.client_name %></figcaption>
+                    </figure>
+
+                    <%# entry.progress will update automatically for in-flight entries %>
+                    <progress value={entry.progress} max="100"> <%= entry.progress %>% </progress>
+
+                    <%# a regular click event whose handler will invoke Phoenix.LiveView.cancel_upload/3 %>
+                    <button phx-click="cancel-upload" phx-value-ref={entry.ref} aria-label="cancel">&times;</button>
+
+                    <%# Phoenix.LiveView.Helpers.upload_errors/2 returns a list of error atoms %>
+                    <%= for err <- upload_errors(@uploads.transition, entry) do %>
+                        <p class="alert alert-danger"><%= error_to_string(err) %></p>
+                    <% end %>
+
+                </article>
+            <% end %>
+
+        </section>
 
         <div>
             <%= submit  "Save", phx_disable_with: "Saving"%>

@@ -33,7 +33,19 @@ defmodule LifecycleWeb.Modal.View.Transition.TransitionList do
                 this line to be removed, user dont need to see <br>
 
                 <%= for {property, value} <- transition.answers do %>
-                  <%= property%> : <%= value%> <br>
+                  <%= unless property == "image_list" do %>
+                      <%= property%> : <%= value %> <br>
+                  <% else %>
+                      <%= for image_path <- String.split(value, "##" ) do%>
+                          <%= if Path.extname(image_path) in [".mp3", ".m4a" ,".aac", ".oga"] do %>
+                            <audio controls>
+                            <source src={image_path} type={"audio/mp4"} >
+                            </audio>
+                          <% else %>
+                            <img alt="assets image" src={image_path}>
+                          <% end %>
+                          <% end %>
+                  <% end %>
                 <% end %>
 
                 creator: <%= transition.initiator.name %><br>
