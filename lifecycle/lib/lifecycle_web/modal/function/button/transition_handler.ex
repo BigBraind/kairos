@@ -13,6 +13,56 @@ defmodule LifecycleWeb.Modal.Function.Button.TransitionHandler do
   alias LifecycleWeb.Modal.Function.Pubsub.Pubs
 
   @doc """
+  Approve transition event in phase show for transition object
+  """
+  def handle_transition(action, params, socket) do
+    attrs =
+      case action do
+        :assign_transiter ->
+          %{}
+          |> Map.put(:transiter_id, socket.assigns.current_user.id)
+          |> Map.put(:transited, true)
+
+        :edit_transition ->
+          %{"answers" => params["answers"]}
+      end
+
+    transition = Timeline.get_transition_by_id(params["transition"])
+
+    case Timeline.update_transition(transition, attrs) do
+      {:ok, transition} ->
+        case action do
+          :edit_transition ->
+            {{Pubsub.notify_subs(
+                {:ok, transition},
+                [:transition, :updated],
+                "phase:" <> transition.phase_id
+              )}}
+
+          :assign_transiter ->
+            {Pubsub.notify_subs(
+               {:ok, transition},
+               [:transition, :approved],
+               "phase:" <> transition.phase_id
+             )}
+        end
+
+        if action == :edit_transition do
+          {:noreply,
+           socket
+           |> push_redirect(to: socket.assigns.return_to)}
+        else
+          {:noreply, socket}
+        end
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        {:noreply,
+         socket
+         |> assign(changeset: changeset)}
+    end
+  end
+
+  @doc """
   handle event for approve button
   assign transiting to true, such that users can upload image to be approved
   """
@@ -47,9 +97,8 @@ defmodule LifecycleWeb.Modal.Function.Button.TransitionHandler do
     # construct echo_params for creating transition echo objects
     echo_params = %{
       "message" => image_list,
-      "type" => "transition",
-      "name" => socket.assigns.current_user.name,
-      "transited" => false,
+      "type" => "image", # ! to be changed
+      "poster_id" => socket.assigns.current_user.id,
       "phase_id" => socket.assigns.phase.id
     }
 
@@ -70,6 +119,4 @@ defmodule LifecycleWeb.Modal.Function.Button.TransitionHandler do
         {:noreply, assign(socket, changeset: changeset)}
     end
   end
-
-
 end

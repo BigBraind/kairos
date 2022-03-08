@@ -5,15 +5,14 @@ defmodule Lifecycle.Users.User do
   use Ecto.Schema
 
   alias Lifecycle.Bridge.Membership
-  alias Lifecycle.Users.Party
   alias Lifecycle.Timeline.Transition
+  alias Lifecycle.Users.Party
 
   alias Pow.Ecto.Schema.Password
 
   use Pow.Ecto.Schema,
     user_id_field: :name,
-    password_hash_methods:
-      {&Password.pbkdf2_hash/1, &Password.pbkdf2_verify/2},
+    password_hash_methods: {&Password.pbkdf2_hash/1, &Password.pbkdf2_verify/2},
     password_min_length: 8,
     password_max_length: 4096
 

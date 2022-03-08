@@ -14,7 +14,7 @@ defmodule LifecycleWeb.Router do
 
   pipeline :authenticated do
     plug Pow.Plug.RequireAuthenticated,
-     error_handler: Pow.Phoenix.PlugErrorHandler
+      error_handler: Pow.Phoenix.PlugErrorHandler
   end
 
   pipeline :api do
@@ -40,23 +40,26 @@ defmodule LifecycleWeb.Router do
 
       live("/phases", PhaseLive.Index, :index)
       live("/phases/new", PhaseLive.Index, :new)
-      live("/phases/:id/edit", PhaseLive.Index, :edit)
+      live("/phases/:phase_id/edit", PhaseLive.Index, :edit)
 
-      live("/phases/:id", PhaseLive.Show, :show)
-      live("/phases/:id/show/edit", PhaseLive.Show, :edit)
-      live("/phases/:id/show/new", PhaseLive.Show, :new)
+      live("/phases/:phase_id", PhaseLive.Show, :show)
+      live("/phases/:phase_id/show/edit", PhaseLive.Show, :edit)
+      live("/phases/:phase_id/show/new", PhaseLive.Show, :new_child)
+      live("/phases/:phase_id/show/transition", PhaseLive.Show, :transition_new)
+      live("/phases/:phase_id/show/transition/:transition_id/edit", PhaseLive.Show, :transition_edit)
 
       live("/party", PartyLive.Index, :index)
       live("/party/new", PartyLive.Index, :new)
       live("/party/:party_name/edit", PartyLive.Index, :edit)
-      
+
       live("/party/:party_name/show/edit", PartyLive.Show, :edit)
       live("/party/:party_name/", PartyLive.Show, :show)
-      
+
       live("/billing", BillingLive.Index, :index)
 
+      live("/transition", TransitionLive.Index, :index)
     end
-   end
+  end
 
   # # Other scopes may use custom stacks.
   # scope "/api", LifecycleWeb do

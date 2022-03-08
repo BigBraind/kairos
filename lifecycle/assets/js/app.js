@@ -24,7 +24,7 @@ import "phoenix_html"
 import { Socket } from "phoenix"
 import { LiveSocket } from "phoenix_live_view"
 import topbar from "../vendor/topbar"
-import {InitCheckout} from "./init_checkout"
+import { InitCheckout } from "./init_checkout"
 
 let Hooks = {} // for creating hooks
 Hooks.InitCheckout = InitCheckout
@@ -35,8 +35,6 @@ Hooks.EmptyInput = {
         this.el.elements[2].value = " "
     }
 }
-
-
 
 // hooks for separating msg on rendering echoes
 Hooks.SeparatingMsg = {
@@ -93,7 +91,7 @@ let liveSocket = new LiveSocket("/live", Socket, {
 )
 
 // Show progress bar on live navigation and form submits
-topbar.config({ barColors: { 0: "#D9BB41"}, shadowColor: "rgba(0, 0, 0, .5)" })
+topbar.config({ barColors: { 0: "#D9BB41" }, shadowColor: "rgba(0, 0, 0, .5)" })
 
 window.addEventListener("phx:page-loading-start", info => topbar.show())
 window.addEventListener("phx:page-loading-stop", info => topbar.hide())

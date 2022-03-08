@@ -15,7 +15,7 @@ defmodule Lifecycle.UserFixtures do
     |> Session.do_create(user, opts)
   end
 
-  def user_fixtures(attr \\ %{}) do
+  def user_fixtures(_attr \\ %{}) do
     user = %Lifecycle.Users.User{name: "Bruce Lee", id: Ecto.UUID.generate()}
     Repo.insert(user)
   end
