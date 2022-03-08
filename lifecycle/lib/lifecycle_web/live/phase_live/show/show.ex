@@ -12,7 +12,7 @@ defmodule LifecycleWeb.PhaseLive.Show do
   alias LifecycleWeb.Modal.View.Button.Phases
   alias LifecycleWeb.Modal.View.Button.Transitions
   alias LifecycleWeb.Modal.View.Echoes.Echoes
-  alias LifecycleWeb.Modal.View.Transition.Transition_List
+  alias LifecycleWeb.Modal.View.Transition.TransitionList
 
   alias LifecycleWeb.Modal.Function.Button.ApproveHandler
   alias LifecycleWeb.Modal.Function.Button.TransitionHandler
@@ -42,7 +42,7 @@ defmodule LifecycleWeb.PhaseLive.Show do
        image_list: [],
        transiting: false,
        transitions: Timeline.get_transition_list(phase_id)
-       #  template: Phase.list_traits(id)
+       # template: Phase.list_traits(id)
      )}
   end
 
@@ -72,16 +72,12 @@ defmodule LifecycleWeb.PhaseLive.Show do
     |> assign(:phase, phase)
     |> assign(:current_user, socket.assigns.current_user)
     |> assign(:changeset, Timeline.change_transition(%Transition{}))
-    # TODO: HOW TO GET THE TRAIT ID HERE?
-    # TODO: MIGHT WANNA MODIFIED PHASE TO HAVE AN ATTRIBUTE OF ID
-    # |> assign(:template, Phase.get_trait!(phase.id, ?))
     |> assign(:template, Phase.list_traits(phase_id))
   end
 
   defp apply_action(socket, :edit, %{"phase_id" => phase_id}) do
     socket
     |> assign(:page_title, "Edit Phase")
-    # TODO: HOW TO GET THE TRAITS AS TEMPLATE
     |> assign(:template, Phase.list_traits(phase_id))
     |> assign(:phase, %{Timeline.get_phase!(phase_id) | parent: []})
   end
@@ -100,8 +96,6 @@ defmodule LifecycleWeb.PhaseLive.Show do
   end
 
   defp apply_action(socket, :show, %{"phase_id" => phase_id}) do
-    IO.inspect(phase_id)
-
     socket
     |> assign(:page_title, "Show Phase")
     |> assign(:phase, Timeline.get_phase!(phase_id))

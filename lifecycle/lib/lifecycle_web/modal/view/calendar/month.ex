@@ -1,9 +1,10 @@
 defmodule LifecycleWeb.Modal.View.Calendar.Month do
+  @moduledoc """
+  View component for displaying month and headers for days
+  """
   use Phoenix.Component
 
   alias LifecycleWeb.Modal.View.Calendar.Day
-
-  alias __MODULE__
 
   def calendar(
         %{

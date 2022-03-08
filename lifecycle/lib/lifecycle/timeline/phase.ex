@@ -67,6 +67,7 @@ defmodule Lifecycle.Timeline.Phase do
 
   """
   def get_trait!(phase_id, id), do: Repo.get_by!(Trait, phase_id: phase_id, id: id)
+  def get_trait!(phase_id, name, type), do: Repo.get_by!(Trait, phase_id: phase_id, name: name, type: type)
 
   @doc """
   Creates a trait.

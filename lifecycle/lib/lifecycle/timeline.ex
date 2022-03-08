@@ -92,12 +92,12 @@ defmodule Lifecycle.Timeline do
 
   def recall(limit \\ 8) do
     query = from(e in Echo, order_by: [desc: e.inserted_at])
-    Lifecycle.Repo.all(query, limit: limit)
+    Repo.all(query, limit: limit)
   end
 
   def phase_recall(id) do
     query = from(e in Echo, where: e.phase_id == ^id, order_by: [desc: e.inserted_at])
-    Lifecycle.Repo.all(query, limit: 8)
+    Repo.all(query, limit: 8)
   end
 
   @doc """

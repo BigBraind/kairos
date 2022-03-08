@@ -1,8 +1,12 @@
 defmodule LifecycleWeb.BillingLive.Index do
+  @moduledoc false
   use LifecycleWeb, :live_view
 
   alias Lifecycle.Money
   alias Lifecycle.Money.Billing
+
+  alias Stripe.Customer
+  alias Stripe.PaymentIntent
 
   @impl true
   def mount(_params, _session, socket) do
@@ -29,29 +33,6 @@ defmodule LifecycleWeb.BillingLive.Index do
     end
   end
 
-  @impl true
-  def handle_info(
-        {:create_payment_intent,
-         %{email: email, name: name, amount: amount, currency: currency} = checkout},
-        socket
-      ) do
-    with {:ok, stripe_customer} <- Stripe.Customer.create(%{email: email, name: name}),
-         {:ok, payment_intent} <-
-           Stripe.PaymentIntent.create(%{
-             customer: stripe_customer.id,
-             amount: amount,
-             currency: currency
-           }) do
-      # Update the checkout
-      Money.update_billing(checkout, %{payment_intent_id: payment_intent.id})
-
-      {:noreply, assign(socket, :intent, payment_intent)}
-    else
-      _ ->
-        {:noreply, assign(socket, :stripe_error, "There was an error with the stripe")}
-    end
-  end
-
   def handle_event(
         "paymentSuccess",
         %{"payment_method" => payment_method_id, "status" => status},
@@ -69,5 +50,28 @@ defmodule LifecycleWeb.BillingLive.Index do
        |> assign(:checkout, checkout),
        to: "/"
      )}
+  end
+
+  @impl true
+  def handle_info(
+        {:create_payment_intent,
+         %{email: email, name: name, amount: amount, currency: currency} = checkout},
+        socket
+      ) do
+    with {:ok, stripe_customer} <- Customer.create(%{email: email, name: name}),
+         {:ok, payment_intent} <-
+           PaymentIntent.create(%{
+             customer: stripe_customer.id,
+             amount: amount,
+             currency: currency
+           }) do
+      # Update the checkout
+      Money.update_billing(checkout, %{payment_intent_id: payment_intent.id})
+
+      {:noreply, assign(socket, :intent, payment_intent)}
+    else
+      _ ->
+        {:noreply, assign(socket, :stripe_error, "There was an error with the stripe")}
+    end
   end
 end

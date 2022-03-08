@@ -1,8 +1,9 @@
 defmodule LifecycleWeb.Modal.View.Calendar.Day do
+  @moduledoc """
+  View Component for displaying each days
+  """
   use Phoenix.Component
   use Timex
-
-  alias __MODULE__
 
   alias LifecycleWeb.Modal.Function.Calendar.CalendarHelpers
 
@@ -35,8 +36,8 @@ defmodule LifecycleWeb.Modal.View.Calendar.Day do
         <%= @text %>
     <% end %>
     """
-    # <button class: {@class}> <%= @text %> </button>
 
+    # <button class: {@class}> <%= @text %> </button>
   end
 
   defp build_path(current_path, params) do

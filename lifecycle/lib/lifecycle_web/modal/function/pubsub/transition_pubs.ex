@@ -1,4 +1,7 @@
 defmodule LifecycleWeb.Modal.Function.Pubsub.TransitionPubs do
+  @moduledoc """
+  Handler pubsubs for transition object being craeted, edited and deleted
+  """
   use Phoenix.Component
 
   alias Lifecycle.Timeline

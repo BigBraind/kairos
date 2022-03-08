@@ -8,10 +8,11 @@ defmodule LifecycleWeb.TransitionLive.Index do
   alias Lifecycle.Timezone
 
   alias LifecycleWeb.Modal.View.Calendar.Month
-  alias LifecycleWeb.Modal.View.Transition.Transition_List
+  alias LifecycleWeb.Modal.View.Transition.TransitionList
 
   alias LifecycleWeb.Modal.Function.Pubsub.TransitionPubs
 
+  @impl true
   def mount(_params, _session, socket) do
     socket =
       socket
@@ -38,6 +39,7 @@ defmodule LifecycleWeb.TransitionLive.Index do
      )}
   end
 
+  @impl true
   def handle_params(params, _url, socket) do
     socket =
       case Map.keys(params) do
@@ -45,7 +47,11 @@ defmodule LifecycleWeb.TransitionLive.Index do
           date = params["date"]
           query_end_dates(date, socket)
 
-        ["month"] -> socket
+        ["month"] ->
+          socket
+
+        [] ->
+          socket
       end
 
     socket = assign_dates(socket, params)
@@ -61,16 +67,18 @@ defmodule LifecycleWeb.TransitionLive.Index do
             socket.assigns.end_date
           )
       )
+    else
+      socket
     end
   end
 
   defp query_end_dates(date, socket) do
     # start_date = NaiveDateTime.new!(Date.from_iso8601!(date), ~T[00:00:00])
     start_date =
-        date
-        |> Date.from_iso8601!()
-        |> NaiveDateTime.new!(~T[00:00:00])
-        |> Timex.shift(hours: socket.assigns.timezone_offset)
+      date
+      |> Date.from_iso8601!()
+      |> NaiveDateTime.new!(~T[00:00:00])
+      |> Timex.shift(hours: socket.assigns.timezone_offset)
 
     end_date = Timex.shift(start_date, days: 1)
 

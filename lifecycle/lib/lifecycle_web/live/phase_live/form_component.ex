@@ -2,6 +2,7 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
   @moduledoc false
   use LifecycleWeb, :live_component
 
+  alias Ecto.Changeset
   alias Lifecycle.Pubsub
   alias Lifecycle.Timeline
   alias Lifecycle.Timeline.Phase
@@ -15,7 +16,7 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
   def update(%{phase: phase} = assigns, socket) do
     changeset =
       Timeline.change_phase(phase)
-      |> Ecto.Changeset.put_assoc(:traits, phase.traits)
+      |> Changeset.put_assoc(:traits, phase.traits)
 
     {:ok,
      socket
@@ -47,14 +48,12 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
         Phase.change_trait(%Trait{tracker: gen_tracker()})
       ])
 
-    changeset =
-      socket.assigns.changeset
-      |> Ecto.Changeset.put_assoc(:traits, traits)
+    changeset = Changeset.put_assoc(socket.assigns.changeset, :traits, traits)
 
     {:noreply, assign(socket, changeset: changeset)}
   end
 
-  def handle_event("remove-trait", %{"remove" => remove_id}, socket) do
+  def handle_event("remove_trait", %{"remove" => remove_id}, socket) do
     # remove_id => tracker_id to be removed
     traits =
       socket.assigns.changeset.changes.traits
@@ -64,14 +63,33 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
 
     changeset =
       socket.assigns.changeset
-      |> Ecto.Changeset.put_assoc(:traits, traits)
+      |> Changeset.put_assoc(:traits, traits)
 
     {:noreply, assign(socket, changeset: changeset)}
   end
 
+  def handle_event(
+        "delete_trait",
+        %{"phase-id" => phase_id, "trait-id" => trait_id},
+        socket
+      ) do
+    trait_deleted =
+      phase_id
+      |> Phase.get_trait!(trait_id)
+      |> Phase.delete_trait()
+
+    IO.inspect(socket.assigns)
+
+    socket =
+      socket.assigns.phase.traits
+      |> Enum.reject(fn %{data: trait} ->
+        trait.id == trait_deleted.id
+      end)
+
+    {:noreply, socket}
+  end
+
   defp save_phase(socket, :edit, phase_params) do
-    IO.inspect(socket.assigns.changeset)
-    IO.inspect(phase_params)
     # TODO: add change_trait when updating trait
     case Timeline.update_phase(socket.assigns.phase, phase_params) do
       {:ok, phase} ->

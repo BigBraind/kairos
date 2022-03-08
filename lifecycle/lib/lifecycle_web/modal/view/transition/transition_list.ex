@@ -1,4 +1,7 @@
-defmodule LifecycleWeb.Modal.View.Transition.Transition_List do
+defmodule LifecycleWeb.Modal.View.Transition.TransitionList do
+  @moduledoc """
+  View component for transition list
+  """
   use LifecycleWeb, :live_component
 
   alias Lifecycle.Timezone

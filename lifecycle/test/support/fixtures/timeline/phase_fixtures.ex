@@ -1,16 +1,19 @@
 defmodule Lifecycle.Timeline.PhaseFixtures do
-  import Lifecycle.TimelineFixtures
   @moduledoc """
   This module defines test helpers for creating
   entities via the `Lifecycle.Timeline.Phase` context.
   """
 
+  import Lifecycle.TimelineFixtures
+
+  alias Lifecycle.Timeline.Phase
+
   @doc """
   Generate a trait.
   """
-
-  def trait_fixture() do
+  def trait_fixture do
     phase = phase_fixture()
+
     {:ok, trait} =
       %{}
       |> Enum.into(%{
@@ -18,7 +21,7 @@ defmodule Lifecycle.Timeline.PhaseFixtures do
         type: "some type",
         value: "some value"
       })
-      |> Lifecycle.Timeline.Phase.create_trait(phase)
+      |> Phase.create_trait(phase)
 
     trait
   end
@@ -31,9 +34,8 @@ defmodule Lifecycle.Timeline.PhaseFixtures do
         type: "some type",
         value: "some value"
       })
-      |> Lifecycle.Timeline.Phase.create_trait(phase)
+      |> Phase.create_trait(phase)
 
     trait
   end
-
 end

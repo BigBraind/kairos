@@ -1,18 +1,21 @@
 defmodule Lifecycle.Timeline.Phase.Trait do
+  @moduledoc """
+    Schema table for Phase Objects
+  """
+
   use Ecto.Schema
   import Ecto.Changeset
-
 
   @foreign_key_type :binary_id
   schema "traits" do
     field :name, :string
-    field :type, Ecto.Enum, values: [:num, :txt, :img, :bool]#Enum
+    # Enum
+    field :type, Ecto.Enum, values: [:num, :txt, :img, :bool]
     field :value, :string
     field :unit, :string
     field :tracker, :string, virtual: true
     field :deletion, :boolean, virtual: true
-    belongs_to :phase , Lifecycle.Timeline.Phase, foreign_key: :phase_id
-
+    belongs_to :phase, Lifecycle.Timeline.Phase, foreign_key: :phase_id
 
     timestamps()
   end
@@ -20,14 +23,16 @@ defmodule Lifecycle.Timeline.Phase.Trait do
   @doc false
   def changeset(trait, attrs) do
     trait
-    |> Map.put(:tracker, (trait.tracker || attrs["tracker"]))
+    |> Map.put(:tracker, trait.tracker || attrs["tracker"])
     |> cast(attrs, [:name, :value, :type, :phase_id, :unit, :deletion])
-    |> validate_required([:name, :value]) # :type
+    # :type
+    |> validate_required([:name, :value, :type])
     |> unique_constraint(:name, name: :variants_name_value_product_id_index)
     |> delete()
   end
 
   defp delete(%{data: %{id: nil}} = changeset), do: changeset
+
   defp delete(changeset) do
     if get_change(changeset, :deletion) do
       %{changeset | action: :deletion}

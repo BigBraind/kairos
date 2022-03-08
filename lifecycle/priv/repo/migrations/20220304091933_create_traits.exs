@@ -11,12 +11,12 @@ defmodule Lifecycle.Repo.Migrations.CreateTraits do
       add :value, :string, null: false
       add :type, :trait_type
       add :unit, :string
-      add :phase_id, references(:phases,type: :binary_id, on_delete: :delete_all)
+      add :phase_id, references(:phases, type: :binary_id, on_delete: :delete_all)
 
       timestamps()
     end
 
     create index(:traits, [:phase_id])
-    unique_index(:traits, [:name, :value, :phase_id])
+    unique_index(:traits, [:name, :type, :phase_id])
   end
 end

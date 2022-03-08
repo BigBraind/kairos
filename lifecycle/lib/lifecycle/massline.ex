@@ -33,7 +33,7 @@ defmodule Lifecycle.Massline do
 
   ## Examples
 
-  iex> list_members(id)    
+  iex> list_members(id)
   [%User{}, ...]
 
   """
@@ -196,10 +196,10 @@ defmodule Lifecycle.Massline do
   Gets user's id by passing in user's name
   """
   def get_user_by_name(name) do
-      Repo.get_by!(User, name: name)
-    rescue
-      Ecto.NoResultsError ->
-        {:error, "user not found, make sure you enter the correct user name"}
+    Repo.get_by!(User, name: name)
+  rescue
+    Ecto.NoResultsError ->
+      {:error, "user not found, make sure you enter the correct user name"}
   end
 
   @doc """
@@ -222,15 +222,19 @@ defmodule Lifecycle.Massline do
   def create_party(attrs \\ %{}) do
     case attrs do
       %{"founder_id" => user_id} ->
-        %Party{}
-        |> Party.changeset(attrs)
-        |> Repo.insert()
-        |> case do
+        party =
+          %Party{}
+          |> Party.changeset(attrs)
+          |> Repo.insert()
+
+        case party do
           {:ok, party} ->
-            %Membership{}
-            |> Membership.changeset(%{role: "lead", party_id: party.id, user_id: user_id})
-            |> Repo.insert()
-            |> case do
+            membership =
+              %Membership{}
+              |> Membership.changeset(%{role: "lead", party_id: party.id, user_id: user_id})
+              |> Repo.insert()
+
+            case membership do
               {:ok, _} -> {:ok, party}
               {:error, %Ecto.Changeset{} = changeset} -> {:error, changeset}
             end

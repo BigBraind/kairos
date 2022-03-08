@@ -4,6 +4,8 @@ defmodule Lifecycle.MoneyFixtures do
   entities via the `Lifecycle.Money` context.
   """
 
+  alias Lifecycle.Money
+
   @doc """
   Generate a billing.
   """
@@ -19,7 +21,7 @@ defmodule Lifecycle.MoneyFixtures do
         payment_method_id: "some payment_method_id",
         status: "some status"
       })
-      |> Lifecycle.Money.create_billing()
+      |> Money.create_billing()
 
     billing
   end
