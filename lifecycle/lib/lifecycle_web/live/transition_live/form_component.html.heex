@@ -8,22 +8,28 @@
         phx-change="validate"
         phx-submit="save">
 
-            <%= for trait <- @phase.traits  do %>
-                <%= label f, String.to_atom(trait.name) %>
-                <%= if @action == :transition_edit do %>
-                    <%= if trait.type == "txt" do %>
-                        <%= text_input f, String.to_atom(trait.name), phx_debounce: "blur", value: @transition.answers[trait.name] %>
-                    <% else %>
-                        <%= text_input f, String.to_atom(trait.name), phx_debounce: "blur", value: trait.value %>
-                    <% end %>
 
-                    <%= if trait.type == "num" do %>
-                        <%= number_input f, String.to_atom(trait.name), phx_debounce: "blur", value: @transition.answers[trait.name] %>
-                    <% end %>
-                    <br>
-                    <%= live_file_input @uploads.transition %>
+        <%= for trait <- @phase.traits  do %>
+            <%= label f, String.to_atom(trait.name) %>
+            
+            <%# trait.type is stored as an atom here %>
+            <%= if trait.type == :txt do %>
+                <%= if @action == :transition_edit do %>
+                    <%= text_input f, String.to_atom(trait.name), phx_debounce: "blur", value: @transition.answers[trait.name] %>
+                <% else %>
+                    <%= text_input f, String.to_atom(trait.name), phx_debounce: "blur", value: trait.value %>
                 <% end %>
             <% end %>
+            <%= if trait.type == :num do %>
+                <%= if @action == :transition_edit do %>
+                    <%= number_input f, String.to_atom(trait.name), phx_debounce: "blur", value: @transition.answers[trait.name] %>
+                <% else %>
+                    <%= number_input f, String.to_atom(trait.name), phx_debounce: "blur", value: trait.value %>
+                <% end %>
+            <% end %>
+            <br>
+            <%= live_file_input @uploads.transition %>
+        <% end %>
 
         <%= label f, :comment %>
         <%= if @action == :transition_edit do %>
