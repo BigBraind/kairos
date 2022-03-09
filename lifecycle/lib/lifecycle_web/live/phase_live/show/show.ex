@@ -24,7 +24,6 @@ defmodule LifecycleWeb.PhaseLive.Show do
   @impl true
   def mount(params, _session, socket) do
     phase_id = params["phase_id"]
-    socket = Timezone.get_timezone(socket)
     echo_changeset = Timeline.Echo.changeset(%Echo{})
     if connected?(socket), do: Pubsub.subscribe("phase:" <> phase_id)
 

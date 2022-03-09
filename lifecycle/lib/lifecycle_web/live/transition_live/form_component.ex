@@ -69,9 +69,6 @@ defmodule LifecycleWeb.TransitionLive.FormComponent do
     TransitionHandler.handle_transition(:edit_transition, params, socket)
   end
 
-  # TODO: new helper function to identify text_input, number_input or checkbox based on the type of trait
-  # to be used in form_compnent.html.heex
-
   def error_to_string(:too_large), do: "Too large"
   def error_to_string(:too_many_files), do: "You have selected too many files"
   def error_to_string(:not_accepted), do: "You have selected an unacceptable file type"

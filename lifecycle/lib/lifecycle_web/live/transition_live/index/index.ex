@@ -16,13 +16,6 @@ defmodule LifecycleWeb.TransitionLive.Index do
   def mount(_params, _session, socket) do
     socket =
       socket
-      |> Timezone.get_timezone()
-
-    # this is an extremely stupid way of doing it, however,
-    # i have no idea on how to access the first element within the pipe operator,
-    # there must be a way to do so... I wonder hmmmm
-    socket =
-      socket
       |> Timezone.get_current_end_date(socket.assigns.timezone)
 
     current_date = socket.assigns.current_date

@@ -6,7 +6,6 @@ defmodule LifecycleWeb.EchoLive.Index do
   alias Lifecycle.Pubsub
   alias Lifecycle.Timeline
   alias Lifecycle.Timeline.Echo
-  alias Lifecycle.Timezone
 
   alias LifecycleWeb.Modal.View.Button.Transition
   alias LifecycleWeb.Modal.View.Echoes.Echoes
@@ -19,7 +18,6 @@ defmodule LifecycleWeb.EchoLive.Index do
   @impl true
   def mount(_params, _session, socket) do
     if connected?(socket), do: Pubsub.subscribe("1")
-    socket = Timezone.get_timezone(socket)
     changeset = Timeline.Echo.changeset(%Echo{})
 
     socket =
