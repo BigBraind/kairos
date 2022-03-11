@@ -34,7 +34,8 @@ defmodule LifecycleWeb.Router do
     get("/", PageController, :index)
 
     # TODO: ADD TIMEZONE ON_MOUNT
-    live_session :default, on_mount: [{LifecycleWeb.Auth.Protocol, :auth}, {LifecycleWeb.Timezone.Timezone, :timezone}] do
+    live_session :default,
+      on_mount: [{LifecycleWeb.Auth.Protocol, :auth}, {LifecycleWeb.Timezone.Timezone, :timezone}] do
       live("/echoes", EchoLive.Index, :index)
       live("/echoes/new", EchoLive.Index, :new)
       live("/echoes/:id", EchoLive.Show, :show)
@@ -47,7 +48,12 @@ defmodule LifecycleWeb.Router do
       live("/phases/:phase_id/show/edit", PhaseLive.Show, :edit)
       live("/phases/:phase_id/show/new", PhaseLive.Show, :new_child)
       live("/phases/:phase_id/show/transition", PhaseLive.Show, :transition_new)
-      live("/phases/:phase_id/show/transition/:transition_id/edit", PhaseLive.Show, :transition_edit)
+
+      live(
+        "/phases/:phase_id/show/transition/:transition_id/edit",
+        PhaseLive.Show,
+        :transition_edit
+      )
 
       live("/party", PartyLive.Index, :index)
       live("/party/new", PartyLive.Index, :new)
@@ -59,6 +65,9 @@ defmodule LifecycleWeb.Router do
       live("/billing", BillingLive.Index, :index)
 
       live("/transition", TransitionLive.Index, :index)
+
+      # TODO 1.0: added routes for viewing all transitions
+      # TODO 2.0: added routes for messaging admin(bigbrain)
     end
   end
 
