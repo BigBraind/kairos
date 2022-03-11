@@ -157,11 +157,13 @@ defmodule Lifecycle.Timeline do
           |> Phase.changeset(attrs)
           |> Repo.insert()
 
-        %Phasor{}
-        |> Phasor.changeset(%{parent_id: parent_id, child_id: phase.id})
-        |> Repo.insert()
+          %Phasor{}
+          |> Phasor.changeset(%{parent_id: parent_id, child_id: phase.id})
+          |> Repo.insert()
 
-        {:ok, phase}
+          {:ok, phase}
+
+        {:error, %Ecto.Changeset{} = changeset} -> {:error, changeset}
 
       %{} ->
         %Phase{}

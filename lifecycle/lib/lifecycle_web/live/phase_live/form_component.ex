@@ -78,23 +78,20 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
       |> Phase.get_trait!(trait_id)
       |> Phase.delete_trait()
 
-    IO.inspect(socket.assigns)
-
     updated_traits =
       socket.assigns.phase.traits
       |> Enum.reject(fn %{id: id} ->
         id == trait_deleted.id
       end)
-      import IEx; IEx.pry()
-      changeset =
-        socket.assigns.changeset
-        |> Changeset.put_assoc(:traits, updated_traits)
+
+    changeset =
+      socket.assigns.changeset
+      |> Changeset.put_assoc(:traits, updated_traits)
 
     {:noreply, assign(socket, changeset: changeset)}
   end
 
   defp save_phase(socket, :edit, phase_params) do
-    # TODO: add change_trait when updating trait
     case Timeline.update_phase(socket.assigns.phase, phase_params) do
       {:ok, phase} ->
         {Pubsub.notify_subs({:ok, phase}, [:phase, :edited], @topic)}
@@ -154,13 +151,17 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
   end
 
   defp create_phase(action, phase_params, socket) do
+    check_trait = Map.has_key?(socket.assigns.changeset.changes, "traits")
+
     case Timeline.create_phase(phase_params) do
       {:ok, phase} ->
         # TODO: TYPE AND UNIT NOT IMPLEMENTED YET
-        trait_map =
-          socket.assigns.changeset.changes.traits
-          |> Enum.map(fn t -> t.changes end)
-          |> Enum.map(fn t -> Phase.create_trait(t, phase) end)
+        if check_trait do # to avoid raising KeyError
+          _trait_map =
+            socket.assigns.changeset.changes.traits
+            |> Enum.map(fn t -> t.changes end)
+            |> Enum.map(fn t -> Phase.create_trait(t, phase) end)
+        end
 
         case action do
           :new ->
@@ -186,16 +187,16 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
 
   def handle_flash(socket), do: {:noreply, clear_flash(socket)}
 
-  defp check_string_value(map, key, value) do
-    # using regex to check if this string contains a number
-    case String.match?(value, ~r/\d+/) do
-      true ->
-        Map.merge(map, %{String.to_atom(key) => value})
+  # defp check_string_value(map, key, value) do
+  #   # using regex to check if this string contains a number
+  #   case String.match?(value, ~r/\d+/) do
+  #     true ->
+  #       Map.merge(map, %{String.to_atom(key) => value})
 
-      _ ->
-        map
-    end
-  end
+  #     _ ->
+  #       map
+  #   end
+  # end
 
   defp gen_tracker, do: :crypto.strong_rand_bytes(5) |> Base.url_encode64() |> binary_part(0, 5)
 end
