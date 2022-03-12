@@ -66,7 +66,8 @@ defmodule LifecycleWeb.Router do
 
       live("/transition", TransitionLive.Index, :index)
 
-      # TODO 1.0: added routes for viewing all transitions
+      live("/admin_transition", AdminLive.ViewTransition, :transition)
+
       # TODO 2.0: added routes for messaging admin(bigbrain)
     end
   end
