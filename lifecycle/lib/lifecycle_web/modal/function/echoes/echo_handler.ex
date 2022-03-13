@@ -3,7 +3,7 @@ defmodule LifecycleWeb.Modal.Function.Echoes.EchoHandler do
   Function component of handling send echoes event
   """
 
-  use LifecycleWeb, :live_component
+  use Phoenix.Component
 
   alias Lifecycle.Pubsub
   alias Lifecycle.Timeline
