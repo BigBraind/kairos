@@ -25,7 +25,6 @@ defmodule LifecycleWeb.Modal.View.Transition.TransitionList do
      )}
   end
 
-  # TODO: abstract the static assets abstraction
   def render(assigns) do
     ~H"""
         <div>

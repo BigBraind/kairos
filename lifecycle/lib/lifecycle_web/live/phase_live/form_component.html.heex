@@ -11,19 +11,19 @@
     >
 
     <%= label f, :title %>
-    <%= text_input f, :title, phx_debounce: "blur"%>
+    <%= text_input f, :title, phx_debounce: "blur", autocomplete: "off" %>
     <%= error_tag f, :title %>
 
     <br>
   
     <%= label f, :content %>
-    <%= text_input f, :content, phx_debounce: "blur" %>
+    <%= text_input f, :content, phx_debounce: "blur", autocomplete: "off" %>
     <%= error_tag f, :content %>
 
     <br>
   
     <%= label f, :type %>
-    <%= text_input f, :type, phx_debounce: "blur" %>
+    <%= text_input f, :type, phx_debounce: "blur", autocomplete: "off" %>
     <%= error_tag f, :type %>
     <br>
 
@@ -32,7 +32,7 @@
         <div class="flex flex-wrap -mx-1 overflow-hidden">
           <div class="form-group px-1 w-3/6">
             <%= label trait, :name %>
-            <%= text_input trait, :name, class: "form-control" %>
+            <%= text_input trait, :name, class: "form-control", autocomplete: "off" %>
             <%= error_tag trait, :name %>
           </div>
 
@@ -44,7 +44,7 @@
 
           <div class="form-group w-2/6">
             <%= label trait, :default_value %>
-            <%= text_input trait, :value, class: "form-control" %>
+            <%= text_input trait, :value, class: "form-control", autocomplete: "off" %>
             <%= error_tag trait, :value %>
           </div>
 

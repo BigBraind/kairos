@@ -125,23 +125,17 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
   end
 
   defp save_phase(socket, :new_child, phase_params) do
-    properties = Map.keys(socket.assigns.phase.template)
-
-    attrs =
-      for key <- properties do
-        [key, phase_params[key]]
+    trait_list =
+      for trait <- Map.values(phase_params["traits"]) do
+        trait
       end
 
-    template =
-      attrs
-      |> List.flatten()
-      |> Enum.chunk_every(2)
-      |> Map.new(fn [k, v] -> {k, v} end)
+    trait_list = List.flatten(trait_list)
 
-    # creating a new map to pass into create_phase
     phase_params =
       %{}
-      |> Map.put("template", template)
+      |> Map.put("existing_traits", trait_list)
+      # |> Map.put("template", template)
       |> Map.put("content", phase_params["content"])
       |> Map.put("title", phase_params["title"])
       |> Map.put("type", phase_params["type"])
@@ -151,16 +145,25 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
   end
 
   defp create_phase(action, phase_params, socket) do
-    check_trait = Map.has_key?(socket.assigns.changeset.changes, "traits")
+    check_trait = Map.has_key?(socket.assigns.changeset.changes, :traits)
+    check_existing_trait = phase_params["existing_traits"] != %{}
 
     case Timeline.create_phase(phase_params) do
       {:ok, phase} ->
         # TODO: TYPE AND UNIT NOT IMPLEMENTED YET
-        if check_trait do # to avoid raising KeyError
+        # to avoid raising KeyError
+        if check_trait do
           _trait_map =
             socket.assigns.changeset.changes.traits
             |> Enum.map(fn t -> t.changes end)
             |> Enum.map(fn t -> Phase.create_trait(t, phase) end)
+        end
+
+        if check_existing_trait do
+          for trait <- phase_params["existing_traits"] do
+            trait
+            |> Phase.create_trait(phase)
+          end
         end
 
         case action do
@@ -186,17 +189,6 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
   end
 
   def handle_flash(socket), do: {:noreply, clear_flash(socket)}
-
-  # defp check_string_value(map, key, value) do
-  #   # using regex to check if this string contains a number
-  #   case String.match?(value, ~r/\d+/) do
-  #     true ->
-  #       Map.merge(map, %{String.to_atom(key) => value})
-
-  #     _ ->
-  #       map
-  #   end
-  # end
 
   defp gen_tracker, do: :crypto.strong_rand_bytes(5) |> Base.url_encode64() |> binary_part(0, 5)
 end

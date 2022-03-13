@@ -3,7 +3,6 @@ defmodule LifecycleWeb.Modal.Function.Transition.TransitionHandler do
   Handle transition button event
   """
 
-  # use Phoenix.Component
   use LifecycleWeb, :live_component
 
   alias Lifecycle.Pubsub
