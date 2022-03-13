@@ -18,12 +18,9 @@ defmodule Lifecycle.Bridge.Journeyer do
   end
 
   @doc false
-  def changeset(link, attrs \\ %{}) do
-    link
+  def changeset(journey, attrs \\ %{}) do
+    journey
     |> cast(attrs, [:journey_id, :party_id])
     |> validate_required([:journey_id, :party_id])
-
-    # |> unique_constraint([:parent_id, :child_id], name: :parent_to_child)
-    # |> unique_constraint([:child_id, :parent_id], name: :child_to_parent)
   end
 end

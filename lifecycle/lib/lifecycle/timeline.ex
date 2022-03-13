@@ -158,13 +158,14 @@ defmodule Lifecycle.Timeline do
           |> Phase.changeset(attrs)
           |> Repo.insert()
 
-          %Phasor{}
-          |> Phasor.changeset(%{parent_id: parent_id, child_id: phase.id})
-          |> Repo.insert()
+        %Phasor{}
+        |> Phasor.changeset(%{parent_id: parent_id, child_id: phase.id})
+        |> Repo.insert()
 
-          {:ok, phase}
+        {:ok, phase}
 
-        {:error, %Ecto.Changeset{} = changeset} -> {:error, changeset}
+      {:error, %Ecto.Changeset{} = changeset} ->
+        {:error, changeset}
 
       %{} ->
         %Phase{}
@@ -243,14 +244,17 @@ defmodule Lifecycle.Timeline do
   end
 
   def get_transition_by_date(begin_date, end_date) do
-    query = Transition
-    |> where([e], e.inserted_at >= ^begin_date and e.inserted_at <= ^end_date )
-    |> order_by([e], desc: e.inserted_at)
-    Repo.all(query, limit: 8 )
+    query =
+      Transition
+      |> where([e], e.inserted_at >= ^begin_date and e.inserted_at <= ^end_date)
+      |> order_by([e], desc: e.inserted_at)
+
+    Repo.all(query, limit: 8)
     |> Repo.preload([:initiator, :transiter])
   end
 
-  def get_transition_by_id(id), do: Repo.get!(Transition, id) |> Repo.preload([:transiter, :initiator])
+  def get_transition_by_id(id),
+    do: Repo.get!(Transition, id) |> Repo.preload([:transiter, :initiator])
 
   def change_transition(%Transition{} = transition, attrs \\ %{}) do
     Transition.changeset(transition, attrs)
@@ -258,13 +262,27 @@ defmodule Lifecycle.Timeline do
 
   def get_user_by_id(id), do: Repo.get!(User, id) |> preload([:transiter, :initiator])
 
+  def list_transitions, do: Repo.all(from(p in Transition, preload: [:transiter, :initiator]))
+
   def delete_transition(%Transition{} = transition), do: Repo.delete(transition)
 
   def create_journey(attrs \\ %{}) do
     %Journey{}
-    # |> Ecto.build_assoc(:party)
     |> Journey.changeset(attrs)
     |> Repo.insert()
+  end
+
+  def start_journey(transition, attrs) do
+
+    {:ok, journey} =
+      %Journey{}
+      |> Journey.changeset(attrs)
+      |> Repo.insert()
+
+    create_transition(%{transition | journey_id: journey.id})
+
+    {:ok, journey}
+
   end
 
   def update_journey(%Journey{} = journey, attrs) do
@@ -273,5 +291,16 @@ defmodule Lifecycle.Timeline do
     |> Repo.update()
   end
 
-  def list_transitions, do: Repo.all(from(p in Transition, preload: [:transiter, :initiator]))
+  def update_journey(transition, %Journey{} = journey, attrs) do
+    journey
+    |> Journey.changeset(attrs)
+    |> Repo.update()
+
+    create_transition(%{transition | journey_id: journey.id})
+  end
+
+  def change_journey(%Journey{} = journey, attrs \\ %{}) do
+    Journey.changeset(journey, attrs)
+  end
+
 end

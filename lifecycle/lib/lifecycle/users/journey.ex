@@ -22,7 +22,6 @@ defmodule Lifecycle.Users.Journey do
   def changeset(journey, attrs) do
     journey
     |> cast(attrs, [:party_id])
-    # |> cast_assoc([:party])
-    # |> validate_required([:party])
+    |> validate_required([:party_id])
   end
 end

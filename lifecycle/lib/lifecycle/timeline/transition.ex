@@ -22,6 +22,6 @@ defmodule Lifecycle.Timeline.Transition do
   @doc false
   def changeset(transition, attrs) do
     transition
-    |> cast(attrs, [:transited, :transiter_id, :answers, :phase_id, :initiator_id])
+    |> cast(attrs, [:transited, :transiter_id, :answers, :phase_id, :initiator_id, :journey_id])
   end
 end
