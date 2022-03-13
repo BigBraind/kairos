@@ -11,9 +11,9 @@ defmodule LifecycleWeb.EchoLive.Index do
   alias LifecycleWeb.Modal.View.Echoes.Echoes
 
   alias LifecycleWeb.Modal.Function.Button.ApproveHandler
-  alias LifecycleWeb.Modal.Function.Button.TransitionHandler
   alias LifecycleWeb.Modal.Function.Echoes.EchoHandler
   alias LifecycleWeb.Modal.Function.Pubsub.Pubs
+  alias LifecycleWeb.Modal.Function.Transition.TransitionHandler
 
   @impl true
   def mount(_params, _session, socket) do

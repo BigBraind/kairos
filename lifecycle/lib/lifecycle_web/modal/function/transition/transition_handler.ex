@@ -1,4 +1,4 @@
-defmodule LifecycleWeb.Modal.Function.Button.TransitionHandler do
+defmodule LifecycleWeb.Modal.Function.Transition.TransitionHandler do
   @moduledoc """
   Handle transition button event
   """
@@ -97,7 +97,9 @@ defmodule LifecycleWeb.Modal.Function.Button.TransitionHandler do
     # construct echo_params for creating transition echo objects
     echo_params = %{
       "message" => image_list,
-      "type" => "image", # ! to be changed
+      # !
+      # FIXME: THE TYPE NOT LONGER NEEDED HERE
+      "type" => "image",
       "poster_id" => socket.assigns.current_user.id,
       "phase_id" => socket.assigns.phase.id
     }
@@ -117,6 +119,38 @@ defmodule LifecycleWeb.Modal.Function.Button.TransitionHandler do
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, changeset: changeset)}
+    end
+  end
+
+  @doc """
+  Handle delete transition event
+  """
+  def delete_transition(action, %{"id" => transition_id}, socket) do
+    transition = Timeline.get_transition_by_id(transition_id)
+    {:ok, deleted_transition} = Timeline.delete_transition(transition)
+
+    {Pubsub.notify_subs(
+       {:ok, deleted_transition},
+       [:transition, :deleted],
+       "phase:" <> deleted_transition.phase_id
+     )}
+
+    case action do
+      :transition_view ->
+        {:noreply,
+         socket
+         |> assign(
+           :transitions,
+           Timeline.get_transition_by_date(
+             socket.assigns.current_date,
+             socket.assigns.end_date
+           )
+         )}
+
+      :phase_view ->
+        {:noreply,
+         socket
+         |> assign(:transitions, Timeline.get_transition_list(socket.assigns.phase.id))}
     end
   end
 end

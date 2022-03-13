@@ -6,8 +6,8 @@ defmodule LifecycleWeb.TransitionLive.FormComponent do
   alias Lifecycle.Timeline
   alias Lifecycle.Timeline.Transition
 
-  alias LifecycleWeb.Modal.Function.Button.TransitionHandler
   alias LifecycleWeb.Modal.Function.Transition.ImageHandler
+  alias LifecycleWeb.Modal.Function.Transition.TransitionHandler
 
   @impl true
   def update(assigns, socket) do
