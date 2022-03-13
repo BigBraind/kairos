@@ -7,9 +7,12 @@ defmodule LifecycleWeb.Modal.Function.Pubsub.TransitionPubs do
   alias Lifecycle.Timeline
   alias Lifecycle.Timeline.Transition
 
-  # TODO: can do it like how we handle echo in pubs.ex -> handle echo created, dont reload the whole thing
   def handle_transition_created(socket, message) do
-    {:noreply, assign(socket, transitions: Timeline.get_transition_list(message.phase_id))}
+    new_transition = Timeline.get_transition_by_id(message.id)
+
+    {:noreply,
+     socket
+     |> assign(:transitions, [new_transition | socket.assigns.transitions])}
   end
 
   def handle_transition_deleted(socket, message) do
@@ -26,6 +29,7 @@ defmodule LifecycleWeb.Modal.Function.Pubsub.TransitionPubs do
       transiter_id: socket.assigns.current_user.id,
       socket: socket
     }
+
     {:noreply, assign(socket, transitions: replace_transition(params))}
   end
 
@@ -34,17 +38,16 @@ defmodule LifecycleWeb.Modal.Function.Pubsub.TransitionPubs do
   """
   def replace_transition(%{
         transition_id: transition_id,
-        transitions: transitions,
+        transitions: transitions
       }) do
-
     updated_transition = Timeline.get_transition_by_id(transition_id)
 
     Enum.map(transitions, fn
       %Transition{id: id} = old_transition ->
         if id == transition_id do
-            updated_transition
+          updated_transition
         else
-            old_transition
+          old_transition
         end
     end)
   end

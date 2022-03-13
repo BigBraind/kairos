@@ -10,6 +10,7 @@ defmodule Lifecycle.Massline do
   alias Lifecycle.Users.Party
   alias Lifecycle.Users.User
 
+
   @doc """
   Returns the list of all parties
 

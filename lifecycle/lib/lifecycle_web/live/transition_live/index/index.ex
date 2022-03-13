@@ -11,21 +11,15 @@ defmodule LifecycleWeb.TransitionLive.Index do
   alias LifecycleWeb.Modal.View.Transition.TransitionList
 
   alias LifecycleWeb.Modal.Function.Pubsub.TransitionPubs
+  alias LifecycleWeb.Modal.Function.Transition.TransitionHandler
 
   @impl true
   def mount(_params, _session, socket) do
     socket =
       socket
-      |> Timezone.get_timezone()
-
-    # this is an extremely stupid way of doing it, however,
-    # i have no idea on how to access the first element within the pipe operator,
-    # there must be a way to do so... I wonder hmmmm
-    socket =
-      socket
       |> Timezone.get_current_end_date(socket.assigns.timezone)
 
-    current_date = socket.assigns.current_date
+    start_date = socket.assigns.current_date
     end_date = socket.assigns.end_date
 
     {:ok,
@@ -33,7 +27,7 @@ defmodule LifecycleWeb.TransitionLive.Index do
      |> assign(
        :transitions_by_date,
        Timeline.get_transition_by_date(
-         current_date,
+         start_date,
          end_date
        )
      )}
@@ -56,6 +50,29 @@ defmodule LifecycleWeb.TransitionLive.Index do
 
     socket = assign_dates(socket, params)
     {:noreply, apply_action(socket, socket.assigns.live_action, params)}
+  end
+
+  @impl true
+  def handle_event("transit", %{"value" => transition_id}, socket) do
+    params = Map.put(%{}, "transition", transition_id)
+    TransitionHandler.handle_transition(:assign_transiter, params, socket)
+  end
+
+  @impl true
+  def handle_event("delete-transition", %{"id" => _transition_id} = params, socket) do
+    TransitionHandler.delete_transition(:transition_view, params, socket)
+    # transition = Timeline.get_transition_by_id(transition_id)
+    # {:ok, deleted_transition} = Timeline.delete_transition(transition)
+
+    # {Pubsub.notify_subs(
+    #    {:ok, deleted_transition},
+    #    [:transition, :deleted],
+    #    "phase:" <> deleted_transition.phase_id
+    #  )}
+
+    # {:noreply,
+    #  socket
+    #  |> assign(:transitions, Timeline.get_transition_list(socket.assigns.phase.id))}
   end
 
   defp apply_action(socket, :index, _params) do

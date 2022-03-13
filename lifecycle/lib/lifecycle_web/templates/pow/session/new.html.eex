@@ -1,6 +1,8 @@
 <%# Main Page, the sign in page %>
 
-<h1>Sign in</h1>
+<h1 class =" text-center mt-6 mb-6 max-w-xl mx-auto font-semibold text-5xl">Welcome to BigBrain, the <span class="text-purple-400 font-light opacity-50 "> quiet documentation tool. </span></h1>
+
+<%# <h1 class ="animate-bounce">Sign in</h1> %>
 
 <%= form_for @changeset, @action, [as: :user], fn f -> %>
   <%= if @changeset.action do %>
@@ -21,7 +23,7 @@
 
   </button> %>
 
-  <%= submit class: "px-4 py-1 text-sm bg-purple-600 text-white font-semibold rounded-full border border-white hover:text-purple-600 hover:bg-white hover:border-transparent focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 hover:border-purple-200" do %>
+  <%= submit class: "px-4 py-1 text-md bg-purple-600 text-white font-semibold rounded-full border border-white hover:text-purple-600 hover:bg-white hover:border-transparent focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 hover:border-purple-200" do %>
     Sign in
   <% end %>
 <% end %>

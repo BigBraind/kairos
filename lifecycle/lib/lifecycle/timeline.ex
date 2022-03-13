@@ -158,11 +158,13 @@ defmodule Lifecycle.Timeline do
           |> Phase.changeset(attrs)
           |> Repo.insert()
 
-        %Phasor{}
-        |> Phasor.changeset(%{parent_id: parent_id, child_id: phase.id})
-        |> Repo.insert()
+          %Phasor{}
+          |> Phasor.changeset(%{parent_id: parent_id, child_id: phase.id})
+          |> Repo.insert()
 
-        {:ok, phase}
+          {:ok, phase}
+
+        {:error, %Ecto.Changeset{} = changeset} -> {:error, changeset}
 
       %{} ->
         %Phase{}
@@ -258,6 +260,7 @@ defmodule Lifecycle.Timeline do
 
   def delete_transition(%Transition{} = transition), do: Repo.delete(transition)
 
+<<<<<<< HEAD
   def create_journey(attrs \\ %{}) do
     %Journey{}
     # |> Ecto.build_assoc(:party)
@@ -270,4 +273,7 @@ defmodule Lifecycle.Timeline do
     |> Journey.changeset(attrs)
     |> Repo.update()
   end
+=======
+  def list_transitions, do: Repo.all(from(p in Transition, preload: [:transiter, :initiator]))
+>>>>>>> a43def914d89547a73be241d71e11cfd230dbeb2
 end

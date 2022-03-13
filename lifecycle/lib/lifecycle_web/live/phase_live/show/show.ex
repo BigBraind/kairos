@@ -15,23 +15,22 @@ defmodule LifecycleWeb.PhaseLive.Show do
   alias LifecycleWeb.Modal.View.Transition.TransitionList
 
   alias LifecycleWeb.Modal.Function.Button.ApproveHandler
-  alias LifecycleWeb.Modal.Function.Button.TransitionHandler
   alias LifecycleWeb.Modal.Function.Component.Flash
   alias LifecycleWeb.Modal.Function.Echoes.EchoHandler
   alias LifecycleWeb.Modal.Function.Pubsub.Pubs
   alias LifecycleWeb.Modal.Function.Pubsub.TransitionPubs
+  alias LifecycleWeb.Modal.Function.Transition.TransitionHandler
 
   @impl true
   def mount(params, _session, socket) do
     phase_id = params["phase_id"]
-    socket = Timezone.get_timezone(socket)
     echo_changeset = Timeline.Echo.changeset(%Echo{})
     if connected?(socket), do: Pubsub.subscribe("phase:" <> phase_id)
 
     socket =
       allow_upload(socket, :transition,
         accept: ~w(.png .jpg .jpeg .mp3 .m4a .aac .oga),
-        max_entries: 1
+        max_entries: 2
       )
 
     {:ok,
@@ -86,13 +85,13 @@ defmodule LifecycleWeb.PhaseLive.Show do
   defp apply_action(socket, :new_child, params) do
     parent_phase = Timeline.get_phase!(params["phase_id"])
 
-    parent_phase = %{parent_phase | parent: parent_phase.id}
+    parent_phase_map = %{parent_phase | parent: parent_phase.id}
 
     socket
     |> assign(:page_title, "Child Phase")
-    |> assign(:phase, parent_phase)
+    |> assign(:phase, parent_phase_map)
     # to get the properties and inherit to child phase
-    |> assign(:template, parent_phase.template)
+    |> assign(:template, Phase.list_traits(parent_phase.id))
   end
 
   defp apply_action(socket, :show, %{"phase_id" => phase_id}) do
@@ -129,19 +128,8 @@ defmodule LifecycleWeb.PhaseLive.Show do
   @impl true
   def handle_info(:clear_flash, socket), do: Flash.handle_flash(socket)
 
-  def handle_event("delete-transition", %{"id" => transition_id} = _params, socket) do
-    transition = Timeline.get_transition_by_id(transition_id)
-    {:ok, deleted_transition} = Timeline.delete_transition(transition)
-
-    {Pubsub.notify_subs(
-       {:ok, deleted_transition},
-       [:transition, :deleted],
-       "phase:" <> deleted_transition.phase_id
-     )}
-
-    {:noreply,
-     socket
-     |> assign(:transitions, Timeline.get_transition_list(socket.assigns.phase.id))}
+  def handle_event("delete-transition", %{"id" => _transition_id} = params, socket) do
+    TransitionHandler.delete_transition(:phase_view, params, socket)
   end
 
   def handle_event("transition", _params, socket) do
