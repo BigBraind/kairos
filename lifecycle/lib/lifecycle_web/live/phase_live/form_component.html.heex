@@ -43,16 +43,6 @@
           </div>
 
           <div class="form-group w-2/6">
-            123
-            <%= unless is_nil(trait.data.tracker) do %>
-              456 <%= trait.data.type %>
-                <%= if trait.data.type == :txt do %>
-                  123
-                <% end %>
-            <% end %>
-          </div>
-
-          <div class="form-group w-2/6">
             <%= label trait, :default_value %>
             <%= text_input trait, :value, class: "form-control" %>
             <%= error_tag trait, :value %>

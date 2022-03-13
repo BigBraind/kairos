@@ -10,6 +10,7 @@ defmodule LifecycleWeb.TransitionLive.Index do
   alias LifecycleWeb.Modal.View.Calendar.Month
   alias LifecycleWeb.Modal.View.Transition.TransitionList
 
+  alias LifecycleWeb.Modal.Function.Button.TransitionHandler
   alias LifecycleWeb.Modal.Function.Pubsub.TransitionPubs
 
   @impl true
@@ -49,6 +50,12 @@ defmodule LifecycleWeb.TransitionLive.Index do
 
     socket = assign_dates(socket, params)
     {:noreply, apply_action(socket, socket.assigns.live_action, params)}
+  end
+
+  @impl true
+  def handle_event("transit",  %{"value" => transition_id}, socket) do
+    params = Map.put(%{}, "transition", transition_id)
+    TransitionHandler.handle_transition(:assign_transiter, params, socket)
   end
 
   defp apply_action(socket, :index, _params) do
