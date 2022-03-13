@@ -3,7 +3,8 @@ defmodule LifecycleWeb.Modal.Function.Button.ApproveHandler do
   Handle approve button
   """
 
-  use LifecycleWeb, :live_component
+  # use LifecycleWeb, :live_component
+  use Phoenix.Component
 
   alias Lifecycle.Pubsub
   alias Lifecycle.Timeline

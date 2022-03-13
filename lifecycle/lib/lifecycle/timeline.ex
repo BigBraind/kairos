@@ -157,11 +157,13 @@ defmodule Lifecycle.Timeline do
           |> Phase.changeset(attrs)
           |> Repo.insert()
 
-        %Phasor{}
-        |> Phasor.changeset(%{parent_id: parent_id, child_id: phase.id})
-        |> Repo.insert()
+          %Phasor{}
+          |> Phasor.changeset(%{parent_id: parent_id, child_id: phase.id})
+          |> Repo.insert()
 
-        {:ok, phase}
+          {:ok, phase}
+
+        {:error, %Ecto.Changeset{} = changeset} -> {:error, changeset}
 
       %{} ->
         %Phase{}
@@ -256,4 +258,6 @@ defmodule Lifecycle.Timeline do
   def get_user_by_id(id), do: Repo.get!(User, id) |> preload([:transiter, :initiator])
 
   def delete_transition(%Transition{} = transition), do: Repo.delete(transition)
+
+  def list_transitions, do: Repo.all(from(p in Transition, preload: [:transiter, :initiator]))
 end
