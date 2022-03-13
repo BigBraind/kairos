@@ -4,11 +4,16 @@ defmodule Lifecycle.Users.Journey do
   """
   use Ecto.Schema
   import Ecto.Changeset
+  # alias Lifecycle.Bridge.Journeyer
+  alias Lifecycle.Timeline.Transition
 
   @primary_key {:id, :binary_id, autogenerate: true}
+  @foreign_key_type :binary_id
+
   schema "journeys" do
-    # field :id, :binary_id, primary_key: true
-    has_one :party, Lifecycle.Users.Party, foreign_key: :party_id
+    belongs_to :party, Lifecycle.Users.Party, foreign_key: :party_id
+    has_many :transitions, Transition, foreign_key: :transition_id
+    belongs_to :realm, Lifecycle.Orgs.Realm
 
     timestamps()
   end
@@ -16,6 +21,8 @@ defmodule Lifecycle.Users.Journey do
   @doc false
   def changeset(journey, attrs) do
     journey
-    |> cast(attrs, [])
+    |> cast(attrs, [:party_id])
+    # |> cast_assoc([:party])
+    # |> validate_required([:party])
   end
 end
