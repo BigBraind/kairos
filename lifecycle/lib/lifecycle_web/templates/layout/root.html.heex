@@ -18,7 +18,7 @@ It may also be given via the :root_layout option to a live_session macro in the 
     <script defer phx-track-static type="text/javascript" src={Routes.static_path(@conn, "/assets/app.js")}></script>
   </head>
   <body class="bg-slate-200">
-    <div class ='p-5'>
+    <div class ="p-5">
       <img class="h-10" src="/images/bigbrainlogo.png" alt="Big Brain Logo" />
     </div>
     <header>
@@ -38,12 +38,11 @@ It may also be given via the :root_layout option to a live_session macro in the 
               <p class = "mt-2 bg-green-300 p-2 max-w-sm text-center rounded-md"> wish.com taskbar </p>
 
 
-              <li class="mt-2"><%= link "Phases", to: Routes.phase_index_path(@conn, :index) %></li>
-              <li class="mt-2"><%= link "Party", to: Routes.party_index_path(@conn, :index) %></li>
-              <li class="mt-2"><%= link "Billing", to: Routes.billing_index_path(@conn, :index) %></li>
-              <li class="mt-2"><%= link "View Transition", to: Routes.transition_index_path(@conn, :index) %></li>
+              <li class="mt-6 fab"><%= link "Phases", to: Routes.phase_index_path(@conn, :index) %></li>
+              <li class="fab"><%= link "Party", to: Routes.party_index_path(@conn, :index) %></li>
+              <li class="fab"><%= link "Billing", to: Routes.billing_index_path(@conn, :index) %></li>
             <% else %>
-              <p class = "mt-2 bg-red-300 p-2 max-w-sm text-center rounded-md "> Haha loser u dont have access yet </p>
+              <p class = "mt-2 mx-2 bg-red-300 p-2 max-w-xs text-center rounded-md "> Haha loser u dont have access yet </p>
             <% end %>
             <%= if function_exported?(Routes, :live_dashboard_path, 2) do %>
               <%= if Pow.Plug.current_user(@conn) do %>
@@ -55,8 +54,8 @@ It may also be given via the :root_layout option to a live_session macro in the 
 
           </ul>
         </nav>
-        <a href="/" class="p-6 max-w-sm mx-auto bg-slate-200 rounded-xl shadow-lg flex items-center space-x-4">
-          <img src={Routes.static_path(@conn, "/images/bigbrainlogo.png")} alt="Phoenix Framework Logo" class="animate-[bounce_0.6s_infinite]"/>
+        <a href="/" class="p-6 max-w-xl mx-auto bg-slate-200 rounded-xl shadow-lg flex items-center space-x-4">
+          <img class=" animate-[bounce_0.6s_infinite]" src={Routes.static_path(@conn, "/images/bigbrainlogo.png")} alt="Big Brain Logo"/>
         </a>
       </section>
     </header>
