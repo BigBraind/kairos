@@ -247,7 +247,7 @@ defmodule Lifecycle.Timeline do
     query =
       Transition
       |> where([e], e.journey_id == ^journey_id)
-      |> order_by([e], desc: e.inserted_at)
+      |> order_by([e], e.inserted_at)
 
     Repo.all(query, limit: 8)
   end
