@@ -32,7 +32,6 @@ defmodule Lifecycle.Timeline.Phase do
   @doc false
   def changeset(phase, attrs) do
     phase
-
     |> cast(attrs, [:content, :title, :type])
     |> cast_assoc(:traits, on_replace: :delete_if_exists)
     |> validate_length(:title, max: @max_len)
@@ -68,7 +67,9 @@ defmodule Lifecycle.Timeline.Phase do
 
   """
   def get_trait!(phase_id, id), do: Repo.get_by!(Trait, phase_id: phase_id, id: id)
-  def get_trait!(phase_id, name, type), do: Repo.get_by!(Trait, phase_id: phase_id, name: name, type: type)
+
+  def get_trait!(phase_id, name, type),
+    do: Repo.get_by!(Trait, phase_id: phase_id, name: name, type: type)
 
   @doc """
   Creates a trait.

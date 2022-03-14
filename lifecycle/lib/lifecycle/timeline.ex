@@ -233,12 +233,21 @@ defmodule Lifecycle.Timeline do
     |> Repo.update()
   end
 
-  def get_transition_list(id) do
+  def get_transition_list(phase_id) do
     query =
       Transition
-      |> where([e], e.phase_id == ^id)
+      |> where([e], e.phase_id == ^phase_id)
       |> order_by([e], desc: e.inserted_at)
       |> preload([:transiter, :initiator])
+
+    Repo.all(query, limit: 8)
+  end
+
+  def get_transition_by_journey(journey_id) do
+    query =
+      Transition
+      |> where([e], e.journey_id == ^journey_id)
+      |> order_by([e], desc: e.inserted_at)
 
     Repo.all(query, limit: 8)
   end
@@ -273,16 +282,16 @@ defmodule Lifecycle.Timeline do
   end
 
   def start_journey(transition, attrs) do
-
     {:ok, journey} =
       %Journey{}
       |> Journey.changeset(attrs)
       |> Repo.insert()
 
-    create_transition(%{transition | journey_id: journey.id})
+    transition
+    |> Map.put(:journey_id, journey.id)
+    |> create_transition()
 
     {:ok, journey}
-
   end
 
   def update_journey(%Journey{} = journey, attrs) do
@@ -303,4 +312,12 @@ defmodule Lifecycle.Timeline do
     Journey.changeset(journey, attrs)
   end
 
+  def get_all_journeys, do: Repo.all(from(p in Journey))
+
+  def get_journey_by_party(party_id), do: Repo.get_by!(Journey, party_id: party_id)
+
+  def get_journey_by_id(journey_id) do
+    Repo.get!(Journey, journey_id)
+    # |> Repo.preload([:transitions])
+  end
 end
