@@ -59,8 +59,9 @@
     <%= submit "Send", phx_disable_with: "Sending..." %> 
   </div>
 </.form> 
+<%# <%= if @check_parent_phase do %> 
+  <span><%= live_patch @transition_title, to: Routes.phase_show_path(@socket, :transition_new, @phase.id), class: "button" %></span>
 
-<span><%= live_patch "Transition", to: Routes.phase_show_path(@socket, :transition_new, @phase.id), class: "button" %></span>
 
 
 <div>

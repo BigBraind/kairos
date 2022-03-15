@@ -26,11 +26,27 @@ defmodule LifecycleWeb.PhaseLive.Show do
     echo_changeset = Timeline.Echo.changeset(%Echo{})
     if connected?(socket), do: Pubsub.subscribe("phase:" <> phase_id)
 
-    socket =
-      allow_upload(socket, :transition,
-        accept: ~w(.png .jpg .jpeg .mp3 .m4a .aac .oga),
-        max_entries: 2
-      )
+    phase = Timeline.get_phase!(phase_id)
+    # * to be used to identify parent phase for crafting journey
+    # * true -> parent phase
+    check_parent_phase =
+      case phase.parent do
+        [] -> true
+        _ -> false
+      end
+
+    transition_title =
+      if check_parent_phase do
+        "Start a new Journey"
+      else
+        "New Transition"
+      end
+
+    # socket =
+    #   allow_upload(socket, :transition,
+    #     accept: ~w(.png .jpg .jpeg .mp3 .m4a .aac .oga),
+    #     max_entries: 2
+    #   )
 
     {:ok,
      assign(socket,
@@ -39,7 +55,10 @@ defmodule LifecycleWeb.PhaseLive.Show do
        echoes: Timeline.phase_recall(phase_id),
        image_list: [],
        transiting: false,
-       transitions: Timeline.get_transition_list(phase_id)
+       transitions: Timeline.get_transition_list(phase_id),
+       # * a helper atom to identify whther if this phase is parent phase
+       check_parent_phase: check_parent_phase,
+       transition_title: transition_title
        # template: Phase.list_traits(id)
      )}
   end
@@ -52,16 +71,11 @@ defmodule LifecycleWeb.PhaseLive.Show do
   defp apply_action(socket, :transition_new, %{"phase_id" => phase_id}) do
     phase = Timeline.get_phase!(phase_id)
 
-    check_parent_phase = # * to be used to identify parent phase for crafting journey
-      case phase.parent do
-        [] -> true
-        _ -> false
-      end
-
     socket
     |> assign(:phase, phase)
     # a helper atom to identify whther if this phase is parent phase
-    |> assign(:check_parent_phase, check_parent_phase)
+    # |> assign(:transition_title, transition_title)
+    # |> assign(:check_parent_phase, check_parent_phase)
     |> assign(:template, Phase.list_traits(phase_id))
     |> assign(:title, "Transition")
     |> assign(:current_user, socket.assigns.current_user)
