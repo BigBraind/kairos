@@ -12,7 +12,7 @@ defmodule Lifecycle.Users.Journey do
 
   schema "journeys" do
     belongs_to :party, Lifecycle.Users.Party, foreign_key: :party_id
-    has_many :transitions, Transition, foreign_key: :transition_id
+    has_many :transitions, Transition, foreign_key: :journey_id
     # belongs_to :realm, Lifecycle.Orgs.Realm
 
     timestamps()
