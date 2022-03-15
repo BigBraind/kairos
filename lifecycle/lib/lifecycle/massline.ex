@@ -197,7 +197,7 @@ defmodule Lifecycle.Massline do
   Gets user's id by passing in user's name
   """
   def get_user_by_name(name) do
-    Repo.get_by!(User, name: name)
+    Repo.get_by!(User, name: name) |> Repo.preload([:parties])
   rescue
     Ecto.NoResultsError ->
       {:error, "user not found, make sure you enter the correct user name"}

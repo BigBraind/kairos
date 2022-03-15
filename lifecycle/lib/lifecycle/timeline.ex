@@ -10,8 +10,8 @@ defmodule Lifecycle.Timeline do
   alias Lifecycle.Timeline.Echo
   alias Lifecycle.Timeline.Phase
   alias Lifecycle.Timeline.Transition
-  alias Lifecycle.Users.User
   alias Lifecycle.Users.Journey
+  alias Lifecycle.Users.User
 
   @doc """
   Returns the list of echoes.
@@ -300,12 +300,15 @@ defmodule Lifecycle.Timeline do
     |> Repo.update()
   end
 
-  def update_journey(transition, %Journey{} = journey, attrs) do
+  def update_journey_transition(transition, %Journey{} = journey, attrs \\ %{}) do
     journey
     |> Journey.changeset(attrs)
     |> Repo.update()
 
-    create_transition(%{transition | journey_id: journey.id})
+    # create_transition(%{transition | journey_id: journey.id})
+    transition
+    |> Map.put(:journey_id, journey.id)
+    |> create_transition()
   end
 
   def change_journey(%Journey{} = journey, attrs \\ %{}) do
@@ -317,7 +320,7 @@ defmodule Lifecycle.Timeline do
   def get_journey_by_party(party_id), do: Repo.get_by!(Journey, party_id: party_id)
 
   def get_journey_by_id(journey_id) do
-    Repo.get!(Journey, journey_id)
+    Repo.get(Journey, journey_id)
     # |> Repo.preload([:transitions])
   end
 end

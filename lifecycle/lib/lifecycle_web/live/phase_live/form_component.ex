@@ -125,17 +125,25 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
   end
 
   defp save_phase(socket, :new_child, phase_params) do
-    trait_list =
-      for trait <- Map.values(phase_params["traits"]) do
-        trait
-      end
+    check_existing_trait = Map.has_key?(phase_params, :traits)
 
-    trait_list = List.flatten(trait_list)
+    new_phase_params = %{}
 
-    phase_params =
-      %{}
-      |> Map.put("existing_traits", trait_list)
-      # |> Map.put("template", template)
+    if check_existing_trait do
+      trait_list =
+        for trait <- Map.values(phase_params["traits"]) do
+          trait
+        end
+
+      trait_list = List.flatten(trait_list)
+
+      new_phase_params =
+        new_phase_params
+        |> Map.put("existing_traits", trait_list)
+    end
+
+    new_phase_params =
+      new_phase_params
       |> Map.put("content", phase_params["content"])
       |> Map.put("title", phase_params["title"])
       |> Map.put("type", phase_params["type"])
@@ -146,7 +154,7 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
 
   defp create_phase(action, phase_params, socket) do
     check_trait = Map.has_key?(socket.assigns.changeset.changes, :traits)
-    check_existing_trait = phase_params["existing_traits"] != %{}
+    check_existing_trait = Map.has_key?(phase_params, :existing_traits)
 
     case Timeline.create_phase(phase_params) do
       {:ok, phase} ->

@@ -28,7 +28,6 @@
                 <% end %>
             <% end %>
             <br>
-            <%= live_file_input @uploads.transition %>
         <% end %>
 
         <%= label f, :comment %>
@@ -37,6 +36,8 @@
         <% else %>
             <%= textarea f, :comment, phx_debounce: "blur", autocomplete: "off" %>
         <% end %>
+        <br>
+        <%= live_file_input @uploads.transition %>
 
         <section phx-drop-target={@uploads.transition.ref}>
 

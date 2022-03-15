@@ -10,7 +10,6 @@ defmodule LifecycleWeb.PhaseLive.Show do
   alias Lifecycle.Timezone
 
   alias LifecycleWeb.Modal.View.Button.Phases
-  alias LifecycleWeb.Modal.View.Button.Transitions
   alias LifecycleWeb.Modal.View.Echoes.Echoes
   alias LifecycleWeb.Modal.View.Transition.TransitionList
 
@@ -51,8 +50,18 @@ defmodule LifecycleWeb.PhaseLive.Show do
   end
 
   defp apply_action(socket, :transition_new, %{"phase_id" => phase_id}) do
+    phase = Timeline.get_phase!(phase_id)
+
+    check_parent_phase = # * to be used to identify parent phase for crafting journey
+      case phase.parent do
+        [] -> true
+        _ -> false
+      end
+
     socket
-    |> assign(:phase, Timeline.get_phase!(phase_id))
+    |> assign(:phase, phase)
+    # a helper atom to identify whther if this phase is parent phase
+    |> assign(:check_parent_phase, check_parent_phase)
     |> assign(:template, Phase.list_traits(phase_id))
     |> assign(:title, "Transition")
     |> assign(:current_user, socket.assigns.current_user)
