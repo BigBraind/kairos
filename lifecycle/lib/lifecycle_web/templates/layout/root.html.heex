@@ -18,17 +18,29 @@ It may also be given via the :root_layout option to a live_session macro in the 
     <script defer phx-track-static type="text/javascript" src={Routes.static_path(@conn, "/assets/app.js")}></script>
   </head>
   <body class="bg-slate-200">
-    <div class ="p-5">
+
+    <%= if Pow.Plug.current_user(@conn) do %>
+      <div class="absolute top-5 right-5 h-16 w-16 ...">Sign Out</div>
+    <% end %>
+    <%# if screen size damn big, can change color %>
+    <%# <body class="bg-slate-200 3xl:bg-red-300"> %>
+
+    <div class ="p-5 absolute h-15 w-15">
       <a href = "/">
       <img class="h-12 animate-[bounce_2s_infinite]" src="/images/bigbrainlogo.png" alt="Big Brain Logo" />
       </a>
+      
     </div>
+    
     <header>
       <section class="mt-2 flex top-0 left-0 m-2 flex flex-col">
+      <%= unless Pow.Plug.current_user(@conn) do %>
+        <p class = "m-auto bg-red-300 p-2 max-w-xs text-center rounded-md "> Haha loser u dont have access yet </p>
+      <% end %>
         <nav>
           <ul>
             <%= if Pow.Plug.current_user(@conn) do %>
-              <li class="mt-2"><%= @current_user.name %></li>
+              <li class="mt-20"><%= @current_user.name %></li>
               <span class="text-center"><%= link "Sign out", to: Routes.pow_session_path(@conn, :delete), method: :delete %></span>
             <% else %>
               <%# <li><%= link "Register", to: Routes.pow_registration_path(@conn, :new)</li> %> 
@@ -44,7 +56,6 @@ It may also be given via the :root_layout option to a live_session macro in the 
               <li class="fab"><%= link "Party", to: Routes.party_index_path(@conn, :index) %></li>
               <li class="fab"><%= link "Billing", to: Routes.billing_index_path(@conn, :index) %></li>
             <% else %>
-              <p class = "mt-2 mx-2 bg-red-300 p-2 max-w-xs text-center rounded-md "> Haha loser u dont have access yet </p>
             <% end %>
             <%= if function_exported?(Routes, :live_dashboard_path, 2) do %>
               <%= if Pow.Plug.current_user(@conn) do %>
@@ -62,12 +73,18 @@ It may also be given via the :root_layout option to a live_session macro in the 
         <%= if Pow.Plug.current_user(@conn) do %>
         <% else %>
 
-          <a href="/" class="mt-10 max-w-l mx-auto bg-slate-200 rounded-xl shadow-lg flex items-center space-x-40">
-            <img class="h-402 object-fill animate-[bounce_5s_infinite]" src={Routes.static_path(@conn, "/images/bigbrainlogo.png")} alt="Big Brain Logo"/>
+          <a href="/" class="mt-10 max-w-xl mx-auto bg-slate-200 rounded-xl shadow-lg flex object-center">
+            <img class="h-20 object-fill animate-[bounce_5s_infinite]" src={Routes.static_path(@conn, "/images/bigbrainlogo.png")} alt="Big Brain Logo"/>
           </a>
         <% end %>
       </section>
     </header>
     <%= @inner_content %>
+
+    <%= if Pow.Plug.current_user(@conn) do %>
+      <span class="text-center"><%= link "Sign out", to: Routes.pow_session_path(@conn, :delete), method: :delete %></span>
+    <% end %>
+
   </body>
+  
 </html>
