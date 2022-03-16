@@ -10,7 +10,7 @@
     return_to: Routes.phase_index_path(@socket, :index) %>
 <% end %>
 
-<table width="30%">
+<table class ="table w-full" >
 <thead>
 <tr>
 <th>Title</th>
@@ -19,9 +19,10 @@
 <th>Editorial</th>
 </tr>
 </thead>
-<tbody id="phases">
+<tbody id="phases" >
+
 <%= for phase <- @phases do %>
-    <tr id={"phase-#{phase.id}"}>
+    <tr id={"phase-#{phase.id}"} class ="table-row">
     <td><span><%= live_redirect phase.title, to: Routes.phase_show_path(@socket, :show, phase), class: "button"%></span></td>
     <td><%= phase.content %></td>
     <%= if phase.parent do %>
