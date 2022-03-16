@@ -4,6 +4,7 @@
     title: @page_title,
     action: @live_action,
     phase: @phase,
+    current_user: @current_user,
     return_to: Routes.phase_show_path(@socket, :show, @phase.id) %>
 <% end %>
 
@@ -59,23 +60,18 @@
     <%= submit "Send", phx_disable_with: "Sending..." %> 
   </div>
 </.form> 
-<%# <%= if @check_parent_phase do %> 
-  <span><%= live_patch @transition_title, to: Routes.phase_show_path(@socket, :transition_new, @phase.id), class: "button" %></span>
 
-
+<%= if @check_parent_phase do %>
+  <span><%= live_patch "Start a new Journey", to: Routes.phase_show_path(@socket, :transition_new, @phase.id), class: "button" %></span>
+<% end %>
 
 <div>
   <div align="right">
-
-    <span><%= live_patch "+ Child Phase 🦋⚡", to: Routes.phase_show_path(@socket, :new_child, @phase), class: "button" %></span>
-<br>
 <span><%= live_patch "Edit Template", to: Routes.phase_show_path(@socket, :edit, @phase), class: "button" %></span>
 <br>
 
 <%= unless @live_action in [:new_child] do %>
-
   <.live_component id="phases-button" module={Phases} phase={@phase}/>
-
 <% end %>
 
   </div>

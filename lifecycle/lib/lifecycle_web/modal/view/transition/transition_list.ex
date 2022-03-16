@@ -4,6 +4,7 @@ defmodule LifecycleWeb.Modal.View.Transition.TransitionList do
   """
   use LifecycleWeb, :live_component
 
+  alias Lifecycle.Timeline
   alias Lifecycle.Timezone
 
   def mount(socket) do
@@ -11,17 +12,23 @@ defmodule LifecycleWeb.Modal.View.Transition.TransitionList do
   end
 
   def update(
-        %{transitions: transitions, id: id, timezone: timezone, timezone_offset: timezone_offset, phase: phase},
+        %{
+          transitions: transitions,
+          id: id,
+          timezone: timezone,
+          timezone_offset: timezone_offset,
+          phase: phase
+        },
         socket
       ) do
-
     {:ok,
      assign(socket,
        id: id,
        phase: phase,
        transitions: transitions,
        timezone: timezone,
-       timezone_offset: timezone_offset
+       timezone_offset: timezone_offset,
+       transition_check: true
      )}
   end
 
@@ -67,6 +74,14 @@ defmodule LifecycleWeb.Modal.View.Transition.TransitionList do
                   <span><%= live_patch "Edit Transition", to: Routes.phase_show_path(@socket, :transition_edit, transition.phase_id, transition.id), class: "button" %></span>
                 <% else %>
                   <span><%= live_patch "Edit Transition", to: Routes.transition_index_path(@socket, :index), class: "button" %></span>
+                <% end %>
+
+                <br>
+
+                <%= if @phase.child == [] do %>
+                  <span><%= live_patch "Proceed to Next Phase", to: Routes.phase_show_path(@socket, :new_child, @phase), class: "button", current_transition: transition.id %></span>
+                <% else %>
+                  456
                 <% end %>
 
                 <br>

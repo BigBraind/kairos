@@ -275,11 +275,11 @@ defmodule Lifecycle.Timeline do
 
   def delete_transition(%Transition{} = transition), do: Repo.delete(transition)
 
-  def create_journey(attrs \\ %{}) do
-    %Journey{}
-    |> Journey.changeset(attrs)
-    |> Repo.insert()
-  end
+  # def create_journey(attrs \\ %{}) do
+  #   %Journey{}
+  #   |> Journey.changeset(attrs)
+  #   |> Repo.insert()
+  # end
 
   def start_journey(transition, attrs) do
     {:ok, journey} =
@@ -305,7 +305,6 @@ defmodule Lifecycle.Timeline do
     |> Journey.changeset(attrs)
     |> Repo.update()
 
-    # create_transition(%{transition | journey_id: journey.id})
     transition
     |> Map.put(:journey_id, journey.id)
     |> create_transition()
@@ -321,6 +320,6 @@ defmodule Lifecycle.Timeline do
 
   def get_journey_by_id(journey_id) do
     Repo.get(Journey, journey_id)
-    # |> Repo.preload([:transitions])
+    |> Repo.preload([:transitions])
   end
 end

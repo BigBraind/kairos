@@ -12,7 +12,7 @@ defmodule LifecycleWeb.Modal.Function.Transition.TransitionHandler do
   alias LifecycleWeb.Modal.Function.Pubsub.Pubs
 
   @doc """
-  Approve transition event in phase show for transition object
+  Approve transition eprvent in phase show for transition object
   """
   def handle_transition(action, params, socket) do
     attrs =

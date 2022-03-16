@@ -13,8 +13,9 @@ defmodule LifecycleWeb.Router do
   end
 
   pipeline :authenticated do
-    plug Pow.Plug.RequireAuthenticated,
+    plug(Pow.Plug.RequireAuthenticated,
       error_handler: Pow.Phoenix.PlugErrorHandler
+    )
   end
 
   pipeline :api do

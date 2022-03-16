@@ -155,6 +155,7 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
   defp create_phase(action, phase_params, socket) do
     check_trait = Map.has_key?(socket.assigns.changeset.changes, :traits)
     check_existing_trait = Map.has_key?(phase_params, :existing_traits)
+    IO.inspect(socket.assigns.current_user)
 
     case Timeline.create_phase(phase_params) do
       {:ok, phase} ->
@@ -179,6 +180,9 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
             {Pubsub.notify_subs({:ok, phase}, [:phase, :created], "phase_index")}
 
           :new_child ->
+            IO.inspect(socket.assigns.current_user)
+            traits_map = create_transition(phase, socket)
+
             {Pubsub.notify_subs(
                {:ok, phase},
                [:phase, :created],
@@ -194,6 +198,22 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, changeset: changeset)}
     end
+  end
+
+  defp create_transition(phase, socket) do
+    IO.inspect(socket.assigns.current_user)
+    trait_list =
+      for trait <- phase.traits do
+        [trait.name, trait.value]
+      end
+
+    trait_map =
+      Map.new(trait_list, fn [k, v] -> {k, v} end)
+      |> Map.put("comment", "")
+      |> Map.put("image_list", "")
+      # |> Map.put(:initiator_id, socket.assigns.current_user.id)
+      |> Map.put(:phase_id, phase.id)
+      import IEx; IEx.pry()
   end
 
   def handle_flash(socket), do: {:noreply, clear_flash(socket)}

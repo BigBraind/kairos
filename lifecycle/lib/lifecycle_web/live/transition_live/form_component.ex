@@ -2,6 +2,7 @@ defmodule LifecycleWeb.TransitionLive.FormComponent do
   @moduledoc false
   use LifecycleWeb, :live_component
 
+  alias Lifecycle.Massline
   alias Lifecycle.Pubsub
   alias Lifecycle.Timeline
   alias Lifecycle.Timeline.Transition
@@ -37,16 +38,23 @@ defmodule LifecycleWeb.TransitionLive.FormComponent do
   defp save_transition(socket, :transition_new, params) do
     image_list = ImageHandler.handle_image(socket)
     params = Map.put(params, "image_list", image_list)
-    params =
+
+    transition_params =
       %{}
       |> Map.put(:answers, params)
       |> Map.put(:initiator_id, socket.assigns.current_user.id)
       |> Map.put(:phase_id, socket.assigns.phase.id)
 
-    case Timeline.create_transition(params) do
-      {:ok, transition} ->
+    user_id = socket.assigns.current_user.id
+    [membership] = Massline.list_my_parties(user_id)
+    journey_attr = Map.put(%{}, :party_id, membership.party_id)
+
+    case Timeline.start_journey(transition_params, journey_attr) do
+      {:ok, journey} ->
+        [first_transition] = Timeline.get_transition_by_journey(journey.id)
+
         {Pubsub.notify_subs(
-           {:ok, transition},
+           {:ok, first_transition},
            [:transition, :created],
            "phase:" <> socket.assigns.phase.id
          )}

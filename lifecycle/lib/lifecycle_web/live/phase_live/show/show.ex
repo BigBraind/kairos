@@ -35,19 +35,6 @@ defmodule LifecycleWeb.PhaseLive.Show do
         _ -> false
       end
 
-    transition_title =
-      if check_parent_phase do
-        "Start a new Journey"
-      else
-        "New Transition"
-      end
-
-    # socket =
-    #   allow_upload(socket, :transition,
-    #     accept: ~w(.png .jpg .jpeg .mp3 .m4a .aac .oga),
-    #     max_entries: 2
-    #   )
-
     {:ok,
      assign(socket,
        echo_changeset: echo_changeset,
@@ -57,8 +44,8 @@ defmodule LifecycleWeb.PhaseLive.Show do
        transiting: false,
        transitions: Timeline.get_transition_list(phase_id),
        # * a helper atom to identify whther if this phase is parent phase
-       check_parent_phase: check_parent_phase,
-       transition_title: transition_title
+       check_parent_phase: check_parent_phase
+
        # template: Phase.list_traits(id)
      )}
   end
@@ -71,13 +58,19 @@ defmodule LifecycleWeb.PhaseLive.Show do
   defp apply_action(socket, :transition_new, %{"phase_id" => phase_id}) do
     phase = Timeline.get_phase!(phase_id)
 
+    title =
+      if socket.assigns.check_parent_phase do
+        "New Journey"
+      else
+        "Proceed to New Phase"
+      end
+
     socket
     |> assign(:phase, phase)
     # a helper atom to identify whther if this phase is parent phase
-    # |> assign(:transition_title, transition_title)
-    # |> assign(:check_parent_phase, check_parent_phase)
+    |> assign(:check_parent_phase, socket.assigns.check_parent_phase)
     |> assign(:template, Phase.list_traits(phase_id))
-    |> assign(:title, "Transition")
+    |> assign(:title, title)
     |> assign(:current_user, socket.assigns.current_user)
     |> assign(:changeset, Timeline.change_transition(%Transition{}))
   end
@@ -106,6 +99,8 @@ defmodule LifecycleWeb.PhaseLive.Show do
 
   # for creating child phase
   defp apply_action(socket, :new_child, params) do
+    # IO.inspect(socket.assigns.current_transition)
+    IO.inspect(params)
     parent_phase = Timeline.get_phase!(params["phase_id"])
 
     parent_phase_map = %{parent_phase | parent: parent_phase.id}
@@ -153,6 +148,10 @@ defmodule LifecycleWeb.PhaseLive.Show do
 
   def handle_event("delete-transition", %{"id" => _transition_id} = params, socket) do
     TransitionHandler.delete_transition(:phase_view, params, socket)
+  end
+
+  def handle_event("to_next_phase", params, socket) do
+    TransitionHandler.transit_to_next_phase(params, socket)
   end
 
   def handle_event("transition", _params, socket) do
