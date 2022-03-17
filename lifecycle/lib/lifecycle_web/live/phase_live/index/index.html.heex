@@ -1,45 +1,76 @@
-<h1>Phases 🌙</h1>
+<div class="mx-2">
+    <h1 class="mb-5 text-4xl font-light">Phases 🌙</h1>
 
-<%= if @live_action in [:new, :edit] do %>
-    <%= live_modal LifecycleWeb.PhaseLive.FormComponent,
-    id: @phase.id || :new,
-    title: @page_title,
-    action: @live_action,
-    phase: @phase,
-    phases: @phases,
-    return_to: Routes.phase_index_path(@socket, :index) %>
-<% end %>
 
-<table class ="table w-full" >
-    <thead>
-        <tr>
-            <th>Title</th>
-            <th>Content</th>
-            <th>Parent</th>
-            <th>Editorial</th>
-        </tr>
-    </thead>
-    <tbody id="phases" >
+    <%= if @live_action in [:new, :edit] do %>
+        <%= live_modal LifecycleWeb.PhaseLive.FormComponent,
+        id: @phase.id || :new,
+        title: @page_title,
+        action: @live_action,
+        phase: @phase,
+        phases: @phases,
+        return_to: Routes.phase_index_path(@socket, :index) %>
+    <% end %>
 
-    <%= for phase <- @phases do %>
-        <tr id={"phase-#{phase.id}"} class ="table-row">
-        <td><span><%= live_redirect phase.title, to: Routes.phase_show_path(@socket, :show, phase), class: "button"%></span></td>
-        <td><%= phase.content %></td>
-        <td><%= phase.type %></td>
-        <%= if phase.parent do %>
-            <td><%= for parent <- phase.parent do %>
-            <span><%= live_redirect parent.title, to: Routes.phase_show_path(@socket, :show, parent), class: "button"%></span>
-            <% end %></td>
-        <% end %>
-   <td>
+    <table class ="shadow-lg bg-white border-seperate" >
+        <thead>
+            <tr>
+                <th class="table-header">Title</th>
+                <th class="table-header">Content</th>
+                <th class="table-header">Parent</th>
+                <th class="table-header">Editorial</th>
+                <th class="table-header">Actions</th>
+            </tr>
+        </thead>
+        <tbody id="phases" >
 
-   <span><%= live_patch "Edit", to: Routes.phase_index_path(@socket, :edit, phase), class: "button" %></span>
-   <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: phase.id, data: [confirm: "Are you sure? Princeton is watching"], class: "button" %></span>
+        <%= for phase <- @phases do %>
+            <tr id={"phase-#{phase.id}"} class ="">
+                <td class="border px-8 py-4"><span><%= live_redirect phase.title, to: Routes.phase_show_path(@socket, :show, phase), class: "button"%></span></td>
+                <td class="border px-8 py-4"><%= phase.content %></td>
+                <td class="border px-8 py-4"><%= phase.type %></td>
+                <%= if phase.parent do %>
+                    <td class="border px-8 py-4"><%= for parent <- phase.parent do %>
+                    <span><%= live_redirect parent.title, to: Routes.phase_show_path(@socket, :show, parent), class: "button"%></span>
+                    <% end %></td>
+                <% end %>
+                <td>
 
-   </td>
-   </tr>
-   <% end %>
-</tbody>
-</table>
+                <span class="mx-2 my-2"><%= live_patch "Edit", to: Routes.phase_index_path(@socket, :edit, phase), class: "button" %></span>
+                <span class="mx-2 my-2"><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: phase.id, data: [confirm: "Are you sure? Princeton is watching"], class: "button" %></span>
 
-<span><%= live_patch "New Phase", to: Routes.phase_index_path(@socket, :new) %></span>
+                </td>
+            </tr>
+    <% end %>
+    </tbody>
+    </table>
+
+    <span><%= live_patch "New Phase", to: Routes.phase_index_path(@socket, :new) %></span>
+
+    <%# <table class="">
+  <thead>
+    <tr>
+      <th>Song</th>
+      <th>Artist</th>
+      <th>Year</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>The Sliding Mr. Bones (Next Stop, Pottersville)</td>
+      <td>Malcolm Lockyer</td>
+      <td>1961</td>
+    </tr>
+    <tr>
+      <td>Witchy Woman</td>
+      <td>The Eagles</td>
+      <td>1972</td>
+    </tr>
+    <tr>
+      <td>Shining Star</td>
+      <td>Earth, Wind, and Fire</td>
+      <td>1975</td>
+    </tr>
+  </tbody>
+</table> %>
+</div>

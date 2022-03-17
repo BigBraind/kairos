@@ -83,9 +83,9 @@ It may also be given via the :root_layout option to a live_session macro in the 
     </header>
     <%= @inner_content %>
 
-    <%= if Pow.Plug.current_user(@conn) do %>
-      <span class="text-center"><%= link "Sign out", to: Routes.pow_session_path(@conn, :delete), method: :delete %></span>
-    <% end %>
+    <%# <%= if Pow.Plug.current_user(@conn) do %> 
+      <%# <span class="text-center"><%= link "Sign out", to: Routes.pow_session_path(@conn, :delete), method: :delete ></span> %> 
+    <%# <% end %>
 
   </body>
   
