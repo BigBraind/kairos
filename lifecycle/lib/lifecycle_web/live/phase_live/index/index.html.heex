@@ -11,25 +11,26 @@
 <% end %>
 
 <table class ="table w-full" >
-<thead>
-<tr>
-<th>Title</th>
-<th>Content</th>
-<th>Parent</th>
-<th>Editorial</th>
-</tr>
-</thead>
-<tbody id="phases" >
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Content</th>
+            <th>Parent</th>
+            <th>Editorial</th>
+        </tr>
+    </thead>
+    <tbody id="phases" >
 
-<%= for phase <- @phases do %>
-    <tr id={"phase-#{phase.id}"} class ="table-row">
-    <td><span><%= live_redirect phase.title, to: Routes.phase_show_path(@socket, :show, phase), class: "button"%></span></td>
-    <td><%= phase.content %></td>
-    <%= if phase.parent do %>
-    <td><%= for parent <- phase.parent do %>
-       <span><%= live_redirect parent.title, to: Routes.phase_show_path(@socket, :show, parent), class: "button"%></span>
-    <% end %></td>
-<% end %>
+    <%= for phase <- @phases do %>
+        <tr id={"phase-#{phase.id}"} class ="table-row">
+        <td><span><%= live_redirect phase.title, to: Routes.phase_show_path(@socket, :show, phase), class: "button"%></span></td>
+        <td><%= phase.content %></td>
+        <td><%= phase.type %></td>
+        <%= if phase.parent do %>
+            <td><%= for parent <- phase.parent do %>
+            <span><%= live_redirect parent.title, to: Routes.phase_show_path(@socket, :show, parent), class: "button"%></span>
+            <% end %></td>
+        <% end %>
    <td>
 
    <span><%= live_patch "Edit", to: Routes.phase_index_path(@socket, :edit, phase), class: "button" %></span>

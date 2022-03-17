@@ -13,10 +13,11 @@
 
 <section>
   <%= if Pow.Plug.current_user(@conn) do %>
-  <h1><%= gettext "Welcome to BigBrain, %{name}!", name: @current_user.name %></h1>
+  <h1 class=" text-center mt-6 mb-6 max-w-xl mx-auto font-semibold text-5xl"><%= gettext "Welcome to BigBrain, %{name}!", name: @current_user.name %></h1>
 
   
   
   <% end %>
   
 </section>
+<%# <h1 class =" text-center mt-6 mb-6 max-w-xl mx-auto font-semibold text-5xl">Welcome to BigBrain, the <span class="text-purple-400 font-light opacity-50 "> quiet documentation tool. </span></h1> %>
