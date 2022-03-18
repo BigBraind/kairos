@@ -125,12 +125,18 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
   end
 
   defp save_phase(socket, :new_child, phase_params) do
+    IO.inspect("phase_params[traits]")
+    IO.inspect(phase_params["traits"])
+
     trait_list =
       for trait <- Map.values(phase_params["traits"]) do
         trait
       end
 
     trait_list = List.flatten(trait_list)
+
+    IO.inspect("trait list")
+    IO.inspect(trait_list)
 
     phase_params =
       %{}
@@ -146,22 +152,33 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
 
   defp create_phase(action, phase_params, socket) do
     check_trait = Map.has_key?(socket.assigns.changeset.changes, :traits)
-    check_existing_trait = phase_params["existing_traits"] != %{}
+    # check_existing_trait = phase_params["existing_traits"] != %{}
+    check_existing_trait = phase_params["existing_traits"] != nil
 
     case Timeline.create_phase(phase_params) do
       {:ok, phase} ->
         # TODO: TYPE AND UNIT NOT IMPLEMENTED YET
         # to avoid raising KeyError
-        if check_trait do
-          _trait_map =
-            socket.assigns.changeset.changes.traits
-            |> Enum.map(fn t -> t.changes end)
-            |> Enum.map(fn t -> Phase.create_trait(t, phase) end)
-        end
 
+        # if check_trait do
+        #   IO.puts("Hello from traits")
+
+        #   _trait_map =
+        #     socket.assigns.changeset.changes.traits
+        #     |> Enum.map(fn t -> t.changes end)
+        #     |> IO.inspect()
+        #     |> Enum.map(fn t -> Phase.create_trait(t, phase) end)
+        # end
+
+        # phase_params include exisitng traits inherited from parents
+        # and traits newly created
         if check_existing_trait do
+          IO.puts("Hello from exisiting traits")
+          IO.inspect(phase_params["existing_traits"])
+
           for trait <- phase_params["existing_traits"] do
             trait
+            |> IO.inspect()
             |> Phase.create_trait(phase)
           end
         end
