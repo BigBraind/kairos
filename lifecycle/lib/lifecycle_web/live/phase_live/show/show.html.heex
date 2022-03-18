@@ -44,7 +44,6 @@
 <% end %>
 
 
-<%= unless @transiting do %>
 <.form let={f} for={@echo_changeset} phx-submit="save", phx-hook="EmptyInput", id="echo_form">
   <%= if @current_user do %>
     <%= hidden_input f, :user_name, value: @current_user.name %>
@@ -59,47 +58,8 @@
     <%= submit "Send", phx_disable_with: "Sending..." %> 
   </div>
 </.form> 
-<Transitions.button/>
 
-<% else %>
 <span><%= live_patch "Transition", to: Routes.phase_show_path(@socket, :transition_new, @phase.id), class: "button" %></span>
-
-<section phx-drop-target={@uploads.transition.ref}>
-
-  <%# render each transition image entry %>
-  <%= for entry <- @uploads.transition.entries do %>
-      <article class="upload-entry">
-        <figure>
-          <%# Phoenix.LiveView.Helpers.live_img_preview/2 renders a client-side preview %>
-          <%= unless Path.extname(entry.client_name) in [".mp3", ".m4a" ,".aac", ".oga"] do %>
-            <%= live_img_preview entry %>
-          <% end %>
-          <figcaption><%= entry.client_name %></figcaption>
-        </figure>
-
-        <%# entry.progress will update automatically for in-flight entries %>
-        <progress value={entry.progress} max="100"> <%= entry.progress %>% </progress>
-
-        <%# a regular click event whose handler will invoke Phoenix.LiveView.cancel_upload/3 %>
-        <button phx-click="cancel-upload" phx-value-ref={entry.ref} aria-label="cancel">&times;</button>
-
-        <%# Phoenix.LiveView.Helpers.upload_errors/2 returns a list of error atoms %>
-        <%= for err <- upload_errors(@uploads.transition, entry) do %>
-            <p class="alert alert-danger"><%= error_to_string(err) %></p>
-        <% end %>
-
-      </article>
-  <% end %>
-
-</section>
-
-
-<form id="upload-form" phx-submit="upload" phx-change="validate">
-  <%= live_file_input @uploads.transition %>
-  <button type="submit">To the Moon ⛽🚀</button>
-</form>
-
-<% end %>
 
 <div>
   <div align="right">

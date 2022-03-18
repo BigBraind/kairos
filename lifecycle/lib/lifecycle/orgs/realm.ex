@@ -2,6 +2,7 @@ defmodule Lifecycle.Orgs.Realm do
   @moduledoc """
   The Realm context. aka Repo
   """
+  use Ecto.Schema
   import Ecto.Query, warn: false
   alias Lifecycle.Users.Party
 
