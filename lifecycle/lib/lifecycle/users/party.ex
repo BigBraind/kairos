@@ -16,7 +16,6 @@ defmodule Lifecycle.Users.Party do
     field :banner, :string
     many_to_many :user, User, join_through: Membership
     # has_many :journey, Lifecycle.Users.Journey, foreign_key: :party_id
-    belongs_to :realm, Lifecycle.Orgs.Realm
 
     timestamps()
   end

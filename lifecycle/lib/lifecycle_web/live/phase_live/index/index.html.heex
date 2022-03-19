@@ -2,7 +2,7 @@
     <h1 class="mb-5 text-4xl font-light">Phases 🌙</h1>
 
 
-    <%= if @live_action in [:new, :edit] do %>
+    <%= if @live_action in [:new, :new_child, :edit] do %>
         <%= live_modal LifecycleWeb.PhaseLive.FormComponent,
         id: @phase.id || :new,
         title: @page_title,
@@ -24,15 +24,6 @@
      return_to: Routes.phase_show_path(@socket, :show, @phase.id) %>
   <% end %>
 
-  <%= if @live_action in [:new, :new_child, :edit] do %>
-      <%= live_modal LifecycleWeb.PhaseLive.FormComponent,
-      id: @phase.id || :new,
-      title: @page_title,
-      action: @live_action,
-      phase: @phase,
-      phases: @phases,
-      return_to: Routes.phase_index_path(@socket, :index) %>
-  <% end %>
 
     <table class ="shadow-lg bg-white border-seperate" >
         <thead>
