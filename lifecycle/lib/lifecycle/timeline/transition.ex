@@ -12,6 +12,7 @@ defmodule Lifecycle.Timeline.Transition do
   schema "transitions" do
     belongs_to :initiator, Lifecycle.Users.User, foreign_key: :initiator_id
     belongs_to :phase, Lifecycle.Timeline.Phase, foreign_key: :phase_id
+    belongs_to :journey, Lifecycle.Timeline.Journey, foreign_key: :journey_id
     field :transited, :boolean, default: false
     belongs_to :transiter, Lifecycle.Users.User, foreign_key: :transiter_id
     field :answers, :map

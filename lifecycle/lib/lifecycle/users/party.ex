@@ -15,7 +15,8 @@ defmodule Lifecycle.Users.Party do
 
     field :banner, :string
     many_to_many :user, User, join_through: Membership
-    has_many :journey, Lifecycle.Users.Journey, foreign_key: :journey_id
+    # has_many :journey, Lifecycle.Users.Journey, foreign_key: :party_id
+
     timestamps()
   end
 
@@ -23,6 +24,7 @@ defmodule Lifecycle.Users.Party do
   def changeset(party, attrs \\ %{}) do
     party
     |> cast(attrs, [:name, :banner])
+    # |> cast_assoc([:journey])
     |> update_change(:name, &String.downcase/1)
     |> validate_required([:banner, :name])
     |> unique_constraint(:name, name: :parties_name_index)

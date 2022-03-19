@@ -32,6 +32,7 @@ defmodule Lifecycle.Timeline.Phase do
   @doc false
   def changeset(phase, attrs) do
     phase
+
     |> cast(attrs, [:content, :title, :type])
     |> cast_assoc(:traits, on_replace: :delete_if_exists)
     |> validate_length(:title, max: @max_len)

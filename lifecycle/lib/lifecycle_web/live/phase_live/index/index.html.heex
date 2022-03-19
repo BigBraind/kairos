@@ -2,7 +2,7 @@
     <h1 class="mb-5 text-4xl font-light">Phases 🌙</h1>
 
 
-    <%= if @live_action in [:new, :edit] do %>
+    <%= if @live_action in [:new, :new_child, :edit] do %>
         <%= live_modal LifecycleWeb.PhaseLive.FormComponent,
         id: @phase.id || :new,
         title: @page_title,
@@ -11,6 +11,19 @@
         phases: @phases,
         return_to: Routes.phase_index_path(@socket, :index) %>
     <% end %>
+      
+   <%= if @live_action in [:transition_new] do %>
+     <%= live_modal LifecycleWeb.TransitionLive.FormComponent,
+     id: :transition_new,
+     title: @title,
+     template: @template,
+     phase: @phase,
+     current_user: @current_user,
+     changeset: @changeset,
+     action: @live_action,
+     return_to: Routes.phase_show_path(@socket, :show, @phase.id) %>
+  <% end %>
+
 
     <table class ="shadow-lg bg-white border-seperate" >
         <thead>
@@ -38,6 +51,8 @@
 
                 <span class="mx-2 my-2"><%= live_patch "Edit", to: Routes.phase_index_path(@socket, :edit, phase), class: "button" %></span>
                 <span class="mx-2 my-2"><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: phase.id, data: [confirm: "Are you sure? Princeton is watching"], class: "button" %></span>
+                <span><%= live_patch "Create New Transition", to: Routes.phase_show_path(@socket, :transition_new, phase.id), class: "button" %></span>
+                <span><%= live_patch "+ Child Phase", to: Routes.phase_show_path(@socket, :new_child, phase), class: "button" %></span>
 
                 </td>
             </tr>
