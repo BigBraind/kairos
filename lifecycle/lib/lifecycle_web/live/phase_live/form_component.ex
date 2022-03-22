@@ -12,11 +12,19 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
 
   @topic "phase_index"
 
+  # clean phase_params whats necesary preload traits
+  # cast_assoc instead of create_traits()?
+  # look at create phase, update phase, delete phase operations
+  # and relation with associated traits
+  # child phase inheritance passing like parent child
+
   @impl true
   def update(%{phase: phase} = assigns, socket) do
     changeset =
       Timeline.change_phase(phase)
       |> Changeset.put_assoc(:traits, phase.traits)
+    # put assoc for working with new phase + traits as in create phase events
+    # for update operation put assoc involves passing existing traits list as well
 
     {:ok,
      socket
@@ -87,7 +95,7 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
     changeset =
       socket.assigns.changeset
       |> Changeset.put_assoc(:traits, updated_traits)
-
+    IO.inspect(updated_traits)
     {:noreply, assign(socket, changeset: changeset)}
   end
 
@@ -177,9 +185,7 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
             {Pubsub.notify_subs({:ok, phase}, [:phase, :created], "phase_index")}
 
           :new_child ->
-            {Pubsub.notify_subs(
-               {:ok, phase},
-               [:phase, :created],
+            {Pubsub.notify_subs({:ok, phase}, [:phase, :created],
                "phase:" <> socket.assigns.phase.id
              )}
         end
