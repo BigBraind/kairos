@@ -51,11 +51,11 @@
           <div class="form-group w-1/6">
             <%= label trait, :goodbye %><br>
             <%= if is_nil(trait.data.tracker) do %>
-              <a href="#" phx-target={@myself} phx-click="delete_trait" phx-value-phase-id={trait.data.phase_id} phx-value-trait-id={trait.data.id} >&times</a>
+              <a href="#" phx-target={@myself} phx-click="delete_trait" phx-value-phase-id={trait.data.phase_id} phx-value-trait-id={trait.data.id} >&#128075</a>
               <%# <%= radio_button trait, :deletion, "phx-click"="delete_trait", "phx-value-trait_id": trait.id %> 
             <% else %>
               <%= hidden_input trait, :tracker %>
-              <a href="#" phx-target={@myself} phx-click="remove_trait" phx-value-remove={trait.data.tracker}>&times</a>
+              <a href="#" phx-target={@myself} phx-click="remove_trait" phx-value-remove={trait.data.tracker}>&copy</a>
             <% end %>
           </div>
         </div>
