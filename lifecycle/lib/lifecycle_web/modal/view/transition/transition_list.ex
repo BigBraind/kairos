@@ -25,12 +25,12 @@ defmodule LifecycleWeb.Modal.View.Transition.TransitionList do
      )}
   end
 
+  # max-w-md max-h-md
+
   def render(assigns) do
     ~H"""
-        <div class="text-center mt-6 mb-6 max-w-xl mx-auto font-light text-sm">
+        <div class="text-center mt-6 mb-6 mx-auto font-light text-sm">
             <%= for transition <- @transitions do %>
-                id: <%= transition.id %> <br>
-                this line to be removed, user dont need to see <br>
 
                 <%= for {property, value} <- transition.answers do %>
                   <%= unless property == "image_list" do %>
@@ -44,7 +44,7 @@ defmodule LifecycleWeb.Modal.View.Transition.TransitionList do
                               <source src={image_path} type={"audio/mp4"} >
                               </audio>
                             <% else %>
-                              <img alt="assets image" src={image_path}>
+                              <img class="text-center mt-6 mb-6 mx-auto object-contain h-48 w-96 font-light text-sm" alt="assets image" src={image_path}>
                             <% end %>
 
                           <% end %>
