@@ -1,7 +1,59 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+/* @import "./phoenix.css" is deleted 
+making the phoenix.css file useless, so I just deleted it.*/
+
 /* This file is for your main application CSS */
-@import "./phoenix.css";
+
+/* for the calendar styling, Glen pls change accordingly haha */
+.grid-column-1 {
+  grid-column: 1;
+}
+
+.grid-column-2 {
+  grid-column: 2;
+}
+
+.grid-column-3 {
+  grid-column: 3;
+}
+
+.grid-column-4 {
+  grid-column: 4;
+}
+
+.grid-column-5 {
+  grid-column: 5;
+}
+
+.grid-column-6 {
+  grid-column: 6;
+}
+
+.grid-column-7 {
+  grid-column: 7;
+}
+
 
 /* Alerts and form errors used by phx.new */
+/* sample text */
+
+/* - create custom css styles here */
+
+@layer components {
+  .deez {
+    @apply text-slate-700 font-semibold
+  }
+  .fab {
+    @apply  py-2 px-3 bg-blue-500 text-white text-center font-semibold rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75;
+  }
+  .table-header {
+    @apply bg-blue-100 border text-left px-8 py-4
+  }
+}
+
+
 .alert {
   padding: 15px;
   margin-bottom: 20px;
@@ -87,3 +139,5 @@
   text-decoration: none;
   cursor: pointer;
 }
+
+

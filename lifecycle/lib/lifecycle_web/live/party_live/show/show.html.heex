@@ -1,0 +1,44 @@
+<%= if @live_action in [:edit] do %>
+    <%= live_modal LifecycleWeb.PartyLive.FormComponent,
+    id: @party.id,
+    title: @page_title,
+    action: @live_action,
+    party: @party,
+    current_user: @current_user,
+    return_to: Routes.party_show_path(@socket, :show, @party.name) %>
+<% end %>
+
+<div align="left">
+  <h1>Name: <%= @party.name %></h1>
+</div>
+<h3>Description: <%= @party.banner %></h3>
+<h3>Members:</h3>
+<h4><%= for user <- @party.user do %>
+<%= user.name %>,
+<% end %></h4>
+
+<div align="right">
+    <span><%= live_patch "Edit", to: Routes.party_show_path(@socket, :edit, @party.name), class: "button" %></span>
+    <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: @party.id, data: [confirm: "Are you sure? 👀 "], return_to: Routes.party_index_path(@socket, :index), class: "button" %></span>
+</div>
+
+<div align="left">
+    <.form let={f} for={@party_changeset} phx-submit="add_member", id="add_member_form">
+        <%= hidden_input f, :party_id, value: @party.id %>
+        <%= error_tag f, :party_id %>
+    
+        <%= label f, :new_member %>
+        <%= text_input f, :user_name, autocomplete: "off"%>
+        <%= error_tag f, :user_name %>
+    </.form>
+    
+    <.form let={f} for={@party_changeset} phx-submit="subtract_member", id="subtract_member_form">
+        <%= hidden_input f, :party_id, value: @party.id %>
+        <%= error_tag f, :party_id %>
+    
+        <%= label f, :remove_member %>
+        <%= text_input f, :user_name, autocomplete: "off"%>
+        <%= error_tag f, :user_name %>
+    </.form>
+    <span><%= link "+ Members", to: "#", phx_click: "add_members", data: [confirm: "To be done!"] %></span>
+</div>

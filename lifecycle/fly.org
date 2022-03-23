@@ -78,10 +78,15 @@ fly status
 flyctl --app kairos secrets set SECRET='TUNNEL'
 #+END_SRC
 
-
-#+NAME: Launch SSH session in Application
+#+NAME: INIT SSH session in Application
 #+BEGIN_SRC shell
-fly ssh console
+fly ssh establish
+fly ssh issue --agent
+#+END_SRC
+
+#+NAME: Launch bash SSH session in Application
+#+BEGIN_SRC shell
+fly ssh console -C /bin/bash
 #+END_SRC
 
 ** Wireguard Management
@@ -90,6 +95,21 @@ fly ssh console
 #+BEGIN_SRC shell
 fly wireguard create
 #+END_SRC
+
+#+RESULTS: Wireguard Create
+
+#+NAME: Wireguard Move to System Config Folder
+#+BEGIN_SRC shell
+sudo cp sb.conf /etc/wireguard
+#+END_SRC
+
+#+NAME: NMCli importing of wireguard config
+#+BEGIN_SRC shell
+nmcli connection import type wireguard file phos.conf
+#+END_SRC
+
+
+#+RESULTS: Wireguard Create
 
 #+NAME: Wireguard Interface up
 #+BEGIN_SRC shell
@@ -101,11 +121,20 @@ wg-quick up kairos_bridge
 wg-quick down kairos_bridge
 #+END_SRC
 
-#+NAME: Wireguard Interface up
+#+NAME: Wireguard List
 #+BEGIN_SRC shell
 fly wireguard list
 #+END_SRC
 
+#+RESULTS: Wireguard List
+
+#+NAME: NMCLI up connection
+#+BEGIN_SRC shell
+nmcli connection up bridge
+nmcli connection down bridge
+#+END_SRC
+
+#+RESULTS: Wireguard Interface up
 #+RESULTS: Wireguard Interface up
 
 Then psql to access database

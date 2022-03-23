@@ -1,10 +1,35 @@
-<%= if @live_action in [:new, :edit] do %>
+<%= if @live_action in [:new_child, :edit] do %>
   <%= live_modal LifecycleWeb.PhaseLive.FormComponent,
     id: @phase.id || :new,
     title: @page_title,
     action: @live_action,
     phase: @phase,
     return_to: Routes.phase_show_path(@socket, :show, @phase.id) %>
+<% end %>
+
+<%= if @live_action in [:transition_new] do %>
+   <%= live_modal LifecycleWeb.TransitionLive.FormComponent,
+   id: :transition_new,
+   title: @title,
+   template: @template,
+   phase: @phase,
+   current_user: @current_user,
+   changeset: @changeset,
+   action: @live_action,
+   return_to: Routes.phase_show_path(@socket, :show, @phase.id) %>
+<% end %>
+
+<%= if @live_action in [:transition_edit] do %>
+   <%= live_modal LifecycleWeb.TransitionLive.FormComponent,
+   id: @transition.id,
+   title: @title,
+   template: @template,
+   phase: @phase,
+   current_user: @current_user,
+   transition: @transition,
+   changeset: @changeset,
+   action: @live_action,
+   return_to: Routes.phase_show_path(@socket, :show, @phase.id) %>
 <% end %>
 
 
@@ -14,11 +39,15 @@
 </div>
 <h3><%= @phase.content %></h3>
 
-<%= unless @transiting do %>
+<%= for trait <- @phase.traits do %>
+  <%= trait.name %> :  <%= trait.value %><br>
+<% end %>
+
+
 <.form let={f} for={@echo_changeset} phx-submit="save", phx-hook="EmptyInput", id="echo_form">
-  <%= if @current_user  do %>
-    <%= hidden_input f, :name, value: @current_user.name %>
-    <%= error_tag f, :name %>
+  <%= if @current_user do %>
+    <%= hidden_input f, :user_name, value: @current_user.name %>
+    <%= error_tag f, :user_name %>
   <% end %>
 
   <%= label f, :message %>
@@ -29,65 +58,26 @@
     <%= submit "Send", phx_disable_with: "Sending..." %> 
   </div>
 </.form> 
-<Transition.button/>
 
-<% else %>
-<section phx-drop-target={@uploads.transition.ref}>
+<span><%= live_patch "Transition", to: Routes.phase_show_path(@socket, :transition_new, @phase.id), class: "button" %></span>
 
-  <%# render each transition image entry %>
-  <%= for entry <- @uploads.transition.entries do %>
-      <article class="upload-entry">
-        <figure>
-          <%# Phoenix.LiveView.Helpers.live_img_preview/2 renders a client-side preview %>
-          <%= unless Path.extname(entry.client_name) in [".mp3", ".m4a" ,".aac", ".oga"] do %>
-            <%= live_img_preview entry %>
-          <% end %>
-          <figcaption><%= entry.client_name %></figcaption>
-        </figure>
-
-        <%# entry.progress will update automatically for in-flight entries %>
-        <progress value={entry.progress} max="100"> <%= entry.progress %>% </progress>
-
-        <%# a regular click event whose handler will invoke Phoenix.LiveView.cancel_upload/3 %>
-        <button phx-click="cancel-upload" phx-value-ref={entry.ref} aria-label="cancel">&times;</button>
-
-        <%# Phoenix.LiveView.Helpers.upload_errors/2 returns a list of error atoms %>
-        <%= for err <- upload_errors(@uploads.transition, entry) do %>
-            <p class="alert alert-danger"><%= error_to_string(err) %></p>
-        <% end %>
-
-      </article>
-  <% end %>
-
-</section>
-
-
-<form id="upload-form" phx-submit="transit" phx-change="validate">
-  <%= live_file_input @uploads.transition %>
-  <button type="submit">To the Moon ⛽🚀</button>
-</form>
-
-<% end %>
 <div>
   <div align="right">
 
-    <span><%= live_patch "+ Own Phase 🦋⚡", to: Routes.phase_show_path(@socket, :new, @phase), class: "button" %></span>
+    <span><%= live_patch "+ Child Phase 🦋⚡", to: Routes.phase_show_path(@socket, :new_child, @phase), class: "button" %></span>
 <br>
-<span><%= live_patch "Edit", to: Routes.phase_show_path(@socket, :edit, @phase), class: "button" %></span>
+<span><%= live_patch "Edit Template", to: Routes.phase_show_path(@socket, :edit, @phase), class: "button" %></span>
 <br>
-<%= unless @live_action in [:new] do %>
-<%= if @phase.parent !== [] do %><b>Parent: </b>  <%= for parent <- @phase.parent do %>
 
-       <span><%= live_redirect parent.title, to: Routes.phase_show_path(@socket, :show, parent), class: "button"%></span>
-                             <% end %>
+<%= unless @live_action in [:new_child] do %>
+
+  <.live_component id="phases-button" module={Phases} phase={@phase}/>
+
 <% end %>
-<br>
-<%= if @phase.child !== [] do %><b>Children: </b> <%= for child <- @phase.child do %>
-       <span><%= live_redirect child.title, to: Routes.phase_show_path(@socket, :show, child), class: "button"%></span>
-                             <% end %>
-<% end %>
-<% end %>
+
   </div>
+
+  <.live_component module={TransitionList} id="transition" transitions={@transitions} timezone={@timezone} timezone_offset={@timezone_offset} phase={@phase}/>
 
   <ul id="phase-live-msg-list-nowstream" style="list-style: none; min-height:10px;">
       <.live_component module={Echoes} id="nowstream" echoes={@nowstream} timezone={@timezone} timezone_offset={@timezone_offset} />

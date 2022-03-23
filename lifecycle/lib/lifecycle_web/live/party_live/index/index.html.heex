@@ -1,0 +1,80 @@
+<%= if @live_action in [:new, :edit] do %>
+                <%= live_modal LifecycleWeb.PartyLive.FormComponent,
+    id: @party.id || :new,
+    title: @page_title,
+    action: @live_action,
+    parties: @all_parties,
+    party: @party,
+    current_user: @current_user,
+    return_to: Routes.party_index_path(@socket, :index) %>
+<% end %>
+<div class="mx-2">
+<h1 class="mx-2 mb-5 my-2 text-3xl font-light"> <%= @page_title %></h1>
+    <span class ="ml-auto mx-2 fab font-extralight text-2xl"><%= live_patch "+ New Party", to: Routes.party_index_path(@socket, :new) %></span>
+<h2 class="mx-2 my-2 text-2xl font-semibold">My Parties 🥳 </h2>
+
+<table class="table-fixed shadow-lg bg-white border-seperate">
+    <thead>
+        <tr>
+            <th class="table-header">Name</th>
+            <th class="table-header">Description</th>
+            <th class="table-header">My Role</th>
+            <th class="table-header">Actions</th>
+        </tr>
+    </thead>
+
+<%# place the fab class within the span, not the td, else only the text is clickable, not the entire button, DOH! %>
+
+<tbody id="parties">
+    <%= for m <- @my_parties do %>
+        <tr id={"membership-#{m.party_id}"}>
+            <td class="border px-4 py-2"><span><%= live_redirect m.party.name, to: Routes.party_show_path(@socket, :show, m.party.name), class: "fab button"%></span></td>
+            <td class="border px-4 py-2"><%= m.party.banner %></td>
+            <td class="border px-4 py-2"><%= m.role %></td>
+            <td>
+                <span class="mx-2 my-2"><%= live_patch "Edit", to: Routes.party_index_path(@socket, :edit, m.party.name), class: "button fab" %></span>
+                <span class="mx-2 my-2"><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: m.party.id, data: [confirm: "Are you sure? 👀 "], class: "button fab" %></span>
+            </td>
+        </tr>
+   <% end %>
+</tbody>
+
+</table>
+
+<h2 class=" mx-2 my-2 font-semibold text-2xl">All Parties 🕺</h2>
+
+<table class= "table-fixed shadow-lg bg-white border-seperate">
+    <thead>
+        <tr>
+            <th class="border px-4 py-2">Name</th>
+            <th class="border px-4 py-2">Description</th>
+            <th class="border px-4 py-2">Members</th>
+            <th class="border px-4 py-2">Party ID</th>
+            <th class="border px-4 py-2 col-span-2">Actions</th>
+        </tr>
+    </thead>
+
+<tbody id="parties">
+    <%= for party <- @all_parties do %>
+        <tr id={"party-#{party.id}"  } class="table-fixed">
+            <td><span class="mx-2 my-2"><%= live_redirect party.name, to: Routes.party_show_path(@socket, :show, party.name), class: "button fab"%></span></td>
+            <td class="border px-4 py-2"><%= party.banner %></td>
+            <td class="border px-4 py-2">
+                <%= for user <- party.user do %>
+                    <%= user.name %>
+                    <br>
+                <% end %>
+            </td>
+            <td><%= party.id %></td>
+    
+            <td>
+                <span class = 'mx-2 my-2'><%= live_patch "Edit", to: Routes.party_index_path(@socket, :edit, party), class: "button fab" %></span>
+                <span class = 'mx-2 my-2'><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: party.id, data: [confirm: "Are you sure? 👀 "], class: "button fab" %></span>
+            </td>
+        </tr>
+   <% end %>
+</tbody>
+
+</table>
+
+</div>
