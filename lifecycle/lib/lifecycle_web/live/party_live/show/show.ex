@@ -68,7 +68,7 @@ defmodule LifecycleWeb.PartyLive.Show do
   end
 
   @impl true
-  def handle_info({Pubsub, [:member, :removed], message}, socket) do
+  def handle_info({Pubsub, [:member, :removed], _message}, socket) do
     PartyPubs.handle_member_removed(socket)
   end
 

@@ -29,7 +29,7 @@ defmodule LifecycleWeb.PartyLive.Index do
 
   defp apply_action(socket, :index, _params) do
     socket
-    |> assign(:page_title, "Let's Party Yooooo")
+    |> assign(:page_title, "Let's get it started in hereeeeeee")
     |> assign(:party, nil)
   end
 

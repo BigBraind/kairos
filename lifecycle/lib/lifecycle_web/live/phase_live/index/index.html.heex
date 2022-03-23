@@ -1,44 +1,77 @@
-<h1>Phases 🌙</h1>
+<div class="mx-2">
+    <h1 class="mb-5 text-4xl font-light">Phases 🌙 </h1> 
+    <span class ="ml-auto fab font-extralight text-2xl"><%= live_patch "New Phase", to: Routes.phase_index_path(@socket, :new) %></span>
 
 
-<%= if @live_action in [:new, :edit] do %>
-                <%= live_modal LifecycleWeb.PhaseLive.FormComponent,
-    id: @phase.id || :new,
-    title: @page_title,
-    action: @live_action,
-    phase: @phase,
-    phases: @phases,
-    return_to: Routes.phase_index_path(@socket, :index) %>
-<% end %>
+    <%= if @live_action in [:new, :new_child, :edit] do %>
+        <%= live_modal LifecycleWeb.PhaseLive.FormComponent,
+        id: @phase.id || :new,
+        title: @page_title,
+        action: @live_action,
+        phase: @phase,
+        phases: @phases,
+        return_to: Routes.phase_index_path(@socket, :index) %>
+    <% end %>
+      
+   <%= if @live_action in [:transition_new] do %>
+     <%= live_modal LifecycleWeb.TransitionLive.FormComponent,
+     id: :transition_new,
+     title: @title,
+     template: @template,
+     phase: @phase,
+     current_user: @current_user,
+     changeset: @changeset,
+     action: @live_action,
+     return_to: Routes.phase_show_path(@socket, :show, @phase.id) %>
+  <% end %>
 
-<table width="30%">
-<thead>
-<tr>
-<th>Title</th>
-<th>Content</th>
-<th>Parent</th>
-<th>Editorial</th>
-</tr>
-</thead>
-<tbody id="phases">
-<%= for phase <- @phases do %>
-    <tr id={"phase-#{phase.id}"}>
-    <td><span><%= live_redirect phase.title, to: Routes.phase_show_path(@socket, :show, phase), class: "button"%></span></td>
-    <td><%= phase.content %></td>
-    <%= if phase.parent do %>
-    <td><%= for parent <- phase.parent do %>
-       <span><%= live_redirect parent.title, to: Routes.phase_show_path(@socket, :show, parent), class: "button"%></span>
-    <% end %></td>
-<% end %>
-   <td>
 
-   <span><%= live_patch "Edit", to: Routes.phase_index_path(@socket, :edit, phase), class: "button" %></span>
-   <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: phase.id, data: [confirm: "Are you sure? Princeton is watching"], class: "button" %></span>
+    <table class ="table-fixed shadow-lg bg-white border-seperate" >
+        <thead>
+            <tr>
+                <th class="table-header">Title</th>
+                <th class="table-header">Content</th>
+                <th class="table-header">Type</th>
+                <th class="table-header">Child</th>
+                <th class="table-header col-span-4 text-center">Actions</th>
+            </tr>
+        </thead>
 
-   </td>
-   </tr>
-   <% end %>
-</tbody>
-</table>
+        <%# If want a footer, got tfoot %>
 
-<span><%= live_patch "New Phase", to: Routes.phase_index_path(@socket, :new) %></span>
+        <%# <tfoot>
+          <tr>
+            <th class="table-header">Title</th>
+            <th class="table-header">Content</th>
+            <th class="table-header">Type</th>
+            <th class="table-header">Child</th>
+            <th class="table-header">Actions</th>
+          </tr>
+        </tfoot> %>
+        <tbody id="phases" >
+
+        <%= for phase <- @phases do %>
+            <tr id={"phase-#{phase.id}"} class ="table-auto">
+                <td class="border px-4 py-2 "><span ><%= live_redirect phase.title, to: Routes.phase_show_path(@socket, :show, phase), class: " fab font-normal button"%></span></td>
+                <td class="border px-4 py-2"><%= phase.content %></td>
+                <td class="border px-4 py-2 "><%= phase.type %></td>
+                <%= if phase.parent do %>
+                    <td class="border px-8 py-4"><%= for parent <- phase.parent do %>
+                    <span><%= live_redirect parent.title, to: Routes.phase_show_path(@socket, :show, parent), class: "button"%></span>
+                    <% end %></td>
+                <% end %>
+                <td>
+
+                <span class="mx-2 my-2 fab"><%= live_patch "Edit", to: Routes.phase_index_path(@socket, :edit, phase), class: "button" %></span>
+                <span class="mx-2 my-2 fab"><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: phase.id, data: [confirm: "Are you sure? Princeton is watching"], class: "button" %></span>
+                <span class = 'mx-2 my-2 fab'><%= live_patch "New Transition", to: Routes.phase_show_path(@socket, :transition_new, phase.id), class: "button" %></span>
+                <span class = 'mx-2 my-2 fab'><%= live_patch "Child Phase", to: Routes.phase_show_path(@socket, :new_child, phase), class: "button" %></span>
+
+                </td>
+            </tr>
+    <% end %>
+    </tbody>
+    </table>
+
+
+</div>

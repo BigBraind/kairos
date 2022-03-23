@@ -10,11 +10,11 @@
     phx-submit="save">
 
     <%= label f, :name %>
-    <%= text_input f, :name, phx_debounce: "blur"%>
+    <%= text_input f, :name, phx_debounce: "blur", autocomplete: "off" %>
     <%= error_tag f, :name %>
   
     <%= label f, :description %>
-    <%= text_input f, :banner, phx_debounce: "blur" %>
+    <%= text_input f, :banner, phx_debounce: "blur", autocomplete: "off" %>
     <%= error_tag f, :banner %>
 
     <div>

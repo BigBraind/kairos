@@ -29,13 +29,14 @@ defmodule LifecycleWeb.Modal.View.Echoes.Echoes do
 
   def render(assigns) do
     # separating msg by date, done via phx-hook(JS interpolating)
+
     ~H"""
         <ul phx-hook={"#{if @id == "echoes", do: "SeparatingMsg"}"} id={"echoes-list-#{@id}"} style="list-style-type:none;">
         <%= for echo <- @echoes do %>
 
           <li data-date={"#{echo.inserted_at}"} id={"echo-#{echo.id}"}>
 
-            <%= if echo.type == "transition" do %>
+            <%= if echo.type == "image" do %>
               <EchoList.transition_list echo={echo}, timezone={@timezone} timezone_offset={@timezone_offset}, assets_path={Routes.static_path(@socket, echo.message)}/>
             <% else %>
               <EchoList.echo_list echo={echo} timezone={@timezone} timezone_offset={@timezone_offset}/>

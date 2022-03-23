@@ -5,38 +5,43 @@ defmodule LifecycleWeb.PhaseLive.Show do
   alias Lifecycle.Pubsub
   alias Lifecycle.Timeline
   alias Lifecycle.Timeline.Echo
+  alias Lifecycle.Timeline.Phase
+  alias Lifecycle.Timeline.Transition
   alias Lifecycle.Timezone
 
   alias LifecycleWeb.Modal.View.Button.Phases
-  alias LifecycleWeb.Modal.View.Button.Transition
+  alias LifecycleWeb.Modal.View.Button.Transitions
   alias LifecycleWeb.Modal.View.Echoes.Echoes
+  alias LifecycleWeb.Modal.View.Transition.TransitionList
 
   alias LifecycleWeb.Modal.Function.Button.ApproveHandler
-  alias LifecycleWeb.Modal.Function.Button.TransitionHandler
   alias LifecycleWeb.Modal.Function.Component.Flash
   alias LifecycleWeb.Modal.Function.Echoes.EchoHandler
   alias LifecycleWeb.Modal.Function.Pubsub.Pubs
+  alias LifecycleWeb.Modal.Function.Pubsub.TransitionPubs
+  alias LifecycleWeb.Modal.Function.Transition.TransitionHandler
 
   @impl true
   def mount(params, _session, socket) do
-    id = params["id"]
-    socket = Timezone.get_timezone(socket)
+    phase_id = params["phase_id"]
     echo_changeset = Timeline.Echo.changeset(%Echo{})
-    if connected?(socket), do: Pubsub.subscribe("phase:" <> id)
+    if connected?(socket), do: Pubsub.subscribe("phase:" <> phase_id)
 
     socket =
       allow_upload(socket, :transition,
         accept: ~w(.png .jpg .jpeg .mp3 .m4a .aac .oga),
-        max_entries: 1
+        max_entries: 2
       )
 
     {:ok,
      assign(socket,
        echo_changeset: echo_changeset,
        nowstream: [],
-       echoes: list_echoes(id),
+       echoes: Timeline.phase_recall(phase_id),
        image_list: [],
-       transiting: false
+       transiting: false,
+       transitions: Timeline.get_transition_list(phase_id)
+       # template: Phase.list_traits(id)
      )}
   end
 
@@ -45,27 +50,55 @@ defmodule LifecycleWeb.PhaseLive.Show do
     {:noreply, apply_action(socket, socket.assigns.live_action, params)}
   end
 
-  defp apply_action(socket, :edit, %{"id" => id}) do
+  defp apply_action(socket, :transition_new, %{"phase_id" => phase_id}) do
     socket
-    |> assign(:page_title, "Edit Phase")
-    |> assign(:phase, %{Timeline.get_phase!(id) | parent: []})
+    |> assign(:phase, Timeline.get_phase!(phase_id))
+    |> assign(:template, Phase.list_traits(phase_id))
+    |> assign(:title, "Transition")
+    |> assign(:current_user, socket.assigns.current_user)
+    |> assign(:changeset, Timeline.change_transition(%Transition{}))
   end
 
-  defp apply_action(socket, :new, params) do
-    parent_phase = Timeline.get_phase!(params["id"])
-    parent_phase = %{parent_phase | parent: parent_phase.id}
+  defp apply_action(socket, :transition_edit, %{
+         "phase_id" => phase_id,
+         "transition_id" => transition_id
+       }) do
+    phase = Timeline.get_phase!(phase_id)
+
+    socket
+    |> assign(:title, "Edit Transition")
+    |> assign(:transition, Timeline.get_transition_by_id(transition_id))
+    |> assign(:phase, phase)
+    |> assign(:current_user, socket.assigns.current_user)
+    |> assign(:changeset, Timeline.change_transition(%Transition{}))
+    |> assign(:template, Phase.list_traits(phase_id))
+  end
+
+  defp apply_action(socket, :edit, %{"phase_id" => phase_id}) do
+    socket
+    |> assign(:page_title, "Edit Phase")
+    |> assign(:template, Phase.list_traits(phase_id))
+    |> assign(:phase, %{Timeline.get_phase!(phase_id) | parent: []})
+  end
+
+  # for creating child phase
+  defp apply_action(socket, :new_child, params) do
+    parent_phase = Timeline.get_phase!(params["phase_id"])
+
+    parent_phase_map = %{parent_phase | parent: parent_phase.id}
 
     socket
     |> assign(:page_title, "Child Phase")
-    |> assign(:title, "Hello")
-    |> assign(:phase, parent_phase)
+    |> assign(:phase, parent_phase_map)
+    # to get the properties and inherit to child phase
+    |> assign(:template, Phase.list_traits(parent_phase.id))
   end
 
-  defp apply_action(socket, :show, %{"id" => id}) do
+  defp apply_action(socket, :show, %{"phase_id" => phase_id}) do
     socket
     |> assign(:page_title, "Show Phase")
-    |> assign(:phase, Timeline.get_phase!(id))
-    |> assign(:echoes, list_echoes(id))
+    |> assign(:phase, Timeline.get_phase!(phase_id))
+    |> assign(:echoes, Timeline.phase_recall(phase_id))
   end
 
   @impl true
@@ -73,13 +106,31 @@ defmodule LifecycleWeb.PhaseLive.Show do
     Pubs.handle_echo_created(socket, message)
   end
 
+  # ! this is now the actual transition instead of the echo transition
   @impl true
   def handle_info({Pubsub, [:transition, :approved], message}, socket) do
-    Pubs.handle_transition_approved(socket, message)
+    # Pubs.handle_transition_approved(socket, message)
+    TransitionPubs.handle_transition_updated(socket, message)
+  end
+
+  def handle_info({Pubsub, [:transition, :updated], message}, socket) do
+    TransitionPubs.handle_transition_updated(socket, message)
+  end
+
+  def handle_info({Pubsub, [:transition, :created], message}, socket) do
+    TransitionPubs.handle_transition_created(socket, message)
+  end
+
+  def handle_info({Pubsub, [:transition, :deleted], message}, socket) do
+    TransitionPubs.handle_transition_deleted(socket, message)
   end
 
   @impl true
   def handle_info(:clear_flash, socket), do: Flash.handle_flash(socket)
+
+  def handle_event("delete-transition", %{"id" => _transition_id} = params, socket) do
+    TransitionHandler.delete_transition(:phase_view, params, socket)
+  end
 
   def handle_event("transition", _params, socket) do
     TransitionHandler.handle_button("transition", socket)
@@ -89,17 +140,27 @@ defmodule LifecycleWeb.PhaseLive.Show do
     {:noreply, socket}
   end
 
+  def handle_event("transit", %{"value" => transition_id}, socket) do
+    params = Map.put(%{}, "transition", transition_id)
+    TransitionHandler.handle_transition(:assign_transiter, params, socket)
+  end
+
   def handle_event("cancel-upload", %{"ref" => ref}, socket) do
     {:noreply, cancel_upload(socket, :transition, ref)}
   end
 
   @impl true
   def handle_event("save", %{"echo" => echo_params}, socket) do
-    echo_params = Map.put(echo_params, "phase_id", socket.assigns.phase.id)
+    echo_params =
+      echo_params
+      |> Map.put("phase_id", socket.assigns.phase.id)
+      |> Map.put("type", "public")
+
     EchoHandler.send_echo(echo_params, socket)
   end
 
   def handle_event("upload", _params, socket) do
+    # ! obselete echo transition handler! To be removed
     TransitionHandler.handle_upload("upload", socket)
   end
 
@@ -108,9 +169,8 @@ defmodule LifecycleWeb.PhaseLive.Show do
     ApproveHandler.handle_button(params, topic, socket)
   end
 
-  defp list_echoes(phase_id), do: Timeline.phase_recall(phase_id)
-
-  def time_format(time, timezone, timezone_offset), do: Timezone.get_time(time, timezone, timezone_offset)
+  def time_format(time, timezone, timezone_offset),
+    do: Timezone.get_time(time, timezone, timezone_offset)
 
   def error_to_string(:too_large), do: "Too large"
   def error_to_string(:too_many_files), do: "You have selected too many files"

@@ -1,3 +1,6 @@
+<%# the app layout - this is the default application layout which is not included or used by LiveViews.
+ It defaults to "app.html.heex" in your MyAppWeb.LayoutView. %>
+ 
 <main class="container">
   <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
   <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>

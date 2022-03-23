@@ -1,4 +1,7 @@
 defmodule Lifecycle.MoneyTest do
+  @moduledoc """
+  Test for billing
+  """
   use Lifecycle.DataCase
 
   alias Lifecycle.Money
@@ -8,7 +11,15 @@ defmodule Lifecycle.MoneyTest do
 
     import Lifecycle.MoneyFixtures
 
-    @invalid_attrs %{amount: nil, currency: nil, email: nil, name: nil, payment_intent_id: nil, payment_method_id: nil, status: nil}
+    @invalid_attrs %{
+      amount: nil,
+      currency: nil,
+      email: nil,
+      name: nil,
+      payment_intent_id: nil,
+      payment_method_id: nil,
+      status: nil
+    }
 
     test "list_billings/0 returns all billings" do
       billing = billing_fixture()
@@ -21,7 +32,15 @@ defmodule Lifecycle.MoneyTest do
     end
 
     test "create_billing/1 with valid data creates a billing" do
-      valid_attrs = %{amount: 42, currency: "some currency", email: "some email", name: "some name", payment_intent_id: "some payment_intent_id", payment_method_id: "some payment_method_id", status: "some status"}
+      valid_attrs = %{
+        amount: 42,
+        currency: "some currency",
+        email: "some email",
+        name: "some name",
+        payment_intent_id: "some payment_intent_id",
+        payment_method_id: "some payment_method_id",
+        status: "some status"
+      }
 
       assert {:ok, %Billing{} = billing} = Money.create_billing(valid_attrs)
       assert billing.amount == 42
@@ -39,7 +58,16 @@ defmodule Lifecycle.MoneyTest do
 
     test "update_billing/2 with valid data updates the billing" do
       billing = billing_fixture()
-      update_attrs = %{amount: 43, currency: "some updated currency", email: "some updated email", name: "some updated name", payment_intent_id: "some updated payment_intent_id", payment_method_id: "some updated payment_method_id", status: "some updated status"}
+
+      update_attrs = %{
+        amount: 43,
+        currency: "some updated currency",
+        email: "some updated email",
+        name: "some updated name",
+        payment_intent_id: "some updated payment_intent_id",
+        payment_method_id: "some updated payment_method_id",
+        status: "some updated status"
+      }
 
       assert {:ok, %Billing{} = billing} = Money.update_billing(billing, update_attrs)
       assert billing.amount == 43
