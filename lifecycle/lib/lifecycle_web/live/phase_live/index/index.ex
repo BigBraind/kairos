@@ -135,10 +135,10 @@ defmodule LifecycleWeb.PhaseLive.Index do
     Enum.map(transitions, fn
       %Transition{phase_id: id} ->
         if id == phase_id do
-          "true"
+          "yep "
           # assign(socket, :transited, "true")
         else
-          ""
+          "nope "
           # assign(socket, :transited, "false")
         end
     end)

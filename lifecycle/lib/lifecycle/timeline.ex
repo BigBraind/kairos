@@ -237,7 +237,7 @@ defmodule Lifecycle.Timeline do
       Transition
       |> where([e], e.phase_id == ^id)
       |> order_by([e], desc: e.inserted_at)
-      |> preload([:transiter, :initiator])
+      |> preload([:transiter, :initiator, :phase])
 
     Repo.all(query, limit: 8)
   end
@@ -247,7 +247,7 @@ defmodule Lifecycle.Timeline do
     |> where([e], e.inserted_at >= ^begin_date and e.inserted_at <= ^end_date )
     |> order_by([e], desc: e.inserted_at)
     Repo.all(query, limit: 8 )
-    |> Repo.preload([:initiator, :transiter])
+    |> Repo.preload([:initiator, :transiter, :phase])
   end
 
   def get_transition_by_id(id), do: Repo.get!(Transition, id) |> Repo.preload([:transiter, :initiator])
