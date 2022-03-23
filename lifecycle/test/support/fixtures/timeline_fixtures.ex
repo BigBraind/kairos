@@ -14,7 +14,7 @@ defmodule Lifecycle.TimelineFixtures do
   """
   def echo_fixture(attrs \\ %{}) do
     phase = phase_fixture()
-    user = user_fixtures()
+    user = user_fixture()
 
     {:ok, echo} =
       attrs
@@ -43,12 +43,12 @@ defmodule Lifecycle.TimelineFixtures do
       })
       |> Timeline.create_phase()
 
-   %{phase | parent: [], child: []} # add child and parent
+   %{phase | parent: [], child: [], traits: []} # add child and parent
   end
 
-  def user_fixtures(_attr \\ %{}) do
+  def user_fixture(_attr \\ %{}) do
     {:ok, user} =
-      %Lifecycle.Users.User{name: "Bruce Lee", id: Ecto.UUID.generate()}
+      %Lifecycle.Users.User{name: "Nietzsche", id: Ecto.UUID.generate()}
       |> Repo.insert()
 
     user

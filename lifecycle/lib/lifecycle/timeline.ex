@@ -119,7 +119,7 @@ defmodule Lifecycle.Timeline do
 
   """
   def list_phases do
-    Repo.all(from(p in Phase, preload: [:parent, :child]))
+    Repo.all(from(p in Phase, preload: [:parent, :child, :traits]))
   end
 
   @doc """
