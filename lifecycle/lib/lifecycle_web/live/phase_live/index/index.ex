@@ -5,6 +5,8 @@ defmodule LifecycleWeb.PhaseLive.Index do
   alias Lifecycle.Pubsub
   alias Lifecycle.Timeline
   alias Lifecycle.Timeline.Phase
+  alias Lifecycle.Timeline.Transition
+  alias Lifecycle.Timezone
 
   alias LifecycleWeb.Modal.Function.Component.Flash
   alias LifecycleWeb.Modal.Function.Pubsub.PhasePubs
@@ -14,7 +16,30 @@ defmodule LifecycleWeb.PhaseLive.Index do
   @impl true
   def mount(_params, _session, socket) do
     if connected?(socket), do: Pubsub.subscribe(@topic)
-    {:ok, assign(socket, :phases, list_phases())}
+
+    socket =
+      socket
+      |> Timezone.get_current_end_date(socket.assigns.timezone)
+
+    start_date = socket.assigns.current_date
+    end_date = socket.assigns.end_date
+
+    socket =
+      socket
+      |> assign(
+        :transitions_by_date,
+        Timeline.get_transition_by_date(
+          start_date,
+          end_date
+        )
+      )
+      |> assign(phases: list_phases())
+
+    # import IEx
+    # IEx.pry()
+
+    # {:ok, assign(socket, :phases, list_phases())}
+    {:ok, socket}
   end
 
   @impl true
@@ -35,11 +60,15 @@ defmodule LifecycleWeb.PhaseLive.Index do
   defp apply_action(socket, :new, _params) do
     socket
     |> assign(:page_title, "New Phase")
-    #|> assign(:template, nil) #so that i can pass through the index.html
+    # |> assign(:template, nil) #so that i can pass through the index.html
     |> assign(:phase, %{%Phase{traits: []} | parent: []})
   end
 
   defp apply_action(socket, :index, _params) do
+    socket =
+      socket
+      |> Timezone.get_current_end_date(socket.assigns.timezone)
+
     socket
     |> assign(:page_title, "Listing Phases")
     |> assign(:phase, nil)
@@ -78,5 +107,40 @@ defmodule LifecycleWeb.PhaseLive.Index do
 
   defp list_phases do
     Timeline.list_phases()
+  end
+
+  defp check_if_transition_exist(socket, phase_id, transitions) do
+    # case(
+    #   Timeline.get_transition_by_date(
+    #     start_date,
+    #     end_date
+    #   )
+    # ) do
+    #   [] ->
+    #     "false"
+    # assign(socket, :transited, "false")
+
+    # transitions ->
+    #   Enum.map(transitions, fn
+    #     %Transition{phase_id: id} ->
+    #       if id == phase_id do
+    #         "true"
+    #         # assign(socket, :transited, "true")
+    #       else
+    #         "false"
+    #         # assign(socket, :transited, "false")
+    #       end
+    #   end)
+    # end
+    Enum.map(transitions, fn
+      %Transition{phase_id: id} ->
+        if id == phase_id do
+          "true"
+          # assign(socket, :transited, "true")
+        else
+          ""
+          # assign(socket, :transited, "false")
+        end
+    end)
   end
 end

@@ -29,11 +29,12 @@ defmodule Lifecycle.TimelineTest do
 
     test "create_echo/1 with valid data and pre-existing phase creates a echo" do
       %{id: phase_id} = phase_fixture()
-      valid_attrs = %{phase_id: phase_id, message: "some message", name: "some name"}
+      %{name: user_name} = user_fixture()
+      valid_attrs = %{phase_id: phase_id, message: "some message", user_name: user_name}
       assert {:ok, %Echo{} = echo} = Timeline.create_echo(valid_attrs)
       assert echo.phase_id == phase_id
       assert echo.message == "some message"
-      assert echo.name == "some name"
+      assert echo.user_name == user_name
       # assert echo.type == "some type"
     end
 
@@ -43,13 +44,10 @@ defmodule Lifecycle.TimelineTest do
 
     test "update_echo/2 with valid data updates the echo" do
       echo = echo_fixture()
-      update_attrs = %{message: "some updated message", name: "some updated name"}
+      update_attrs = %{message: "some updated message"}
 
       assert {:ok, %Echo{} = echo} = Timeline.update_echo(echo, update_attrs)
-      # assert echo.phase == "some updated phase"
       assert echo.message == "some updated message"
-      assert echo.name == "some updated name"
-      # assert echo.type == "some updated type"
     end
 
     test "update_echo/2 with invalid data returns error changeset" do

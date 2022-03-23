@@ -5,6 +5,7 @@ defmodule Lifecycle.TimelineFixtures do
   """
 
   alias Lifecycle.Timeline
+  alias Lifecycle.Repo
 
   alias Ecto.UUID
 
@@ -13,13 +14,14 @@ defmodule Lifecycle.TimelineFixtures do
   """
   def echo_fixture(attrs \\ %{}) do
     phase = phase_fixture()
+    user = user_fixture()
 
     {:ok, echo} =
       attrs
       |> Enum.into(%{
         phase_id: phase.id,
+        user_name: user.name,
         message: "some message",
-        name: "some name"
         # type: "type"
       })
       |> Timeline.create_echo()
@@ -41,6 +43,14 @@ defmodule Lifecycle.TimelineFixtures do
       })
       |> Timeline.create_phase()
 
-   %{phase | parent: [], child: []} # add child and parent
+   %{phase | parent: [], child: [], traits: []} # add child and parent
+  end
+
+  def user_fixture(_attr \\ %{}) do
+    {:ok, user} =
+      %Lifecycle.Users.User{name: "Nietzsche", id: Ecto.UUID.generate()}
+      |> Repo.insert()
+
+    user
   end
 end

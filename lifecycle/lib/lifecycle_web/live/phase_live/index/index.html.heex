@@ -31,6 +31,7 @@
             <tr>
                 <th class="table-header">Title</th>
                 <th class="table-header">Content</th>
+                <th class="table-header">Has this been transited today?</th>
                 <th class="table-header">Type</th>
                 <th class="table-header">Child</th>
                 <th class="table-header col-span-4 text-center">Actions</th>
@@ -54,6 +55,7 @@
             <tr id={"phase-#{phase.id}"} class ="table-fixed">
                 <td class="border px-4 py-2 "><span ><%= live_redirect phase.title, to: Routes.phase_show_path(@socket, :show, phase), class: " fab font-normal button"%></span></td>
                 <td class="border px-4 py-2"><%= phase.content %></td>
+                <td class="border px-4 py-2"><%= to_string(check_if_transition_exist(@socket, phase.id, @transitions_by_date)) %></td>
                 <td class="border px-4 py-2 "><%= phase.type %></td>
                 <%= if phase.parent do %>
                     <td class="border px-4 py-2"><%= for parent <- phase.parent do %>
