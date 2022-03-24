@@ -242,6 +242,22 @@ defmodule Lifecycle.Timeline do
     Repo.all(query, limit: 8)
   end
 
+  def check_if_transited_today(id, begin_date, end_date) do
+    query =
+      Transition
+      |> where([e], e.phase_id == ^id)
+      |> where([e], e.inserted_at >= ^begin_date and e.inserted_at <= ^end_date )
+      |> order_by([e], desc: e.inserted_at)
+      |> preload([:transiter, :initiator])
+      |> Repo.all()
+
+      case query do
+        [] -> false
+
+        _list_of_transitions -> true
+      end
+  end
+
   def get_transition_by_date(begin_date, end_date) do
     query = Transition
     |> where([e], e.inserted_at >= ^begin_date and e.inserted_at <= ^end_date )
