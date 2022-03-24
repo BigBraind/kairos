@@ -9,18 +9,18 @@ defmodule Lifecycle.Timezone do
 
   @doc """
   get_connect_params can only be called during mount, to avoid error, I purposely splitted out getting the date to query transition list here
+  first get today's date in UTC, then subtract by the offset
   """
   def get_current_end_date(socket, timezone) do
     current_date =
       timezone
-      |> Timex.today()
+      |> Timex.today() # in UTC time
       |> Timex.to_naive_datetime()
+      |> Timex.subtract(Duration.from_hours(socket.assigns.timezone_offset))
 
     end_date =
-      timezone
-      |> Timex.today()
+      current_date
       |> Timex.shift(days: 1)
-      |> Timex.to_naive_datetime()
 
     assign(socket, current_date: current_date, end_date: end_date)
   end
