@@ -55,7 +55,8 @@ It may also be given via the :root_layout option to a live_session macro in the 
                 
                 <%= link "Phases", to: Routes.phase_index_path(@conn, :index), class: "fab" %>
                 <%= link "Party", to: Routes.party_index_path(@conn, :index), class: "fab" %>
-                <%= link "Billing", to: Routes.billing_index_path(@conn, :index), class: "fab" %>
+                <%# <%= link "Billing", to: Routes.billing_index_path(@conn, :index), class: "fab" %>
+                <%= link "Transitions", to: Routes.transition_index_path(@conn, :index), class: "fab" %>
               </div>
             <% else %>
             <% end %>

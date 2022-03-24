@@ -43,7 +43,7 @@ defmodule LifecycleWeb.Modal.View.Transition.TransitionList do
     ~H"""
         <div class="text-center mt-6 mb-6 mx-auto font-light text-sm">
             <%= for transition <- @transitions do %>
-
+                from : <%= transition.phase.title %> <br>
                 <%= for {property, value} <- transition.answers do %>
                   <%= unless property == "image_list" do %>
                       <%= property%> : <%= value %> <br>
