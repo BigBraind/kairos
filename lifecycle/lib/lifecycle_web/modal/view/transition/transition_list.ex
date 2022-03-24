@@ -11,10 +11,15 @@ defmodule LifecycleWeb.Modal.View.Transition.TransitionList do
   end
 
   def update(
-        %{transitions: transitions, id: id, timezone: timezone, timezone_offset: timezone_offset, phase: phase},
+        %{
+          transitions: transitions,
+          id: id,
+          timezone: timezone,
+          timezone_offset: timezone_offset,
+          phase: phase
+        },
         socket
       ) do
-
     {:ok,
      assign(socket,
        id: id,
@@ -23,6 +28,13 @@ defmodule LifecycleWeb.Modal.View.Transition.TransitionList do
        timezone: timezone,
        timezone_offset: timezone_offset
      )}
+  end
+
+  defp format_string(string) do
+    string
+    |> String.trim_leading()
+    |> String.trim_trailing()
+    |> String.split("\n")
   end
 
   # max-w-md max-h-md
