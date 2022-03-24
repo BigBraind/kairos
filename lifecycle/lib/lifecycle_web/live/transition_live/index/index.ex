@@ -5,7 +5,6 @@ defmodule LifecycleWeb.TransitionLive.Index do
   use Timex
 
   alias Lifecycle.Timeline
-  alias Lifecycle.Timezone
 
   alias LifecycleWeb.Modal.View.Calendar.Month
   alias LifecycleWeb.Modal.View.Transition.TransitionList
