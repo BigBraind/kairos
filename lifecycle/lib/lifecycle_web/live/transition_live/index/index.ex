@@ -15,10 +15,6 @@ defmodule LifecycleWeb.TransitionLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
-    socket =
-      socket
-      |> Timezone.get_current_end_date(socket.assigns.timezone)
-
     start_date = socket.assigns.current_date
     end_date = socket.assigns.end_date
 
