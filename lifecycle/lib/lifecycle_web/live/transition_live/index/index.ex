@@ -79,7 +79,7 @@ defmodule LifecycleWeb.TransitionLive.Index do
       |> Timex.to_naive_datetime()
       |> Timex.shift(hours: -1 * socket.assigns.timezone_offset)
 
-    end_date = Timex.shift(start_date, days: 1, minutes: -1)
+    end_date = Timex.shift(start_date, days: 1, seconds: -1)
 
     assign(socket, start_date: start_date, end_date: end_date)
   end
