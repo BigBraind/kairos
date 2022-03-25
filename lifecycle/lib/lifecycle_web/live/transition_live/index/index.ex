@@ -5,7 +5,6 @@ defmodule LifecycleWeb.TransitionLive.Index do
   use Timex
 
   alias Lifecycle.Timeline
-  alias Lifecycle.Timezone
 
   alias LifecycleWeb.Modal.View.Calendar.Month
   alias LifecycleWeb.Modal.View.Transition.TransitionList
@@ -15,10 +14,6 @@ defmodule LifecycleWeb.TransitionLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
-    socket =
-      socket
-      |> Timezone.get_current_end_date(socket.assigns.timezone)
-
     start_date = socket.assigns.current_date
     end_date = socket.assigns.end_date
 
@@ -61,18 +56,6 @@ defmodule LifecycleWeb.TransitionLive.Index do
   @impl true
   def handle_event("delete-transition", %{"id" => _transition_id} = params, socket) do
     TransitionHandler.delete_transition(:transition_view, params, socket)
-    # transition = Timeline.get_transition_by_id(transition_id)
-    # {:ok, deleted_transition} = Timeline.delete_transition(transition)
-
-    # {Pubsub.notify_subs(
-    #    {:ok, deleted_transition},
-    #    [:transition, :deleted],
-    #    "phase:" <> deleted_transition.phase_id
-    #  )}
-
-    # {:noreply,
-    #  socket
-    #  |> assign(:transitions, Timeline.get_transition_list(socket.assigns.phase.id))}
   end
 
   defp apply_action(socket, :index, _params) do
@@ -90,20 +73,18 @@ defmodule LifecycleWeb.TransitionLive.Index do
   end
 
   defp query_end_dates(date, socket) do
-    # start_date = NaiveDateTime.new!(Date.from_iso8601!(date), ~T[00:00:00])
     start_date =
       date
       |> Date.from_iso8601!()
-      |> NaiveDateTime.new!(~T[00:00:00])
-      |> Timex.shift(hours: socket.assigns.timezone_offset)
+      |> Timex.to_naive_datetime()
+      |> Timex.subtract(Duration.from_hours(socket.assigns.timezone_offset))
 
-    end_date = Timex.shift(start_date, days: 1)
+    end_date = Timex.shift(start_date, days: 1, minutes: -1)
 
     assign(socket, start_date: start_date, end_date: end_date)
   end
 
   defp assign_dates(socket, params) do
-    # current = Timex.today(socket.assigns.timezone)
     current = current_from_params(socket, params)
 
     beginning_of_month = Timex.beginning_of_month(current)

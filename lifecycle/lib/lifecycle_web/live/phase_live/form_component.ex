@@ -97,7 +97,6 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
       socket.assigns.changeset
       |> Changeset.put_assoc(:traits, updated_traits)
 
-    IO.inspect(updated_traits)
     {:noreply, assign(socket, changeset: changeset)}
   end
 
@@ -160,7 +159,7 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
       {:ok, phase} ->
         # TODO: TYPE AND UNIT NOT IMPLEMENTED YET
         # to avoid raising KeyError
-        
+
         # phase_params include exisitng traits inherited from parents
         # and traits newly created
         if check_existing_trait do

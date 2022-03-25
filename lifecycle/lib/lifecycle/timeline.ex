@@ -10,8 +10,8 @@ defmodule Lifecycle.Timeline do
   alias Lifecycle.Timeline.Echo
   alias Lifecycle.Timeline.Phase
   alias Lifecycle.Timeline.Transition
-  alias Lifecycle.Users.User
   alias Lifecycle.Users.Journey
+  alias Lifecycle.Users.User
 
   @doc """
   Returns the list of echoes.
@@ -240,6 +240,20 @@ defmodule Lifecycle.Timeline do
       |> preload([:transiter, :initiator, :phase])
 
     Repo.all(query, limit: 8)
+  end
+
+  def check_if_transited_today(phase_id, begin_date, end_date) do
+    query =
+      Transition
+      |> where([e], e.phase_id == ^phase_id)
+      |> where([e], e.inserted_at >= ^begin_date and e.inserted_at <= ^end_date )
+      |> Repo.all()
+
+      case query do
+        [] -> false
+
+        _list_of_transitions -> true
+      end
   end
 
   def get_transition_by_date(begin_date, end_date) do

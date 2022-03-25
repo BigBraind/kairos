@@ -69,7 +69,9 @@
 
                 </td>
                 <td class="border px-4 py-2"><%= phase.content %></td>
-                <td class="border px-4 py-2"><%= to_string(check_if_transition_exist(@socket, phase.id, @transitions_by_date)) %></td>
+
+                <td class="border px-4 py-2"><%= to_string(check_if_transition_exist(phase.id, @current_date, @end_date)) %></td>
+
                 <td class="border px-4 py-2 "><%= phase.type %></td>
                 <%= if phase.parent do %>
                     <td class="border px-4 py-2"><%= for parent <- phase.parent do %>
