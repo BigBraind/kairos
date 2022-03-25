@@ -10,7 +10,7 @@
 <% end %>
 <div class="mx-2">
 <h1 class="mx-2 mb-5 my-2 text-3xl font-light"> <%= @page_title %></h1>
-    <span class ="ml-auto mx-2 fab font-extralight text-2xl"><%= live_patch "+ New Party", to: Routes.party_index_path(@socket, :new) %></span>
+    <span class ="ml-auto mx-2 fab font-extralight px-2 text-2xl"><%= live_patch "+ New Party ", to: Routes.party_index_path(@socket, :new) %></span>
 
 <%# <h2 class="mx-2 my-2 text-2xl font-semibold">My Parties 🥳 </h2>
 
@@ -58,7 +58,7 @@
 <tbody id="parties">
     <%= for party <- @all_parties do %>
         <tr id={"party-#{party.id}"  } class="table-fixed">
-            <td><span class="px-8 py-4 mx-8 my-8"><%= live_redirect party.name, to: Routes.party_show_path(@socket, :show, party.name), class: "button fab"%></span></td>
+            <td><span class="px-8 py-4 mx-8 my-8"><%= live_redirect party.name, to: Routes.party_show_path(@socket, :show, party.name), class: "md:fab md:py-2 md:px-2 button smaller-fab"%></span></td>
             <td class="border px-4 py-2 mx-6"><%= party.banner %></td>
             <td class="border px-4 py-2">
                 <%= for user <- party.user do %>
