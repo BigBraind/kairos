@@ -1,5 +1,5 @@
-<div class="mx-2">
-    <h1 class="mb-5 text-4xl font-light">Phases 🌙 </h1> 
+<div class="mx-3">
+    <h1 class="mb-3 text-4xl font-light">Phases 🌙 </h1> 
     <span class ="ml-auto fab font-extralight text-2xl"><%= live_patch "New Phase", to: Routes.phase_index_path(@socket, :new) %></span>
 
 
@@ -29,12 +29,16 @@
     <table class ="table-fixed shadow-lg bg-white border-seperate" >
         <thead>
             <tr>
-                <th class="table-header">Title</th>
-                <th class="table-header">Content</th>
-                <th class="table-header">Has this been transited today?</th>
+                <th class="table-header">Mushroom</th>
+                
+                <th class="table-header">Variables</th>
+                <th class="table-header">Progress</th>
                 <th class="table-header">Type</th>
                 <th class="table-header">Child</th>
-                <th class="table-header col-span-4 text-center">Actions</th>
+                <%# <th class="table-header col-span-2">Actions</th> %>
+
+                <%# <th class="table-header">Title</th> %>
+                <%# <th class="table-header">Day</th> %>
             </tr>
         </thead>
 
@@ -52,8 +56,18 @@
         <tbody id="phases" >
 
         <%= for phase <- @phases do %>
-            <tr id={"phase-#{phase.id}"} class ="table-fixed">
-                <td class="border px-4 py-2 "><span ><%= live_redirect phase.title, to: Routes.phase_show_path(@socket, :show, phase), class: " fab font-normal button"%></span></td>
+            <tr id={"phase-#{phase.id}"} class ="">
+                <td class="border px-4 py-2 ">
+                <%# made a div here so it stretches across the entire mushroom col %>
+                    
+                    <span class="text-center"><%= live_redirect phase.title, to: Routes.phase_show_path(@socket, :show, phase), class: "font-normal smaller-fab"%></span>
+                    
+                    <br>
+                    <span class="mt-2 my-1 "><%= live_patch "Edit", to: Routes.phase_index_path(@socket, :edit, phase), class: "button font-medium text-blue-600 dark:text-blue-500 hover:underline" %></span>
+                    <br>                
+                    <span class=""><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: phase.id, data: [confirm: "Are you sure? Princeton is watching"], class: "button font-medium text-red-600 dark:text-red-500 hover:underline" %></span>
+
+                </td>
                 <td class="border px-4 py-2"><%= phase.content %></td>
 
                 <td class="border px-4 py-2"><%= to_string(check_if_transition_exist(phase.id, @current_date, @end_date)) %></td>
@@ -64,14 +78,19 @@
                     <span><%= live_redirect parent.title, to: Routes.phase_show_path(@socket, :show, parent), class: "button"%></span>
                     <% end %></td>
                 <% end %>
-                <td>
+                
 
-                <span class="mx-2 my-2 fab"><%= live_patch "Edit", to: Routes.phase_index_path(@socket, :edit, phase), class: "button" %></span>
-                <span class="mx-2 my-2 fab"><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: phase.id, data: [confirm: "Are you sure? Princeton is watching"], class: "button" %></span>
-                <span class = 'mx-2 my-2 fab'><%= live_patch "New Transition", to: Routes.phase_show_path(@socket, :transition_new, phase.id), class: "button" %></span>
-                <span class = 'mx-2 my-2 fab'><%= live_patch "Child Phase", to: Routes.phase_show_path(@socket, :new_child, phase), class: "button" %></span>
-
+                <td><%= live_patch "New Transition", to: Routes.phase_show_path(@socket, :transition_new, phase.id), class: "button mx-2 my-2 fab" %>
+                    <span> </span>
                 </td>
+
+                <td><%= live_patch "Child Phase", to: Routes.phase_show_path(@socket, :new_child, phase), class: "mx-2 my-2 fab" %>
+                    <span> </span>
+                </td>
+            </tr>
+            <tr>
+                <%# <td class="col-span-2"> Test</td>
+                <td class="col-auto"> wqedad </td> %>
             </tr>
     <% end %>
     </tbody>

@@ -85,6 +85,7 @@ defmodule LifecycleWeb.PhaseLive.Index do
     Timeline.list_phases()
   end
 
+
   defdelegate check_if_transition_exist(phase_id, begin_date, end_date),
     to: Timeline,
     as: :check_if_transited_today
