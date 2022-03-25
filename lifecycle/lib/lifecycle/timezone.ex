@@ -14,9 +14,10 @@ defmodule Lifecycle.Timezone do
   def get_current_end_date(socket, timezone) do
     current_date =
       timezone
-      |> Timex.today() # in UTC time
+      # in UTC time
+      |> Timex.today()
       |> Timex.to_naive_datetime()
-      |> Timex.subtract(Duration.from_hours(socket.assigns.timezone_offset))
+      |> Timex.shift(hours: -1 * socket.assigns.timezone_offset)
 
     end_date =
       current_date
