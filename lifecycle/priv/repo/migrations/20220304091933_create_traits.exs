@@ -8,8 +8,8 @@ defmodule Lifecycle.Repo.Migrations.CreateTraits do
 
     create table(:traits) do
       add :name, :string
-      add :value, :string, null: false
-      add :type, :trait_type
+      add :value, :string
+      add :type, :trait_type, null: false
       add :unit, :string
       add :phase_id, references(:phases, type: :binary_id, on_delete: :delete_all)
 
