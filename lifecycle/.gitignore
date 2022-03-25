@@ -40,4 +40,5 @@ priv/.DS_Store
 
 ../.history
 ../.vscode
-
+../.DS_Store
+dummy_data.txt
