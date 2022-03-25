@@ -33,11 +33,11 @@ defmodule Lifecycle.Timeline.PhaseTest do
     end
 
     test "create_trait/1 with valid data creates a trait",  %{phase: phase} do
-      valid_attrs = %{name: "dimsum", type: "some type", value: "some value"}
+      valid_attrs = %{name: "dimsum", type: "txt", value: "some value"}
 
       assert {:ok, %Trait{} = trait} = Phase.create_trait(valid_attrs, phase)
       assert trait.name == "dimsum"
-      assert trait.type == "some type"
+      assert trait.type == :txt
       assert trait.value == "some value"
     end
 
@@ -46,11 +46,11 @@ defmodule Lifecycle.Timeline.PhaseTest do
     end
 
     test "update_trait/2 with valid data updates the trait", %{trait: trait} do
-      update_attrs = %{name: "some updated name", type: "some updated type", value: "some updated value"}
+      update_attrs = %{name: "some updated name", type: "txt", value: "some updated value"}
 
       assert {:ok, %Trait{} = trait} = Phase.update_trait(trait, update_attrs)
       assert trait.name == "some updated name"
-      assert trait.type == "some updated type"
+      assert trait.type == :txt
       assert trait.value == "some updated value"
     end
 

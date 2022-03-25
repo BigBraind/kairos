@@ -33,7 +33,6 @@ defmodule LifecycleWeb.Router do
 
     get("/", PageController, :index)
 
-    # TODO: ADD TIMEZONE ON_MOUNT
     live_session :default,
       on_mount: [{LifecycleWeb.Auth.Protocol, :auth}, {LifecycleWeb.Timezone.Timezone, :timezone}] do
       live("/echoes", EchoLive.Index, :index)

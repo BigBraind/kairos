@@ -15,16 +15,16 @@
             <%# trait.type is stored as an atom here %>
             <%= if trait.type == :txt do %>
                 <%= if @action == :transition_edit do %>
-                    <%= text_input f, String.to_atom(trait.name), phx_debounce: "blur", value: @transition.answers[trait.name] %>
+                    <%= text_input f, String.to_atom(trait.name), phx_debounce: "blur", value: @transition.answers[trait.name], autocomplete: "off" %>
                 <% else %>
-                    <%= text_input f, String.to_atom(trait.name), phx_debounce: "blur", value: trait.value %>
+                    <%= text_input f, String.to_atom(trait.name), phx_debounce: "blur", value: trait.value, autocomplete: "off"%>
                 <% end %>
             <% end %>
             <%= if trait.type == :num do %>
                 <%= if @action == :transition_edit do %>
-                    <%= number_input f, String.to_atom(trait.name), phx_debounce: "blur", value: @transition.answers[trait.name] %>
+                    <%= number_input f, String.to_atom(trait.name), phx_debounce: "blur", value: @transition.answers[trait.name], autocomplete: "off" %>
                 <% else %>
-                    <%= number_input f, String.to_atom(trait.name), phx_debounce: "blur", value: trait.value %>
+                    <%= number_input f, String.to_atom(trait.name), phx_debounce: "blur", value: trait.value, autocomplete: "off" %>
                 <% end %>
             <% end %>
             <br>
@@ -33,9 +33,9 @@
 
         <%= label f, :comment %>
         <%= if @action == :transition_edit do %>
-            <%= textarea f, :comment, phx_debounce: "blur", value:  @transition.answers["comment"] %>
+            <%= textarea f, :comment, phx_debounce: "blur", value:  @transition.answers["comment"], autocomplete: "off" %>
         <% else %>
-            <%= textarea f, :comment, phx_debounce: "blur" %>
+            <%= textarea f, :comment, phx_debounce: "blur", autocomplete: "off" %>
         <% end %>
 
         <section phx-drop-target={@uploads.transition.ref}>

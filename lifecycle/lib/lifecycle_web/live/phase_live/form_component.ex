@@ -12,11 +12,20 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
 
   @topic "phase_index"
 
+  # clean phase_params whats necesary preload traits
+  # cast_assoc instead of create_traits()?
+  # look at create phase, update phase, delete phase operations
+  # and relation with associated traits
+  # child phase inheritance passing like parent child
+
   @impl true
   def update(%{phase: phase} = assigns, socket) do
     changeset =
       Timeline.change_phase(phase)
       |> Changeset.put_assoc(:traits, phase.traits)
+
+    # put assoc for working with new phase + traits as in create phase events
+    # for update operation put assoc involves passing existing traits list as well
 
     {:ok,
      socket
@@ -88,6 +97,7 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
       socket.assigns.changeset
       |> Changeset.put_assoc(:traits, updated_traits)
 
+    IO.inspect(updated_traits)
     {:noreply, assign(socket, changeset: changeset)}
   end
 
@@ -114,8 +124,11 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
   """
 
   defp save_phase(socket, :new, phase_params) do
+    trait_list = retrieve_traits(phase_params["traits"])
+
     phase_params =
       %{}
+      |> Map.put("existing_traits", trait_list)
       |> Map.put("content", phase_params["content"])
       |> Map.put("title", phase_params["title"])
       |> Map.put("type", phase_params["type"])
@@ -125,23 +138,11 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
   end
 
   defp save_phase(socket, :new_child, phase_params) do
-    properties = Map.keys(socket.assigns.phase.template)
+    trait_list = retrieve_traits(phase_params["traits"])
 
-    attrs =
-      for key <- properties do
-        [key, phase_params[key]]
-      end
-
-    template =
-      attrs
-      |> List.flatten()
-      |> Enum.chunk_every(2)
-      |> Map.new(fn [k, v] -> {k, v} end)
-
-    # creating a new map to pass into create_phase
     phase_params =
       %{}
-      |> Map.put("template", template)
+      |> Map.put("existing_traits", trait_list)
       |> Map.put("content", phase_params["content"])
       |> Map.put("title", phase_params["title"])
       |> Map.put("type", phase_params["type"])
@@ -151,16 +152,22 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
   end
 
   defp create_phase(action, phase_params, socket) do
-    check_trait = Map.has_key?(socket.assigns.changeset.changes, "traits")
+    check_trait = Map.has_key?(socket.assigns.changeset.changes, :traits)
+    # check_existing_trait = phase_params["existing_traits"] != %{}
+    check_existing_trait = phase_params["existing_traits"] != nil
 
     case Timeline.create_phase(phase_params) do
       {:ok, phase} ->
         # TODO: TYPE AND UNIT NOT IMPLEMENTED YET
-        if check_trait do # to avoid raising KeyError
-          _trait_map =
-            socket.assigns.changeset.changes.traits
-            |> Enum.map(fn t -> t.changes end)
-            |> Enum.map(fn t -> Phase.create_trait(t, phase) end)
+        # to avoid raising KeyError
+        
+        # phase_params include exisitng traits inherited from parents
+        # and traits newly created
+        if check_existing_trait do
+          for trait <- phase_params["existing_traits"] do
+            trait
+            |> Phase.create_trait(phase)
+          end
         end
 
         case action do
@@ -187,16 +194,14 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
 
   def handle_flash(socket), do: {:noreply, clear_flash(socket)}
 
-  # defp check_string_value(map, key, value) do
-  #   # using regex to check if this string contains a number
-  #   case String.match?(value, ~r/\d+/) do
-  #     true ->
-  #       Map.merge(map, %{String.to_atom(key) => value})
-
-  #     _ ->
-  #       map
-  #   end
-  # end
-
   defp gen_tracker, do: :crypto.strong_rand_bytes(5) |> Base.url_encode64() |> binary_part(0, 5)
+
+  def retrieve_traits(traits_map) do
+    trait_list =
+      for trait <- Map.values(traits_map) do
+        trait
+      end
+
+    List.flatten(trait_list)
+  end
 end

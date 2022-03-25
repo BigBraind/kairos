@@ -17,6 +17,6 @@ defmodule Lifecycle.Repo.Migrations.CreateTraits do
     end
 
     create index(:traits, [:phase_id])
-    unique_index(:traits, [:name, :type, :phase_id])
+    create unique_index(:traits, [:name, :type, :phase_id], name: :repeat_traits )
   end
 end

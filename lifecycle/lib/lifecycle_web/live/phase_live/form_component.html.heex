@@ -11,19 +11,19 @@
     >
 
     <%= label f, :title %>
-    <%= text_input f, :title, phx_debounce: "blur"%>
+    <%= text_input f, :title, phx_debounce: "blur", autocomplete: "off" %>
     <%= error_tag f, :title %>
 
     <br>
   
     <%= label f, :content %>
-    <%= text_input f, :content, phx_debounce: "blur" %>
+    <%= textarea f, :content, phx_debounce: "blur", autocomplete: "off" %>
     <%= error_tag f, :content %>
 
     <br>
   
     <%= label f, :type %>
-    <%= text_input f, :type, phx_debounce: "blur" %>
+    <%= text_input f, :type, phx_debounce: "blur", autocomplete: "off" %>
     <%= error_tag f, :type %>
     <br>
 
@@ -32,7 +32,7 @@
         <div class="flex flex-wrap -mx-1 overflow-hidden">
           <div class="form-group px-1 w-3/6">
             <%= label trait, :name %>
-            <%= text_input trait, :name, class: "form-control" %>
+            <%= text_input trait, :name, class: "form-control", autocomplete: "off" %>
             <%= error_tag trait, :name %>
           </div>
 
@@ -43,29 +43,19 @@
           </div>
 
           <div class="form-group w-2/6">
-            123
-            <%= unless is_nil(trait.data.tracker) do %>
-              456 <%= trait.data.type %>
-                <%= if trait.data.type == :txt do %>
-                  123
-                <% end %>
-            <% end %>
-          </div>
-
-          <div class="form-group w-2/6">
             <%= label trait, :default_value %>
-            <%= text_input trait, :value, class: "form-control" %>
+            <%= text_input trait, :value, class: "form-control", autocomplete: "off" %>
             <%= error_tag trait, :value %>
           </div>
 
           <div class="form-group w-1/6">
             <%= label trait, :goodbye %><br>
             <%= if is_nil(trait.data.tracker) do %>
-              <a href="#" phx-target={@myself} phx-click="delete_trait" phx-value-phase-id={trait.data.phase_id} phx-value-trait-id={trait.data.id} >&times</a>
+              <a href="#" phx-target={@myself} phx-click="delete_trait" phx-value-phase-id={trait.data.phase_id} phx-value-trait-id={trait.data.id} >&#128075</a>
               <%# <%= radio_button trait, :deletion, "phx-click"="delete_trait", "phx-value-trait_id": trait.id %> 
             <% else %>
               <%= hidden_input trait, :tracker %>
-              <a href="#" phx-target={@myself} phx-click="remove_trait" phx-value-remove={trait.data.tracker}>&times</a>
+              <a href="#" phx-target={@myself} phx-click="remove_trait" phx-value-remove={trait.data.tracker}>&copy</a>
             <% end %>
           </div>
         </div>

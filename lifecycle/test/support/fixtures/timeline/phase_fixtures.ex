@@ -18,7 +18,7 @@ defmodule Lifecycle.Timeline.PhaseFixtures do
       %{}
       |> Enum.into(%{
         name: "some name",
-        type: "some type",
+        type: "txt",
         value: "some value"
       })
       |> Phase.create_trait(phase)
@@ -31,7 +31,7 @@ defmodule Lifecycle.Timeline.PhaseFixtures do
       attrs
       |> Enum.into(%{
         name: "some name",
-        type: "some type",
+        type: "txt",
         value: "some value"
       })
       |> Phase.create_trait(phase)
