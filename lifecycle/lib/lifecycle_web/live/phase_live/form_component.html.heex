@@ -48,6 +48,12 @@
             <%= error_tag trait, :value %>
           </div>
 
+          <div class="form-group w-2/6">
+            <%= label trait, :unit %>
+            <%= text_input trait, :unit, class: "form-control", autocomplete: "off" %>
+            <%= error_tag trait, :unit %>
+          </div>
+
           <div class="form-group w-1/6">
             <%= label trait, :goodbye %><br>
             <%= if is_nil(trait.data.tracker) do %>
