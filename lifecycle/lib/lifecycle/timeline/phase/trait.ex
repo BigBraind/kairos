@@ -25,7 +25,7 @@ defmodule Lifecycle.Timeline.Phase.Trait do
     trait
     |> Map.put(:tracker, trait.tracker || attrs["tracker"])
     |> cast(attrs, [:name, :value, :type, :phase_id, :unit, :deletion])
-    |> validate_required([:name, :value, :type])
+    |> validate_required([:name, :type])
     |> unique_constraint(:name, name: :repeat_traits)
     |> delete()
   end
