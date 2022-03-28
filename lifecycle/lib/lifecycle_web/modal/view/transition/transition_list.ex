@@ -11,10 +11,15 @@ defmodule LifecycleWeb.Modal.View.Transition.TransitionList do
   end
 
   def update(
-        %{transitions: transitions, id: id, timezone: timezone, timezone_offset: timezone_offset, phase: phase},
+        %{
+          transitions: transitions,
+          id: id,
+          timezone: timezone,
+          timezone_offset: timezone_offset,
+          phase: phase
+        },
         socket
       ) do
-
     {:ok,
      assign(socket,
        id: id,
@@ -25,13 +30,20 @@ defmodule LifecycleWeb.Modal.View.Transition.TransitionList do
      )}
   end
 
+  defp format_string(string) do
+    string
+    |> String.trim_leading()
+    |> String.trim_trailing()
+    |> String.split("\n")
+  end
+
   # max-w-md max-h-md
 
   def render(assigns) do
     ~H"""
         <div class="text-center mt-6 mb-6 mx-auto font-light text-sm">
             <%= for transition <- @transitions do %>
-
+                from : <%= transition.phase.title %> <br>
                 <%= for {property, value} <- transition.answers do %>
                   <%= unless property == "image_list" do %>
                       <%= property%> : <%= value %> <br>
