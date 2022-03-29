@@ -34,6 +34,7 @@
                 <th class="table-header">Variables</th>
                 <th class="table-header">Progress</th>
                 <th class="table-header">Type</th>
+                <th class="table-header">Last Updated</th>
                 <th class="table-header">Child</th>
                 <%# <th class="table-header col-span-2">Actions</th> %>
 
@@ -70,9 +71,8 @@
                 </td>
                 <td class="border px-4 py-2"><%= phase.content %></td>
 
-                <td class="border px-4 py-2"><%= to_string(check_if_transition_exist(phase.id, @current_date, @end_date)) %></td>
-
                 <td class="border px-4 py-2 "><%= phase.type %></td>
+                <td class="border px-4 py-2 "><%= get_last_updated_transition_info(phase.id, @timezone, @timezone_offset) %></td>
                 <%= if phase.parent do %>
                     <td class="border px-4 py-2"><%= for parent <- phase.parent do %>
                     <span><%= live_redirect parent.title, to: Routes.phase_show_path(@socket, :show, parent), class: "button"%></span>

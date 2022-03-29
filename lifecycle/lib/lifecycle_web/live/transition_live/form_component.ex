@@ -29,7 +29,8 @@ defmodule LifecycleWeb.TransitionLive.FormComponent do
   end
 
   @impl true
-  def handle_event("save", %{"transition" => transition}, socket) do
+  def handle_event("save", %{"transition" => transition} = params, socket) do
+    IO.inspect(params)
     save_transition(socket, socket.assigns.action, transition)
   end
 
