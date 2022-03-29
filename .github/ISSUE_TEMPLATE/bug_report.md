@@ -7,8 +7,6 @@ assignees: ''
 
 ---
 
-## Bug report
-
 **Describe the bug**
 A clear and concise description of what the bug is.
 
@@ -32,9 +30,9 @@ Add any other context about the problem here.
 
 ---
 
-### Flutter doctor
+### elixir version
 
-Run `flutter doctor` and paste the output below:
+Run `elixir --version` and paste the output below:
 
 <details><summary>Click To Expand</summary>
 
