@@ -1,5 +1,5 @@
 <div>
-    <h2><%= @title %> </h2>
+    <h1 class="text-2xl underline underline-offset-4 my-1"><%= @title %> </h1>
     <.form
         let={f}
         for={@changeset}
@@ -10,40 +10,54 @@
 
 
         <%= for trait <- @phase.traits  do %>
-            <%= label f, String.to_atom(trait.name) %>
+            <%= label f, String.to_atom(trait.name)%>
             
             <%# trait.type is stored as an atom here %>
             <%= if trait.type == :txt do %>
                 <%= if @action == :transition_edit do %>
-                    <%= text_input f, String.to_atom(trait.name), phx_debounce: "blur", value: @transition.answers[trait.name], autocomplete: "off" %>
+                    <%= text_input f, String.to_atom(trait.name), phx_debounce: "blur", value: @transition.answers[trait.name], autocomplete: "off", class: "solid-form" %>
                 <% else %>
-                    <%= text_input f, String.to_atom(trait.name), phx_debounce: "blur", value: trait.value, autocomplete: "off"%>
+                    <%= text_input f, String.to_atom(trait.name), phx_debounce: "blur", value: trait.value, autocomplete: "off", class: "solid-form" %>
                 <% end %>
             <% end %>
             <%= if trait.type == :num do %>
                 <%= if @action == :transition_edit do %>
-                    <%= number_input f, String.to_atom(trait.name), phx_debounce: "blur", value: @transition.answers[trait.name], autocomplete: "off" %>
-                    <%= text_input f, :unit, phx_debounce: "blur", value: @transition.answers["unit"], autocomplete: "off" %>
+                    <%= number_input f, String.to_atom(trait.name), phx_debounce: "blur", value: @transition.answers[trait.name], autocomplete: "off", class: "solid-form", type: "number" %>
+                    <%= text_input f, :unit, phx_debounce: "blur", value: @transition.answers["unit"], autocomplete: "off" , class: "solid-form", type: "text", placeholder: "unit" %>
                 <% else %>
-                    <%= number_input f, String.to_atom(trait.name), phx_debounce: "blur", value: trait.value, autocomplete: "off" %>
-                    <%= text_input f, :unit, phx_debounce: "blur", value: trait.unit, autocomplete: "off" %>
+                    <%= number_input f, String.to_atom(trait.name), phx_debounce: "blur", value: trait.value, autocomplete: "off", class: "solid-form", type: "number" %>
+                    <%= text_input f, :unit, phx_debounce: "blur", value: trait.unit, autocomplete: "off", class: "solid-form", type: "text", placeholder: "unit" %>
                 <% end %>
             <% end %>
             <%= if trait.type == :bool do %>
                 <%= if @action == :transition_edit do %>
-                    <%= checkbox f, String.to_atom(trait.name), phx_debounce: "blur", value: @transition.answers[trait.name]%>
+                    <%= checkbox f, String.to_atom(trait.name), phx_debounce: "blur", value: @transition.answers[trait.name], class: "
+                          rounded
+                          bg-gray-200
+                          border-transparent
+                          focus:border-transparent focus:bg-gray-200
+                          text-gray-700
+                          focus:ring-1 focus:ring-offset-2 focus:ring-gray-500
+                        " %>
                 <% else %>
-                    <%= checkbox f, String.to_atom(trait.name), phx_debounce: "blur", value: trait.value%>
+                    <%= checkbox f, String.to_atom(trait.name), phx_debounce: "blur", value: trait.value, class: "
+                          rounded
+                          bg-gray-200
+                          border-transparent
+                          focus:border-transparent focus:bg-gray-200
+                          text-gray-700
+                          focus:ring-1 focus:ring-offset-2 focus:ring-gray-500
+                        " %>
                 <% end %>
             <% end %>
             <br>
         <% end %>
 
-        <%= label f, :comment %>
+        <%= label f, :comment, class: "" %>
         <%= if @action == :transition_edit do %>
-            <%= textarea f, :comment, phx_debounce: "blur", value:  @transition.answers["comment"], autocomplete: "off" %>
+            <%= textarea f, :comment, phx_debounce: "blur", value:  @transition.answers["comment"], autocomplete: "off", type: "text-area", class: "solid-form" %>
         <% else %>
-            <%= textarea f, :comment, phx_debounce: "blur", autocomplete: "off" %>
+            <%= textarea f, :comment, phx_debounce: "blur", autocomplete: "off", type: "text-area", class: "solid-form" %>
         <% end %>
 
         <%= live_file_input @uploads.transition %>
@@ -64,7 +78,7 @@
                     <progress value={entry.progress} max="100"> <%= entry.progress %>% </progress>
 
                     <%# a regular click event whose handler will invoke Phoenix.LiveView.cancel_upload/3 %>
-                    <button phx-click="cancel-upload" phx-value-ref={entry.ref} aria-label="cancel">&times;</button>
+                    <button phx-click="cancel-upload" phx-value-ref={entry.ref} aria-label="cancel">Woops, nevermind &#128465;</button>
 
                     <%# Phoenix.LiveView.Helpers.upload_errors/2 returns a list of error atoms %>
                     <%= for err <- upload_errors(@uploads.transition, entry) do %>
@@ -77,7 +91,7 @@
         </section>
 
         <div>
-            <%= submit  "Save", phx_disable_with: "Saving"%>
+            <%= submit  "Save", phx_disable_with: "Saving", class: "smaller-fab"%>
         </div>
 
     </.form>
