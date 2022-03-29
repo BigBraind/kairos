@@ -5,6 +5,7 @@ defmodule LifecycleWeb.PhaseLive.Index do
   alias Lifecycle.Pubsub
   alias Lifecycle.Timeline
   alias Lifecycle.Timeline.Phase
+  alias Lifecycle.Timezone
 
   alias LifecycleWeb.Modal.Function.Component.Flash
   alias LifecycleWeb.Modal.Function.Pubsub.PhasePubs
@@ -35,7 +36,7 @@ defmodule LifecycleWeb.PhaseLive.Index do
   defp apply_action(socket, :new, _params) do
     socket
     |> assign(:page_title, "New Phase")
-    #|> assign(:template, nil) #so that i can pass through the index.html
+    # |> assign(:template, nil) #so that i can pass through the index.html
     |> assign(:phase, %{%Phase{traits: []} | parent: []})
   end
 
@@ -78,5 +79,18 @@ defmodule LifecycleWeb.PhaseLive.Index do
 
   defp list_phases do
     Timeline.list_phases()
+  end
+
+  defp get_last_updated_transition_info(phase_id, timezone, timezone_offset) do
+    case Timeline.last_transited_by_who_when(phase_id) do
+      {:ok, [initiator_name, transition_updated_at]} ->
+        transition_datetime =
+          Timezone.get_datetime(transition_updated_at, timezone, timezone_offset)
+
+        "Date: #{transition_datetime}\nBy: #{initiator_name}"
+
+      {:error, reason} ->
+        reason
+    end
   end
 end

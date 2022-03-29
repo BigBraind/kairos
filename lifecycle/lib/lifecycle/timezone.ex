@@ -37,7 +37,7 @@ defmodule Lifecycle.Timezone do
   end
 
   @doc """
-    Get the time in the format of 12hrs, e.x.: 5:06pm
+    Get the time in the format of 12hrs, (e.g 5:06pm)
   """
   def get_time(time, timezone, timezone_offset) do
     time
@@ -45,5 +45,14 @@ defmodule Lifecycle.Timezone do
     |> Timex.shift(hours: timezone_offset)
     |> Timex.format("{h12}:{m} {am}")
     |> elem(1)
+  end
+
+  @doc """
+    Get datetime, (e.g 5:06pm)
+  """
+  def get_datetime(time, timezone, timezone_offset) do
+    date = get_date(time, timezone, timezone_offset)
+    time = get_time(time, timezone, timezone_offset)
+    date <> " " <> time
   end
 end
