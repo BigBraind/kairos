@@ -29,8 +29,14 @@
                     <%= text_input f, :unit, phx_debounce: "blur", value: trait.unit, autocomplete: "off" %>
                 <% end %>
             <% end %>
+            <%= if trait.type == :bool do %>
+                <%= if @action == :transition_edit do %>
+                    <%= checkbox f, String.to_atom(trait.name), phx_debounce: "blur", value: @transition.answers[trait.name]%>
+                <% else %>
+                    <%= checkbox f, String.to_atom(trait.name), phx_debounce: "blur", value: trait.value%>
+                <% end %>
+            <% end %>
             <br>
-            <%= live_file_input @uploads.transition %>
         <% end %>
 
         <%= label f, :comment %>
@@ -40,6 +46,7 @@
             <%= textarea f, :comment, phx_debounce: "blur", autocomplete: "off" %>
         <% end %>
 
+        <%= live_file_input @uploads.transition %>
         <section phx-drop-target={@uploads.transition.ref}>
 
             <%# render each transition image entry %>
