@@ -97,7 +97,6 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
       socket.assigns.changeset
       |> Changeset.put_assoc(:traits, updated_traits)
 
-    IO.inspect(updated_traits)
     {:noreply, assign(socket, changeset: changeset)}
   end
 
@@ -156,6 +155,8 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
     # check_existing_trait = phase_params["existing_traits"] != %{}
     check_existing_trait = phase_params["existing_traits"] != nil
 
+    IO.inspect(phase_params["existing_traits"])
+
     case Timeline.create_phase(phase_params) do
       {:ok, phase} ->
         # to avoid raising KeyError
@@ -164,8 +165,13 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
         # and traits newly created
         if check_existing_trait do
           for trait <- phase_params["existing_traits"] do
-            trait
-            |> Phase.create_trait(phase)
+            case Phase.create_trait(trait, phase) do
+              {:ok, _trait} ->
+                "do nothing"
+
+              {:error, %Ecto.Changeset{} = changeset} ->
+                {:noreply, assign(socket, changeset: changeset)}
+            end
           end
         end
 

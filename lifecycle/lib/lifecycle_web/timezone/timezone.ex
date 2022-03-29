@@ -5,6 +5,8 @@ defmodule LifecycleWeb.Timezone.Timezone do
 
   use Phoenix.Component
 
+  alias Lifecycle.Timezone
+
   @default_locale "en"
   @timezone "UTC"
   @timezone_offset 0
@@ -18,6 +20,7 @@ defmodule LifecycleWeb.Timezone.Timezone do
      socket
      |> assign(:locale, locale)
      |> assign(:timezone, timezone)
-     |> assign(:timezone_offset, timezone_offset)}
+     |> assign(:timezone_offset, timezone_offset)
+     |> Timezone.get_current_end_date(timezone)} # get current date with time set to 00:00:00
   end
 end
