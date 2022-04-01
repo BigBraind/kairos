@@ -10,8 +10,8 @@ defmodule Lifecycle.Timeline do
   alias Lifecycle.Timeline.Echo
   alias Lifecycle.Timeline.Phase
   alias Lifecycle.Timeline.Transition
-  alias Lifecycle.Users.User
   alias Lifecycle.Users.Journey
+  alias Lifecycle.Users.User
 
   @doc """
   Returns the list of echoes.
@@ -119,7 +119,7 @@ defmodule Lifecycle.Timeline do
 
   """
   def list_phases do
-    Repo.all(from(p in Phase, preload: [:parent, :child, :traits]))
+    Repo.all(from(p in Phase, order_by: [desc: p.inserted_at], preload: [:parent, :child, :traits]))
   end
 
   @doc """
@@ -158,13 +158,14 @@ defmodule Lifecycle.Timeline do
           |> Phase.changeset(attrs)
           |> Repo.insert()
 
-          %Phasor{}
-          |> Phasor.changeset(%{parent_id: parent_id, child_id: phase.id})
-          |> Repo.insert()
+        %Phasor{}
+        |> Phasor.changeset(%{parent_id: parent_id, child_id: phase.id})
+        |> Repo.insert()
 
-          {:ok, phase}
+        {:ok, phase}
 
-        {:error, %Ecto.Changeset{} = changeset} -> {:error, changeset}
+      {:error, %Ecto.Changeset{} = changeset} ->
+        {:error, changeset}
 
       %{} ->
         %Phase{}
@@ -237,20 +238,36 @@ defmodule Lifecycle.Timeline do
       Transition
       |> where([e], e.phase_id == ^id)
       |> order_by([e], desc: e.inserted_at)
-      |> preload([:transiter, :initiator])
+      |> preload([:transiter, :initiator, :phase])
 
     Repo.all(query, limit: 8)
   end
 
-  def get_transition_by_date(begin_date, end_date) do
-    query = Transition
-    |> where([e], e.inserted_at >= ^begin_date and e.inserted_at <= ^end_date )
-    |> order_by([e], desc: e.inserted_at)
-    Repo.all(query, limit: 8 )
-    |> Repo.preload([:initiator, :transiter])
+  def check_if_transited_today(phase_id, begin_date, end_date) do
+    query =
+      Transition
+      |> where([e], e.phase_id == ^phase_id)
+      |> where([e], e.inserted_at >= ^begin_date and e.inserted_at <= ^end_date)
+      |> Repo.all()
+
+    case query do
+      [] -> false
+      _list_of_transitions -> true
+    end
   end
 
-  def get_transition_by_id(id), do: Repo.get!(Transition, id) |> Repo.preload([:transiter, :initiator])
+  def get_transition_by_date(begin_date, end_date) do
+    query =
+      Transition
+      |> where([e], e.inserted_at >= ^begin_date and e.inserted_at <= ^end_date)
+      |> order_by([e], desc: e.inserted_at)
+
+    Repo.all(query, limit: 8)
+    |> Repo.preload([:initiator, :transiter, :phase])
+  end
+
+  def get_transition_by_id(id),
+    do: Repo.get!(Transition, id) |> Repo.preload([:transiter, :initiator])
 
   def change_transition(%Transition{} = transition, attrs \\ %{}) do
     Transition.changeset(transition, attrs)
@@ -274,4 +291,22 @@ defmodule Lifecycle.Timeline do
   end
 
   def list_transitions, do: Repo.all(from(p in Transition, preload: [:transiter, :initiator]))
+
+  def last_transited_by_who_when(phase_id) do
+    # list of transitions associated to the phase being passed in
+    query =
+      Transition
+      |> where([e], e.phase_id == ^phase_id)
+      |> order_by([e], desc: e.updated_at)
+      # take the latest
+      |> limit(1)
+      |> preload([:initiator])
+
+    case Repo.one!(query) do
+      %Transition{} = transition -> {:ok, [transition.initiator.name, transition.updated_at]}
+    end
+  rescue
+    Ecto.NoResultsError ->
+      {:error, "No Records Found"}
+  end
 end

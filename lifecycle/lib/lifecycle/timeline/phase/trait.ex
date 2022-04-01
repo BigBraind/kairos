@@ -8,14 +8,14 @@ defmodule Lifecycle.Timeline.Phase.Trait do
 
   @foreign_key_type :binary_id
   schema "traits" do
-    field :name, :string
+    field(:name, :string)
     # Enum
-    field :type, Ecto.Enum, values: [:num, :txt, :img, :bool]
-    field :value, :string
-    field :unit, :string
-    field :tracker, :string, virtual: true
-    field :deletion, :boolean, virtual: true
-    belongs_to :phase, Lifecycle.Timeline.Phase, foreign_key: :phase_id
+    field(:type, Ecto.Enum, values: [:num, :txt, :img, :bool])
+    field(:value, :string)
+    field(:unit, :string)
+    field(:tracker, :string, virtual: true)
+    field(:deletion, :boolean, virtual: true)
+    belongs_to(:phase, Lifecycle.Timeline.Phase, foreign_key: :phase_id)
 
     timestamps()
   end
@@ -25,7 +25,7 @@ defmodule Lifecycle.Timeline.Phase.Trait do
     trait
     |> Map.put(:tracker, trait.tracker || attrs["tracker"])
     |> cast(attrs, [:name, :value, :type, :phase_id, :unit, :deletion])
-    |> validate_required([:name, :value, :type])
+    |> validate_required([:name, :type])
     |> unique_constraint(:name, name: :repeat_traits)
     |> delete()
   end

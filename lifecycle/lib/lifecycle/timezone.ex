@@ -9,18 +9,19 @@ defmodule Lifecycle.Timezone do
 
   @doc """
   get_connect_params can only be called during mount, to avoid error, I purposely splitted out getting the date to query transition list here
+  first get today's date in UTC, then subtract by the offset
   """
   def get_current_end_date(socket, timezone) do
     current_date =
       timezone
+      # in UTC time
       |> Timex.today()
       |> Timex.to_naive_datetime()
+      |> Timex.shift(hours: -1 * socket.assigns.timezone_offset)
 
     end_date =
-      timezone
-      |> Timex.today()
+      current_date
       |> Timex.shift(days: 1)
-      |> Timex.to_naive_datetime()
 
     assign(socket, current_date: current_date, end_date: end_date)
   end
@@ -37,7 +38,7 @@ defmodule Lifecycle.Timezone do
   end
 
   @doc """
-    Get the time in the format of 12hrs, e.x.: 5:06pm
+    Get the time in the format of 12hrs, (e.g 5:06pm)
   """
   def get_time(time, timezone, timezone_offset) do
     time
@@ -45,5 +46,14 @@ defmodule Lifecycle.Timezone do
     |> Timex.shift(hours: timezone_offset)
     |> Timex.format("{h12}:{m} {am}")
     |> elem(1)
+  end
+
+  @doc """
+    Get datetime, (e.g 5:06pm)
+  """
+  def get_datetime(time, timezone, timezone_offset) do
+    date = get_date(time, timezone, timezone_offset)
+    time = get_time(time, timezone, timezone_offset)
+    date <> " " <> time
   end
 end

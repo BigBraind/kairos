@@ -54,7 +54,7 @@ defmodule LifecycleWeb.PhaseLive.Show do
     socket
     |> assign(:phase, Timeline.get_phase!(phase_id))
     |> assign(:template, Phase.list_traits(phase_id))
-    |> assign(:title, "Transition")
+    |> assign(:title, "New Transition")
     |> assign(:current_user, socket.assigns.current_user)
     |> assign(:changeset, Timeline.change_transition(%Transition{}))
   end
@@ -65,6 +65,7 @@ defmodule LifecycleWeb.PhaseLive.Show do
        }) do
     phase = Timeline.get_phase!(phase_id)
 
+    # import IEx; IEx.pry()
     socket
     |> assign(:title, "Edit Transition")
     |> assign(:transition, Timeline.get_transition_by_id(transition_id))

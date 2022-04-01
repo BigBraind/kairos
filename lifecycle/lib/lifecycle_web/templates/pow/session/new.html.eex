@@ -25,10 +25,14 @@
 
   </button> %>
   <br>
-  <%= submit class: "mt-6 px-4 py-1 text-md bg-purple-600 text-white font-semibold rounded-full border border-white hover:text-purple-600 hover:bg-white hover:border-transparent hover:border-purple-200  " do %>
+
+  <%= submit class: "mt-6 px-4 py-1 text-md bg-purple-600 text-white font-semibold rounded-full border border-white hover:text-purple-600 hover:bg-white hover:border-transparent hover:border-purple-200 transition " do %>
+
     Sign in
   <% end %>
 <% end %>
+
+<%# hover:translate-x-20 %>
 
 
 
