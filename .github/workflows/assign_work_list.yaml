@@ -1,0 +1,40 @@
+ # https://github.com/marketplace/actions/assign-to-one-project
+name: Auto Assign to Project2 (WorkList)
+
+on:
+  issues:
+    types: [opened, labeled]
+env:
+  GITHUB_TOKEN: ${{ secrets.ISSUE_PROJECTS_TOKEN }}
+
+jobs:
+  assign_one_project:
+    runs-on: ubuntu-latest
+    name: Assign to WorkList
+    steps:
+    - name: Assign issues and pull requests with `bug` label to project 2
+      uses: srggrs/assign-one-project-github-action@1.2.1
+      if: |
+        contains(github.event.issue.labels.*.name, 'bug') ||
+        contains(github.event.pull_request.labels.*.name, 'bug')
+      with:
+        project: 'https://github.com/BigBraind/kairos/projects/2'
+        column_name: 'Bugs'
+        
+    - name: Assign issues and pull requests with `feature` label to project 2
+      uses: srggrs/assign-one-project-github-action@1.2.1
+      if: |
+        contains(github.event.issue.labels.*.name, 'feature') ||
+        contains(github.event.pull_request.labels.*.name, 'feature')
+      with:
+        project: 'https://github.com/BigBraind/kairos/projects/2'
+        column_name: 'New Feature'
+        
+    - name: Assign issues and pull requests with `enhancement` label to project 2
+      uses: srggrs/assign-one-project-github-action@1.2.1
+      if: |
+        contains(github.event.issue.labels.*.name, 'enhancement') ||
+        contains(github.event.pull_request.labels.*.name, 'enhancement')
+      with:
+        project: 'https://github.com/BigBraind/kairos/projects/2'
+        column_name: 'Feature Enhancement'
