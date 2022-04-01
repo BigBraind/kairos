@@ -29,15 +29,14 @@
     <table class ="table shadow-lg bg-white border-seperate" >
         <thead>
             <tr>
-                <th class="table-header">Mushroom</th>
+                <th class=" table-header">Mushroom</th>
+                <th class=" table-header">Variables</th>
+                <th class=" table-header">Progress</th>
+                <th class=" table-header">Type</th>
+                <th class=" table-header ">Child</th>
+                <th class=" table-header col-span-2"></th>
                 
-                <th class="table-header w-20">Variables</th>
-                <th class="table-header w-20">Type</th>
-                <th class="table-header">Last Updated</th>
-                <th class="table-header">Parent</th>
-                <th class="table-header"></th>
-                <th class="table-header"></th>
-                <%# <th class="table-header col-span-2">Actions</th> %>
+
 
                 <%# <th class="table-header">Title</th> %>
                 <%# <th class="table-header">Day</th> %>
@@ -62,7 +61,7 @@
                 <td class="border px-4 py-2 ">
                 <%# made a div here so it stretches across the entire mushroom col %>
                     
-                    <span class="text-center"><%= live_redirect phase.title, to: Routes.phase_show_path(@socket, :show, phase), class: "font-normal smaller-fab"%></span>
+                    <span class="text-center"><%= live_redirect phase.title, to: Routes.phase_show_path(@socket, :show, phase), class: "font-normal smaller-fab grid-cols-1"%></span>
                     
                     <br>
                     <span class="mt-2 my-1 "><%= live_patch "Edit", to: Routes.phase_index_path(@socket, :edit, phase), class: "button font-medium text-blue-600 dark:text-blue-500 hover:underline" %></span>
@@ -81,12 +80,14 @@
                 <% end %>
                 
 
-                <td><%= live_patch "New Transition", to: Routes.phase_show_path(@socket, :transition_new, phase.id), class: "button mx-2 my-2 fab" %>
-                    <span> </span>
-                </td>
+                <td><%= live_patch "+ Transition", to: Routes.phase_show_path(@socket, :transition_new, phase.id), class: " px-6 py-2 my-6 mx-1 button bg-blue-500 text-white text-center font-semibold rounded-lg shadow-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-opacity-75" %>
+                    
+                
+                <br>
+                <br>
 
-                <td><%= live_patch "Child Phase", to: Routes.phase_show_path(@socket, :new_child, phase), class: "mx-2 my-2 fab" %>
-                    <span> </span>
+                <%= live_patch "+ Child Phase", to: Routes.phase_show_path(@socket, :new_child, phase), class: " px-6 py-2 my-6 mx-1 button bg-blue-500 text-white text-center font-semibold rounded-lg shadow-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-opacity-75" %>
+                    
                 </td>
             </tr>
             <tr>
