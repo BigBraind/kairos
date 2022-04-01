@@ -159,7 +159,6 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
 
     case Timeline.create_phase(phase_params) do
       {:ok, phase} ->
-        # TODO: TYPE AND UNIT NOT IMPLEMENTED YET
         # to avoid raising KeyError
 
         # phase_params include exisitng traits inherited from parents

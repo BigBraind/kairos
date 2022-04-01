@@ -85,8 +85,16 @@ defmodule LifecycleWeb.PhaseLive.Index do
     Timeline.list_phases()
   end
 
+  defp get_last_updated_transition_info(phase_id, timezone, timezone_offset) do
+    case Timeline.last_transited_by_who_when(phase_id) do
+      {:ok, [initiator_name, transition_updated_at]} ->
+        transition_datetime =
+          Timezone.get_datetime(transition_updated_at, timezone, timezone_offset)
 
-  defdelegate check_if_transition_exist(phase_id, begin_date, end_date),
-    to: Timeline,
-    as: :check_if_transited_today
+        "Date: #{transition_datetime}\nBy: #{initiator_name}"
+
+      {:error, reason} ->
+        reason
+    end
+  end
 end

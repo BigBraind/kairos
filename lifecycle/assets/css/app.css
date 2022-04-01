@@ -54,6 +54,9 @@ making the phoenix.css file useless, so I just deleted it.*/
   .table-header {
     @apply bg-blue-100 border text-left px-8 py-4
   }
+  .solid-form {
+    @apply my-1 block w-full rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:bg-indigo-100 focus:ring-0
+  }
 }
 
 
