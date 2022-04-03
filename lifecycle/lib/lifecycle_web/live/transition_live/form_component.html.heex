@@ -15,18 +15,18 @@
             <%# trait.type is stored as an atom here %>
             <%= if trait.type == :txt do %>
                 <%= if @action == :transition_edit do %>
-                    <%= text_input f, String.to_atom(trait.name), phx_debounce: "blur", value: @transition.answers[trait.name], autocomplete: "off", class: "solid-form" %>
+                    <%= text_input f, String.to_atom(trait.name), phx_debounce: "blur", value: @transition.answers[trait.name], autocomplete: "off", class: " solid-form" %>
                 <% else %>
-                    <%= text_input f, String.to_atom(trait.name), phx_debounce: "blur", value: trait.value, autocomplete: "off", class: "solid-form" %>
+                    <%= text_input f, String.to_atom(trait.name), phx_debounce: "blur", value: trait.value, autocomplete: "off", class: " solid-form" %>
                 <% end %>
             <% end %>
             <%= if trait.type == :num do %>
                 <%= if @action == :transition_edit do %>
-                    <%= number_input f, String.to_atom(trait.name), phx_debounce: "blur", value: @transition.answers[trait.name], autocomplete: "off", class: "solid-form", type: "number" %>
-                    <%= text_input f, :unit, phx_debounce: "blur", value: @transition.answers["unit"], autocomplete: "off" , class: "solid-form", type: "text", placeholder: "unit" %>
+                    <%= number_input f, String.to_atom(trait.name), phx_debounce: "blur", value: @transition.answers[trait.name], autocomplete: "off", class: " solid-form", type: "number" %>
+                    <%= text_input f, :unit, phx_debounce: "blur", value: @transition.answers["unit"], autocomplete: "off" , class: " solid-form", type: "text", placeholder: "unit" %>
                 <% else %>
-                    <%= number_input f, String.to_atom(trait.name), phx_debounce: "blur", value: trait.value, autocomplete: "off", class: "solid-form", type: "number" %>
-                    <%= text_input f, :unit, phx_debounce: "blur", value: trait.unit, autocomplete: "off", class: "solid-form", type: "text", placeholder: "unit" %>
+                    <%= number_input f, String.to_atom(trait.name), phx_debounce: "blur", value: trait.value, autocomplete: "off", class: " solid-form", type: "number" %>
+                    <%= text_input f, :unit, phx_debounce: "blur", value: trait.unit, autocomplete: "off", class: " solid-form", type: "text", placeholder: "unit" %>
                 <% end %>
             <% end %>
             <%= if trait.type == :bool do %>
@@ -55,9 +55,9 @@
 
         <%= label f, :comment, class: "" %>
         <%= if @action == :transition_edit do %>
-            <%= textarea f, :comment, phx_debounce: "blur", value:  @transition.answers["comment"], autocomplete: "off", type: "text-area", class: "solid-form" %>
+            <%= textarea f, :comment, phx_debounce: "blur", value:  @transition.answers["comment"], autocomplete: "off", type: "text-area", class: " solid-form" %>
         <% else %>
-            <%= textarea f, :comment, phx_debounce: "blur", autocomplete: "off", type: "text-area", class: "solid-form" %>
+            <%= textarea f, :comment, phx_debounce: "blur", autocomplete: "off", type: "text-area", class: " solid-form" %>
         <% end %>
 
         <%= live_file_input @uploads.transition %>
