@@ -1,6 +1,6 @@
 <div class="mx-3">
     <h1 class="mb-3 text-4xl font-light">Phases 🌙 </h1> 
-    <span class ="ml-auto fab font-extralight text-2xl"><%= live_patch "New Phase", to: Routes.phase_index_path(@socket, :new) %></span>
+    <span><%= live_patch "New Phase", to: Routes.phase_index_path(@socket, :new), class: "ml-auto fab font-extralight text-2xl " %></span>
 
 
     <%= if @live_action in [:new, :new_child, :edit] do %>
@@ -29,12 +29,14 @@
     <table class ="table shadow-lg bg-white border-seperate" >
         <thead>
             <tr>
-                <th class=" table-header">Mushroom</th>
-                <th class=" table-header">Variables</th>
-                <th class=" table-header">Progress</th>
-                <th class=" table-header">Type</th>
-                <th class=" table-header ">Child</th>
-                <th class=" table-header col-span-2"></th>
+            
+
+                <th class="table-header w-20">Variables</th>
+                <th class="table-header w-20">Type</th>
+                <th class="table-header">Last Updated</th>
+                <th class="table-header">Parent</th>
+                <th class="table-header"></th>
+                <th class="table-header"></th>
                 
 
 
