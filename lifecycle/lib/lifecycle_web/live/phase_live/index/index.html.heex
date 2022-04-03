@@ -1,6 +1,6 @@
 <div class="mx-3">
     <h1 class="mb-3 text-4xl font-light">Phases 🌙 </h1> 
-    <span class ="ml-auto fab font-extralight text-2xl"><%= live_patch "New Phase", to: Routes.phase_index_path(@socket, :new) %></span>
+    <span><%= live_patch "New Phase", to: Routes.phase_index_path(@socket, :new), class: "ml-auto fab font-extralight text-2xl " %></span>
 
 
     <%= if @live_action in [:new, :new_child, :edit] do %>

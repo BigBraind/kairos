@@ -1,7 +1,11 @@
+
+# Forms Branch
+
+## 3 April
+-  Something weird is going on, but the form branch has the nicest forms for now, and the best-working (but not perfect) carousel component made by Brandon. Only semi-works on transition page. Hence, am will merge it over to develop
+
+
 # Tailwind Branch
-
-
-
 
 ## 9 Feb
 - run `mix deps.get` to get the TailWindCSS dependency
