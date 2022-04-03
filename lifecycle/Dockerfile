@@ -50,11 +50,11 @@ COPY priv priv
 # step down so that `lib` is available.
 COPY assets assets
 
-# compile assets
-RUN mix assets.deploy
-
 # Compile the release
 COPY lib lib
+
+# compile assets
+RUN mix assets.deploy
 
 RUN mix compile
 

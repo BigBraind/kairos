@@ -17,6 +17,10 @@ processes = []
   allowed_public_ports = []
   auto_rollback = true
 
+[mounts]
+  source="kairos_archive"
+  destination="/app/lib/lifecycle-0.1.0/priv/static/uploads/"
+
 [[services]]
   http_checks = []
   internal_port = 8080
