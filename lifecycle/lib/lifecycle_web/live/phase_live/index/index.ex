@@ -36,7 +36,7 @@ defmodule LifecycleWeb.PhaseLive.Index do
 
   defp apply_action(socket, :new, _params) do
     socket
-    |> assign(:page_title, "New Phase")
+    |> assign(:page_title, "New Experiment")
     |> assign(:phase, %{%Phase{traits: []} | parent: []})
   end
 
