@@ -65,9 +65,9 @@
                     
                     
 
-                    <%# Temporary disable of edit %>
+                    
 
-                    <%# <span><%= live_patch "Edit", to: Routes.phase_index_path(@socket, :edit, phase), class: "disabled:button font-medium text-blue-600 dark:text-blue-500 hover:underline" </span> %>
+                    <span><%= live_patch "Edit", to: Routes.phase_index_path(@socket, :edit, phase), class: "disabled:button font-medium text-blue-600 dark:text-blue-500 hover:underline" %></span>
                     
                     <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: phase.id, data: [confirm: "Are you sure? Princeton is watching"], class: "button font-medium text-red-600 dark:text-red-500 hover:underline" %></span>
 
