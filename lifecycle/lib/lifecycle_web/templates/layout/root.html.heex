@@ -16,7 +16,7 @@ It may also be given via the :root_layout option to a live_session macro in the 
     <%= live_title_tag assigns[:page_title] || "Kairos", suffix: " · LifeCycle Framework" %>
     <link phx-track-static rel="stylesheet" href={Routes.static_path(@conn, "/assets/app.css")}/>
     <script defer phx-track-static type="text/javascript" src={Routes.static_path(@conn, "/assets/app.js")}></script>
-    <link phx-track-static rel="stylesheet" href="https://unpkg.com/flowbite@1.4.1/dist/flowbite.min.css" />
+    
   </head>
   <body class="bg-slate-200">
 
@@ -88,9 +88,8 @@ It may also be given via the :root_layout option to a live_session macro in the 
     <%# <%= if Pow.Plug.current_user(@conn) do %> 
       <%# <span class="text-center"><%= link "Sign out", to: Routes.pow_session_path(@conn, :delete), method: :delete ></span> %> 
     <%# <% end %>
-    <script src="https://unpkg.com/flowbite@1.4.1/dist/flowbite.js"></script> 
 
-    <script src="https://unpkg.com/flowbite@1.4.1/dist/flowbite.js"></script>
+    
   </body>
   
 </html>
