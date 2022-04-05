@@ -51,7 +51,9 @@ defmodule LifecycleWeb.Modal.View.Transition.TransitionList do
 
                   <!-- first -->
 
-                    from : <%= transition.phase.title %> <br>
+                    <u>Source</u> : <%= live_redirect transition.phase.title , to: Routes.phase_show_path(@socket, :show, transition.phase), class: "button" %> <br>
+                    <u>Creator:</u> <%= transition.initiator.name %><br>
+                    <u>Created At:</u> <%= if @id == "transition" do %> <%= Timezone.get_date(transition.inserted_at, assigns.timezone, assigns.timezone_offset) %> <% end %>  <%= Timezone.get_time(transition.inserted_at, assigns.timezone, assigns.timezone_offset) %><br>
                     <%= for {property, value} <- transition.answers do %>
                       <%= unless property == "image_list" do %>
                           <%= property%> : <%= value %> <br>
@@ -93,12 +95,7 @@ defmodule LifecycleWeb.Modal.View.Transition.TransitionList do
                           <% end %>
                       <% end %>
                     <% end %>
-
-                    creator: <%= transition.initiator.name %><br>
                     transited: <%= transition.transited %><br>
-
-                    created at: <%= Timezone.get_date(transition.inserted_at, assigns.timezone, assigns.timezone_offset) %> <%= Timezone.get_time(transition.inserted_at, assigns.timezone, assigns.timezone_offset) %><br>
-
                     <%= if transition.transited do %>
                         Approved by: <%= transition.transiter.name %><br>
                     <% else %>
@@ -106,13 +103,13 @@ defmodule LifecycleWeb.Modal.View.Transition.TransitionList do
                     <% end %>
                     <div class="flex items-center justify-center">
                     <%= if @id == "transition" do %>
-                      <span><%= live_patch "Edit Transition", to: Routes.phase_show_path(@socket, :transition_edit, transition.phase_id, transition.id), class: "button" %></span>
+                      <span class="px-4 py-1 text-lg bg-orange-300 text-white font-light rounded-full hover:text-white hover:bg-orange-600 hover:font-semibold"><%= live_patch "Edit", to: Routes.phase_show_path(@socket, :transition_edit, transition.phase_id, transition.id), class: "button" %></span>
                     <% else %>
-                      <span><%= live_patch "Edit Transition", to: Routes.transition_index_path(@socket, :index), class: "fab" %></span>
+                      <span class="px-4 py-1 text-lg bg-orange-300 text-white font-light rounded-full hover:text-white hover:bg-orange-600 hover:font-semibold"><%= live_patch "Edit", to: Routes.transition_index_path(@socket, :index)%></span>
                     <% end %>
 
                     <br>
-                      <span class = "px-4 py-1 text-lg bg-red-200 text-white font-light rounded-full hover:text-white hover:bg-red-600 hover:font-semibold"><%= link "Delete", to: "#", phx_click: "delete-transition", phx_value_id: transition.id, data: [confirm: "Are you sure?"], class: "button" %></span>
+                    <span class = "px-4 py-1 text-lg bg-red-300 text-white font-light rounded-full hover:text-white hover:bg-red-600 hover:font-semibold"><%= link "Delete", to: "#", phx_click: "delete-transition", phx_value_id: transition.id, data: [confirm: "Are you sure?"], class: "button" %></span>
                     </div>
                       <br>
                     <br>

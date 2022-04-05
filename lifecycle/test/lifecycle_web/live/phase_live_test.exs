@@ -27,11 +27,13 @@ defmodule LifecycleWeb.PhaseLiveTest do
       assert html =~ phase.content
     end
 
+    # Changed to new experiment for user clarity
+
     test "creates new phase", %{conn: conn} do
       {:ok, index_live, _html} = live(conn, Routes.phase_index_path(conn, :index))
 
-      assert index_live |> element("a", "New Phase") |> render_click() =~
-               "New Phase"
+      assert index_live |> element("a", "New Experiment") |> render_click() =~
+               "New Experiment"
 
       assert_patch(index_live, Routes.phase_index_path(conn, :new))
     end

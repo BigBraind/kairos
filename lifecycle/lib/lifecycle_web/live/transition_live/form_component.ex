@@ -62,6 +62,8 @@ defmodule LifecycleWeb.TransitionLive.FormComponent do
   end
 
   defp save_transition(socket, :transition_edit, params) do
+    image_list = ImageHandler.handle_image(socket)
+    params = Map.put(params, "image_list", image_list)
     params =
       %{}
       |> Map.put("answers", params)
