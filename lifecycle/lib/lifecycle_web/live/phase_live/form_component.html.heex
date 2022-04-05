@@ -17,20 +17,21 @@
 
     <br>
   
-    <%= label f, :content %>
+
+    <%= label f, :variables %>
     <hr class="border-0 bg-gray-500 text-gray-500 h-px w-full">
     <%= textarea f, :content, phx_debounce: "blur", autocomplete: "off", class: " solid-form"  %>
     <%= error_tag f, :content %>
 
     <br>
   
-    <%= label f, :type %>
+    <%= label f, :description %>
     <hr class="border-0 bg-gray-500 text-gray-500 h-px w-full">
     <%= text_input f, :type, phx_debounce: "blur", autocomplete: "off", class: " solid-form"  %>
     <%= error_tag f, :type %>
     <br>
 
-    <p class="mt-2 font-bold">Traits</p>
+    <p class="mt-2 font-bold">Variables</p>
     <hr class="border-0 bg-gray-500 text-gray-500 h-px w-32">
       <%= inputs_for f, :traits, fn trait -> %>
         <div class="flex flex-wrap -mx-1 overflow-hidden">
