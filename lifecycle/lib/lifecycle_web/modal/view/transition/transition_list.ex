@@ -115,6 +115,44 @@ defmodule LifecycleWeb.Modal.View.Transition.TransitionList do
                     <br>
                     <br>
                     <hr class="border-0 bg-gray-500 text-gray-500 h-px w-full mb-8">
+
+                    <div class="shadow-md rounded-md p-10 bg-white text-left">
+                      <h2 class="text-sm font-semibold uppercase">
+                        Title here
+                      </h2>
+                      <h3 class="text-xl font-semibold">
+                        Sample 2
+                      </h3>
+                      <h2 class="text-sm font-semibold uppercase mt-5">
+                        Measurement traits
+                      </h2>
+                      <div class="flex flex-wrap">
+                        <div class="p-5 text-center">
+                          <h3>Weight</h3>
+                          <h2 class="text-xl font-medium">2kg</h2>
+                        </div>
+                        <div class="p-5 text-center">
+                          <h3>Weight</h3>
+                          <h2 class="text-xl font-medium">2kg</h2>
+                        </div>
+                        <div class="p-5 text-center">
+                          <h3>Weight</h3>
+                          <h2 class="text-xl font-medium">2kg</h2>
+                        </div>
+                        <div class="p-5 text-center">
+                          <h3>Weight</h3>
+                          <h2 class="text-xl font-medium">2kg</h2>
+                        </div>
+                        <div class="p-5 text-center">
+                          <h3>Weight</h3>
+                          <h2 class="text-xl font-medium">2kg</h2>
+                        </div>
+                        <div class="p-5 text-center">
+                          <h3>Weight</h3>
+                          <h2 class="text-xl font-medium">2kg</h2>
+                        </div>
+                      </div>
+                    </div>
             <% end %>
             </div>
             <script src="https://unpkg.com/flowbite@1.4.1/dist/flowbite.js"></script>
