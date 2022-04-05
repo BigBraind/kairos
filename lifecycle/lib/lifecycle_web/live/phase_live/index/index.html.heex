@@ -25,17 +25,16 @@
      return_to: Routes.phase_show_path(@socket, :show, @phase.id) %>
   <% end %>
 
-
     <table class ="table shadow-lg bg-white border-seperate" >
         <thead>
-            <tr>
+            <tr class="sticky top-0">
                 <th class="table-header">Experiment</th>
                 <th class="table-header w-20">Variables</th>
                 <th class="table-header w-20">Type</th>
                 <th class="table-header">Last Updated</th>
                 <th class="table-header">Parent</th>
-                <th class="table-header"></th>
-                <th class="table-header"></th>
+                <th class="table-header">Actions</th>
+                
                 <%# <th class="table-header col-span-2">Actions</th> %>
 
                 <%# <th class="table-header">Title</th> %>
@@ -57,7 +56,7 @@
         <tbody id="phases" >
 
         <%= for phase <- @phases do %>
-            <tr id={"phase-#{phase.id}"} class ="">
+            <tr id={"phase-#{phase.id}"} class ="sticky left-0">
                 <td class="border px-4 py-2 ">
                 <%# made a div here so it stretches across the entire mushroom col %>
                     
@@ -83,12 +82,12 @@
                 <% end %>
                 
 
-                <td><%= live_patch "New Transition", to: Routes.phase_show_path(@socket, :transition_new, phase.id), class: "button mx-2 my-2 fab" %>
-                    <span> </span>
-                </td>
+                <td><%= live_patch "New Transition", to: Routes.phase_show_path(@socket, :transition_new, phase.id), class: "p-1 button flex bg-blue-500 text-white text-center font-semibold rounded-lg shadow-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-opacity-75" %>
+                    
+                <div class="mt-1.5"></div>
 
-                <td><%= live_patch "Child Phase", to: Routes.phase_show_path(@socket, :new_child, phase), class: "mx-2 my-2 fab" %>
-                    <span> </span>
+                <%= live_patch "Child Phase", to: Routes.phase_show_path(@socket, :new_child, phase), class: "p-1 button flex bg-blue-500 text-white text-center font-semibold rounded-lg shadow-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-opacity-75" %>
+                    
                 </td>
             </tr>
             <tr>
