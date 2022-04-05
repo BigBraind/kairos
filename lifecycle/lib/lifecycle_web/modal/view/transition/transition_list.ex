@@ -49,7 +49,7 @@ defmodule LifecycleWeb.Modal.View.Transition.TransitionList do
 
 
 
-                  <!-- first -->
+                  <!--- first --->
 
                     <u>Source</u> : <%= live_redirect transition.phase.title , to: Routes.phase_show_path(@socket, :show, transition.phase), class: "button" %> <br>
                     <u>Creator:</u> <%= transition.initiator.name %><br>
@@ -102,6 +102,7 @@ defmodule LifecycleWeb.Modal.View.Transition.TransitionList do
                         <button phx-click="transit", value={transition.id}>Approve?</button><br>
                     <% end %>
                     <div class="flex items-center justify-center">
+
                     <%= if @id == "transition" do %>
                       <span class="px-4 py-1 text-lg bg-orange-300 text-white font-light rounded-full hover:text-white hover:bg-orange-600 hover:font-semibold"><%= live_patch "Edit", to: Routes.phase_show_path(@socket, :transition_edit, transition.phase_id, transition.id), class: "button" %></span>
                     <% else %>
@@ -111,12 +112,12 @@ defmodule LifecycleWeb.Modal.View.Transition.TransitionList do
                     <br>
                     <span class = "px-4 py-1 text-lg bg-red-300 text-white font-light rounded-full hover:text-white hover:bg-red-600 hover:font-semibold"><%= link "Delete", to: "#", phx_click: "delete-transition", phx_value_id: transition.id, data: [confirm: "Are you sure?"], class: "button" %></span>
                     </div>
-                      <br>
                     <br>
-                <% end %>
+                    <br>
+                    <hr class="border-0 bg-gray-500 text-gray-500 h-px w-full mb-8">
+            <% end %>
             </div>
             <script src="https://unpkg.com/flowbite@1.4.1/dist/flowbite.js"></script>
-
           </div>
           </div>
 
