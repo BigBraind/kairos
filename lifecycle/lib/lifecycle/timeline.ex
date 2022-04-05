@@ -233,10 +233,10 @@ defmodule Lifecycle.Timeline do
     |> Repo.update()
   end
 
-  def get_transition_list(id) do
+  def get_transition_list(phase_id) do
     query =
       Transition
-      |> where([e], e.phase_id == ^id)
+      |> where([e], e.phase_id == ^phase_id)
       |> order_by([e], desc: e.inserted_at)
       |> preload([:transiter, :initiator, :phase])
 
@@ -267,7 +267,7 @@ defmodule Lifecycle.Timeline do
   end
 
   def get_transition_by_id(id),
-    do: Repo.get!(Transition, id) |> Repo.preload([:transiter, :initiator])
+    do: Repo.get!(Transition, id) |> Repo.preload([:transiter, :initiator, :phase])
 
   def change_transition(%Transition{} = transition, attrs \\ %{}) do
     Transition.changeset(transition, attrs)

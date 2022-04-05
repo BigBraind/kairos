@@ -18,11 +18,14 @@ defmodule LifecycleWeb.Modal.Function.Transition.TransitionHandler do
     attrs =
       case action do
         :assign_transiter ->
+          IO.inspect params
           %{}
           |> Map.put(:transiter_id, socket.assigns.current_user.id)
           |> Map.put(:transited, true)
 
         :edit_transition ->
+          IO.puts "handle transition edit"
+          IO.inspect params
           %{"answers" => params["answers"]}
       end
 
