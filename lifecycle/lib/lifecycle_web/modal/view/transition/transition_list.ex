@@ -105,11 +105,11 @@ defmodule LifecycleWeb.Modal.View.Transition.TransitionList do
                         <button phx-click="transit", value={transition.id}>Approve?</button><br>
                     <% end %>
                     <div class="flex items-center justify-center">
-                    <%= if @id == "transition" do %>
-                      <span><%= live_patch "Edit Transition", to: Routes.phase_show_path(@socket, :transition_edit, transition.phase_id, transition.id), class: "button" %></span>
-                    <% else %>
-                      <span><%= live_patch "Edit Transition", to: Routes.transition_index_path(@socket, :index), class: "fab" %></span>
-                    <% end %>
+                    <%# <%= if @id == "transition" do %>
+                      <%# <span><%= live_patch "Edit Transition", to: Routes.phase_show_path(@socket, :transition_edit, transition.phase_id, transition.id), class: "button" %>
+                    <%# <% else %>
+                      <%# <span><%= live_patch "Edit Transition", to: Routes.transition_index_path(@socket, :index), class: "fab" %>
+                    <%# <% end %>
 
                     <br>
                       <span class = "px-4 py-1 text-lg bg-red-200 text-white font-light rounded-full hover:text-white hover:bg-red-600 hover:font-semibold"><%= link "Delete", to: "#", phx_click: "delete-transition", phx_value_id: transition.id, data: [confirm: "Are you sure?"], class: "button" %></span>
