@@ -31,14 +31,14 @@ defmodule LifecycleWeb.TransitionLive.FormComponent do
 
 @impl true
   def handle_event("save", %{"transition" => transition} = params, socket) do
-    IO.inspect transition
-    import IEx; IEx.pry()
-    new_transition = Map.new(transition, fn {k, v} -> {transition_map_parser(k,v)} end)
-    import IEx; IEx.pry()
+    # IO.inspect transition
+    # # import IEx; IEx.pry()
+    # new_transition = Map.new(transition, fn {k, v} -> {transition_map_parser(k,v)} end)
+    # import IEx; IEx.pry()
     image_list = ImageHandler.handle_image(socket)
-    transition = Map.put(new_transition, "image_list", image_list)
+    transition = Map.put(transition, "image_list", image_list)
 
-    #save_transition(socket, socket.assigns.action, transition)
+    save_transition(socket, socket.assigns.action, transition)
   end
 
   # saving transition object
@@ -76,11 +76,8 @@ defmodule LifecycleWeb.TransitionLive.FormComponent do
   end
 
   def transition_map_parser(key, value) do
-    IO.inspect key
-    [type | name] = String.split(key, "#", parts: 2)
+    [type | name] = String.split(key, "#", parts: 2) # what's the point???
     name = unless List.first(name) == nil , do: List.first(name)
-    IO.inspect name
-    IO.inspect type
     case type do
       "comment" ->
         %{:comment => value}

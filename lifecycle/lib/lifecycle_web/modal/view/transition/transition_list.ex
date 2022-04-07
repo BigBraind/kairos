@@ -123,14 +123,24 @@ defmodule LifecycleWeb.Modal.View.Transition.TransitionList do
                       </h2>
                       <div class="flex flex-wrap">
 
+                        <%= for {property, value} <- transition.answers do %>
+                          IO.inpect property
+                          IO.inpect property
+
+                          <%= if (property == "image_list") do %>
+                            <!-- TODO: insert images here -->
+                            <div class="shadow-md rounded-md">
+                              <div class="p-5 text-center">
+                                <h3><%= value %><br></h3>
+                              <h2 class="text-xl font-medium"><%= value %> Above is your image list....you can use it to render your images </h2>
+                              </div>
+                            </div>
+                          <% end %>
+                        <% end %>
+
+
                         <!-- Traits component -->
                         <%= for {property, value} <- transition.answers do %>
-                          <%= case property do %>
-                          <% "comment" -> %>
-                              <h1>WORK</h1>
-                          <% _ -> %>
-                            <h1>LOL</h1>
-                          <% end %>
                           <%= if (property != "image_list") && (property != "comment") && (property != "unit") do %>
                             <div class="shadow-md rounded-md">
                               <div class="p-5 text-center">
