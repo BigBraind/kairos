@@ -56,7 +56,7 @@ defmodule LifecycleWeb.Modal.View.Transition.TransitionList do
                     <u>Created At:</u> <%= if @id == "transition" do %> <%= Timezone.get_date(transition.inserted_at, assigns.timezone, assigns.timezone_offset) %> <% end %>  <%= Timezone.get_time(transition.inserted_at, assigns.timezone, assigns.timezone_offset) %><br>
                     <%= for {property, value} <- transition.answers do %>
                       <%= unless property == "image_list" do %>
-                          <%= property%> : <%= value %> <br>
+                          <%= property%> : <%= inspect value %> <br>
                       <% else %>
                           <%= unless value == "" do %>
                               <div id="default-carousel" class="relative" data-carousel="static">
@@ -124,9 +124,6 @@ defmodule LifecycleWeb.Modal.View.Transition.TransitionList do
                       <div class="flex flex-wrap">
 
                         <%= for {property, value} <- transition.answers do %>
-                          IO.inpect property
-                          IO.inpect property
-
                           <%= if (property == "image_list") do %>
                             <!-- TODO: insert images here -->
                             <div class="shadow-md rounded-md">
@@ -141,20 +138,53 @@ defmodule LifecycleWeb.Modal.View.Transition.TransitionList do
 
                         <!-- Traits component -->
                         <%= for {property, value} <- transition.answers do %>
-                          <%= if (property != "image_list") && (property != "comment") && (property != "unit") do %>
-                            <div class="shadow-md rounded-md">
-                              <div class="p-5 text-center">
-                                <h3><%= property%><br></h3>
-                              <h2 class="text-xl font-medium"><%= value %> units </h2>
+                          <%= if (property == "bool" || property == "text") do %>
+                            <div class="shadow-md rounded-md bg-stone-100 m-1">
+                              <div class="p-3 text-center">
+                                <h3><%= Map.keys(value) %><br></h3>
+                                <h2 class="text-xl font-medium">
+                                  <%=
+                                    [x]=Map.values(value)
+                                    Map.values(x)
+                                  %>
+                                </h2>
                               </div>
                             </div>
                           <% end %>
-                          <!-- Comment component -->
-                          <%= if (property == "comment") do %>
-                            <div class="shadow-md rounded-md">
+                          <%= if (property == "numeric") do %>
+                            <%= for {trait_name, trait_dict} <- value do %>
+                              <div class="shadow-md rounded-md bg-stone-200 m-1">
+                                <div class="p-3 text-center">
+                                  <h3><%= trait_name %><br></h3>
+                                  <div class="w-10">
+                                    <h2 class="text-xl font-medium">
+                                      <%=
+                                        [_, trait_value]=Map.values(trait_dict)
+                                        trait_value
+                                      %>
+                                    </h2>
+                                    <h2 class="text-m font-small">
+                                      <%=
+                                        [trait_unit, _]=Map.values(trait_dict)
+                                        trait_unit
+                                      %>
+                                    </h2>
+                                  </div>
+                                </div>
+                              </div>
+                            <% end %>
+                          <% end %>
+                        <% end %>
+
+                        <%= for {property, value} <- transition.answers do %>
+                        <!-- Comment component -->
+                          <%= if (property == "comment" ) do %>
+                            <div class="shadow-md rounded-md bg-stone-300 m-1">
                               <div class="p-5 text-center">
-                                <h3><%= property%><br></h3>
-                              <h2 class="text-xl font-medium"><%= value %> units </h2>
+                                <h3>Comments<br></h3>
+                              <h2 class="text-xl font-medium">
+                                <%= Map.values(value) %>
+                              </h2>
                               </div>
                             </div>
                           <% end %>

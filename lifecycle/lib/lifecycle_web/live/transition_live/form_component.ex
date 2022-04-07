@@ -30,7 +30,7 @@ defmodule LifecycleWeb.TransitionLive.FormComponent do
 
 
   @impl true
-  def handle_event("save", %{"transition" => transition} = params, socket) do
+  def handle_event("save", %{"transition" => transition} = _, socket) do
     transition = transition
     |> Enum.map(fn {k,v} -> {assigntypes(k), mergetypes(k,v, transition)} end) # type-specific  numeric/unit merger
     |> Enum.group_by(fn {k, _v} -> k end) # parsing together types
