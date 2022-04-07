@@ -114,7 +114,8 @@ defmodule LifecycleWeb.TransitionLive.FormComponent do
       Map.merge(x, y, fn _k, v1, v2 -> v2 ++ v1 end) end)
   end
 
-  def error_to_string(:too_large), do: "Too large"
+
+  def error_to_string(:too_large), do: "Too large" #just like your mum HA got em -not glen
   def error_to_string(:too_many_files), do: "You have selected too many files"
   def error_to_string(:not_accepted), do: "You have selected an unacceptable file type"
 end

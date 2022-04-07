@@ -27,12 +27,13 @@
 
     <table class ="table shadow-lg bg-white border-seperate" >
         <thead>
-            <tr class="sticky top-0">
+        <%# removed sticky top for now, should be quite clear %>
+            <tr class="">
                 <th class="table-header">Experiment</th>
-                <th class="table-header w-20">Variables</th>
-                <th class="table-header w-20">Type</th>
+                <th class="table-header w-1/5">Properties</th>
+                <th class="table-header w-1/3">Description</th>
                 <th class="table-header">Last Updated</th>
-                <th class="table-header">Parent</th>
+                <th class="table-header">Parent Experiment</th>
                 <th class="table-header">Actions</th>
                 
                 <%# <th class="table-header col-span-2">Actions</th> %>
@@ -56,7 +57,7 @@
         <tbody id="phases" >
 
         <%= for phase <- @phases do %>
-            <tr id={"phase-#{phase.id}"} class ="sticky left-0">
+            <tr id={"phase-#{phase.id}"} class ="">
                 <td class="border px-4 py-2 ">
                 <%# made a div here so it stretches across the entire mushroom col %>
                     
@@ -68,25 +69,27 @@
 
                     <span><%= live_patch "Edit", to: Routes.phase_index_path(@socket, :edit, phase), class: "disabled:button font-medium text-blue-600 dark:text-blue-500 hover:underline" %></span>
                     
-                    <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: phase.id, data: [confirm: "Are you sure? Princeton is watching"], class: "button font-medium text-red-600 dark:text-red-500 hover:underline" %></span>
+                    <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: phase.id, data: [confirm: "Are you sure? Princeton is watching"], class: "mx-2 button font-medium text-red-600 dark:text-red-500 hover:underline" %></span>
 
                 </td>
-                <td class="border px-4 py-2"><%= phase.content %></td>
-
-                <td class="border px-4 py-2 "><%= phase.type %></td>
+                <%# Line break for properties/variables %>
+                <td class="border px-4 py-2"><%= text_to_html(phase.content) %></td>
+                
+                <%# Line break for description %>
+                <td class="border px-4 py-2 "><%= text_to_html(phase.type) %></td>
                 <td class="border px-4 py-2 "><%= get_last_updated_transition_info(phase.id, @timezone, @timezone_offset) %></td>
                 <%= if phase.parent do %>
                     <td class="border px-4 py-2"><%= for parent <- phase.parent do %>
-                    <span><%= live_redirect parent.title, to: Routes.phase_show_path(@socket, :show, parent), class: "button"%></span>
+                    <span><%= live_redirect parent.title, to: Routes.phase_show_path(@socket, :show, parent), class: "button smaller-fab"%></span>
                     <% end %></td>
                 <% end %>
                 
 
-                <td><%= live_patch "New Transition", to: Routes.phase_show_path(@socket, :transition_new, phase.id), class: "p-1 button flex bg-blue-500 text-white text-center font-semibold rounded-lg shadow-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-opacity-75" %>
+                <td><%= live_patch "+ New Entry", to: Routes.phase_show_path(@socket, :transition_new, phase.id), class: "p-1 button flex bg-blue-500 text-white text-center font-semibold rounded-lg shadow-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-opacity-75" %>
                     
                 <div class="mt-1.5"></div>
 
-                <%= live_patch "Child Phase", to: Routes.phase_show_path(@socket, :new_child, phase), class: "p-1 button flex bg-blue-500 text-white text-center font-semibold rounded-lg shadow-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-opacity-75" %>
+                <%= live_patch "+ Branch Out", to: Routes.phase_show_path(@socket, :new_child, phase), class: "p-1 button flex bg-blue-500 text-white text-center font-semibold rounded-lg shadow-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-opacity-75" %>
                     
                 </td>
             </tr>
