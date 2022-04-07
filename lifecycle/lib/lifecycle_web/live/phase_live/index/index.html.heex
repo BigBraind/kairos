@@ -28,10 +28,10 @@
     <table class ="table shadow-lg bg-white border-seperate" >
         <thead>
         <%# removed sticky top for now, should be quite clear %>
-            <tr class="top-0">
+            <tr class="">
                 <th class="table-header">Experiment</th>
-                <th class="table-header w-20">Variables</th>
-                <th class="table-header w-20">Description</th>
+                <th class="table-header w-1/5">Properties</th>
+                <th class="table-header w-1/3">Description</th>
                 <th class="table-header">Last Updated</th>
                 <th class="table-header">Parent Experiment</th>
                 <th class="table-header">Actions</th>
@@ -72,9 +72,11 @@
                     <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: phase.id, data: [confirm: "Are you sure? Princeton is watching"], class: "mx-2 button font-medium text-red-600 dark:text-red-500 hover:underline" %></span>
 
                 </td>
-                <td class="border px-4 py-2"><%= phase.content %></td>
-
-                <td class="border px-4 py-2 "><%= phase.type %></td>
+                <%# Line break for properties/variables %>
+                <td class="border px-4 py-2"><%= text_to_html(phase.content) %></td>
+                
+                <%# Line break for description %>
+                <td class="border px-4 py-2 "><%= text_to_html(phase.type) %></td>
                 <td class="border px-4 py-2 "><%= get_last_updated_transition_info(phase.id, @timezone, @timezone_offset) %></td>
                 <%= if phase.parent do %>
                     <td class="border px-4 py-2"><%= for parent <- phase.parent do %>
@@ -87,7 +89,7 @@
                     
                 <div class="mt-1.5"></div>
 
-                <%= live_patch "+ Child Experiment", to: Routes.phase_show_path(@socket, :new_child, phase), class: "p-1 button flex bg-blue-500 text-white text-center font-semibold rounded-lg shadow-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-opacity-75" %>
+                <%= live_patch "+ Branch Out", to: Routes.phase_show_path(@socket, :new_child, phase), class: "p-1 button flex bg-blue-500 text-white text-center font-semibold rounded-lg shadow-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-opacity-75" %>
                     
                 </td>
             </tr>
