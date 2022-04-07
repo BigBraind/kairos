@@ -50,10 +50,6 @@ defmodule LifecycleWeb.Modal.View.Transition.TransitionList do
 
 
                   <!--- first --->
-
-                    <u>Source</u> : <%= live_redirect transition.phase.title , to: Routes.phase_show_path(@socket, :show, transition.phase), class: "button" %> <br>
-                    <u>Creator:</u> <%= transition.initiator.name %><br>
-                    <u>Created At:</u> <%= if @id == "transition" do %> <%= Timezone.get_date(transition.inserted_at, assigns.timezone, assigns.timezone_offset) %> <% end %>  <%= Timezone.get_time(transition.inserted_at, assigns.timezone, assigns.timezone_offset) %><br>
                     <%= for {property, value} <- transition.answers do %>
                       <%= unless property == "image_list" do %>
                           <%= property%> : <%= inspect value %> <br>
@@ -95,31 +91,14 @@ defmodule LifecycleWeb.Modal.View.Transition.TransitionList do
                           <% end %>
                       <% end %>
                     <% end %>
-                    transited: <%= transition.transited %><br>
-                    <%= if transition.transited do %>
-                        Approved by: <%= transition.transiter.name %><br>
-                    <% else %>
-                        <button phx-click="transit", value={transition.id}>Approve?</button><br>
-                    <% end %>
-                    <div class="flex items-center justify-center">
-                    <%= live_patch "Edit", to: Routes.phase_show_path(@socket, :transition_edit, transition.phase_id, transition.id), class: "button px-4 py-1 text-lg bg-orange-300 text-white font-light rounded-full hover:text-white hover:bg-orange-600 hover:font-semibold" %>
-                    <br>
-                    <%= link "Delete", to: "#", phx_click: "delete-transition", phx_value_id: transition.id, data: [confirm: "Are you sure?"], class: "button px-4 py-1 text-lg bg-red-300 text-white font-light rounded-full hover:text-white hover:bg-red-600 hover:font-semibold" %>
-                    </div>
-                    <br>
-                    <br>
-                    <hr class="border-0 bg-gray-500 text-gray-500 h-px w-full mb-8">
 
                     <!-- Card component -->
-                    <div class="shadow-md rounded-md p-10 bg-white text-left">
-                      <h2 class="text-sm font-semibold uppercase">
-                        Insert experiment here
-                      </h2>
-                      <h3 class="text-xl font-semibold">
+                    <div class="shadow-md rounded-md p-10 mx-1 my-3 bg-white text-left">
+                      <h1 class="text-xl font-bold uppercase">
                         <%= live_redirect transition.phase.title , to: Routes.phase_show_path(@socket, :show, transition.phase), class: "button" %>
-                      </h3>
+                      </h1>
                       <h2 class="text-sm font-semibold uppercase mt-5 underline">
-                        Measurement traits
+                        Observations
                       </h2>
                       <div class="flex flex-wrap">
 
@@ -138,6 +117,7 @@ defmodule LifecycleWeb.Modal.View.Transition.TransitionList do
 
                         <!-- Traits component -->
                         <%= for {property, value} <- transition.answers do %>
+                          <!-- bool & text Traits -->
                           <%= if (property == "bool" || property == "text") do %>
                             <div class="shadow-md rounded-md bg-stone-100 m-1">
                               <div class="p-3 text-center">
@@ -151,6 +131,7 @@ defmodule LifecycleWeb.Modal.View.Transition.TransitionList do
                               </div>
                             </div>
                           <% end %>
+                          <!-- numeric Traits -->
                           <%= if (property == "numeric") do %>
                             <%= for {trait_name, trait_dict} <- value do %>
                               <div class="shadow-md rounded-md bg-stone-200 m-1">
@@ -194,17 +175,22 @@ defmodule LifecycleWeb.Modal.View.Transition.TransitionList do
 
 
 
-
                       <br>
                       <h2 class="text-sm font-semibold"><%= transition.initiator.name %></h2>
-                      <h3 class="text-xs font-semibold"><%= if @id == "transition" do %> <%= Timezone.get_date(transition.inserted_at, assigns.timezone, assigns.timezone_offset) %> <% end %>  <%= Timezone.get_time(transition.inserted_at, assigns.timezone, assigns.timezone_offset) %><br></h3>
-
-                      transited: <%= transition.transited %><br>
+                      <h2 class="text-xs font-semibold"><%= if @id == "transition" do %> <%= Timezone.get_date(transition.inserted_at, assigns.timezone, assigns.timezone_offset) %> <% end %>  <%= Timezone.get_time(transition.inserted_at, assigns.timezone, assigns.timezone_offset) %><br></h2>
+                      <br>
+                      <div class="flex items-center justify-center">
+                      Transited: <%= transition.transited %><br>
                       <%= if transition.transited do %>
                           Approved by: <%= transition.transiter.name %><br>
                       <% else %>
-                          <button phx-click="transit", value={transition.id}>Approve?</button><br>
+                          <button phx-click="transit", value={transition.id}, class="button px-4 py-1 text-lg bg-orange-300 text-white font-light rounded-full hover:text-white hover:bg-orange-600 hover:font-semibold m-1">Approve</button>
                       <% end %>
+                        <%= live_patch "Edit", to: Routes.phase_show_path(@socket, :transition_edit, transition.phase_id, transition.id), class: "button px-4 py-1 text-lg bg-orange-300 text-white font-light rounded-full hover:text-white hover:bg-orange-600 hover:font-semibold m-2" %>
+                        <%= link "Delete", to: "#", phx_click: "delete-transition", phx_value_id: transition.id, data: [confirm: "Are you sure?"], class: "button px-4 py-1 text-lg bg-red-300 text-white font-light rounded-full hover:text-white hover:bg-red-600 hover:font-semibold m-2" %>
+                      </div>
+
+
                     </div>
             <% end %>
             </div>
