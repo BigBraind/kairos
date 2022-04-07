@@ -46,6 +46,8 @@
 
         <%= for trait <- @phase.traits  do %>
             <%= label f, String.to_atom(trait.name)%>
+
+            <hr class="border-0 bg-gray-500 text-gray-500 h-px w-full">
             
             <%# trait.type is stored as an atom here %>
             <%= if trait.type == :txt do %>
@@ -55,7 +57,7 @@
                     <%= text_input f, String.to_atom("text#" <> trait.name), phx_debounce: "blur", value: trait.value, autocomplete: "off", class: " solid-form" %>
                 <% end %>
             <% end %>
-                <hr class="border-0 bg-gray-500 text-gray-500 h-px w-full">
+                
             <%= if trait.type == :num do %>
                 <%= if @action == :transition_edit do %>
                     <div class="grid grid-rows-1 grid-flow-col gap-4">
