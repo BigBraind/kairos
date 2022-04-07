@@ -29,15 +29,14 @@ defmodule LifecycleWeb.TransitionLive.FormComponent do
   end
 
 
-@impl true
+  @impl true
   def handle_event("save", %{"transition" => transition} = params, socket) do
-    # IO.inspect transition
-    # # import IEx; IEx.pry()
-    # new_transition = Map.new(transition, fn {k, v} -> {transition_map_parser(k,v)} end)
-    # import IEx; IEx.pry()
-    image_list = ImageHandler.handle_image(socket)
-    transition = Map.put(transition, "image_list", image_list)
-
+    transition = transition
+    |> Enum.map(fn {k,v} -> {assigntypes(k), mergetypes(k,v, transition)} end) # type-specific  numeric/unit merger
+    |> Enum.group_by(fn {k, _v} -> k end) # parsing together types
+    |> Enum.map(fn {k,v} -> {k, mergetypes(k,v)} end) # bundle together data related to types
+    |> Enum.into(%{}) #keywordlist to map
+    |> Map.put("image_list", ImageHandler.handle_image(socket))
     save_transition(socket, socket.assigns.action, transition)
   end
 
@@ -75,24 +74,44 @@ defmodule LifecycleWeb.TransitionLive.FormComponent do
     TransitionHandler.handle_transition(:edit_transition, params, socket)
   end
 
-  def transition_map_parser(key, value) do
-    [type | name] = String.split(key, "#", parts: 2) # what's the point???
+  def mergetypes(key, value, maps) do
+    [type | name] = String.split(key, "#", parts: 2)
     name = unless List.first(name) == nil , do: List.first(name)
     case type do
       "comment" ->
-        %{:comment => value}
+        %{"value" => value}
       "bool" ->
-        %{:bool => %{name => %{"value" => value}}}
+        %{name => %{"value" => value}}
       "numeric" ->
-        %{:numeric => %{name => %{"value" => value}}}
+        %{name => %{"value" => value, "unit" => maps["unit#" <> name]}}
       "text" ->
-        %{:text => %{name => %{"value" => value}}}
-      "unit" ->
-        %{:numeric => %{name => %{"unit" => value}}}
+        %{name => %{"value" => value}}
       _jk ->
-        IO.inspect 1
         %{}
     end
+  end
+
+  def assigntypes(key) do
+    case String.to_atom(List.first(String.split(key, "#"))) do
+      :unit ->
+        :unit
+      :numeric ->
+        :numeric
+      :text ->
+        :text
+      :bool ->
+        :bool
+      :comment ->
+        :comment
+      _unrecognised_type ->
+        :unknown
+    end
+  end
+
+  def mergetypes(key, value) do
+    ## data merger
+    Enum.reduce(Keyword.get_values(value, key), fn x, y ->
+      Map.merge(x, y, fn _k, v1, v2 -> v2 ++ v1 end) end)
   end
 
   def error_to_string(:too_large), do: "Too large"
