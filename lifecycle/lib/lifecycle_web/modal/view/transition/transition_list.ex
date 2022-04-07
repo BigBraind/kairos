@@ -102,56 +102,69 @@ defmodule LifecycleWeb.Modal.View.Transition.TransitionList do
                         <button phx-click="transit", value={transition.id}>Approve?</button><br>
                     <% end %>
                     <div class="flex items-center justify-center">
-
-                    <%= if @id == "transition" do %>
-                      <span class="px-4 py-1 text-lg bg-orange-300 text-white font-light rounded-full hover:text-white hover:bg-orange-600 hover:font-semibold"><%= live_patch "Edit", to: Routes.phase_show_path(@socket, :transition_edit, transition.phase_id, transition.id), class: "button" %></span>
-                    <% else %>
-                      <span class="px-4 py-1 text-lg bg-orange-300 text-white font-light rounded-full hover:text-white hover:bg-orange-600 hover:font-semibold"><%= live_patch "Edit", to: Routes.transition_index_path(@socket, :index)%></span>
-                    <% end %>
-
+                    <%= live_patch "Edit", to: Routes.phase_show_path(@socket, :transition_edit, transition.phase_id, transition.id), class: "button px-4 py-1 text-lg bg-orange-300 text-white font-light rounded-full hover:text-white hover:bg-orange-600 hover:font-semibold" %>
                     <br>
-                    <span class = "px-4 py-1 text-lg bg-red-300 text-white font-light rounded-full hover:text-white hover:bg-red-600 hover:font-semibold"><%= link "Delete", to: "#", phx_click: "delete-transition", phx_value_id: transition.id, data: [confirm: "Are you sure?"], class: "button" %></span>
+                    <%= link "Delete", to: "#", phx_click: "delete-transition", phx_value_id: transition.id, data: [confirm: "Are you sure?"], class: "button px-4 py-1 text-lg bg-red-300 text-white font-light rounded-full hover:text-white hover:bg-red-600 hover:font-semibold" %>
                     </div>
                     <br>
                     <br>
                     <hr class="border-0 bg-gray-500 text-gray-500 h-px w-full mb-8">
 
+                    <!-- Card component -->
                     <div class="shadow-md rounded-md p-10 bg-white text-left">
                       <h2 class="text-sm font-semibold uppercase">
-                        Title here
+                        Insert experiment here
                       </h2>
                       <h3 class="text-xl font-semibold">
-                        Sample 2
+                        <%= live_redirect transition.phase.title , to: Routes.phase_show_path(@socket, :show, transition.phase), class: "button" %>
                       </h3>
-                      <h2 class="text-sm font-semibold uppercase mt-5">
+                      <h2 class="text-sm font-semibold uppercase mt-5 underline">
                         Measurement traits
                       </h2>
                       <div class="flex flex-wrap">
-                        <div class="p-5 text-center">
-                          <h3>Weight</h3>
-                          <h2 class="text-xl font-medium">2kg</h2>
-                        </div>
-                        <div class="p-5 text-center">
-                          <h3>Weight</h3>
-                          <h2 class="text-xl font-medium">2kg</h2>
-                        </div>
-                        <div class="p-5 text-center">
-                          <h3>Weight</h3>
-                          <h2 class="text-xl font-medium">2kg</h2>
-                        </div>
-                        <div class="p-5 text-center">
-                          <h3>Weight</h3>
-                          <h2 class="text-xl font-medium">2kg</h2>
-                        </div>
-                        <div class="p-5 text-center">
-                          <h3>Weight</h3>
-                          <h2 class="text-xl font-medium">2kg</h2>
-                        </div>
-                        <div class="p-5 text-center">
-                          <h3>Weight</h3>
-                          <h2 class="text-xl font-medium">2kg</h2>
-                        </div>
+
+                        <!-- Traits component -->
+                        <%= for {property, value} <- transition.answers do %>
+                          <%= case property do %>
+                          <% "comment" -> %>
+                              <h1>WORK</h1>
+                          <% _ -> %>
+                            <h1>LOL</h1>
+                          <% end %>
+                          <%= if (property != "image_list") && (property != "comment") && (property != "unit") do %>
+                            <div class="shadow-md rounded-md">
+                              <div class="p-5 text-center">
+                                <h3><%= property%><br></h3>
+                              <h2 class="text-xl font-medium"><%= value %> units </h2>
+                              </div>
+                            </div>
+                          <% end %>
+                          <!-- Comment component -->
+                          <%= if (property == "comment") do %>
+                            <div class="shadow-md rounded-md">
+                              <div class="p-5 text-center">
+                                <h3><%= property%><br></h3>
+                              <h2 class="text-xl font-medium"><%= value %> units </h2>
+                              </div>
+                            </div>
+                          <% end %>
+                        <% end %>
+
                       </div>
+
+
+
+
+                      <br>
+                      <h2 class="text-sm font-semibold"><%= transition.initiator.name %></h2>
+                      <h3 class="text-xs font-semibold"><%= if @id == "transition" do %> <%= Timezone.get_date(transition.inserted_at, assigns.timezone, assigns.timezone_offset) %> <% end %>  <%= Timezone.get_time(transition.inserted_at, assigns.timezone, assigns.timezone_offset) %><br></h3>
+
+                      transited: <%= transition.transited %><br>
+                      <%= if transition.transited do %>
+                          Approved by: <%= transition.transiter.name %><br>
+                      <% else %>
+                          <button phx-click="transit", value={transition.id}>Approve?</button><br>
+                      <% end %>
                     </div>
             <% end %>
             </div>

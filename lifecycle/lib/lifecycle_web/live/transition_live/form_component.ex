@@ -28,23 +28,28 @@ defmodule LifecycleWeb.TransitionLive.FormComponent do
     {:noreply, socket}
   end
 
-  @impl true
+
+@impl true
   def handle_event("save", %{"transition" => transition} = params, socket) do
-    IO.inspect(params)
-    save_transition(socket, socket.assigns.action, transition)
+    IO.inspect transition
+    import IEx; IEx.pry()
+    new_transition = Map.new(transition, fn {k, v} -> {transition_map_parser(k,v)} end)
+    import IEx; IEx.pry()
+    image_list = ImageHandler.handle_image(socket)
+    transition = Map.put(new_transition, "image_list", image_list)
+
+    #save_transition(socket, socket.assigns.action, transition)
   end
 
   # saving transition object
-  defp save_transition(socket, :transition_new, params) do
-    image_list = ImageHandler.handle_image(socket)
-    params = Map.put(params, "image_list", image_list)
-    params =
+  defp save_transition(socket, :transition_new, answer_map) do
+    answer_map =
       %{}
-      |> Map.put(:answers, params)
+      |> Map.put(:answers, answer_map)
       |> Map.put(:initiator_id, socket.assigns.current_user.id)
       |> Map.put(:phase_id, socket.assigns.phase.id)
 
-    case Timeline.create_transition(params) do
+    case Timeline.create_transition(answer_map) do
       {:ok, transition} ->
         {Pubsub.notify_subs(
            {:ok, transition},
@@ -62,14 +67,35 @@ defmodule LifecycleWeb.TransitionLive.FormComponent do
   end
 
   defp save_transition(socket, :transition_edit, params) do
-    image_list = ImageHandler.handle_image(socket)
-    params = Map.put(params, "image_list", image_list)
     params =
       %{}
       |> Map.put("answers", params)
       |> Map.put("transition", socket.assigns.transition.id)
 
     TransitionHandler.handle_transition(:edit_transition, params, socket)
+  end
+
+  def transition_map_parser(key, value) do
+    IO.inspect key
+    [type | name] = String.split(key, "#", parts: 2)
+    name = unless List.first(name) == nil , do: List.first(name)
+    IO.inspect name
+    IO.inspect type
+    case type do
+      "comment" ->
+        %{:comment => value}
+      "bool" ->
+        %{:bool => %{name => %{"value" => value}}}
+      "numeric" ->
+        %{:numeric => %{name => %{"value" => value}}}
+      "text" ->
+        %{:text => %{name => %{"value" => value}}}
+      "unit" ->
+        %{:numeric => %{name => %{"unit" => value}}}
+      _jk ->
+        IO.inspect 1
+        %{}
+    end
   end
 
   def error_to_string(:too_large), do: "Too large"
