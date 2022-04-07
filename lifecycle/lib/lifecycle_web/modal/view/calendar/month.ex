@@ -24,18 +24,19 @@ defmodule LifecycleWeb.Modal.View.Calendar.Month do
     ~H"""
         <div>
           <div class="flex items-center mb-8">
-              <div class="flex-1">
+              <div class="text-md text-pink-500 font-weight-light ">
+
                 <%= Timex.format!(@current, "{Mshort} {YYYY}") %>
               </div>
               <div class="flex justify-end flex-1 text-right">
                 <%= live_patch to: @previous_month_path do %>
-                    <button class="flex items-center justify-center w-10 h-10 text-blue-700 align-middle rounded-full hover:bg-blue-200">
-                    <i class="fas fa-chevron-left"> Previous        </i>
+                    <button class="mr-1 smaller-fab">
+                    Past Month
                     </button>
                 <% end %>
                 <%= live_patch to: @next_month_path do %>
-                    <button class="flex items-center justify-center w-10 h-10 text-blue-700 align-middle rounded-full hover:bg-blue-200">
-                    <i class="fas fa-chevron-right"> Next </i>
+                    <button class="ml-1 smaller-fab">
+                    Next Month
                     </button>
                 <% end %>
               </div>
@@ -55,13 +56,14 @@ defmodule LifecycleWeb.Modal.View.Calendar.Month do
                   date={Timex.shift(@beginning_of_month, days: i)}
                   timezone={@timezone} />
               <% end %>
-              <div class="flex items-center gap-x-1">
-                  <i class="fas fa-globe-americas"></i>
-                  <%= @timezone %>
-              </div>
+
             </div>
         </div>
     """
+    # deleted the region thing 'Asia/Singapore'
+    # <div class="flex items-center gap-x-1">
+    # <%= @timezone %>
+    # </div>
   end
 
   defp build_path(current_path, params) do
