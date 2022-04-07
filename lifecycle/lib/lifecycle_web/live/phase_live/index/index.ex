@@ -90,8 +90,12 @@ defmodule LifecycleWeb.PhaseLive.Index do
       {:ok, [initiator_name, transition_updated_at]} ->
         transition_datetime =
           Timezone.get_datetime(transition_updated_at, timezone, timezone_offset)
+          [date, time, am_or_pm] = String.split(transition_datetime, " ")
+          text_to_html("#{date} \n #{time}#{am_or_pm} \n #{initiator_name}")
+        # glen used text_to_html instead, for the line break \n to work
 
-        "Date: #{transition_datetime}\nBy: #{initiator_name}"
+
+        # "#{transition_datetime},\n\n by:#{initiator_name}"
 
       {:error, reason} ->
         reason
