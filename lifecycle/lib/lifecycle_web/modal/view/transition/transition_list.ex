@@ -46,52 +46,6 @@ defmodule LifecycleWeb.Modal.View.Transition.TransitionList do
             <div class="max-w-2xl mx-auto">
 
                 <%= for transition <- @transitions do %>
-
-
-
-                  <!--- first --->
-                    <%= for {property, value} <- transition.answers do %>
-                      <%= unless property == "image_list" do %>
-                          <%= property%> : <%= inspect value %> <br>
-                      <% else %>
-                          <%= unless value == "" do %>
-                              <div id="default-carousel" class="relative" data-carousel="static">
-                                <div class="overflow-hidden relative h-56 rounded-lg sm:h-64 xl:h-80 2xl:h-96">
-                              <%= for image_path <- String.split(value, "##" ) do%>
-
-                                <%= if Path.extname(image_path) in [".mp3", ".m4a" ,".aac", ".oga"] do %>
-                                  <audio controls>
-                                  <source src={image_path} type={"audio/mp4"} >
-                                  </audio>
-                                <% else %>
-                                <div class="active duration-700 ease-in-out" data-carousel-item>
-                                    <img src={image_path} class="block absolute top-1/2 left-1/2 w-full -translate-y-1/2 -translate-x-1/2 transition" alt="...">
-                                </div>
-                                <% end %>
-                                <% end %>
-                                </div>
-                                <div class="flex absolute bottom-5 left-1/2 z-30 space-x-3 -translate-x-1/2">
-                                    <button type="button" class="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 1" data-carousel-slide-to="0"></button>
-                                    <button type="button" class="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 2" data-carousel-slide-to="1"></button>
-                                </div>
-                                <!-- Slider controls -->
-                                <button type="button" class="flex absolute top-0 left-0 z-30 justify-center items-center px-4 h-full cursor-pointer group focus:outline-none" data-carousel-prev>
-                                    <span class="inline-flex justify-center items-center w-8 h-8 rounded-full sm:w-10 sm:h-10 bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
-                                        <svg class="w-5 h-5 text-white sm:w-6 sm:h-6 dark:text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
-                                        <span class="hidden">Previous</span>
-                                    </span>
-                                </button>
-                                <button type="button" class="flex absolute top-0 right-0 z-30 justify-center items-center px-4 h-full cursor-pointer group focus:outline-none" data-carousel-next>
-                                    <span class="inline-flex justify-center items-center w-8 h-8 rounded-full sm:w-10 sm:h-10 bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
-                                        <svg class="w-5 h-5 text-white sm:w-6 sm:h-6 dark:text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                                        <span class="hidden">Next</span>
-                                    </span>
-                                </button>
-                              </div>
-                          <% end %>
-                      <% end %>
-                    <% end %>
-
                     <!-- Card component -->
                     <div class="shadow-md rounded-md p-10 mx-1 my-3 bg-white text-left">
                       <h1 class="text-xl font-bold uppercase">
@@ -101,16 +55,25 @@ defmodule LifecycleWeb.Modal.View.Transition.TransitionList do
                         Observations
                       </h2>
                       <div class="flex flex-wrap">
-
                         <%= for {property, value} <- transition.answers do %>
                           <%= if (property == "image_list") do %>
                             <!-- TODO: insert images here -->
-                            <div class="shadow-md rounded-md">
-                              <div class="p-5 text-center">
-                                <h3><%= value %><br></h3>
-                              <h2 class="text-xl font-medium"><%= value %> Above is your image list....you can use it to render your images </h2>
+                            <%= unless value == "" do %>
+                              <div class="shadow-md rounded-md">
+                                <div class="container px-5 py-2 mx-auto">
+                                  <div class="flex flex-wrap -m-1 md:-m-2 items-center justify-center">
+                                    <%= for image_path <- String.split(value, "##" ) do%>
+                                      <div class="flex flex-wrap w-1/3">
+                                        <button class="w-full p-1 md:p-2">
+                                          <img alt="gallery" class="button block object-cover object-center w-full h-full rounded-lg"
+                                            src={image_path}>
+                                        </button>
+                                      </div>
+                                    <% end %>
+                                  </div>
+                                </div>
                               </div>
-                            </div>
+                            <% end %>
                           <% end %>
                         <% end %>
 
