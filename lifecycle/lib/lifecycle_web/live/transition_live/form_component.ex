@@ -28,23 +28,27 @@ defmodule LifecycleWeb.TransitionLive.FormComponent do
     {:noreply, socket}
   end
 
+
   @impl true
-  def handle_event("save", %{"transition" => transition} = params, socket) do
-    IO.inspect(params)
+  def handle_event("save", %{"transition" => transition} = _, socket) do
+    transition = transition
+    |> Enum.map(fn {k,v} -> {assigntypes(k), mergetypes(k,v, transition)} end) # type-specific  numeric/unit merger
+    |> Enum.group_by(fn {k, _v} -> k end) # parsing together types
+    |> Enum.map(fn {k,v} -> {k, mergetypes(k,v)} end) # bundle together data related to types
+    |> Enum.into(%{}) #keywordlist to map
+    |> Map.put("image_list", ImageHandler.handle_image(socket))
     save_transition(socket, socket.assigns.action, transition)
   end
 
   # saving transition object
-  defp save_transition(socket, :transition_new, params) do
-    image_list = ImageHandler.handle_image(socket)
-    params = Map.put(params, "image_list", image_list)
-    params =
+  defp save_transition(socket, :transition_new, answer_map) do
+    answer_map =
       %{}
-      |> Map.put(:answers, params)
+      |> Map.put(:answers, answer_map)
       |> Map.put(:initiator_id, socket.assigns.current_user.id)
       |> Map.put(:phase_id, socket.assigns.phase.id)
 
-    case Timeline.create_transition(params) do
+    case Timeline.create_transition(answer_map) do
       {:ok, transition} ->
         {Pubsub.notify_subs(
            {:ok, transition},
@@ -62,8 +66,6 @@ defmodule LifecycleWeb.TransitionLive.FormComponent do
   end
 
   defp save_transition(socket, :transition_edit, params) do
-    image_list = ImageHandler.handle_image(socket)
-    params = Map.put(params, "image_list", image_list)
     params =
       %{}
       |> Map.put("answers", params)
@@ -72,7 +74,48 @@ defmodule LifecycleWeb.TransitionLive.FormComponent do
     TransitionHandler.handle_transition(:edit_transition, params, socket)
   end
 
-  def error_to_string(:too_large), do: "Too large"
+  def mergetypes(key, value, maps) do
+    [type | name] = String.split(key, "#", parts: 2)
+    name = unless List.first(name) == nil , do: List.first(name)
+    case type do
+      "comment" ->
+        %{"value" => value}
+      "bool" ->
+        %{name => %{"value" => value}}
+      "numeric" ->
+        %{name => %{"value" => value, "unit" => maps["unit#" <> name]}}
+      "text" ->
+        %{name => %{"value" => value}}
+      _jk ->
+        %{}
+    end
+  end
+
+  def assigntypes(key) do
+    case String.to_atom(List.first(String.split(key, "#"))) do
+      :unit ->
+        :unit
+      :numeric ->
+        :numeric
+      :text ->
+        :text
+      :bool ->
+        :bool
+      :comment ->
+        :comment
+      _unrecognised_type ->
+        :unknown
+    end
+  end
+
+  def mergetypes(key, value) do
+    ## data merger
+    Enum.reduce(Keyword.get_values(value, key), fn x, y ->
+      Map.merge(x, y, fn _k, v1, v2 -> v2 ++ v1 end) end)
+  end
+
+
+  def error_to_string(:too_large), do: "Too large" #just like your mum HA got em -not glen
   def error_to_string(:too_many_files), do: "You have selected too many files"
   def error_to_string(:not_accepted), do: "You have selected an unacceptable file type"
 end
