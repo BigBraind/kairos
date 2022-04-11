@@ -119,7 +119,9 @@ defmodule Lifecycle.Timeline do
 
   """
   def list_phases do
-    Repo.all(from(p in Phase, order_by: [desc: p.inserted_at], preload: [:parent, :child, :traits]))
+    Repo.all(
+      from(p in Phase, order_by: [desc: p.inserted_at], preload: [:parent, :child, :traits])
+    )
   end
 
   @doc """
@@ -308,5 +310,41 @@ defmodule Lifecycle.Timeline do
   rescue
     Ecto.NoResultsError ->
       {:error, "No Records Found"}
+  end
+
+  @doc """
+  Get all the phases which has no parents
+  """
+  def get_root_phase do
+    from(p in Phase)
+    |> order_by([p], desc: p.inserted_at)
+    |> preload([:parent])
+    |> Repo.all()
+    |> Enum.map(fn %Phase{parent: parent} = phase ->
+      try do
+        if parent == [], do: phase, else: throw(:skip)
+      catch
+        :skip -> :not_absolute_root_phase
+      end
+    end)
+    |> Enum.filter(fn element -> element != :not_absolute_root_phase end)
+  end
+
+  @doc """
+  Get the child phase(s) of the phase'id being passed in
+  """
+  def get_child_phase(parent_id) do
+    child_phase =
+      Phasor
+      |> where([phasor], phasor.parent_id == ^parent_id)
+      |> Repo.all()
+      |> Repo.preload([:child])
+      |> Enum.map(fn %Phasor{child: child} -> child end)
+
+    if child_phase == [] do
+      {:no_child_found, child_phase}
+    else
+      {:ok, child_phase}
+    end
   end
 end
