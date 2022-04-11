@@ -155,8 +155,6 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
     # check_existing_trait = phase_params["existing_traits"] != %{}
     check_existing_trait = phase_params["existing_traits"] != nil
 
-    IO.inspect(phase_params["existing_traits"])
-
     case Timeline.create_phase(phase_params) do
       {:ok, phase} ->
         # to avoid raising KeyError
