@@ -271,6 +271,22 @@ defmodule Lifecycle.Timeline do
   def get_transition_by_id(id),
     do: Repo.get!(Transition, id) |> Repo.preload([:transiter, :initiator, :phase])
 
+  def get_latest_transition(phase_id) do
+    query =
+      Transition
+      |> where([e], e.phase_id == ^phase_id)
+      |> order_by([e], desc: e.inserted_at)
+      |> preload([:transiter, :initiator, :phase])
+      |> limit(1)
+
+    case Repo.one!(query) do
+      %Transition{} = transition -> {:ok, transition}
+    end
+  rescue
+    Ecto.NoResultsError ->
+      {:error, "No Records Found"}
+  end
+
   def change_transition(%Transition{} = transition, attrs \\ %{}) do
     Transition.changeset(transition, attrs)
   end
@@ -316,7 +332,10 @@ defmodule Lifecycle.Timeline do
   Get all the phases which has no parents
   """
   def get_root_phase do
-    from(p in Phase, where: fragment("NOT EXISTS (SELECT * FROM phase_phase_link a WHERE a.child_id =?)", p.id), order_by: [desc: p.inserted_at])
+    from(p in Phase,
+      where: fragment("NOT EXISTS (SELECT * FROM phase_phase_link a WHERE a.child_id =?)", p.id),
+      order_by: [desc: p.inserted_at]
+    )
     |> Repo.all()
     |> Repo.preload([:child])
   end
