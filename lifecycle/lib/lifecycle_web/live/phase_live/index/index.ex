@@ -16,7 +16,12 @@ defmodule LifecycleWeb.PhaseLive.Index do
   def mount(_params, _session, socket) do
     if connected?(socket), do: Pubsub.subscribe(@topic)
 
-    {:ok, assign(socket, phases: list_phases())}
+    # {:ok, assign(socket, phases: list_phases(), reformat_phases: Timeline.get_root_phase())}
+    {:ok,
+     socket
+     |> assign(phases: list_phases())
+     |> assign(reformat_phases: Timeline.get_root_phase())
+     |> assign(child_phases: [])}
   end
 
   @impl true
@@ -63,6 +68,18 @@ defmodule LifecycleWeb.PhaseLive.Index do
      |> Flash.insert_flash(:info, "Phase deleted", self())}
   end
 
+  def handle_event("display_child_phase", %{"phase_id" => parent_phase_id}, socket) do
+    child_phase =
+      case Timeline.get_child_phase(parent_phase_id) do
+        {:ok, child_phase} -> child_phase
+        {:no_child_found, _} -> []
+      end
+
+    {:noreply,
+     socket
+     |> assign(child_phases: child_phase)}
+  end
+
   @impl true
   def handle_info(:clear_flash, socket), do: Flash.handle_flash(socket)
 
@@ -90,15 +107,23 @@ defmodule LifecycleWeb.PhaseLive.Index do
       {:ok, [initiator_name, transition_updated_at]} ->
         transition_datetime =
           Timezone.get_datetime(transition_updated_at, timezone, timezone_offset)
-          [date, time, am_or_pm] = String.split(transition_datetime, " ")
-          text_to_html("#{date} \n #{time}#{am_or_pm} \n #{initiator_name}")
-        # glen used text_to_html instead, for the line break \n to work
 
+        [date, time, am_or_pm] = String.split(transition_datetime, " ")
+        text_to_html("#{date} \n #{time}#{am_or_pm} \n #{initiator_name}")
 
-        # "#{transition_datetime},\n\n by:#{initiator_name}"
+      # glen used text_to_html instead, for the line break \n to work
+
+      # "#{transition_datetime},\n\n by:#{initiator_name}"
 
       {:error, reason} ->
         reason
+    end
+  end
+
+  def get_child_phase(parent_phase_id) do
+    case Timeline.get_child_phase(parent_phase_id) do
+      {:ok, child_phase} -> child_phase
+      {:no_child_found, _} -> []
     end
   end
 end

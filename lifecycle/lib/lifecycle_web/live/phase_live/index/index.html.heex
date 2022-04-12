@@ -101,5 +101,14 @@
     </tbody>
     </table>
 
+    <%= for phase <- @reformat_phases do %>
+        <h1><%= text_to_html(phase.title) %></h1>
+        <%= for child_phase <- get_child_phase(phase.id) do %>
+            <%= text_to_html(child_phase.title) %>
+        <% end %>
+    <% end %>
+
+
+
 
 </div>
