@@ -1,0 +1,37 @@
+<h1>Listing Journeys</h1>
+
+<%= if @live_action in [:new, :edit] do %>
+    <.live_component
+      module={LifecycleWeb.JourneyLive.FormComponent}
+      id={@journey.id || :new}
+      title={@page_title}
+      action={@live_action}
+      journey={@journey}
+      return_to={Routes.journey_index_path(@socket, :index)}
+    />
+<% end %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody id="journeys">
+    <%= for journey <- @journeys do %>
+      <tr id={"journey-#{journey.id}"}>
+        <td><%= journey.name %></td>
+
+        <td>
+          <span><%= live_redirect "Show", to: Routes.journey_show_path(@socket, :show, journey) %></span>
+          <span><%= live_patch "Edit", to: Routes.journey_index_path(@socket, :edit, journey) %></span>
+          <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: journey.id, data: [confirm: "Are you sure?"] %></span>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<span><%= live_patch "New Journey", to: Routes.journey_index_path(@socket, :new) %></span>
