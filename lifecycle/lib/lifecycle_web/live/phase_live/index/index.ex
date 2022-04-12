@@ -10,6 +10,8 @@ defmodule LifecycleWeb.PhaseLive.Index do
   alias LifecycleWeb.Modal.Function.Component.Flash
   alias LifecycleWeb.Modal.Function.Pubsub.PhasePubs
 
+  alias LifecycleWeb.Modal.View.Transition.Phases
+
   @topic "phase_index"
 
   @impl true
@@ -126,4 +128,6 @@ defmodule LifecycleWeb.PhaseLive.Index do
       {:no_child_found, _} -> []
     end
   end
+
+  defdelegate phase_has_child?(phase_id), to: Timeline
 end

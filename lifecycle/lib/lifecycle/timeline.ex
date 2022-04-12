@@ -316,18 +316,9 @@ defmodule Lifecycle.Timeline do
   Get all the phases which has no parents
   """
   def get_root_phase do
-    from(p in Phase)
-    |> order_by([p], desc: p.inserted_at)
-    |> preload([:parent])
+    from(p in Phase, where: fragment("NOT EXISTS (SELECT * FROM phase_phase_link a WHERE a.child_id =?)", p.id), order_by: [desc: p.inserted_at])
     |> Repo.all()
-    |> Enum.map(fn %Phase{parent: parent} = phase ->
-      try do
-        if parent == [], do: phase, else: throw(:skip)
-      catch
-        :skip -> :not_absolute_root_phase
-      end
-    end)
-    |> Enum.filter(fn element -> element != :not_absolute_root_phase end)
+    |> Repo.preload([:child])
   end
 
   @doc """
@@ -345,6 +336,23 @@ defmodule Lifecycle.Timeline do
       {:no_child_found, child_phase}
     else
       {:ok, child_phase}
+    end
+  end
+
+  @doc """
+  Return true/ false based on if the phase has child
+  """
+  def phase_has_child?(phase_id) do
+    query =
+      Phasor
+      |> where([phasor], phasor.parent_id == ^phase_id)
+      |> Repo.all()
+      |> List.first()
+
+    case query do
+      %Phasor{} = _phasor -> true
+      nil -> false
+      _ -> :something_wrong
     end
   end
 end

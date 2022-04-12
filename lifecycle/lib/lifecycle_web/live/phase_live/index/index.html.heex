@@ -102,9 +102,11 @@
     </table>
 
     <%= for phase <- @reformat_phases do %>
-        <h1><%= text_to_html(phase.title) %></h1>
+
+        # TODO: input the css class here to identify the styling
+        <.live_component module={Phases} id={"phase-component-#{phase.id}"} phase={phase} class="some-css-class"/>
         <%= for child_phase <- get_child_phase(phase.id) do %>
-            <%= text_to_html(child_phase.title) %>
+            <.live_component module={Phases} id={"phase-component-#{phase.id}"} phase={child_phase} class="another-css-class"/>
         <% end %>
     <% end %>
 
