@@ -106,7 +106,7 @@
         # TODO: input the css class here to identify the styling
         <.live_component module={Phases} id={"phase-component-#{phase.id}"} phase={phase} class="some-css-class"/>
         <%= for child_phase <- get_child_phase(phase.id) do %>
-            <.live_component module={Phases} id={"phase-component-#{phase.id}"} phase={child_phase} class="another-css-class"/>
+            <.live_component module={Phases} id={"phase-component-#{child_phase.id}"} phase={child_phase} class="another-css-class"/>
         <% end %>
     <% end %>
 
