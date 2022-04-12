@@ -1,0 +1,29 @@
+<h1>Show Realm</h1>
+
+<%= if @live_action in [:edit] do %>
+    <.live_component
+      module={LifecycleWeb.RealmLive.FormComponent}
+      id={@realm.id}
+      title={@page_title}
+      action={@live_action}
+      realm={@realm}
+      return_to={Routes.realm_show_path(@socket, :show, @realm.name)}
+    />
+<% end %>
+
+<ul>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @realm.name %>
+  </li>
+
+  <li>
+    <strong>Description:</strong>
+    <%= @realm.description %>
+  </li>
+
+</ul>
+
+<span><%= live_patch "Edit", to: Routes.realm_show_path(@socket, :edit, @realm.name), class: "button" %></span> |
+<span><%= live_redirect "Back", to: Routes.realm_index_path(@socket, :index) %></span>

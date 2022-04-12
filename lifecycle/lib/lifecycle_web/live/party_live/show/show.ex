@@ -17,12 +17,6 @@ defmodule LifecycleWeb.PartyLive.Show do
 
     if connected?(socket) do
       Pubsub.subscribe("party:" <> parties.id)
-
-      {:ok,
-       assign(socket,
-         party: parties,
-         party_changeset: Party.changeset(%Party{})
-       )}
     end
 
     {:ok,
