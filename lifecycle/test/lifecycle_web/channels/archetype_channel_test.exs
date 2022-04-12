@@ -5,7 +5,7 @@ defmodule LifecycleWeb.ArchetypeChannelTest do
     {:ok, _, socket} =
       LifecycleWeb.UserSocket
       |> socket("user_id", %{some: :assign})
-      |> subscribe_and_join(LifecycleWeb.ArchetypeChannel, "archetype:phase:42")
+      |> subscribe_and_join(LifecycleWeb.ArchetypeChannel, "archetype:journey:42")
 
     %{socket: socket}
   end

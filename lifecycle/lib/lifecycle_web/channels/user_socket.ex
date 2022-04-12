@@ -8,7 +8,7 @@ defmodule LifecycleWeb.UserSocket do
 
   ## Channels
 
-  channel "archetype:phase:*", LifecycleWeb.ArchetypeChannel
+  channel "archetype:realm:*", LifecycleWeb.ArchetypeChannel
 
   # Socket params are passed from the client and can
   # be used to verify and authenticate a user. After

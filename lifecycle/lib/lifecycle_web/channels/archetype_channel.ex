@@ -2,10 +2,10 @@ defmodule LifecycleWeb.ArchetypeChannel do
   use LifecycleWeb, :channel
 
   @impl true
-  def join("archetype:phase:" <> id , payload, socket) do
+  def join("archetype:realm:" <> name , payload, socket) do
     if authorized?(payload) do
-      IO.inspect(id)
-      {:ok, socket|> assign(:phase, id)}
+      IO.inspect(name)
+      {:ok, socket|> assign(:realm, name)}
     else
       {:error, %{reason: "unauthorized"}}
     end

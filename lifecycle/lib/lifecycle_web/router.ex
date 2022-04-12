@@ -48,8 +48,7 @@ defmodule LifecycleWeb.Router do
       live("/phases/:phase_id/show/new", PhaseLive.Show, :new_child)
       live("/phases/:phase_id/show/transition", PhaseLive.Show, :transition_new)
 
-      live(
-        "/phases/:phase_id/show/transition/:transition_id/edit",
+      live("/phases/:phase_id/show/transition/:transition_id/edit",
         PhaseLive.Show,
         :transition_edit
       )
@@ -60,6 +59,13 @@ defmodule LifecycleWeb.Router do
 
       live("/party/:party_name/show/edit", PartyLive.Show, :edit)
       live("/party/:party_name/", PartyLive.Show, :show)
+
+      live("/journeys", JourneyLive.Index, :index)
+      live("/journeys/new", JourneyLive.Index, :new)
+      live("/journeys/:id/edit", JourneyLive.Index, :edit)
+
+      live("/journeys/:id", JourneyLive.Show, :show)
+      live("/journeys/:id/show/edit", JourneyLive.Show, :edit)
 
       live("/billing", BillingLive.Index, :index)
 

@@ -55,13 +55,9 @@ defmodule Lifecycle.MixProject do
       {:pow, "~> 1.0.18"},
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
       {:libcluster, "~> 3.3"},
-      # ImageStorage:
-      {:waffle, "~> 1.1"},
+      {:contex, "~> 0.4.0"},
       # For S3:
       {:poison, "~> 3.0"},
-      {:ex_aws, "~> 2.1.2"},
-      {:ex_aws_s3, "~> 2.0"},
-      {:hackney, "~> 1.9"},
       {:stripity_stripe, "~> 2.0"},
       {:dotenv_parser, "~> 2.0", runtime: Mix.env() == :dev}
     ]
