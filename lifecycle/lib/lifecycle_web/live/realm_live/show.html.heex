@@ -36,7 +36,9 @@
 </div>
 </div>
 
-
+<div class="column">
+  <%= build_pointplot(@test_data, @chart_options) %>
+</div>
 
 
 <span><%= live_patch "Edit", to: Routes.realm_show_path(@socket, :edit, @party_name, @realm), class: "button" %></span> |
