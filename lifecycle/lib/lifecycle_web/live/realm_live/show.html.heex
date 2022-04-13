@@ -27,16 +27,9 @@
 </ul>
 <div>
 <h2>"Hello"</h2>
-
-<div><%= for {k,v} <- @nowstream do %> 
-    <div>
-      <%=to_string(k) <> v%>
-    </div>
-  <%= end %>
-</div>
 </div>
 
-<div class="column">
+<div class="column w-7/12">
   <%= build_pointplot(@test_data, @chart_options) %>
 </div>
 

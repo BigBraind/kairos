@@ -11,8 +11,8 @@ defmodule LifecycleWeb.RealmLive.Show do
     socket =
       socket
       |> assign(chart_options: %{
-          series: 4,
-          points: 30,
+          series: 3,
+          points: 99999,
           title: nil,
           type: "line",
           smoothed: "yes",
@@ -31,7 +31,7 @@ defmodule LifecycleWeb.RealmLive.Show do
      socket
      |> assign(:party_name, party)
      |> assign(:realm_topic, realm_topic)
-     |> assign(:nowstream, [shitty: "piece opf shit", shittier: "this smells good"])}
+     |> assign(:nowstream, [[0,0,0,0,0]])}
   end
 
   @impl true
@@ -54,10 +54,11 @@ defmodule LifecycleWeb.RealmLive.Show do
   @impl true
   def handle_info({Lifecycle.Pubsub, [:echo, :flux], message}, socket) do
     IO.puts("Show is Live")
-    IO.inspect(socket.assigns)
+    series_cols = ["humidity","temperature","co2"]
     {:noreply,
      socket
-     |> assign(:nowstream, [message | socket.assigns.nowstream])
+     |> assign(:nowstream, socket.assigns.nowstream ++ message)
+     |> assign(:test_data, Dataset.new(socket.assigns.nowstream ++ message, ["X" | series_cols]))
     }
   end
 
@@ -111,20 +112,13 @@ defmodule LifecycleWeb.RealmLive.Show do
 
     needs_update = (prev_series != series) or (prev_points != points) or (prev_time_series != time_series)
 
-    # TODO: insert data here
+    # first dummy data
     data = [
-      [1, 135, 231, 1233, 213],
-      [2, 432, 21, 321, 234],
-      [3, 135, 423, 121, 534],
-      [4, 135, 21, 1112, 1233],
-      [5, 135, 231, 1233, 213],
-      [6, 432, 21, 321, 234],
-      [7, 135, 423, 121, 534],
-      [8, 135, 21, 1112, 1233],
+      [0,0,0,0,0]
     ]
 
     # TODO: add the lable for the data here
-    series_cols = ["a","b","c","d"]
+    series_cols = ["humidity","temperature","co2"]
 
     test_data = case needs_update do
       true ->  Dataset.new(data, ["X" | series_cols])
