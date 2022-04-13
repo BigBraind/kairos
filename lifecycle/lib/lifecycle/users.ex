@@ -41,7 +41,12 @@ defmodule Lifecycle.Users do
 
   """
   def get_realm!(id), do: Repo.get!(Realm, id)
-  def get_realm_by_name!(name), do: Repo.get_by!(Realm, name: name)
+  def get_realm_by_name!(name) do
+    Repo.get_by!(Realm, name: name)
+  rescue
+    Ecto.NoResultsError ->
+      {:error, "Realm not discovered"}
+  end
 
   @doc """
   Creates a realm.

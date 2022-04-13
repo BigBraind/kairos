@@ -25,6 +25,15 @@
   </li>
 
 </ul>
+<div>
+<h2>"Hello"</h2>
+<%= for {k, v} <- @nowstream do %>
+    <ul> <%= k <> v  %> </ul>
+<% end %>
+</div>
+
+
+
 
 <span><%= live_patch "Edit", to: Routes.realm_show_path(@socket, :edit, @party_name, @realm), class: "button" %></span> |
 <span><%= live_redirect "Back", to: Routes.realm_index_path(@socket, :index, @party_name) %></span>
