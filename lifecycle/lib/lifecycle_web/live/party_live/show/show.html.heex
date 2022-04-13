@@ -18,6 +18,8 @@
 <% end %></h4>
 
 <div align="right">
+    <span><%= live_patch "Our Realms", to: Routes.realm_index_path(@socket, :index, @party.name), class: "button" %></span>
+<br>
     <span><%= live_patch "Edit", to: Routes.party_show_path(@socket, :edit, @party.name), class: "button" %></span>
     <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: @party.id, data: [confirm: "Are you sure? 👀 "], return_to: Routes.party_index_path(@socket, :index), class: "button" %></span>
 </div>

@@ -72,8 +72,8 @@ defmodule LifecycleWeb.Router do
       live "/party/:party_name/realms/new", RealmLive.Index, :new
       live "/realms/:id/edit", RealmLive.Index, :edit
 
-      live "/party/:party_name/:realm_name", RealmLive.Show, :show
-      live "/party/:party_name/:id/show/edit", RealmLive.Show, :edit
+      live "/realms/:party_name/:realm_name", RealmLive.Show, :show
+      live "/realms/:party_name/:id/show/edit", RealmLive.Show, :edit
 
       live("/billing", BillingLive.Index, :index)
 
