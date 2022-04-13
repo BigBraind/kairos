@@ -8,10 +8,13 @@ defmodule LifecycleWeb.ErrorHelpers do
   @doc """
   Generates tag for inlined form input errors.
   """
+
+  # got rid of class: "invalid-feedback", old bootstrap class that messes w the constraints
+
   def error_tag(form, field) do
     Enum.map(Keyword.get_values(form.errors, field), fn error ->
       content_tag(:span, translate_error(error),
-        class: "invalid-feedback",
+        class: "text-red-500",
         phx_feedback_for: input_name(form, field)
       )
     end)
