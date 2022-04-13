@@ -21,6 +21,11 @@ defmodule Lifecycle.Users do
     Repo.all(Realm)
   end
 
+  def list_realms_by_parties(party_name) do
+    from(r in Realm, where: [party_name: ^party_name], order_by: [asc: :id])
+    |> Repo.all()
+  end
+
   @doc """
   Gets a single realm.
 

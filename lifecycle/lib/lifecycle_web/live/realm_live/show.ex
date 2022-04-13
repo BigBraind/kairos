@@ -4,8 +4,9 @@ defmodule LifecycleWeb.RealmLive.Show do
   alias Lifecycle.Users
 
   @impl true
-  def mount(_params, _session, socket) do
-    {:ok, socket}
+  def mount(params, _session, socket) do
+    IO.inspect(params)
+    {:ok, socket |> assign(:party_name, params["party_name"])}
   end
 
   @impl true
@@ -15,6 +16,13 @@ defmodule LifecycleWeb.RealmLive.Show do
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
      |> assign(:realm, Users.get_realm_by_name!(name))}
+  end
+
+  def handle_params(%{"id" => id}, _, socket) do
+    {:noreply,
+     socket
+     |> assign(:page_title, page_title(socket.assigns.live_action))
+     |> assign(:realm, Users.get_realm!(id))}
   end
 
   defp page_title(:show), do: "Show Realm"

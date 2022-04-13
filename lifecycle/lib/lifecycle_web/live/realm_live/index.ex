@@ -5,8 +5,11 @@ defmodule LifecycleWeb.RealmLive.Index do
   alias Lifecycle.Users.Realm
 
   @impl true
-  def mount(_params, _session, socket) do
-    {:ok, assign(socket, :realms, list_realms())}
+  def mount(params, _session, socket) do
+    %{"party_name" => party_name} = params
+    {:ok, assign(socket, :realms, list_realms_by_parties(party_name))
+     |> assign(:party_name, party_name)
+    }
   end
 
   @impl true
@@ -38,6 +41,10 @@ defmodule LifecycleWeb.RealmLive.Index do
     {:ok, _} = Users.delete_realm(realm)
 
     {:noreply, assign(socket, :realms, list_realms())}
+  end
+
+  defp list_realms_by_parties(party_name) do
+    Users.list_realms_by_parties(party_name)
   end
 
   defp list_realms do

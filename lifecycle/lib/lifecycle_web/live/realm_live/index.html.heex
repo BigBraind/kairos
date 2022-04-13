@@ -4,10 +4,11 @@
     <.live_component
       module={LifecycleWeb.RealmLive.FormComponent}
       id={@realm.id || :new}
+      party_name= {@party_name}
       title={@page_title}
       action={@live_action}
       realm={@realm}
-      return_to={Routes.realm_index_path(@socket, :index)}
+      return_to={Routes.realm_index_path(@socket, :index, @party_name)}
     />
 <% end %>
 
@@ -27,7 +28,7 @@
         <td><%= realm.description %></td>
 
         <td>
-          <span><%= live_redirect "Show", to: Routes.realm_show_path(@socket, :show, "hi", realm.name) %></span>
+          <span><%= live_redirect "Show", to: Routes.realm_show_path(@socket, :show, @party_name, realm.name) %></span>
           <span><%= live_patch "Edit", to: Routes.realm_index_path(@socket, :edit, realm) %></span>
           <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: realm.id, data: [confirm: "Are you sure?"] %></span>
         </td>
@@ -36,4 +37,4 @@
   </tbody>
 </table>
 
-<span><%= live_patch "New Realm", to: Routes.realm_index_path(@socket, :new) %></span>
+<span><%= live_patch "New Realm", to: Routes.realm_index_path(@socket, :new, @party_name) %></span>

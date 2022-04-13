@@ -41,6 +41,7 @@ defmodule LifecycleWeb.RealmLive.FormComponent do
   end
 
   defp save_realm(socket, :new, realm_params) do
+    IO.inspect(realm_params)
     case Users.create_realm(realm_params) do
       {:ok, _realm} ->
         {:noreply,

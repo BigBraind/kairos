@@ -6,8 +6,9 @@
       id={@realm.id}
       title={@page_title}
       action={@live_action}
+      party_name={@party_name}
       realm={@realm}
-      return_to={Routes.realm_show_path(@socket, :show, @realm.name)}
+      return_to={Routes.realm_show_path(@socket, :show, @party_name, @realm.name)}
     />
 <% end %>
 
@@ -25,5 +26,5 @@
 
 </ul>
 
-<span><%= live_patch "Edit", to: Routes.realm_show_path(@socket, :edit, @realm.name), class: "button" %></span> |
-<span><%= live_redirect "Back", to: Routes.realm_index_path(@socket, :index) %></span>
+<span><%= live_patch "Edit", to: Routes.realm_show_path(@socket, :edit, @party_name, @realm), class: "button" %></span> |
+<span><%= live_redirect "Back", to: Routes.realm_index_path(@socket, :index, @party_name) %></span>
