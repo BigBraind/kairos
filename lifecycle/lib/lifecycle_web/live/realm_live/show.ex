@@ -11,7 +11,7 @@ defmodule LifecycleWeb.RealmLive.Show do
      socket
      |> assign(:party_name, party)
      |> assign(:realm_topic, realm_topic)
-     |> assign(:nowstream, [])}
+     |> assign(:nowstream, [shitty: "piece opf shit", shittier: "this smells good"])}
   end
 
   @impl true

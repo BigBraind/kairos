@@ -27,9 +27,13 @@
 </ul>
 <div>
 <h2>"Hello"</h2>
-<%= for {k, v} <- @nowstream do %>
-    <ul> <%= k <> v  %> </ul>
-<% end %>
+
+<div><%= for {k,v} <- @nowstream do %> 
+    <div>
+      <%=to_string(k) <> v%>
+    </div>
+  <%= end %>
+</div>
 </div>
 
 
