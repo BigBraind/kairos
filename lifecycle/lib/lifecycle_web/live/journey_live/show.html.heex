@@ -1,0 +1,24 @@
+<h1>Show Journey</h1>
+
+<%= if @live_action in [:edit] do %>
+    <.live_component
+      module={LifecycleWeb.JourneyLive.FormComponent}
+      id={@journey.id}
+      title={@page_title}
+      action={@live_action}
+      journey={@journey}
+      return_to={Routes.journey_show_path(@socket, :show, @journey)}
+    />
+<% end %>
+
+<ul>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @journey.name %>
+  </li>
+
+</ul>
+
+<span><%= live_patch "Edit", to: Routes.journey_show_path(@socket, :edit, @journey), class: "button" %></span> |
+<span><%= live_redirect "Back", to: Routes.journey_index_path(@socket, :index) %></span>

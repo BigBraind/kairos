@@ -67,19 +67,6 @@ config :lifecycle, LifecycleWeb.Endpoint,
     ]
   ]
 
-config :ex_aws,
-  debug_requests: true,
-  region: "local"
-
-config :ex_aws, :s3, %{
-  access_key_id: "minioadmin",
-  secret_access_key: "minioadmin",
-  scheme: "http://",
-  host: "localhost",
-  port: 9000,
-  region: "local",
-  bucket: "uploads"
-}
 
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n"

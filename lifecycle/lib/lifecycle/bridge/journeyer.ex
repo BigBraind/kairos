@@ -5,7 +5,7 @@ defmodule Lifecycle.Bridge.Journeyer do
   """
   use Ecto.Schema
   import Ecto.Changeset
-  alias Lifecycle.Users.Journey
+  alias Lifecycle.Realm.Journey
   alias Lifecycle.Users.Party
 
   @primary_key false

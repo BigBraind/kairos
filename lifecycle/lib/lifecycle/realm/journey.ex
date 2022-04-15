@@ -1,19 +1,16 @@
-defmodule Lifecycle.Users.Journey do
-  @moduledoc """
-    Schema table for Phase Objects
-  """
+defmodule Lifecycle.Realm.Journey do
   use Ecto.Schema
   import Ecto.Changeset
-  # alias Lifecycle.Bridge.Journeyer
+
   alias Lifecycle.Timeline.Transition
+  alias Lifecycle.Users.Party
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
-
   schema "journeys" do
-    belongs_to :party, Lifecycle.Users.Party, foreign_key: :party_id
+    field :name, :string
+    belongs_to :party, Party, foreign_key: :party_id
     has_many :transitions, Transition, foreign_key: :transition_id
-    belongs_to :realm, Lifecycle.Orgs.Realm
 
     timestamps()
   end
@@ -21,8 +18,7 @@ defmodule Lifecycle.Users.Journey do
   @doc false
   def changeset(journey, attrs) do
     journey
-    |> cast(attrs, [:party_id])
-    # |> cast_assoc([:party])
-    # |> validate_required([:party])
+    |> cast(attrs, [:name])
+    |> validate_required([:name])
   end
 end

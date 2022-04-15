@@ -10,7 +10,6 @@ defmodule Lifecycle.Timeline do
   alias Lifecycle.Timeline.Echo
   alias Lifecycle.Timeline.Phase
   alias Lifecycle.Timeline.Transition
-  alias Lifecycle.Users.Journey
   alias Lifecycle.Users.User
 
   @doc """
@@ -276,19 +275,6 @@ defmodule Lifecycle.Timeline do
   def get_user_by_id(id), do: Repo.get!(User, id) |> preload([:transiter, :initiator])
 
   def delete_transition(%Transition{} = transition), do: Repo.delete(transition)
-
-  def create_journey(attrs \\ %{}) do
-    %Journey{}
-    # |> Ecto.build_assoc(:party)
-    |> Journey.changeset(attrs)
-    |> Repo.insert()
-  end
-
-  def update_journey(%Journey{} = journey, attrs) do
-    journey
-    |> Journey.changeset(attrs)
-    |> Repo.update()
-  end
 
   def list_transitions, do: Repo.all(from(p in Transition, preload: [:transiter, :initiator]))
 

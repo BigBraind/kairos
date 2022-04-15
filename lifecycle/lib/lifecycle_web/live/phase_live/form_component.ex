@@ -123,7 +123,7 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
   """
 
   defp save_phase(socket, :new, phase_params) do
-    trait_list = retrieve_traits(phase_params["traits"])
+    trait_list = retrieve_traits(phase_params["traits"] || %{})
 
     phase_params =
       %{}
@@ -137,7 +137,7 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
   end
 
   defp save_phase(socket, :new_child, phase_params) do
-    trait_list = retrieve_traits(phase_params["traits"])
+    trait_list = retrieve_traits(phase_params["traits"] || %{})
 
     phase_params =
       %{}
@@ -201,8 +201,8 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
 
   defp gen_tracker, do: :crypto.strong_rand_bytes(5) |> Base.url_encode64() |> binary_part(0, 5)
 
-  def retrieve_traits(traits_map) do
-    trait_list =
+  def retrieve_traits(traits_map \\ %{}) do
+    trait_list  =
       for trait <- Map.values(traits_map) do
         trait
       end
