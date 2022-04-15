@@ -12,8 +12,6 @@ defmodule LifecycleWeb.ArchetypeChannel do
                   {:error, reason} ->
                   {:error, reason}
               end
-      IO.inspect realm
-      IO.inspect realm_topic
       {:ok, socket
       |> assign(:realm, realm)
       |> assign(:realm_topic, realm_topic)
@@ -35,6 +33,7 @@ defmodule LifecycleWeb.ArchetypeChannel do
   @impl true
   def handle_in("echo", payload, socket) do
     Lifecycle.Pubsub.notify_subs({:ok, payload}, [:echo, :flux], socket.assigns.realm_topic)
+    broadcast(socket, "echo", payload)
     {:noreply, socket}
   end
 
