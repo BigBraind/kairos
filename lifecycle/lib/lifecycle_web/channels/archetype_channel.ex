@@ -33,7 +33,7 @@ defmodule LifecycleWeb.ArchetypeChannel do
   @impl true
   def handle_in("echo", payload, socket) do
     Lifecycle.Pubsub.notify_subs({:ok, payload}, [:echo, :flux], socket.assigns.realm_topic)
-    broadcast(socket, "echo", payload)
+    #broadcast socket, "shout", %{"data" => payload}
     {:noreply, socket}
   end
 

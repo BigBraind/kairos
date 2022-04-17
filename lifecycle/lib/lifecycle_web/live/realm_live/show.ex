@@ -31,7 +31,9 @@ defmodule LifecycleWeb.RealmLive.Show do
      socket
      |> assign(:party_name, party)
      |> assign(:realm_topic, realm_topic)
-     |> assign(:nowstream, [[0,0,0,0,0]])}
+     |> assign(:nowstream, [])
+     |> assign(:nowstream_counter, 0)
+    }
   end
 
   @impl true
@@ -53,12 +55,12 @@ defmodule LifecycleWeb.RealmLive.Show do
 
   @impl true
   def handle_info({Lifecycle.Pubsub, [:echo, :flux], message}, socket) do
-    IO.puts("Show is Live")
     series_cols = ["humidity","temperature","co2"]
     {:noreply,
      socket
-     |> assign(:nowstream, socket.assigns.nowstream ++ message)
-     |> assign(:test_data, Dataset.new(socket.assigns.nowstream ++ message, ["X" | series_cols]))
+     |> assign(:nowstream, socket.assigns.nowstream ++ [[socket.assigns.nowstream_counter | message]])
+     |> assign(:nowstream_counter, socket.assigns.nowstream_counter + 1)
+     |> assign(:test_data, Dataset.new(socket.assigns.nowstream ++ [[socket.assigns.nowstream_counter | message]], ["X" | series_cols]))
     }
   end
 
