@@ -17,10 +17,6 @@ defmodule LifecycleWeb.ArchetypeChannelTest do
     assert_reply ref, :ok, %{"hello" => "there"}
   end
 
-  test "shout broadcasts to archetype:realm", %{socket: socket} do
-    push(socket, "echo", %{"hello" => "all"})
-    assert_broadcast "echo", %{"hello" => "all"}
-  end
 
 
   test "broadcasts are pushed to the client", %{socket: socket} do
