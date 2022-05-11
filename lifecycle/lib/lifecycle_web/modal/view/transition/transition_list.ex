@@ -20,7 +20,6 @@ defmodule LifecycleWeb.Modal.View.Transition.TransitionList do
         },
         socket
       ) do
-        # import IEx; IEx.pry()
     {:ok,
      assign(socket,
        id: id,
@@ -31,15 +30,7 @@ defmodule LifecycleWeb.Modal.View.Transition.TransitionList do
      )}
   end
 
-  # defp format_string(string) do
-  #   string
-  #   |> String.trim_leading()
-  #   |> String.trim_trailing()
-  #   |> String.split("\n")
-  # end
-
   # max-w-md max-h-md
-
   def render(assigns) do
     ~H"""
           <div class="w-96 mx-auto" style="scroll-snap-type: x mandatory;">
