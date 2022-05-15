@@ -30,15 +30,7 @@ defmodule LifecycleWeb.Modal.View.Transition.TransitionList do
      )}
   end
 
-  defp format_string(string) do
-    string
-    |> String.trim_leading()
-    |> String.trim_trailing()
-    |> String.split("\n")
-  end
-
   # max-w-md max-h-md
-
   def render(assigns) do
     ~H"""
           <div class="w-96 mx-auto" style="scroll-snap-type: x mandatory;">
@@ -82,17 +74,16 @@ defmodule LifecycleWeb.Modal.View.Transition.TransitionList do
                         <%= for {property, value} <- transition.answers do %>
                           <!-- bool & text Traits -->
                           <%= if (property == "bool" || property == "text") do %>
-                            <div class="shadow-md rounded-md bg-stone-100 m-1">
-                              <div class="p-3 text-center">
-                                <h3><%= Map.keys(value) %><br></h3>
+                            <%= for {key, val} <- value do %>
+                              <div class="shadow-md rounded-md bg-stone-100 m-1">
+                                <div class="p-3 text-center">
+                                  <h3><%= key %><br></h3>
+                                </div>
                                 <h2 class="text-xl font-medium">
-                                  <%=
-                                    [x]=Map.values(value)
-                                    Map.values(x)
-                                  %>
+                                  <%= Map.values(val) %>
                                 </h2>
                               </div>
-                            </div>
+                            <% end %>
                           <% end %>
                           <!-- numeric Traits -->
                           <%= if (property == "numeric") do %>
