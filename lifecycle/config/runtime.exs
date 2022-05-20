@@ -54,8 +54,7 @@ if config_env() == :prod do
 
   config :lifecycle, LifecycleWeb.Endpoint,
     server: true,
-    #url: [host: "#{host}.fly.dev", port: 80],
-    url: [host: "bigbrain.link" || "bigbrain.fly.dev"],
+    url: [host: "#{host}.fly.dev", port: 80],
     http: [
       # Enable IPv6 and bind on all interfaces.
       # Set it to  {0, 0, 0, 0, 0, 0, 0, 1} for local network only access.
@@ -64,7 +63,12 @@ if config_env() == :prod do
       ip: {0, 0, 0, 0, 0, 0, 0, 0},
       port: port
     ],
-    secret_key_base: secret_key_base
+    secret_key_base: secret_key_base,
+
+    check_origin: [
+      "https://bigbrain.link",
+      "https://bigbrain.fly.dev"
+    ]
 
   config :libcluster,
     debug: true,
