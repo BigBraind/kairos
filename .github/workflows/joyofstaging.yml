@@ -1,15 +1,13 @@
-name: Gigalixir Alchemical Push babyy
+name: Staging in Flight 🕊️
 
 on:
   push:
-    branches: [ unstable/concoction ]
-  pull_request:
-    branches: [ unstable/concoction ]
+    branches: [ fly/live/kabuki ]
 
 jobs:
-  build:
+  test:
 
-    name: Build and test
+    name: Build and Testing
     runs-on: ubuntu-latest
     services:
       postgres:
@@ -26,7 +24,6 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-
     steps:
     - uses: actions/checkout@v2
     - name: Set up Elixir
@@ -41,7 +38,7 @@ jobs:
         key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
         restore-keys: ${{ runner.os }}-mix-
     - name: Install dependencies
-      working-directory: ./chat
+      working-directory: ./lifecycle
       run: mix deps.get
     - name: Run tests
       env:
@@ -49,26 +46,24 @@ jobs:
         # If we were running the job on in a container this would be postgres
         POSTGRES_HOST: localhost
         POSTGRES_PORT: ${{ job.services.postgres.ports[5432] }}
-      working-directory: ./chat
+      working-directory: ./lifecycle
       run: mix test
 
 
   deploy:
-    needs: build
+    needs: test
+    name: Deploy to Staging
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+      - name: Rename Config File
+        working-directory: ./lifecycle
+        run: mv fly_stage.toml fly.toml
+      - uses: superfly/flyctl-actions@master
+        env:
+          FLY_PROJECT_PATH: lifecycle
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+          FLY_APP: bigbrain
         with:
-          python-version: '3.8.11'
-
-      - uses: mhanberg/gigalixir-action@v0.6.1
-        with:
-          APP_SUBFOLDER: chat  # Add only if you want to deploy an app that is not at the root of your repository
-          GIGALIXIR_APP: satorotas # Feel free to also put this in your secrets
-          GIGALIXIR_CLEAN: true # defaults to false
-          GIGALIXIR_USERNAME: ${{ secrets.GIGALIXIR_USERNAME }}
-          GIGALIXIR_PASSWORD: ${{ secrets.GIGALIXIR_PASSWORD }}
-          MIGRATIONS: false  # defaults to true
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          args: "deploy"

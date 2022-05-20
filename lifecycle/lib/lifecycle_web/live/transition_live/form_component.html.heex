@@ -98,7 +98,7 @@
         <%= label f, :comment, class: "" %>
         <hr class="border-0 bg-gray-500 text-gray-500 h-px w-full">
         <%= if @action == :transition_edit do %>
-            <%= textarea f, :comment, phx_debounce: "blur", value:  @transition.answers["comment"], autocomplete: "off", type: "text-area", class: "w-1/2 solid-form" %>
+            <%= textarea f, :comment, phx_debounce: "blur", value:  Map.values(@transition.answers["comment"]), autocomplete: "off", type: "text-area", class: "w-1/2 solid-form" %>
         <% else %>
             <%= textarea f, :comment, phx_debounce: "blur", autocomplete: "off", type: "text-area", class: "solid-form" %>
         <% end %>
