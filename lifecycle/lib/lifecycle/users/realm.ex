@@ -17,7 +17,7 @@ defmodule Lifecycle.Users.Realm do
   @doc false
   def changeset(realm, attrs) do
     realm
-    |> cast(attrs, [:name,:party_name, :description])
+    |> cast(attrs, [:name, :party_name, :description])
     |> validate_required([:name, :description])
     |> unique_constraint(:homologous_realms, name: :unique_realms)
   end

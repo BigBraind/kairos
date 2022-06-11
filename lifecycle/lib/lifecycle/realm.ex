@@ -101,4 +101,13 @@ defmodule Lifecycle.Realm do
   def change_journey(%Journey{} = journey, attrs \\ %{}) do
     Journey.changeset(journey, attrs)
   end
+
+  def start_journey(attrs \\ %{}) do
+    # create_journey()
+
+
+    # assoc_realm
+    # create_transition()
+
+  end
 end
