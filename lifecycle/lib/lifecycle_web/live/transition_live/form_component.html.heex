@@ -13,7 +13,7 @@
         <br>
         <br>
         <%= live_file_input @uploads.transition %>
-        <section phx-drop-target={@uploads.transition.ref}>
+        <section phx-drop-target={@uploads.transition.ref}>œßœ
 
             <%# render each transition image entry %>
             <%= for entry <- @uploads.transition.entries do %>
@@ -38,6 +38,16 @@
                     <% end %>
 
                 </article>
+            <% end %>
+
+            <%= if @action == :transition_edit do %>
+                <%= for image_path <- String.split(@transition.answers["image_list"], "##" ) do %>
+                    <article class="edit-images">
+                        <figure>
+                            <%= live_img_preview image_path %>
+                        </figure>
+                    </article>
+                <% end %>
             <% end %>
         </section>
         <br>
