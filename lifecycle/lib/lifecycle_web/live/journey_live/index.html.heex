@@ -1,16 +1,27 @@
-<h1>Listing Journeys</h1>
+<h1>Legggo on. a JOURNwy</h1>
 
-<%= if @live_action in [:new, :edit] do %>
+<%= if @live_action in [:edit] do %>
     <.live_component
       module={LifecycleWeb.JourneyLive.FormComponent}
       id={@journey.id || :new}
       title={@page_title}
       action={@live_action}
       journey={@journey}
-      return_to={Routes.journey_index_path(@socket, :index)}
+      return_to={Routes.journey_show_path(@socket, :show, @journey)}
     />
 <% end %>
 
+<%= if @live_action in [:new] do %>
+    <.live_component
+      module={LifecycleWeb.JourneyLive.FormComponent}
+      id={:new}
+      title={@page_title}
+      action={@live_action}
+      journey={@journey}
+      return_to={Routes.journey_index_path(@socket, :index)}
+    />
+<% end %>
+<p> deeznuts </p>
 <table>
   <thead>
     <tr>
