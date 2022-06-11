@@ -28,9 +28,9 @@ defmodule LifecycleWeb.TransLive.Index do
     # TODO: can be changed to fit the title of the page
     |> assign(:page_title, "Revamped Transitions")
     # TODO: to be filled up by the read transition query
-    |> assign(:transitions, Timeline.get_transition_list("56ad2631-fbe8-40a3-a848-a28eb9b6de88"))
+    |> assign(:transitions, Timeline.get_transition_list("a7eb6aea-fc1f-47c4-a6d2-abf663d22af2"))
     # TODO: to be filled up by the read phase query
-    |> assign(:phase, "56ad2631-fbe8-40a3-a848-a28eb9b6de88")
+    |> assign(:phase, "a7eb6aea-fc1f-47c4-a6d2-abf663d22af2")
   end
 
   def handle_event("search", %{"search_field" => %{"query" => query}}, socket) do
