@@ -4,9 +4,40 @@ defmodule LifecycleWeb.JourneyLive.Index do
   alias Lifecycle.Realm
   alias Lifecycle.Realm.Journey
 
+  @vertical_list_1 [
+    %{transition_id: 1.1, name: "transition_1"},
+    %{transition_id: 2.1, name: "transition_2"},
+    %{transition_id: 3.1, name: "transition_3"}
+  ]
+
+  @vertical_list_2 [
+    %{transition_id: 1.2, name: "transition_1"},
+    %{transition_id: 2.2, name: "transition_2"},
+    %{transition_id: 3.2, name: "transition_3"}
+  ]
+
+  @vertical_list_3 [
+    %{transition_id: 1.3, name: "transition_1"},
+    %{transition_id: 2.3, name: "transition_2"},
+    %{transition_id: 3.3, name: "transition_3"}
+  ]
+
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, assign(socket, :journeys, list_journeys())}
+    sub_left = %{journey_id: 1, name: "journey_1"}
+    sub = %{journey_id: 2, name: "journey_2"}
+    sub_right = %{journey_id: 3, name: "journey_3"}
+
+    {:ok,
+     assign(socket,
+       journeys: list_journeys(),
+       sub_left: sub_left,
+       sub: sub,
+       sub_right: sub_right,
+       vertical_list_1: @vertical_list_1,
+       vertical_list_2: @vertical_list_2,
+       vertical_list_3: @vertical_list_3
+     )}
   end
 
   @impl true
@@ -38,6 +69,18 @@ defmodule LifecycleWeb.JourneyLive.Index do
     {:ok, _} = Realm.delete_journey(journey)
 
     {:noreply, assign(socket, :journeys, list_journeys())}
+  end
+
+  def handle_event("left", %{"journeyid" => journey_id}, socket) do
+    case journey_id do
+      "2" -> {:noreply, assign(socket, transition: @vertical_list_1 )}
+    end
+  end
+
+  def handle_event("right", %{"journeyid" => journey_id}, socket) do
+    case journey_id do
+      "2" -> {:noreply, assign(socket, transition: @vertical_list_3 )}
+    end
   end
 
   defp list_journeys do
