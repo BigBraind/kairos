@@ -1,4 +1,6 @@
-<h1>Show Journey</h1>
+<article class="prose prose-xl">
+  <h1>Show Journey</h1>
+</article>
 
 <%= if @live_action in [:edit] do %>
     <.live_component
@@ -10,15 +12,48 @@
       return_to={Routes.journey_show_path(@socket, :show, @journey)}
     />
 <% end %>
+<div class="flex align-middle">
+  <strong class="my-3 py-3 mx-3">Journey Name:</strong><div class="m-3 p-3 bg-slate-100 w-fit rounded"><%= @journey.name %></div>
+</div>
 
-<ul>
+<br>
+<button><%= live_patch "@ Edit", to: Routes.journey_show_path(@socket, :edit, @journey), class: "button" %></button> |
+<button><%= live_redirect "<- Back", to: Routes.journey_index_path(@socket, :index) %></button> |
+<button><%= live_patch "+ New Journey", to: Routes.journey_index_path(@socket, :new), class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %></button>
 
-  <li>
-    <strong>Name:</strong>
-    <%= @journey.name %>
-  </li>
+<br>
+<br>
+<button><%= live_redirect "+ Continue Journey", to: Routes.journey_index_path(@socket, :new), class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %></button>
 
-</ul>
+<br>
+<br>
+<br>
+<%# TODO: glen add the horizontal scrolling thingy here %>
+<div class="flex-grow border-t border-gray-400"></div>
+<article class="prose prose-xl">
+  <h4>btw, put stuff in &#60; article &#62; to use headers</h4>
+</article>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
 
-<span><%= live_patch "Edit", to: Routes.journey_show_path(@socket, :edit, @journey), class: "button" %></span> |
-<span><%= live_redirect "Back", to: Routes.journey_index_path(@socket, :index) %></span>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody id="journeys">
+    <%= for journey <- @journeys do %>
+      <tr id={"journey-#{journey.id}"}>
+        <td><%= journey.name %></td>
+
+        <td>
+          <span><%= live_redirect "Show", to: Routes.journey_show_path(@socket, :show, journey) %></span>
+          <span><%= live_patch "Edit", to: Routes.journey_index_path(@socket, :edit, journey) %></span>
+          <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: journey.id, data: [confirm: "Are you sure?"] %></span>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<div class="flex-grow border-t border-gray-400"></div>
+

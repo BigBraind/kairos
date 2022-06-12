@@ -5,7 +5,9 @@ defmodule LifecycleWeb.JourneyLive.Show do
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, socket}
+    {:ok,
+    assign(socket, :journeys, list_journeys())
+  }
   end
 
   @impl true
@@ -14,6 +16,10 @@ defmodule LifecycleWeb.JourneyLive.Show do
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
      |> assign(:journey, Realm.get_journey!(id))}
+  end
+
+  defp list_journeys do
+    Realm.list_journeys()
   end
 
   defp page_title(:show), do: "Show Journey"
