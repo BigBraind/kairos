@@ -1,0 +1,63 @@
+# Untitled notebook
+
+## Journey Construction
+
+```elixir
+defmodule R do
+  def recompile() do
+    Mix.Task.reenable("app.start")
+    Mix.Task.reenable("compile")
+    Mix.Task.reenable("compile.all")
+    compilers = Mix.compilers()
+    Enum.each(compilers, &Mix.Task.reenable("compile.#{&1}"))
+    Mix.Task.run("compile.all")
+  end
+end
+
+R.recompile()
+```
+
+```elixir
+alias Lifecycle.Realm
+alias Lifecycle.Repo
+alias Lifecycle.Realm.Journey
+# Lifecycle.Realm.create_journey(%{'name': "test"})
+# Lifecycle.Realm.list_journeys()
+R.recompile()
+defmodule Journeyz do
+  def start_journey() do
+    
+    {:ok, realm} =
+      Lifecycle.Users.create_realm(%{name: to_string(:rand.uniform(1000000)), description: "realmDescription"})
+    # {:ok, journey} = %Journey{} 
+    # |> Ecto.Changeset.cast(%{name: "testName", realm_name: realm}, [:name]) 
+    # |> Ecto.build_assoc(:realm)
+    # |> Repo.insert()
+    {:ok , journey}= %Journey{name: "nigga", realm_name: realm.name} |> Repo.insert()
+    journey
+
+    {}
+    {:ok, transition} = %
+  end
+end
+```
+
+```elixir
+alias Lifecycle.Repo
+alias Journeyz
+Journeyz.start_journey() |> Repo.preload(:realm)
+# Journeyz.start_journey()
+```
+
+```elixir
+defmodule Transitionz do
+  def continue_journey(transition_attrs \\ %{}, phase_attrs \\ %{}) do
+    {:ok, p} = Lifecycle.Timeline.create_phase(phase_attrs)
+
+    Lifecycle.Timeline.create_transition(
+      transition_attrs
+      |> Map.put(:phase_id, p.id)
+    )
+  end
+end
+```
