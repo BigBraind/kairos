@@ -24,20 +24,21 @@ alias Lifecycle.Realm.Journey
 # Lifecycle.Realm.create_journey(%{'name': "test"})
 # Lifecycle.Realm.list_journeys()
 R.recompile()
+
 defmodule Journeyz do
   def start_journey() do
-    
     {:ok, realm} =
-      Lifecycle.Users.create_realm(%{name: to_string(:rand.uniform(1000000)), description: "realmDescription"})
+      Lifecycle.Users.create_realm(%{
+        name: to_string(:rand.uniform(1_000_000)),
+        description: "realmDescription"
+      })
+
     # {:ok, journey} = %Journey{} 
     # |> Ecto.Changeset.cast(%{name: "testName", realm_name: realm}, [:name]) 
     # |> Ecto.build_assoc(:realm)
     # |> Repo.insert()
-    {:ok , journey}= %Journey{name: "nigga", realm_name: realm.name} |> Repo.insert()
+    {:ok, journey} = %Journey{name: "nigga", realm_name: realm.name, pointer: 1} |> Repo.insert()
     journey
-
-    {}
-    {:ok, transition} = %
   end
 end
 ```
@@ -60,4 +61,6 @@ defmodule Transitionz do
     )
   end
 end
+
+Realm.list_journeys()
 ```
