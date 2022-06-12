@@ -5,8 +5,9 @@ defmodule Lifecycle.Realm do
 
   import Ecto.Query, warn: false
   alias Lifecycle.Repo
-
+  alias Lifecycle.Timeline
   alias Lifecycle.Realm.Journey
+
 
   @doc """
   Returns the list of journeys.
@@ -100,5 +101,34 @@ defmodule Lifecycle.Realm do
   """
   def change_journey(%Journey{} = journey, attrs \\ %{}) do
     Journey.changeset(journey, attrs)
+  end
+
+  # def start_journey(attrs \\ %{}) do
+  #   #realm is already created (append onto current realm + increment pointer by 1)
+
+  #   {:ok , journey}= Journey.changeset(attrs) |> Repo.insert()
+  #   journey
+
+  #   # assoc_realm
+  #   # create_transition()
+
+  # end
+
+  def start_journey(realm_attrs \\ %{}, journey_attrs \\ %{}) do
+    # create_journey()
+    {:ok, realm} =
+      Lifecycle.Users.create_realm(realm_attrs)
+    {:ok , journey}=
+      Journey.changeset(journey_attrs
+      |> Map.put(:realm_name, realm.name))
+      |> Repo.insert()
+
+  end
+
+  def continue_journey(transition_attrs \\ %{}, phase_attrs \\ %{}) do
+    {:ok, p} = Lifecycle.Timeline.create_phase(phase_attrs)
+    Lifecycle.Timeline.create_transition(transition_attrs
+    |> Map.put(:phase_id, p.id)
+    )
   end
 end
