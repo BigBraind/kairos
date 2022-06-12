@@ -16,6 +16,7 @@ defmodule Lifecycle.Timeline.Transition do
     field :transited, :boolean, default: false
     belongs_to :transiter, Lifecycle.Users.User, foreign_key: :transiter_id
     field :answers, :map
+    has_many :traits, through: [:phase, :traits]
     timestamps()
   end
 

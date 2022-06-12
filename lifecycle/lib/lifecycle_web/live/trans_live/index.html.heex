@@ -1,0 +1,12 @@
+<h1> <%= @page_title %> </h1>
+<form phx-change="search" id="search_journey_form">
+    <%= text_input :search_field, :query, placeholder: "Search for your very own journey", autofocus: true, "phx-debounce": "1", autocomplete: "off"%>
+</form>
+
+<%= if @searching == true do %>
+    I am searhing # to let the user know it's working<br>
+    <%= @searching_result %> <br>
+<% end %>
+
+# ! testing on the card
+<.live_component module={TransitionList} id="transition" transitions={@transitions} timezone={@timezone} timezone_offset={@timezone_offset} phase={@phase}/>
