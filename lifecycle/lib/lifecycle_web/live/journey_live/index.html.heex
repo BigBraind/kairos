@@ -1,27 +1,16 @@
-<h1>Legggo on. a JOURNwy</h1>
+<h1>Listing Journeys</h1>
 
-<%= if @live_action in [:edit] do %>
+<%= if @live_action in [:new, :edit] do %>
     <.live_component
       module={LifecycleWeb.JourneyLive.FormComponent}
       id={@journey.id || :new}
       title={@page_title}
       action={@live_action}
       journey={@journey}
-      return_to={Routes.journey_show_path(@socket, :show, @journey)}
-    />
-<% end %>
-
-<%= if @live_action in [:new] do %>
-    <.live_component
-      module={LifecycleWeb.JourneyLive.FormComponent}
-      id={:new}
-      title={@page_title}
-      action={@live_action}
-      journey={@journey}
       return_to={Routes.journey_index_path(@socket, :index)}
     />
 <% end %>
-<p> deeznuts </p>
+
 <table>
   <thead>
     <tr>
@@ -46,3 +35,14 @@
 </table>
 
 <span><%= live_patch "New Journey", to: Routes.journey_index_path(@socket, :new) %></span>
+
+# display the journy info <br>
+jurney_id: <%= @sub[:journey_id] %> <br>
+
+<button phx-click = "left" phx-value-journeyid = {@sub[:journey_id]} >
+  L
+</button>
+
+<button phx-click = "right" phx-value-journeyid = {@sub[:journey_id]}>
+  R
+</button>
