@@ -6,6 +6,15 @@ making the phoenix.css file useless, so I just deleted it.*/
 
 /* This file is for your main application CSS */
 
+/* This is to hide the scrollbar on mobile, godgamerglen customised the scrollbar utility, not in tailwind yet */
+@layer utilities
+{
+  .scrollbar::-webkit-scrollbar {
+    
+    display: none;
+  }
+}
+
 /* for the calendar styling, Glen pls change accordingly haha */
 .grid-column-1 {
   grid-column: 1;
@@ -56,6 +65,12 @@ making the phoenix.css file useless, so I just deleted it.*/
   }
   .solid-form {
     @apply my-0.5 block w-full rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:bg-indigo-100 focus:ring-0
+  }
+  .scrolling-wrapper {
+    @apply overflow-x-auto flex flex-nowrap scrollbar 
+    }
+  .ccard{
+    @apply flex-grow-0 flex-shrink-0 basis-auto w-1/2 h-[100px] m-4 px-10 py-12 bg-gray-100 rounded-lg shadow-lg 
   }
 }
 

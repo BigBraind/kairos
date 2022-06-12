@@ -8,9 +8,22 @@ module.exports = {
     '../lib/*_web/**/*.*ex'
   ],
   theme: {
-    extend: {},
+    extend: {
+      // gridTemplateColumns: {
+      //   'hs': 'repeat(6, calc(50% - 40px))',
+      // },
+      // gridTemplateRows: {
+      //   'hs':'minmax(150px, 1fr)',
+      // },
+    },
   },
   plugins: [
     require('@tailwindcss/forms')
   ]
 }
+// .hs {
+//   display: grid;
+//   grid-gap: 10px;
+//   grid-template-columns: repeat(6, calc(50% - 40px));
+//   grid-template-rows: minmax(150px, 1fr);
+// }
