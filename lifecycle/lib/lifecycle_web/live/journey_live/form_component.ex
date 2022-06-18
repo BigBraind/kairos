@@ -42,11 +42,12 @@ defmodule LifecycleWeb.JourneyLive.FormComponent do
 
   defp save_journey(socket, :new, journey_params) do
     case Realm.create_journey(journey_params) do
-      {:ok, _journey} ->
+      {:ok, journey} ->
+        IO.inspect socket.assigns.return_to
         {:noreply,
          socket
          |> put_flash(:info, "Journey created successfully")
-         |> push_redirect(to: socket.assigns.return_to)}
+         |> push_redirect(to: "/journeys/#{journey.id}")} # TODO: Go abstract with the function router
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, changeset: changeset)}

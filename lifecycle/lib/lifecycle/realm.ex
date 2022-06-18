@@ -38,6 +38,16 @@ defmodule Lifecycle.Realm do
   """
   def get_journey!(id), do: Repo.get!(Journey, id)
 
+  def get_journey_by_realm_attrs!(realm_name, pointer) do
+    query = Journey
+        |> where([j], j.realm_name == ^realm_name)
+        |> where([j], j.pointer == ^pointer)
+        |> order_by([e], desc: e.inserted_at)
+        |> preload(:realm)
+
+      Repo.one!(query)
+  end
+
   @doc """
   Creates a journey.
 
@@ -123,6 +133,7 @@ defmodule Lifecycle.Realm do
       |> Map.put(:realm_name, realm.name))
       |> Repo.insert()
 
+      journey |> Repo.preload(:realm)
   end
 
   def continue_journey(transition_attrs \\ %{}, phase_attrs \\ %{}) do
