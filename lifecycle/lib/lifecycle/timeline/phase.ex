@@ -21,6 +21,7 @@ defmodule Lifecycle.Timeline.Phase do
     # field :child, :binary_id
     has_many :echoes, Lifecycle.Timeline.Echo, foreign_key: :phase_id
     has_many :traits, Trait, foreign_key: :phase_id, on_replace: :delete_if_exists
+    has_many :transitions, Lifecycle.Timeline.Transition, foreign_key: :phase_id, on_replace: :delete_if_exists
     many_to_many :child, Phase, join_through: Phasor, join_keys: [parent_id: :id, child_id: :id]
     many_to_many :parent, Phase, join_through: Phasor, join_keys: [child_id: :id, parent_id: :id]
 
@@ -35,6 +36,7 @@ defmodule Lifecycle.Timeline.Phase do
 
     |> cast(attrs, [:content, :title, :type])
     |> cast_assoc(:traits, on_replace: :update)
+    |> cast_assoc(:transitions, on_replace: :update)
     |> validate_length(:title, max: @max_len)
     |> validate_required([:content, :title, :type])
   end

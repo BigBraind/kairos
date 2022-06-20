@@ -13,7 +13,7 @@ defmodule Lifecycle.Realm.Journey do
     field :name, :string
     field :pointer, :integer
     belongs_to :party, Party, foreign_key: :party_id
-    has_many :transitions, Transition, foreign_key: :transition_id
+    has_many :transitions, Transition, foreign_key: :journey_id
     belongs_to :realm, Realm, foreign_key: :realm_name, references: :name, type: :string
     timestamps()
   end

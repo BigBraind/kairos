@@ -41,6 +41,7 @@ defmodule LifecycleWeb.JourneyLive.FormComponent do
   end
 
   defp save_journey(socket, :new, journey_params) do
+    IO.inspect journey_params
     case Realm.create_journey(journey_params) do
       {:ok, journey} ->
         IO.inspect socket.assigns.return_to

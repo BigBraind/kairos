@@ -12,7 +12,7 @@ defmodule Lifecycle.Timeline.Transition do
   schema "transitions" do
     belongs_to :initiator, Lifecycle.Users.User, foreign_key: :initiator_id
     belongs_to :phase, Lifecycle.Timeline.Phase, foreign_key: :phase_id
-    belongs_to :journey, Lifecycle.Timeline.Journey, foreign_key: :journey_id
+    belongs_to :journey, Lifecycle.Realm.Journey, foreign_key: :journey_id
     field :transited, :boolean, default: false
     belongs_to :transiter, Lifecycle.Users.User, foreign_key: :transiter_id
     field :answers, :map
@@ -22,6 +22,11 @@ defmodule Lifecycle.Timeline.Transition do
 
   @doc false
   def changeset(transition, attrs) do
+    transition
+    |> cast(attrs, [:transited, :transiter_id, :answers, :phase_id, :initiator_id])
+  end
+
+  def phase_changeset(transition, attrs) do
     transition
     |> cast(attrs, [:transited, :transiter_id, :answers, :phase_id, :initiator_id])
   end

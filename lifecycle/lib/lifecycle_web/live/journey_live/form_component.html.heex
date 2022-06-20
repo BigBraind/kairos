@@ -7,10 +7,27 @@
     phx-target={@myself}
     phx-change="validate"
     phx-submit="save">
+
+    <%= inputs_for f, :realm,
+    fn r -> %>
+   <%= label r, :name %>
+   <%= text_input r, :name %>
+   <%= error_tag r, :name %>
+
+   <%= label r, :description %>
+   <%= text_input r, :description %>
+   <%= error_tag r, :description %>
+   <% end %>
   
     <%= label f, :name %>
     <%= text_input f, :name %>
     <%= error_tag f, :name %>
+
+    <%= label f, :pointer %>
+    <%= number_input f, :pointer %>
+    <%= error_tag f, :pointer %>
+
+
   
     <div>
       <%= submit "Save", phx_disable_with: "Saving..." %>

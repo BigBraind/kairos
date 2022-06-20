@@ -1,4 +1,4 @@
-# Untitled notebook
+# Journeys
 
 ## Journey Construction
 
@@ -23,31 +23,37 @@ alias Lifecycle.Repo
 alias Lifecycle.Realm.Journey
 # Lifecycle.Realm.create_journey(%{'name': "test"})
 # Lifecycle.Realm.list_journeys()
-R.recompile()
+# R.recompile()
 
 defmodule Journeyz do
-  def start_journey() do
-    {:ok, realm} =
-      Lifecycle.Users.create_realm(%{
-        name: to_string(:rand.uniform(1_000_000)),
-        description: "realmDescription"
-      })
-
-    # {:ok, journey} = %Journey{} 
-    # |> Ecto.Changeset.cast(%{name: "testName", realm_name: realm}, [:name]) 
-    # |> Ecto.build_assoc(:realm)
-    # |> Repo.insert()
-    {:ok, journey} = %Journey{name: "nigga", realm_name: realm.name, pointer: 1} |> Repo.insert()
-    journey
+  def build_assoc(attr) do
+    Realm.create_journey()
   end
 end
 ```
 
 ```elixir
 alias Lifecycle.Repo
-alias Journeyz
-Journeyz.start_journey() |> Repo.preload(:realm)
-# Journeyz.start_journey()
+R.recompile()
+## Build Assoc (Create Parent then build any subsequent Children Association)
+journey_param = %{name: "Journey to the West"}
+transition_param = %{transited: true}
+{:ok, journey} = Realm.create_journey(journey_param)
+
+transition =
+  Ecto.build_assoc(journey, :transitions)
+  |> Lifecycle.Timeline.Transition.changeset(transition_param)
+  |> Repo.insert!()
+  |> Repo.preload(:journey)
+```
+
+```elixir
+struct(%Lifecycle.Timeline.Transition{}, Map.put(%{transited: 1}, :journey_id, journey.id))
+# |> Repo.insert!()
+```
+
+```elixir
+Realm.create_journey(%{name: "hi", pointer: 1, realm: %{name: "agarr", description: "wow"}})
 ```
 
 ```elixir
