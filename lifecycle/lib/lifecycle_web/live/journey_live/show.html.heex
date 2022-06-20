@@ -2,7 +2,7 @@
   <h1>Show Journey</h1>
 </article>
 
-<%= if @live_action in [:edit] do %>
+<%= if @live_action in [:edit, :new] do %>
     <.live_component
       module={LifecycleWeb.JourneyLive.FormComponent}
       id={@journey.id}
@@ -19,7 +19,7 @@
 <br>
 <button><%= live_patch "@ Edit", to: Routes.journey_show_path(@socket, :edit, @journey), class: "button" %></button> |
 <button><%= live_redirect "<- Back", to: Routes.journey_index_path(@socket, :index) %></button> |
-<button><%= live_patch "+ New Journey", to: Routes.journey_index_path(@socket, :new), class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %></button>
+<button><%= live_patch "+ New Journey", to: Routes.journey_show_path(@socket, :new, @journey), class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %></button>
 
 <br>
 <br>
@@ -28,34 +28,6 @@
 <br>
 <br>
 <br>
-<%# TODO: glen add the horizontal scrolling thingy here %>
-<div class="flex-grow border-t border-gray-400"></div>
-<article class="prose prose-xl">
-  <h4>btw, put stuff in &#60; article &#62; to use headers</h4>
-</article>
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-
-      <th></th>
-    </tr>
-  </thead>
-  <tbody id="journeys">
-    <%= for journey <- @journeys do %>
-      <tr id={"journey-#{journey.id}"}>
-        <td><%= journey.name %></td>
-
-        <td>
-          <span><%= live_redirect "Show", to: Routes.journey_show_path(@socket, :show, journey) %></span>
-          <span><%= live_patch "Edit", to: Routes.journey_index_path(@socket, :edit, journey) %></span>
-          <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: journey.id, data: [confirm: "Are you sure?"] %></span>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-<div class="flex-grow border-t border-gray-400"></div>
 
 
 

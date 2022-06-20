@@ -25,6 +25,7 @@ defmodule LifecycleWeb.JourneyLive.Show do
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
      |> assign(:journey, Realm.get_journey_by_realm_attrs!(realm_name, pointer))}
+     #|> assign(:journeys, [-1,0,1] |> Enum.map(fn inc -> Realm.get_journey_by_realm_attrs!(realm_name, String.to_integer(pointer) + inc) end))
   end
 
   defp list_journeys do
@@ -33,4 +34,5 @@ defmodule LifecycleWeb.JourneyLive.Show do
 
   defp page_title(:show), do: "Show Journey"
   defp page_title(:edit), do: "Edit Journey"
+  defp page_title(:new), do: "Next Journey"
 end

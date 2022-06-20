@@ -65,6 +65,7 @@ defmodule LifecycleWeb.Router do
       live("/journeys/:id/edit", JourneyLive.Index, :edit)
 
       live("/journeys/:id", JourneyLive.Show, :show)
+      live("/journeys/:id/new", JourneyLive.Show, :new)
       live("/journeys/:id/show/edit", JourneyLive.Show, :edit)
 
 
