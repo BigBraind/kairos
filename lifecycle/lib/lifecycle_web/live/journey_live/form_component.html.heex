@@ -7,7 +7,7 @@
     phx-target={@myself}
     phx-change="validate"
     phx-submit="save"
-    class="">
+    class="text-center">
     <%# Only solution to place text in center is this %>
 
   
@@ -15,35 +15,35 @@
     fn r -> %>
   
   <%# text-center here doesnt work %>
-  <div class="">
-   <%= label r, :name, class: "" %>
   
+   <%= label r, :name, class: "font-extralight" %> 
 
    <%= text_input r, :name , class: "underline-form" %>
    <%= error_tag r, :name %>
-   </div>
+   
   
     
-   <%= label r, :description %>
+   <%= label r, :description, class: "font-extralight" %>
    <%= text_input r, :description, class: "underline-form" %>
    <%= error_tag r, :description %>
    <% end %>
+  <%# <hr class="pp-divider"> %>
   
-  <div>
-    <%= label f, :name %>
+    <%= label f, :name, class: "font-extralight" %>
     <%= text_input f, :name, class: "underline-form" %>
     <%= error_tag f, :name %>
-  </div>
-
-  <div>
-    <%= label f, :pointer %>
-    <%= number_input f, :pointer, class: "underline-form" %>
-    <%= error_tag f, :pointer %>
-</div>
+  
 
   
+    <%= label f, :pointer, class: "font-extralight" %>
+    <%= number_input f, :pointer, class: "underline-form" %>
+    <%= error_tag f, :pointer %>
+
+
+  <%# TODO:
+   ALIGN RIGHT? %>
     <div>
-      <%= submit "Save", phx_disable_with: "Saving..." %>
+      <%= submit "Save", phx_disable_with: "Saving...", class: "fab width-1/3 mx-auto" %>
     </div>
   </.form>
 </div>
