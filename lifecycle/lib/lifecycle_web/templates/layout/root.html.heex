@@ -18,7 +18,7 @@ It may also be given via the :root_layout option to a live_session macro in the 
     <script defer phx-track-static type="text/javascript" src={Routes.static_path(@conn, "/assets/app.js")}></script>
     
   </head>
-  <body class="bg-slate-200">
+  <body class="bg-slate-100">
 
     <%= if Pow.Plug.current_user(@conn) do %>
       <div class="absolute top-5 right-5 h-16 w-16 ..."><%= link "Sign out", to: Routes.pow_session_path(@conn, :delete), method: :delete %></div>

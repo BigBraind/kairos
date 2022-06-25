@@ -1,36 +1,49 @@
-<div>
-  <h2><%= @title %></h2>
+<div class="mx-2">
+  <h2><%= @title %> <p>test</p></h2>
   <.form
     let={f}
     for={@changeset}
     id="journey-form"
     phx-target={@myself}
     phx-change="validate"
-    phx-submit="save">
+    phx-submit="save"
+    class="text-center">
+    <%# Only solution to place text in center is this %>
 
+  
     <%= inputs_for f, :realm,
     fn r -> %>
-   <%= label r, :name %>
-   <%= text_input r, :name %>
-   <%= error_tag r, :name %>
+  
+  <%# text-center here doesnt work %>
+  
+   <%= label r, :name, class: "font-extralight" %> 
 
-   <%= label r, :description %>
-   <%= text_input r, :description %>
+   <%= text_input r, :name , class: "underline-form" %>
+   <%= error_tag r, :name %>
+   
+  
+    
+   <%= label r, :description, class: "font-extralight" %>
+   <%= text_input r, :description, class: "underline-form" %>
    <%= error_tag r, :description %>
    <% end %>
+  <%# <hr class="pp-divider"> %>
   
-    <%= label f, :name %>
-    <%= text_input f, :name %>
+    <%= label f, :realm_name, class: "font-extralight" %>
+    <%= text_input f, :name, class: "underline-form" %>
     <%= error_tag f, :name %>
+  
 
-    <%= label f, :pointer %>
-    <%= number_input f, :pointer %>
+  
+    <%= label f, :pointer, class: "font-extralight" %>
+    <%= number_input f, :pointer, class: "underline-form" %>
     <%= error_tag f, :pointer %>
 
 
-  
+  <%# TODO:
+   ALIGN RIGHT? %>
     <div>
-      <%= submit "Save", phx_disable_with: "Saving..." %>
+      <%= submit "Save", phx_disable_with: "Saving...", class: "fab mx-auto" %>
     </div>
   </.form>
 </div>

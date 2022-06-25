@@ -36,14 +36,12 @@ making the phoenix.css file useless, so I just deleted it.*/
   grid-column: 7;
 }
 
-
 /* Alerts and form errors used by phx.new */
 /* sample text */
 
 /* - create custom css styles here */
 
-@layer utilities
-{
+@layer utilities {
   .scrollbar::-webkit-scrollbar {
     display: none;
   }
@@ -51,25 +49,49 @@ making the phoenix.css file useless, so I just deleted it.*/
 
 @layer components {
   .deez {
-    @apply text-slate-700 font-semibold
+    @apply text-slate-700 font-semibold;
   }
   .fab {
-    @apply  py-2 px-1 bg-blue-500 text-white text-center font-semibold rounded-lg shadow-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-opacity-75;
+    @apply py-2 px-4 bg-blue-400 text-white text-center font-semibold rounded-lg shadow-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-700 focus:ring-opacity-75;
   }
   .smaller-fab {
     @apply py-1 px-2 flex bg-blue-500 text-white font-light text-center rounded-lg shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-1 focus:ring-blue-700 focus:ring-opacity-75;
   }
   .table-header {
-    @apply bg-blue-100 border text-left px-8 py-4 
+    @apply bg-blue-100 border text-left px-8 py-4;
   }
   .solid-form {
-    @apply my-0.5 block w-full rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:bg-indigo-100 focus:ring-0
+    @apply my-0.5 block w-full rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:bg-indigo-100 focus:ring-0;
   }
-  .ccard{
-    @apply flex-grow-0 flex-shrink-0 basis-auto w-1/2 h-[100px] m-4 px-10 py-12 bg-gray-100 rounded-lg shadow-lg 
+  .ccard {
+    @apply flex-grow-0 flex-shrink-0 basis-auto w-1/2 h-[100px] m-4 px-10 py-12 bg-gray-100 rounded-lg shadow-lg;
+  }
+  .underline-form {
+    @apply
+    block /* for line break liddat */
+    
+    px-0.5
+    border-0 border-b-2 border-gray-300
+    focus:ring-0 focus:border-black
+    w-auto
+    mx-auto mb-24 mt-2
+    
+    bg-slate-100
+    
+    text-lg text-opacity-30
+  }
+  .pp-divider {
+    @apply border-0 bg-gray-500 text-gray-500 h-px
+  }
+  .hero{
+    &-overlay {
+      @apply bg-neutral bg-opacity-50;
+    }
+    &-content {
+      @apply max-w-7xl gap-4 p-4;
+    }
   }
 }
-
 
 .alert {
   padding: 15px;
@@ -115,15 +137,15 @@ making the phoenix.css file useless, so I just deleted it.*/
   transition: opacity 1s ease-out;
 }
 
-.phx-disconnected{
+.phx-disconnected {
   cursor: wait;
 }
-.phx-disconnected *{
+.phx-disconnected * {
   pointer-events: none;
 }
 
 .phx-modal {
-  opacity: 1!important;
+  opacity: 1 !important;
   position: fixed;
   z-index: 1;
   left: 0;
@@ -131,8 +153,8 @@ making the phoenix.css file useless, so I just deleted it.*/
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgb(0,0,0);
-  background-color: rgba(0,0,0,0.4);
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.4);
 }
 
 .phx-modal-content {
@@ -156,5 +178,3 @@ making the phoenix.css file useless, so I just deleted it.*/
   text-decoration: none;
   cursor: pointer;
 }
-
-
