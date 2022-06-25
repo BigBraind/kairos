@@ -29,7 +29,7 @@
    <% end %>
   <%# <hr class="pp-divider"> %>
   
-    <%= label f, :name, class: "font-extralight" %>
+    <%= label f, :realm_name, class: "font-extralight" %>
     <%= text_input f, :name, class: "underline-form" %>
     <%= error_tag f, :name %>
   
@@ -43,7 +43,7 @@
   <%# TODO:
    ALIGN RIGHT? %>
     <div>
-      <%= submit "Save", phx_disable_with: "Saving...", class: "fab width-1/3 mx-auto" %>
+      <%= submit "Save", phx_disable_with: "Saving...", class: "fab mx-auto" %>
     </div>
   </.form>
 </div>

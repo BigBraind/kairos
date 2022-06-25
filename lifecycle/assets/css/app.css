@@ -68,22 +68,28 @@ making the phoenix.css file useless, so I just deleted it.*/
   }
   .underline-form {
     @apply
-    
     block /* for line break liddat */
     
     px-0.5
     border-0 border-b-2 border-gray-300
     focus:ring-0 focus:border-black
     w-auto
-    mx-auto mb-12 -mt-2
+    mx-auto mb-24 mt-2
     
-    bg-slate-200
+    bg-slate-100
     
     text-lg text-opacity-30
-  
   }
   .pp-divider {
     @apply border-0 bg-gray-500 text-gray-500 h-px
+  }
+  .hero{
+    &-overlay {
+      @apply bg-neutral bg-opacity-50;
+    }
+    &-content {
+      @apply max-w-7xl gap-4 p-4;
+    }
   }
 }
 
