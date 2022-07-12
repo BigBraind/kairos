@@ -61,7 +61,7 @@ defmodule LifecycleWeb.Router do
       live("/party/:party_name/", PartyLive.Show, :show)
 
       live("/journeys", JourneyLive.Index, :index)
-      live("/journeys/new", JourneyLive.Index, :new)
+      #live("/journeys/new", JourneyLive.Index, :new)
       live("/journeys/:id/edit", JourneyLive.Index, :edit)
 
       live("/journeys/:id", JourneyLive.Show, :show)
@@ -76,8 +76,11 @@ defmodule LifecycleWeb.Router do
       live "/realms/:party_name/:realm_name", RealmLive.Show, :show
       live "/realms/:party_name/:id/show/edit", RealmLive.Show, :edit
 
-      live "/start/", JourneyLive.Index, :new
+      live "/start/", JourneyLive.Index, :start
       live "/journey/:realm_name/:journey_pointer", JourneyLive.Show, :show
+      live "/journey/:realm_name/:journey_pointer/start", JourneyLive.Show, :new
+      live "/journey/:realm_name/:journey_pointer/continue", JourneyLive.Show, :continue
+      live "/journey/:realm_name/:journey_pointer/clone", JourneyLive.Show, :clone
 
       live("/billing", BillingLive.Index, :index)
 

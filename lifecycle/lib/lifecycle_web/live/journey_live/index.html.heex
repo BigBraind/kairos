@@ -1,9 +1,9 @@
 <h1>Listing Journeys</h1>
 
-<%= if @live_action in [:new, :edit] do %>
+<%= if @live_action in [:start, :edit] do %>
     <.live_component
       module={LifecycleWeb.JourneyLive.FormComponent}
-      id={@journey.id || :new}
+      id={@journey.id || :start}
       title={@page_title}
       action={@live_action}
       journey={@journey}
@@ -34,5 +34,5 @@
   </tbody>
 </table>
 
-<span><%= live_patch "New Journey", to: Routes.journey_index_path(@socket, :new) %></span>
-<p class="hero-content">soafijwosaeuifh</p>
+
+<span><%= live_patch "New Journey", to: Routes.journey_index_path(@socket, :start) %></span>

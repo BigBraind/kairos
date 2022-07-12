@@ -6,8 +6,9 @@
         id={@id}
         phx-target={@myself}
         phx-change="validate"
-        phx-submit="save">
-
+        phx-submit="save"
+        class="text-center"
+        >
 
         <br>
         <br>
@@ -42,11 +43,7 @@
 
             <%= if @action == :transition_edit do %>
                 <%= for image_path <- String.split(@transition.answers["image_list"], "##" ) do %>
-                    <article class="edit-images">
-                        <figure>
-                            <%= live_img_preview image_path %>
-                        </figure>
-                    </article>
+                            <img alt="image_list" src={image_path}>
                 <% end %>
             <% end %>
         </section>
@@ -62,7 +59,7 @@
             <%# trait.type is stored as an atom here %>
             <%= if trait.type == :txt do %>
                 <%= if @action == :transition_edit do %>
-                    <%= text_input f, String.to_atom("text#" <> trait.name), phx_debounce: "blur", value: @transition.answers[trait.name], autocomplete: "off", class: " solid-form" %>
+                    <%= text_input f, String.to_atom("text#" <> trait.name), phx_debounce: "blur", value: @transition.answers["txt"][trait.name], autocomplete: "off", class: " solid-form" %>
                 <% else %>
                     <%= text_input f, String.to_atom("text#" <> trait.name), phx_debounce: "blur", value: trait.value, autocomplete: "off", class: " solid-form" %>
                 <% end %>
@@ -71,8 +68,8 @@
             <%= if trait.type == :num do %>
                 <%= if @action == :transition_edit do %>
                     <div class="grid grid-rows-1 grid-flow-col gap-4">
-                        <%= number_input f, String.to_atom("numeric#" <> trait.name), phx_debounce: "blur", value: @transition.answers[trait.name], autocomplete: "off", class: " solid-form", type: "number" %>
-                        <%= text_input f, String.to_atom("unit#" <> trait.name), phx_debounce: "blur", value: @transition.answers["unit"][trait.name], autocomplete: "off" , class: "w-20 solid-form", type: "text", placeholder: "unit" %>
+                        <%= number_input f, String.to_atom("numeric#" <> trait.name), phx_debounce: "blur", value: @transition.answers["numeric"][trait.name]["value"], autocomplete: "off", class: " solid-form", type: "number" %>
+                        <%= text_input f, String.to_atom("unit#" <> trait.name), phx_debounce: "blur", value: @transition.answers["numeric"][trait.name]["unit"], autocomplete: "off" , class: "w-20 solid-form", type: "text", placeholder: "unit" %>
                     </div>
                 <% else %>
                     <div class="grid grid-rows-1 grid-flow-col gap-4">
@@ -83,7 +80,7 @@
             <% end %>
             <%= if trait.type == :bool do %>
                 <%= if @action == :transition_edit do %>
-                    <%= checkbox f, String.to_atom("bool#" <> trait.name), phx_debounce: "blur", value: @transition.answers[trait.name], class: "
+                    <%= checkbox f, String.to_atom("bool#" <> trait.name), phx_debounce: "blur", value: @transition.answers["bool"][trait.name]["value"], class: "
                           rounded
                           bg-gray-200
                           border-transparent
@@ -115,7 +112,7 @@
         <br>
 
         <div>
-            <%= submit  "Save", phx_disable_with: "Saving", class: "smaller-fab"%>
+            <%= submit  "Save", phx_disable_with: "Saving", class: "fab mx-auto"%>
         </div>
 
     </.form>

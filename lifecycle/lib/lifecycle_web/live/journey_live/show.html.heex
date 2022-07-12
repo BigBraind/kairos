@@ -1,8 +1,15 @@
 <article class="prose prose-xl">
-  <h1>Show Journey</h1>
+<.form let={f} for={@changeset}>
+       <%= text_input f, :name, class: "prose prose-xl", value: "Journey Name here..."  %>
+</.form>
+  <h1><%= @journey.realm_name %></h1>
+</article>
+<article class="prose prose-xl">
+<h2><%= @journey.name %></h2>
 </article>
 
-<%= if @live_action in [:edit, :new] do %>
+
+<%= if @live_action in [:edit, :new, :continue] do %>
     <.live_component
       module={LifecycleWeb.JourneyLive.FormComponent}
       id={@journey.id}
@@ -21,13 +28,14 @@
 <button><%= live_redirect "<- Back", to: Routes.journey_index_path(@socket, :index) %></button> |
 <button><%= live_patch "+ New Journey", to: Routes.journey_show_path(@socket, :new, @journey), class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %></button>
 
-<br>
-<br>
-<button><%= live_redirect "+ Continue Journey", to: Routes.journey_index_path(@socket, :new), class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %></button>
 
 <br>
 <br>
+<button><%= live_redirect "+ Continue Journey", to: Routes.journey_show_path(@socket, :show, @journey), class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %> </button>
+
 <br>
+<br>
+
 
 
 
@@ -60,4 +68,9 @@
   </div>
 </div>
 
-
+<%# TODO: glen add the horizontal scrolling thingy here %>
+<div class="flex-grow border-t border-gray-400"></div>
+<article class="prose prose-xl">
+  <h4>btw, put stuff in &#60; article &#62; to use headers</h4>
+</article>
+<div class="flex-grow border-t border-gray-400"></div>

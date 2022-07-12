@@ -5,18 +5,19 @@ defmodule LifecycleWeb.JourneyLive.Show do
 
   @impl true
   def mount(params, _session, socket) do
-    IO.inspect params
     {:ok,
-    assign(socket, :journeys, list_journeys())
+    socket |> assign(:journeys, list_journeys())
   }
   end
 
   @impl true
   def handle_params(%{"id" => id}, _, socket) do
+    journey = Realm.get_journey!(id)
     {:noreply,
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
-     |> assign(:journey, Realm.get_journey!(id))}
+     |> assign(:journey, journey)
+     |> assign(:changeset, Realm.change_journey(journey))}
   end
 
   @impl true
@@ -29,7 +30,7 @@ defmodule LifecycleWeb.JourneyLive.Show do
   end
 
   defp list_journeys do
-    Realm.list_journeys()
+    Realm.list_journeys() # change to +- 2
   end
 
   defp page_title(:show), do: "Show Journey"

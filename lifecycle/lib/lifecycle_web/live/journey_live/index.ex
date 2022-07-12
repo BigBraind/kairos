@@ -15,14 +15,15 @@ defmodule LifecycleWeb.JourneyLive.Index do
   end
 
   defp apply_action(socket, :edit, %{"id" => id}) do
+    #import IEx; IEx.pry()
     socket
     |> assign(:page_title, "Edit Journey")
     |> assign(:journey, Realm.get_journey!(id))
   end
 
-  defp apply_action(socket, :new, _params) do
+  defp apply_action(socket, :start, _params) do
     socket
-    |> assign(:page_title, "New Journey")
+    |> assign(:page_title, "Start Journey in New Realm")
     |> assign(:journey, %Journey{})
   end
 

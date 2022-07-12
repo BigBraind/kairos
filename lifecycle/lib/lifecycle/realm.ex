@@ -136,6 +136,13 @@ defmodule Lifecycle.Realm do
       journey |> Repo.preload(:realm)
   end
 
+  def new_journey(journey_attrs \\ %{}) do
+    Ecto.build_assoc(journey_attrs.realm, :transitions)
+    |> Journey.non_realm_changeset(journey_attrs)
+    |> Repo.insert!()
+    |> Repo.preload(:journey)
+  end
+
   def continue_journey(transition_attrs \\ %{}, phase_attrs \\ %{}) do
     {:ok, p} = Lifecycle.Timeline.create_phase(phase_attrs)
     Lifecycle.Timeline.create_transition(transition_attrs

@@ -26,4 +26,10 @@ defmodule Lifecycle.Realm.Journey do
     |> validate_required([:name])
   end
 
+  def non_realm_changeset(journey, attrs) do
+    journey
+    |> cast(attrs, [:name, :pointer])
+    |> validate_required([:name])
+  end
+
 end
