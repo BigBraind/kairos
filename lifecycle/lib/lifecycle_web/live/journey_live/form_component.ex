@@ -41,8 +41,7 @@ defmodule LifecycleWeb.JourneyLive.FormComponent do
   end
 
   defp save_journey(socket, :start, journey_params) do
-
-    case Realm.create_journey(journey_params) do
+    case Realm.start_journey(journey_params) do
       {:ok, journey} ->
         {:noreply,
          socket
@@ -55,6 +54,7 @@ defmodule LifecycleWeb.JourneyLive.FormComponent do
   end
 
   defp save_journey(socket, :new, journey_params) do
+    journey_params |> Map.put("realm_name", journey_params["realm"]["name"])
     case Realm.new_journey(journey_params) do
       {:ok, journey} ->
         {:noreply,
