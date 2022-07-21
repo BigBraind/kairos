@@ -1,11 +1,3 @@
-<article class="prose prose-xl">
-  <h1><%= @journey.realm_name %></h1>
-</article>
-<article class="prose prose-xl">
-<h2><%= @journey.name %></h2>
-</article>
-
-
 <%= if @live_action in [:edit, :new, :continue] do %>
     <.live_component
       module={LifecycleWeb.JourneyLive.FormComponent}
@@ -16,13 +8,10 @@
       return_to={Routes.journey_show_path(@socket, :show, @journey)}
     />
 <% end %>
-<div class="flex align-middle">
-  <strong class="my-3 py-3 mx-3">Journey Name:</strong><div class="m-3 p-3 bg-slate-100 w-fit rounded"><%= @journey.name %></div>
-</div>
 
 <br>
 <button><%= live_patch "@ Edit", to: Routes.journey_show_path(@socket, :edit, @journey), class: "button" %></button> |
-<button><%= live_redirect "<- Back", to: Routes.journey_index_path(@socket, :index) %></button> |
+<button><%= live_redirect "<- View all journeys", to: Routes.journey_index_path(@socket, :index) %></button> |
 <button><%= live_patch "+ New Journey", to: Routes.journey_show_path(@socket, :new, @journey), class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %></button>
 
 
@@ -41,19 +30,32 @@
   <br>
   <br>
   <span class="justify-center items-center flex">
-    <button class="text-white text-2xl">❮</button>
-    <button class="flex items-center h-12 px-4 py-2 text-sm text-center text-gray-700 bg-transparent border-b border-gray-300 sm:text-base dark:border-gray-500 dark:text-white whitespace-nowrap cursor-base focus:outline-none hover:border-gray-400 dark:hover:border-gray-300">
-        Journey 1
-    </button>
+    <article class="prose prose-xl">
+      <h1 class="text-white">Realm_name: <%= @journey.realm_name %></h1>
+    </article>
+  </span>
+  <br>
+  <br>
+  <span class="justify-center items-center flex">
+    <%# Previous button %>
+    <%= if Enum.at(@journey_list, 0) do %>
+      <button class="flex items-center h-12 px-4 py-2 text-sm text-center text-gray-700 bg-transparent border-b border-gray-300 sm:text-base dark:border-gray-500 dark:text-white whitespace-nowrap cursor-base focus:outline-none hover:border-gray-400 dark:hover:border-gray-300">
+        <%= live_redirect "❮", to: Routes.journey_show_path(@socket, :show, Enum.at(@journey_list, 0).realm_name, Enum.at(@journey_list, 0).pointer) %>
+      </button>
+    <%= end %>
 
+    <%# Show names %>
     <button class="flex items-center h-12 px-4 py-2 text-xl text-center text-gray-700 border border-b-0 border-gray-300 sm:text-base dark:border-gray-500 rounded-t-md dark:text-white whitespace-nowrap focus:outline-none">
-        Journey 2
+        Journey_name: <%= @journey.name %>
+        Pointer: <%= @journey.pointer %>
     </button>
 
-    <button class="flex items-center h-12 px-4 py-2 text-sm text-center text-gray-700 bg-transparent border-b border-gray-300 sm:text-base dark:border-gray-500 dark:text-white whitespace-nowrap cursor-base focus:outline-none hover:border-gray-400 dark:hover:border-gray-300">
-        Journey 3
-    </button>
-    <button class="text-white text-2xl">❯</button>
+    <%# Next button %>
+    <%= if Enum.at(@journey_list, 2) do %>
+      <button class="flex items-center h-12 px-4 py-2 text-sm text-center text-gray-700 bg-transparent border-b border-gray-300 sm:text-base dark:border-gray-500 dark:text-white whitespace-nowrap cursor-base focus:outline-none hover:border-gray-400 dark:hover:border-gray-300">
+        <%= live_redirect "❯", to: Routes.journey_show_path(@socket, :show, Enum.at(@journey_list, 2).realm_name, Enum.at(@journey_list, 2).pointer) %>
+      </button>
+    <%= end %>
   </span>
 
   <br>
@@ -64,10 +66,3 @@
     <div class="ccard"><h2>Card3</h2></div>
   </div>
 </div>
-
-<%# TODO: glen add the horizontal scrolling thingy here %>
-<div class="flex-grow border-t border-gray-400"></div>
-<article class="prose prose-xl">
-  <h4>btw, put stuff in &#60; article &#62; to use headers</h4>
-</article>
-<div class="flex-grow border-t border-gray-400"></div>
