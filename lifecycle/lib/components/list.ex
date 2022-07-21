@@ -18,10 +18,11 @@ defmodule LifecycleWeb.Components.List do
   @impl true
   def render(assigns) do
     if (Map.get(assigns, :value) != nil) do
+      IO.inspect assigns
       ~H"""
       <div class="w-full flex items-center justify-between px-4 py-2 border-b">
         <div class="w-1/2"><%= @name %></div>
-        <div class="w-1/2"><%= if(Map.get(assigns, :editable, false), do: (assigns), else: @value) %></div>
+        <div class="w-1/2"><%= if(Map.get(assigns, :editable, false), do: editable_value(assigns), else: @value) %></div>
       </div>
       """
     else
