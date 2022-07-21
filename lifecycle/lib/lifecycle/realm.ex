@@ -7,6 +7,7 @@ defmodule Lifecycle.Realm do
   alias Lifecycle.Repo
   alias Lifecycle.Timeline
   alias Lifecycle.Realm.Journey
+  alias Lifecycle.Users
 
 
   @doc """
@@ -124,24 +125,23 @@ defmodule Lifecycle.Realm do
 
   # end
 
-  def start_journey(realm_attrs \\ %{}, journey_attrs \\ %{}) do
-    # create_journey()
-    {:ok, realm} =
-      Lifecycle.Users.create_realm(realm_attrs)
-    {:ok , journey}=
-      Journey.changeset(journey_attrs
-      |> Map.put(:realm_name, realm.name))
+  def start_journey(journey_attrs \\ %{}) do
+      Journey.changeset(%Journey{},journey_attrs)
       |> Repo.insert()
-
-      journey |> Repo.preload(:realm)
   end
 
   def new_journey(journey_attrs \\ %{}) do
-    Ecto.build_assoc(journey_attrs.realm, :transitions)
-    |> Journey.non_realm_changeset(journey_attrs)
-    |> Repo.insert!()
-    |> Repo.preload(:journey)
+    Journey.realm_changeset(%Journey{}, journey_attrs)
+    |> Repo.insert()
   end
+
+  # def new_transition(journey, transition_param \\ %{}) do
+  #   transition =
+  #     Ecto.build_assoc(journey, :transitions)
+  #     |> Lifecycle.Timeline.Transition.changeset(transition_param)
+  #     |> Repo.insert!()
+  #     |> Repo.preload(:journey)
+  # end
 
   def continue_journey(transition_attrs \\ %{}, phase_attrs \\ %{}) do
     {:ok, p} = Lifecycle.Timeline.create_phase(phase_attrs)
