@@ -1,11 +1,16 @@
 <article class="prose prose-xl">
 <.form let={f} for={@changeset}>
-       <%= text_input f, :name, class: "prose prose-xl", value: "Journey Name here..."  %>
+       <%= text_input f, :name, class: "prose prose-xl", placeholder: "Journey Name here..."  %>
 </.form>
-  <h1><%= @journey.realm_name %></h1>
+
+<%# <.live_component module={LifecycleWeb.Components.List} name = "Name" editable={true} update={&Realm.update_journey/2} data={@journey} value={@journey.realm_name} id="journey_realm_name_#{journey.id}" /> %>
+<.live_component module={LifecycleWeb.Components.List} name = "Realm Name" value={@journey.name} id="journey_name_#{journey.id}" />
+
+
+<h1><%= @journey.realm_name %></h1>
 </article>
 <article class="prose prose-xl">
-<h2><%= @journey.name %></h2>
+<h3><%= @journey.name %></h3>
 </article>
 
 
