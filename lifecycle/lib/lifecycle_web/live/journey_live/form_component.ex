@@ -55,7 +55,8 @@ defmodule LifecycleWeb.JourneyLive.FormComponent do
 
   defp save_journey(socket, :new, journey_params) do
     journey_params |> Map.put("realm_name", journey_params["realm"]["name"])
-    case Realm.new_journey(journey_params) do
+    |> Realm.new_journey() |>
+    case do
       {:ok, journey} ->
         {:noreply,
          socket
