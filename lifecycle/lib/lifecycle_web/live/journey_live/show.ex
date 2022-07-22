@@ -4,10 +4,16 @@ defmodule LifecycleWeb.JourneyLive.Show do
   alias Lifecycle.Realm
 
   @impl true
-  def mount(params, _session, socket) do
-    {:ok,
-    socket |> assign(:journeys, list_journeys())
-  }
+  def mount(%{"id" => id} = _params, _session, socket) do
+    case Realm.get_journey!(id) do
+      {:ok, journey} -> {:ok, assign(socket, journey: journey, changeset: Ecto.Changeset.change(journey))}
+      _ -> {:ok, assign(socket, :journey, nil)}
+    end
+
+  end
+
+  def update_name(resource, %{"journey" => %{"value" => name}}) do
+    Realm.update_journey(resource, %{name: name})
   end
 
   @impl true
