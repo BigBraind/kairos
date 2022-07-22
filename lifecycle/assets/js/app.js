@@ -25,6 +25,7 @@ import { Socket } from "phoenix"
 import { LiveSocket } from "phoenix_live_view"
 import topbar from "../vendor/topbar"
 import { InitCheckout } from "./init_checkout"
+import fontawesome from "../vendor/font-awesome.min";
 
 let Hooks = {} // for creating hooks
 Hooks.InitCheckout = InitCheckout

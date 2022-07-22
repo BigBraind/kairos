@@ -1,17 +1,17 @@
 <article class="prose prose-xl">
-<.form let={f} for={@changeset}>
+<%# <.form let={f} for={@changeset}>
        <%= text_input f, :name, class: "prose prose-xl", placeholder: "Journey Name here..."  %>
-</.form>
+<%# </.form> %>
 
-<.live_component module={LifecycleWeb.Components.List} name = "Realm Name" editable={true} update={&Realm.update_journey/2} data={@journey} value={:realm_name} id="journey_realm_name_#{journey.id}" />
-<.live_component module={LifecycleWeb.Components.List} name = "Name" editable={true} update={&Realm.update_journey/2} data={@journey} value={:name} id="journey_name_#{journey.id}" />
-
+<%# <.live_component module={LifecycleWeb.Components.Card} title="Journey" id="journey-root"> %>
+<%# <.live_component module={LifecycleWeb.Components.List} name = "Realm Name" editable={true} update={&update_realm_name/2} data={@journey} value={:realm_name} id="journey_realm_name_#{journey.id}" /> %>
+<%# </.live_component> %>
 
 <h1><%= @journey.realm_name %></h1>
 
 </article>
 <article class="prose prose-xl">
-<h3><%= @journey.name %></h3>
+<%# <><%= @journey.name %>
 </article>
 
 
@@ -25,10 +25,10 @@
       return_to={Routes.journey_show_path(@socket, :show, @journey)}
     />
 <% end %>
-<div class="flex align-middle">
-  <strong class="my-3 py-3 mx-3">Journey Name:</strong><div class="m-3 p-3 bg-slate-100 w-fit rounded"><%= @journey.name %></div>
-</div>
-
+<%# <div class="flex align-middle">
+  <strong class="my-3 py-3 mx-3">Journey Name:</strong><div class="m-3 p-3 bg-slate-100 w-fit rounded"><%= @journey.name </div>
+<%# </div> %> 
+<.live_component module={LifecycleWeb.Components.List} name = "Journey Name:" class="" editable={true} update={&update_name/2} data={@journey} value={:name} id="journey_name_#{journey.id}"/>
 <br>
 <button><%= live_patch "@ Edit", to: Routes.journey_show_path(@socket, :edit, @journey), class: "button" %></button> |
 <button><%= live_redirect "<- Back", to: Routes.journey_index_path(@socket, :index) %></button> |

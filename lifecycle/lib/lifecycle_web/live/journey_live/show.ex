@@ -12,7 +12,7 @@ defmodule LifecycleWeb.JourneyLive.Show do
 
   end
 
-  def update_realm_name(resource, %{"journey" => %{"value" => name}}) do
+  def update_name(resource, %{"journey" => %{"value" => name}}) do
     Realm.update_journey(resource, %{name: name})
   end
 
