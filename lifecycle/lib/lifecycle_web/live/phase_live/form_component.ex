@@ -115,12 +115,12 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
     end
   end
 
-  # """
-  #   TODO:
-  #     Future improvement:
-  #       1. Create a list of properties(water, grain, coconut, peanuts, tea etc)
-  #       2. Loop through the list to get the properties
-  # """
+  """
+    TODO:
+      Future improvement:
+        1. Create a list of properties(water, grain, coconut, peanuts, tea etc)
+        2. Loop through the list to get the properties
+  """
 
   defp save_phase(socket, :new, phase_params) do
     trait_list = retrieve_traits(phase_params["traits"] || %{})

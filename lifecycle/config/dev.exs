@@ -63,8 +63,7 @@ config :lifecycle, LifecycleWeb.Endpoint,
       ~r"priv/static/static/images/.*(png|jpeg|jpg|gif|svg|mp3|m4a|mp4|aac|oga)$",
       ~r"priv/gettext/.*(po)$",
       ~r"lib/lifecycle_web/(live|views)/.*(ex)$",
-      ~r"lib/lifecycle_web/templates/.*(eex)$",
-      ~r"lib/lifecycle_web/components/.*(ex)$"
+      ~r"lib/lifecycle_web/templates/.*(eex)$"
     ]
   ]
 

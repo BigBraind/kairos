@@ -40,7 +40,7 @@ config :esbuild,
   ]
 
 # slightly changed dir to fit our directory
-config :tailwind, version: "3.1.15", default: [
+config :tailwind, version: "3.0.23", default: [
   args: ~w(
     --config=tailwind.config.js
     --input=../assets/css/app.css
