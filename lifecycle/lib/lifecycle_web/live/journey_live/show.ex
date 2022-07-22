@@ -6,7 +6,7 @@ defmodule LifecycleWeb.JourneyLive.Show do
   @impl true
   def mount(params, _session, socket) do
     {:ok,
-    socket |> assign(:journeys, list_journeys())
+    socket |> assign(:journeys, list_journeys()) |> assign(:journey_list, [])
   }
   end
 
