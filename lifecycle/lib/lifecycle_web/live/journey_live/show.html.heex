@@ -9,31 +9,23 @@
     />
 <% end %>
 
-<br>
-<button><%= live_patch "@ Edit", to: Routes.journey_show_path(@socket, :edit, @journey), class: "button" %></button> |
-<button><%= live_redirect "<- View all journeys", to: Routes.journey_index_path(@socket, :index) %></button> |
-<button><%= live_patch "+ New Journey", to: Routes.journey_show_path(@socket, :new, @journey), class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %></button>
-
-
-<br>
-<br>
-<button><%= live_redirect "+ Continue Journey", to: Routes.journey_show_path(@socket, :show, @journey), class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %> </button>
-
-<br>
-<br>
 
 
 
 
-
-<div class="min-h-screen bg-black">
+<div class="min-h-screen w-100 bg-black">
   <br>
   <br>
-  <span class="justify-center items-center flex">
-    <article class="prose prose-xl">
-      <h1 class="text-white">Realm_name: <%= @journey.realm_name %></h1>
+  <div class="justify-center items-center flex">
+    <article class="prose prose-sm">
+      <h1 class="text-white">Realm</h1>
     </article>
-  </span>
+  </div>
+  <div class="justify-center items-center flex">
+    <article class="prose prose-xl">
+      <h1 class="text-white"><%= @journey.realm_name %></h1>
+    </article>
+  </div>
   <br>
   <br>
   <span class="justify-center items-center flex">
@@ -44,10 +36,9 @@
       </button>
     <%= end %>
 
-    <%# Show names %>
+    <%# Show journey names %>
     <button class="flex items-center h-12 px-4 py-2 text-xl text-center text-gray-700 border border-b-0 border-gray-300 sm:text-base dark:border-gray-500 rounded-t-md dark:text-white whitespace-nowrap focus:outline-none">
-        Journey_name: <%= @journey.name %>
-        Pointer: <%= @journey.pointer %>
+        Journey: <%= @journey.name %>
     </button>
 
     <%# Next button %>
@@ -66,3 +57,13 @@
     <div class="ccard"><h2>Card3</h2></div>
   </div>
 </div>
+
+
+<div class="min-h-screen w-100 bg-black"></div>
+<div class="min-h-screen w-100 bg-black"></div>
+<div class="min-h-screen w-100 bg-black"></div>
+
+<button><%= live_patch "@ Edit", to: Routes.journey_show_path(@socket, :edit, @journey), class: "button" %></button> |
+<button><%= live_redirect "<- View all journeys", to: Routes.journey_index_path(@socket, :index) %></button> |
+<button><%= live_patch "+ New Journey", to: Routes.journey_show_path(@socket, :new, @journey), class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %></button>
+<button><%= live_redirect "+ Continue Journey", to: Routes.journey_show_path(@socket, :show, @journey), class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %> </button>
