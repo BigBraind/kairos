@@ -39,14 +39,14 @@ defmodule Lifecycle.Realm do
   """
   def get_journey!(id), do: Repo.get!(Journey, id) |> Repo.preload(:realm)
 
-  def get_journey_by_realm_attrs!(realm_name, pointer) do
+  def get_journey_by_realm_attrs(realm_name, pointer) do
     query = Journey
         |> where([j], j.realm_name == ^realm_name)
         |> where([j], j.pointer == ^pointer)
         |> order_by([e], desc: e.inserted_at)
         |> preload(:realm)
 
-      Repo.one!(query)
+      Repo.one(query)
   end
 
   @doc """

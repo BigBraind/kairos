@@ -28,11 +28,18 @@ defmodule LifecycleWeb.JourneyLive.Show do
 
   @impl true
   def handle_params(%{"realm_name" => realm_name, "journey_pointer" => pointer}, _, socket) do
+    pointer = String.to_integer(pointer)
+    journey_list = [-1, 0, 1]
+      |> Enum.map(fn inc -> Realm.get_journey_by_realm_attrs(realm_name, pointer + inc)
+    end)
+
+
     {:noreply,
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
-     |> assign(:journey, Realm.get_journey_by_realm_attrs!(realm_name, pointer))}
-     #|> assign(:journeys, [-1,0,1] |> Enum.map(fn inc -> Realm.get_journey_by_realm_attrs!(realm_name, String.to_integer(pointer) + inc) end))
+     |> assign(:journey, Realm.get_journey_by_realm_attrs(realm_name, pointer))
+     |> assign(journey_list: journey_list)
+    }
   end
 
   defp list_journeys do
