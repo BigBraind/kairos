@@ -16,6 +16,15 @@
 <div class="min-h-screen w-100 bg-black">
   <br>
   <br>
+<article class="prose prose-sm">
+  <h2 class="text-white">Journey Navigator</h2>
+</article>
+  <form phx-change="search" id="search_journey_form">
+        <%= text_input :search_journey, :pointer, placeholder: "Jump to Journey", autofocus: true, "phx-debounce": "1", autocomplete: "off"%>
+  </form>
+<article class="prose prose-sm">
+  <h2 class="text-white"><%= @search_result %></h2>
+</article>
   <div class="justify-center items-center flex">
     <article class="prose prose-sm">
       <h1 class="text-white">Realm</h1>

@@ -2,11 +2,12 @@ defmodule LifecycleWeb.JourneyLive.Show do
   use LifecycleWeb, :live_view
 
   alias Lifecycle.Realm
+  alias Lifecycle.Realm.Journey
 
   @impl true
   def mount(params, _session, socket) do
     {:ok,
-    socket |> assign(:journeys, list_journeys())
+    socket |> assign(:journeys, list_journeys()) |> assign(:search_result, "")
   }
   end
 
@@ -17,8 +18,29 @@ defmodule LifecycleWeb.JourneyLive.Show do
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
      |> assign(:journey, journey)
-     |> assign(:changeset, Realm.change_journey(journey))}
+     |> assign(:changeset, Realm.change_journey(journey))
+     |> assign(journey_list: [])
+    }
   end
+
+  def handle_event("search", %{"search_journey" => %{"pointer" => pointer}}, socket) do
+    # TODO: to be replaced by actual search function
+    search_result = "This is an intermediate result #{pointer}"
+    realm_name = socket.assigns.journey.realm_name
+    case Realm.get_journey_by_realm_attrs(realm_name, String.to_integer(pointer)) do
+      %Journey{:realm_name => realm_name, :pointer => pointer} ->
+
+        {:noreply, socket |> push_redirect(to: Routes.journey_show_path(socket, :show, realm_name, pointer))}
+
+      nil ->
+          search_result = "Journey doesn't exist yet, create it below."
+
+          {:noreply,
+           assign(socket,
+             search_result: search_result)}
+
+    end
+   end
 
   @impl true
   def handle_params(%{"realm_name" => realm_name, "journey_pointer" => pointer}, _, socket) do

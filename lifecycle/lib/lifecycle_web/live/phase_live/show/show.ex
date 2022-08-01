@@ -67,7 +67,6 @@ defmodule LifecycleWeb.PhaseLive.Show do
     phase = Timeline.get_phase!(phase_id)
     transition = Timeline.get_transition_by_id(transition_id)
 
-    # import IEx; IEx.pry()
     socket
     |> assign(:title, "Edit Transition")
     |> assign(:transition, transition)
