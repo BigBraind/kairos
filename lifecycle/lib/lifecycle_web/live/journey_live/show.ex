@@ -3,6 +3,7 @@ defmodule LifecycleWeb.JourneyLive.Show do
 
   alias Lifecycle.Realm
   alias Lifecycle.Realm.Journey
+  alias Lifecycle.Timeline.Phase
   alias LifecycleWeb.Modal.View.Transition.TransitionList
 
   @impl true
@@ -39,7 +40,32 @@ defmodule LifecycleWeb.JourneyLive.Show do
      |> assign(:journey, Realm.get_journey_by_realm_attrs(realm_name, pointer))
      |> assign(journey_list: journey_list)
      |> assign(steps_in_journey: [])
+     |> apply_action(socket.assigns.live_action)
     }
+  end
+
+  defp apply_action(socket, :step_child) do
+    #parent_phase = Timeline.get_phase!() get phase from last transition in phase
+
+    parent_phase_map =  %{} #%{parent_phase | parent: parent_phase.id}
+
+    socket
+    |> assign(:phase, parent_phase_map)
+    # to get the properties and inherit to child phase
+    #|> assign(:template, Phase.list_traits(parent_phase.id))
+  end
+
+  defp apply_action(socket, :step) do
+    socket
+    |> assign(:phase, %{%Phase{traits: []} | parent: []})
+  end
+
+  defp apply_action(socket, :show) do
+    socket
+  end
+
+  defp apply_action(socket, :new) do
+    socket
   end
 
   def handle_event("search", %{"search_journey" => %{"pointer" => pointer_str}}, socket)  do

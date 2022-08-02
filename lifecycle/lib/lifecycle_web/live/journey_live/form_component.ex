@@ -46,7 +46,7 @@ defmodule LifecycleWeb.JourneyLive.FormComponent do
         {:noreply,
          socket
          |> put_flash(:info, "Journey created successfully")
-         |> push_redirect(to: "/journeys/#{journey.id}")} # TODO: Go abstract with the function router
+         |> push_redirect(to: Routes.journey_show_path(socket, :show, journey.realm_name, journey.pointer))} # TODO: Go abstract with the function router
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, changeset: changeset)}
@@ -61,7 +61,7 @@ defmodule LifecycleWeb.JourneyLive.FormComponent do
         {:noreply,
          socket
          |> put_flash(:info, "Journey created successfully")
-         |> push_redirect(to: "/journeys/#{journey.id}")} # TODO: Go abstract with the function router
+         |> push_redirect(to: Routes.journey_show_path(socket, :show, journey.realm_name, journey.pointer))}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, changeset: changeset)}
