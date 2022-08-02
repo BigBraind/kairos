@@ -79,7 +79,7 @@ defmodule LifecycleWeb.Router do
       live "/start/", JourneyLive.Index, :start
       live "/journey/:realm_name/:journey_pointer", JourneyLive.Show, :show
       live "/journey/:realm_name/:journey_pointer/start", JourneyLive.Show, :new
-      live "/journey/:realm_name/:journey_pointer/continue", JourneyLive.Show, :continue
+      live "/journey/:realm_name/:journey_pointer/step", JourneyLive.Show, :step
       live "/journey/:realm_name/:journey_pointer/clone", JourneyLive.Show, :clone
 
       live("/billing", BillingLive.Index, :index)
