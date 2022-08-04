@@ -1,5 +1,5 @@
-<div>
-  <h1 class="text-2xl underline underline-offset-4 my-2"><%= @title %></h1>
+<div class="font-bold border-solid border-2 border-black rounded-lg m-3 p-7 flex-auto">
+  <h1 class="text-4xl my-2 font-bold p-1"><%= @title %></h1>
 
   <.form
     let={f}
@@ -10,89 +10,88 @@
     phx-submit="save"
     >
 
-    <%= label f, :title %>
-    <hr class="border-0 bg-gray-500 text-gray-500 h-px w-full">
-    <%= text_input f, :title, phx_debounce: "blur", autocomplete: "off", class: " solid-form" %>
-    <%= error_tag f, :title %>
+    <div class="py-1">
+      <%= label f, :title, class: "text-xl my-2" %>
+      <%= text_input f, :title, phx_debounce: "blur", autocomplete: "off", class: "solid-form bg-zinc-200" %>
+      <%= error_tag f, :title %>
+    </div>
 
-    <br>
-  
+    <div class="py-1">
+      <%= label f, :properties, class: "text-xl my-2" %>
+      <%= textarea f, :content, phx_debounce: "blur", autocomplete: "off", class: "solid-form bg-zinc-200" %>
+      <%= error_tag f, :content %>
+    </div>
 
-    <%= label f, :properties %>
-    <hr class="border-0 bg-gray-500 text-gray-500 h-px w-full">
-    <%= textarea f, :content, phx_debounce: "blur", autocomplete: "off", class: " solid-form"  %>
-    <%= error_tag f, :content %>
+    <div class="py-1">
+      <%= label f, :description, class: "text-xl my-2" %>
+      <%= textarea f, :type, phx_debounce: "blur", autocomplete: "off", class: "solid-form bg-zinc-200 h-32" %>
+      <%= error_tag f, :type %>
+    </div>
 
-    <br>
-  
-    <%= label f, :description %>
-    <hr class="border-0 bg-gray-500 text-gray-500 h-px w-full">
-    <%= textarea f, :type, phx_debounce: "blur", autocomplete: "off", class: " solid-form"  %>
-    <%= error_tag f, :type %>
-    <br>
+    <%# Variables %>
+    <p class="my-2 font-bold text-2xl">Variables</p>
 
-    <p class="mt-2 font-bold">Variables</p>
-    <hr class="border-0 bg-gray-500 text-gray-500 h-px w-32">
-      <%= inputs_for f, :traits, fn trait -> %>
-        <div class="flex flex-wrap -mx-1 overflow-hidden">
-          <div class="form-group px-1 w-3/6">
-            <%= label trait, :name %>
-            <%= text_input trait, :name, autocomplete: "off", class: " solid-form"  %>
-            <%= error_tag trait, :name %>
-          </div>
-
-          <br>
-
-          <div class="form-group w-2/6">
-            <%= label trait, :type %>
-            <%= select(trait, :type, ["Text": "txt", "Numeric": "num", "Image": "img", "True/False": "bool"], class: "block
-                    w-full
-                    mt-1
-                    mx-5
-                    rounded-md
-                    bg-gray-100
-                    border-transparent
-                    focus:border-gray-500 focus:bg-white focus:ring-0" ) %>
-            <%= error_tag trait, :type %>
-          </div>
-
-          <div class="form-group w-2/6">
-            <%= label trait, :default_value %>
-            <%= text_input trait, :value, autocomplete: "off", class: " solid-form"  %>
-            <%= error_tag trait, :value %>
-          </div>
-
-          <br>
-
-          <div class="mx-2 form-group w-2/6">
-            <%= label trait, :unit, class: "mx-6" %>
-            <%= text_input trait, :unit, autocomplete: "off", placeholder: "Unit", class: "mx-5  solid-form"  %>
-            <%= error_tag trait, :unit %>
-          </div>
-
-          <div class="form-group w-1/6">
-            <%= label trait, :goodbye %><br>
-            <%= if is_nil(trait.data.tracker) do %>
-              <a href="#" phx-target={@myself} phx-click="delete_trait" phx-value-phase-id={trait.data.phase_id} phx-value-trait-id={trait.data.id} class="m-5">&#128075;</a>
-              <%# <%= radio_button trait, :deletion, "phx-click"="delete_trait", "phx-value-trait_id": trait.id %> 
-            <% else %>
-              <%= hidden_input trait, :tracker %>
-              <a href="#" phx-target={@myself} phx-click="remove_trait" phx-value-remove={trait.data.tracker}>&#128465;</a>
-            <% end %>
-          </div>
+    <%= inputs_for f, :traits, fn trait -> %>
+      <%# Variable Card %>
+      <div class="flex flex-wrap overflow-hidden font-bold border-solid border-2 border-black rounded-lg my-3 p-2">
+        <%# Name %>
+        <div class="mx-2 my-1 form-group w-3/6">
+          <%= label trait, :name %>
+          <%= text_input trait, :name, autocomplete: "off", class: "solid-form bg-zinc-200"  %>
+          <%= error_tag trait, :name %>
         </div>
-      <% end %>
+        <br>
 
-    <a href="#" phx-target={@myself} phx-click="add-trait">Add a variant</a>
-      <br>
+        <%# Type %>
+        <div class="mx-2 my-1 form-group w-2/6">
+          <%= label trait, :type %>
+          <%= select(trait, :type, ["Text": "txt", "Numeric": "num", "Image": "img", "True/False": "bool"], class: "block
+                  w-full rounded-md
+                  bg-zinc-200 border-transparent
+                  focus:border-gray-500 focus:bg-white focus:ring-0" ) %>
+          <%= error_tag trait, :type %>
+        </div>
+
+        <%# Default value %>
+        <div class="mx-2 my-1 form-group w-3/6">
+          <%= label trait, :default_value %>
+          <%= text_input trait, :value, autocomplete: "off", class: "solid-form bg-zinc-200"  %>
+          <%= error_tag trait, :value %>
+        </div>
+        <br>
+
+        <%# Unit %>
+        <div class="mx-2 my-1 form-group w-2/6">
+          <%= label trait, :unit %>
+          <%= text_input trait, :unit, autocomplete: "off", placeholder: "Unit", class: "solid-form bg-zinc-200"  %>
+          <%= error_tag trait, :unit %>
+        </div>
+
+        <%# Trash buttons %>
+        <div class="form-group flex justify-end">
+          <%= if is_nil(trait.data.tracker) do %>
+            <a href="#" phx-target={@myself} phx-click="delete_trait" phx-value-phase-id={trait.data.phase_id} phx-value-trait-id={trait.data.id} class="mx-2 p-2">&#128075;</a>
+          <% else %>
+            <%= hidden_input trait, :tracker %>
+            <a href="#" phx-target={@myself} phx-click="remove_trait" phx-value-remove={trait.data.tracker} class="mx-2 p-2">&#128465;</a>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+
+    <%# Add Variant Button %>
+    <a href="#" phx-target={@myself} phx-click="add-trait" class="font-bold border-solid border-2 disable:w-2 disable:px-12 disable:py-4 border-black w-fit px-5 py-1 hover:bg-blue-500 rounded-lg">+ add variable</a>
 
     <%= hidden_input f, :parent %>
     <%= error_tag f, :parent  %>
-
+    <br>
     <br>
 
-    <div>
-      <%= submit "Save", phx_disable_with: "Saving...", class: "font-bold border-solid border-2 disable:w-2 disable:px-12 disable:py-4 border-black w-fit px-12 py-4 hover:bg-blue-500 rounded-lg"%>
+    <div class="flex justify-end">
+      <%= submit "Save", phx_disable_with: "Saving...", class: "font-bold border-solid border-2 disable:w-2 disable:px-12 disable:py-4 border-black w-fit px-5 py-1 hover:bg-blue-500 rounded-lg"%>
     </div>
   </.form>
 </div>
+
+<%# line break %>
+<%# <hr class="border-0 bg-gray-500 text-gray-500 h-px w-32"> %>
