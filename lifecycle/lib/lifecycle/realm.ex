@@ -8,6 +8,7 @@ defmodule Lifecycle.Realm do
   alias Lifecycle.Timeline
   alias Lifecycle.Realm.Journey
   alias Lifecycle.Users
+  alias Lifecycle.Timeline.Transition
 
 
   @doc """
@@ -47,6 +48,16 @@ defmodule Lifecycle.Realm do
         |> preload(:realm)
 
       Repo.one(query)
+  end
+
+  def get_journey_steps(journey_id) do
+    query =
+      Transition
+      |> where([e], e.journey_id == ^journey_id)
+      |> order_by([e], desc: e.inserted_at)
+      |> preload([:transiter, :initiator, :phase])
+
+    Repo.all(query, limit: 8)
   end
 
   @doc """

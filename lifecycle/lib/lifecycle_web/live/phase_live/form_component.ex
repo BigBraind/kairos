@@ -137,7 +137,21 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
   end
 
   defp save_phase(socket, :step, phase_params) do
-    IO.inspect phase_params
+    transition_map =  for {id, trait} <- phase_params["traits"], into: [] do
+      case trait["type"] do
+        "num" -> {:numeric, %{trait["name"] => %{"value" => trait["value"], "unit" => trait["unit"]}}}
+        "bool" -> {:bool, %{trait["name"] => %{"value" => trait["value"]}}}
+        "txt" -> {:text, %{trait["name"] => %{"value" => trait["value"]}}}
+      end
+    end
+    |> Enum.reduce(%{}, fn {key, val}, acc ->
+      if acc[key] do
+        Map.put(acc, key, Map.merge(acc[key], val))
+      else
+        Map.put(acc, key, val)
+      end
+    end)
+    phase_params = phase_params |> Map.put("transitions", [%{initiator_id: socket.assigns.current_user.id, answers: transition_map, journey_id: socket.assigns.journey.id}])
     create_phase(:step, phase_params, socket)
   end
 
