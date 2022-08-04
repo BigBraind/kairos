@@ -64,7 +64,7 @@ making the phoenix.css file useless, so I just deleted it.*/
     @apply my-0.5 block w-full rounded-md bg-zinc-200 border-transparent focus:border-gray-500 focus:bg-indigo-100 focus:ring-0;
   }
   .ccard {
-    @apply flex-grow-0 flex-shrink-0 basis-auto w-1/2 h-[100px] m-4 px-10 py-12 bg-gray-100 rounded-lg shadow-lg;
+    @apply flex-grow-0 flex-shrink-0 basis-auto w-1/2 h-[100px] m-4 px-10 py-12 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-lg shadow-lg;
   }
   .underline-form {
     @apply
