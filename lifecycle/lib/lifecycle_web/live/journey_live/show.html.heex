@@ -30,7 +30,7 @@
   <h2 class="text-white">Journey Navigator</h2>
 </article>
   <form phx-change="search" id="search_journey_form">
-        <%= text_input :search_journey, :pointer, placeholder: "Jump to Journey", autofocus: true, "phx-debounce": "1", autocomplete: "off"%>
+        <%= text_input :search_journey, :pointer, placeholder: "Jump to Journey", autofocus: true, "phx-debounce": "1000", autocomplete: "off"%>
   </form>
 <article class="prose prose-sm">
   <h2 class="text-white"><%= @search_result %></h2>

@@ -115,7 +115,7 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
     end
   end
 
-  """
+  @doc """
     TODO:
       Future improvement:
         1. Create a list of properties(water, grain, coconut, peanuts, tea etc)
