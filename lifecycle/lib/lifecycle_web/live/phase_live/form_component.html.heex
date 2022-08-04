@@ -12,19 +12,19 @@
 
     <div class="py-1">
       <%= label f, :title, class: "text-xl my-2" %>
-      <%= text_input f, :title, phx_debounce: "blur", autocomplete: "off", class: "solid-form bg-zinc-200" %>
+      <%= text_input f, :title, phx_debounce: "blur", autocomplete: "off", class: "solid-form" %>
       <%= error_tag f, :title %>
     </div>
 
     <div class="py-1">
       <%= label f, :properties, class: "text-xl my-2" %>
-      <%= textarea f, :content, phx_debounce: "blur", autocomplete: "off", class: "solid-form bg-zinc-200" %>
+      <%= textarea f, :content, phx_debounce: "blur", autocomplete: "off", class: "solid-form" %>
       <%= error_tag f, :content %>
     </div>
 
     <div class="py-1">
       <%= label f, :description, class: "text-xl my-2" %>
-      <%= textarea f, :type, phx_debounce: "blur", autocomplete: "off", class: "solid-form bg-zinc-200 h-32" %>
+      <%= textarea f, :type, phx_debounce: "blur", autocomplete: "off", class: "solid-form h-32" %>
       <%= error_tag f, :type %>
     </div>
 
@@ -88,7 +88,7 @@
     <br>
 
     <div class="flex justify-end">
-      <%= submit "Save", phx_disable_with: "Saving...", class: "font-bold border-solid border-2 disable:w-2 disable:px-12 disable:py-4 border-black w-fit px-5 py-1 hover:bg-blue-500 rounded-lg"%>
+      <%= submit "Save", phx_disable_with: "Saving...", class: "save-btn disable:w-2 disable:px-12 disable:py-4"%>
     </div>
   </.form>
 </div>
