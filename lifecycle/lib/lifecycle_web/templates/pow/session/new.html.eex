@@ -1,6 +1,6 @@
 <%# Main Page, the sign in page %>
 <div class="">
-  <h1 class =" text-center mt-6 mb-6 max-w-xl mx-auto font-semibold text-5xl dark:text-white">Welcome to BigBrain, the <span class="text-purple-400 dark:text-purple-600 font-light opacity-50 "> quiet documentation tool. </span></h1>
+  <h1 class =" text-center mt-6 mb-6 max-w-xl mx-auto font-semibold text-5xl dark:text-white">Welcome to BigBrain, the <span class="text-purple-400 dark:text-yellow-300 font-light opacity-50 "> quiet documentation tool. </span></h1>
 
 <%# <h1 class ="animate-bounce">Sign in</h1> %>
 
