@@ -33,7 +33,7 @@
 
     <%= inputs_for f, :traits, fn trait -> %>
       <%# Variable Card %>
-      <div class="flex flex-wrap -mx-1 overflow-hidden font-bold border-solid border-2 border-black rounded-lg m-3 p-7">
+      <div class="flex flex-wrap overflow-hidden font-bold border-solid border-2 border-black rounded-lg my-3 p-2">
         <%# Name %>
         <div class="mx-2 my-1 form-group w-3/6">
           <%= label trait, :name %>
@@ -68,24 +68,23 @@
         </div>
 
         <%# Trash buttons %>
-        <div class="form-group w-1/6">
+        <div class="form-group flex justify-end">
           <%= if is_nil(trait.data.tracker) do %>
-            <a href="#" phx-target={@myself} phx-click="delete_trait" phx-value-phase-id={trait.data.phase_id} phx-value-trait-id={trait.data.id} class="mx-2">&#128075;</a>
+            <a href="#" phx-target={@myself} phx-click="delete_trait" phx-value-phase-id={trait.data.phase_id} phx-value-trait-id={trait.data.id} class="mx-2 p-2">&#128075;</a>
           <% else %>
             <%= hidden_input trait, :tracker %>
-            <a href="#" phx-target={@myself} phx-click="remove_trait" phx-value-remove={trait.data.tracker} class="mx-2">&#128465;</a>
+            <a href="#" phx-target={@myself} phx-click="remove_trait" phx-value-remove={trait.data.tracker} class="mx-2 p-2">&#128465;</a>
           <% end %>
         </div>
       </div>
     <% end %>
 
     <%# Add Variant Button %>
-    <a href="#" phx-target={@myself} phx-click="add-trait" class="font-bold border-solid border-2 disable:w-2 disable:px-12 disable:py-4 border-black w-fit px-5 py-1 hover:bg-blue-500 rounded-lg">Add Variant</a>
-      <br>
+    <a href="#" phx-target={@myself} phx-click="add-trait" class="font-bold border-solid border-2 disable:w-2 disable:px-12 disable:py-4 border-black w-fit px-5 py-1 hover:bg-blue-500 rounded-lg">+ add variable</a>
 
     <%= hidden_input f, :parent %>
     <%= error_tag f, :parent  %>
-
+    <br>
     <br>
 
     <div class="flex justify-end">
