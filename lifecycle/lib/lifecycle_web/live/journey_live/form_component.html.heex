@@ -1,4 +1,4 @@
-<div class="m-3 p-7 grid place-items-center border-solid border-2 border-black rounded-lg w-1/2">
+<div class="m-3 p-7 grid mx-auto  border-solid border-2 border-black rounded-lg w-1/2 dark:border-white">
   <.form let={f}
     for={@changeset}
     id="journey-form"
@@ -8,23 +8,23 @@
 
   
     <%= inputs_for f, :realm, fn r -> %>  <%# text-center here doesnt work %>
-      <%= label r, :realm_name, class: "text-xl my-2" %> 
-      <%= text_input r, :name , class: "solid-form  mb-4" %>
+      <%= label r, :realm_name, class: "text-xl mx-auto dark:text-white" %> 
+      <%= text_input r, :name , class: "underline-form  mb-4 dark:focus:bg-white dark:hover:bg-white" %>
       <%= error_tag r, :name %>
       
-      <%= label r, :description, class: "text-xl my-2" %>
-      <%= text_input r, :description, class: "solid-form  mb-4" %>
+      <%= label r, :description, class: "text-xl my-2 dark:text-white" %>
+      <%= text_input r, :description, class: "underline-form  mb-4 dark:focus:bg-white dark:hover:bg-white" %>
       <%= error_tag r, :description %>
     <% end %>
   
-    <%= label f, :journey_name, class: "text-xl my-2" %>
-    <%= text_input f, :name, class: "solid-form  mb-4" %>
+    <%= label f, :journey_name, class: "text-xl my-2 dark:text-white" %>
+    <%= text_input f, :name, class: "underline-form  mb-4 dark:focus:bg-white dark:hover:bg-white" %>
     <%= error_tag f, :name %>
   
-    <%= label f, :pointer, class: "text-xl my-2" %>
-    <%= number_input f, :pointer, class: "solid-form  mb-4" %>
+    <%= label f, :pointer, class: "text-xl my-2 dark:text-white" %>
+    <%= number_input f, :pointer, class: "underline-form  mb-4 dark:focus:bg-white dark:hover:bg-white" %>
     <%= error_tag f, :pointer %>
 
-    <%= submit "Save", phx_disable_with: "Saving...", class: "save-btn disable:w-2 disable:px-12 disable:py-4" %>
+    <%= submit "Save", phx_disable_with: "Saving...", class: "save-btn disable:w-2 disable:px-12 disable:py-4 dark:text-white dark:border-white dark:focus:bg-slate-400 dark:hover:bg-slate-400" %>
   </.form>
 </div>

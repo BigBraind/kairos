@@ -71,13 +71,15 @@ making the phoenix.css file useless, so I just deleted it.*/
     block /* for line break liddat */
     
     px-0.5
-    border-0 border-b-2 border-gray-300
-    focus:ring-0 focus:border-black
+    border-0 border-b-2 border-gray-300 dark:border-white
+    focus:ring-0 focus:border-black dark:focus:bg-slate-900 dark:focus:text-black
+    dark:hover:bg-slate-900
     w-auto
     mx-auto mb-2
-    bg-slate-100
-    text-lg text-opacity-30
+    bg-slate-100 dark:bg-slate-900
+    text-lg text-opacity-30 dark:text-white
   }
+
   .pp-divider {
     @apply border-0 bg-gray-500 text-gray-500 h-px
   }
