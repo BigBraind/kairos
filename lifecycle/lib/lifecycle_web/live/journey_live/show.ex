@@ -5,6 +5,8 @@ defmodule LifecycleWeb.JourneyLive.Show do
   alias Lifecycle.Realm.Journey
   alias Lifecycle.Timeline.Phase
   alias LifecycleWeb.Modal.View.Transition.TransitionList
+  alias LifecycleWeb.Modal.Function.Transition.TransitionHandler
+  alias LifecycleWeb.Modal.Function.Pubsub.TransitionPubs
 
   @impl true
   def mount(params, _session, socket) do
@@ -98,6 +100,33 @@ defmodule LifecycleWeb.JourneyLive.Show do
     end
   end
 
+  @impl true
+  def handle_event("transit", %{"value" => transition_id}, socket) do
+    params = Map.put(%{}, "transition", transition_id)
+    TransitionHandler.handle_transition(:assign_transiter, params, socket)
+  end
+
+  @impl true
+  def handle_event("delete-transition", %{"id" => _transition_id} = params, socket) do
+    TransitionHandler.delete_transition(:transition_view, params, socket)
+  end
+
+  @impl true
+  def handle_info({Pubsub, [:transition, :approved], message}, socket) do
+    TransitionPubs.handle_transition_updated(socket, message)
+  end
+
+  def handle_info({Pubsub, [:transition, :updated], message}, socket) do
+    TransitionPubs.handle_transition_updated(socket, message)
+  end
+
+  def handle_info({Pubsub, [:transition, :created], message}, socket) do
+    TransitionPubs.handle_transition_created(socket, message)
+  end
+
+  def handle_info({Pubsub, [:transition, :deleted], message}, socket) do
+    TransitionPubs.handle_transition_deleted(socket, message)
+  end
 
   defp list_journeys do
     Realm.list_journeys() # change to +- 2
