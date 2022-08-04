@@ -38,7 +38,7 @@ defmodule Lifecycle.Timeline.Phase do
     |> cast_assoc(:traits, on_replace: :update)
     |> cast_assoc(:transitions, on_replace: :update)
     |> validate_length(:title, max: @max_len)
-    |> validate_required([:content, :title, :type])
+    |> validate_required([:title])
   end
 
   @doc """

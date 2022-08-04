@@ -136,6 +136,26 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
     create_phase(:new, phase_params, socket)
   end
 
+  defp save_phase(socket, :step, phase_params) do
+    IO.inspect phase_params
+    create_phase(:step, phase_params, socket)
+  end
+
+  defp create_phase(:step, phase_params, socket) do
+    case Timeline.create_phase(phase_params) do
+      {:ok, phase} ->
+        {Pubsub.notify_subs({:ok, phase}, [:phase, :created], "phase_index")}
+
+        {:noreply,
+         socket
+         |> push_redirect(to: socket.assigns.return_to)
+         |> Flash.insert_flash(:info, "Phase created successfully", self())}
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        {:noreply, assign(socket, changeset: changeset)}
+    end
+  end
+
   defp save_phase(socket, :new_child, phase_params) do
     trait_list = retrieve_traits(phase_params["traits"] || %{})
 
@@ -150,12 +170,12 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
     create_phase(:new_child, phase_params, socket)
   end
 
+
+
   defp create_phase(action, phase_params, socket) do
     check_trait = Map.has_key?(socket.assigns.changeset.changes, :traits)
-    # check_existing_trait = phase_params["existing_traits"] != %{}
     check_existing_trait = phase_params["existing_traits"] != nil
 
-    IO.inspect(phase_params["existing_traits"])
 
     case Timeline.create_phase(phase_params) do
       {:ok, phase} ->
@@ -179,18 +199,33 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
           :new ->
             {Pubsub.notify_subs({:ok, phase}, [:phase, :created], "phase_index")}
 
+            {:noreply,
+         socket
+         |> push_redirect(to: Routes.phase_show_path(socket, :show, phase.id))
+         |> Flash.insert_flash(:info, "Phase created successfully", self())}
+
+          :step ->
+            {Pubsub.notify_subs({:ok, phase}, [:phase, :created], "phase_index")}
+
+            {:noreply,
+         socket
+         |> push_redirect(to: socket.assigns.return_to)
+         |> Flash.insert_flash(:info, "Phase created successfully", self())}
+
           :new_child ->
             {Pubsub.notify_subs(
                {:ok, phase},
                [:phase, :created],
                "phase:" <> socket.assigns.phase.id
              )}
-        end
 
-        {:noreply,
+            {:noreply,
          socket
          |> push_redirect(to: Routes.phase_show_path(socket, :show, phase.id))
          |> Flash.insert_flash(:info, "Phase created successfully", self())}
+        end
+
+
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, changeset: changeset)}

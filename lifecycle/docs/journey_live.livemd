@@ -18,6 +18,21 @@ R.recompile()
 ```
 
 ```elixir
+alias Lifecycle.Repo
+alias Lifecycle.Timeline.Phase
+
+%Phase{}
+|> Phase.changeset(%{
+  title: "seed",
+  traits: [%{name: "weight", type: :num, value: "10"}, %{name: "height", type: :num, value: "10"}],
+  transitions: [%{initiator_id: "69727047-12d0-4b25-94b1-2326666a519e"}]
+})
+|> Repo.insert()
+
+# Lifecycle.Timeline.delete_phase(Lifecycle.Timeline.get_phase!("984eafcb-6261-4b83-b9ef-a96348c6dcab"))
+```
+
+```elixir
 alias Lifecycle.Realm
 alias Lifecycle.Repo
 alias Lifecycle.Realm.Journey

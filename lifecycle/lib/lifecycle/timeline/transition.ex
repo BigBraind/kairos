@@ -23,7 +23,8 @@ defmodule Lifecycle.Timeline.Transition do
   @doc false
   def changeset(transition, attrs) do
     transition
-    |> cast(attrs, [:transited, :transiter_id, :answers, :phase_id, :initiator_id])
+    |> cast(attrs, [:transited, :transiter_id, :answers, :phase_id, :initiator_id, :journey_id])
+    |> validate_required([:initiator_id])
   end
 
   def phase_changeset(transition, attrs) do
