@@ -26,15 +26,6 @@
 <div class="min-h-screen w-100 bg-black">
   <br>
   <br>
-  <%# Navigator %>
-  <article class="prose prose-sm">
-    <h2 class="text-white">Journey Navigator</h2>
-  </article>
-  <form phx-change="search" id="search_journey_form">
-        <%= text_input :search_journey, :pointer, placeholder: "Jump to Journey", autofocus: true, "phx-debounce": "1000", autocomplete: "off"%>
-  </form>
-  <br>
-  <br>
 
   <div class="justify-center items-center flex">
     <article class="prose prose-sm">
@@ -58,9 +49,7 @@
     <% end %>
 
     <%# Show journey names %>
-    <button class="flex items-center h-12 px-4 py-2 text-xl text-center text-gray-700 border border-b-0 border-gray-300 sm:text-base dark:border-gray-500 rounded-t-md dark:text-white whitespace-nowrap focus:outline-none">
-        Journey: <%= @journey.name %>
-    </button>
+    <form phx-change="search" id="search_journey_form"><%= text_input :search_journey, :pointer, placeholder: @journey.name, autofocus: true, "phx-debounce": "1000", autocomplete: "off", class: "h-12 px-4 py-2 text-center text-gray-700 sm:text-base rounded-t-md bg-black border border-b-0 border-gray-300"%></form>
 
     <%# Next button %>
     <%= if Enum.at(@journey_list, 2) do %>
