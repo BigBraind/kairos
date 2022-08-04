@@ -16,6 +16,8 @@
       title={@page_title}
       action={@live_action}
       phase={@phase}
+      journey={@journey}
+      current_user={@current_user}
       phases={@phase}
       return_to={Routes.journey_show_path(@socket, :show, @journey.realm_name, @journey.pointer)}
     />

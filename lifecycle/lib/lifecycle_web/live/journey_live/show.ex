@@ -22,24 +22,26 @@ defmodule LifecycleWeb.JourneyLive.Show do
      |> assign(:journey, journey)
      |> assign(:changeset, Realm.change_journey(journey))
      |> assign(journey_list: [])
-     |> assign(steps_in_journey: [])
+     |> assign(steps_in_journey: Realm.get_journey_steps(journey.id))
     }
   end
 
   @impl true
   def handle_params(%{"realm_name" => realm_name, "journey_pointer" => pointer}, _, socket) do
     pointer = String.to_integer(pointer)
+    journey = Realm.get_journey_by_realm_attrs(realm_name, pointer)
     journey_list = [-1, 0, 1]
       |> Enum.map(fn inc -> Realm.get_journey_by_realm_attrs(realm_name, pointer + inc)
     end)
 
 
+
     {:noreply,
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
-     |> assign(:journey, Realm.get_journey_by_realm_attrs(realm_name, pointer))
+     |> assign(:journey, journey)
      |> assign(journey_list: journey_list)
-     |> assign(steps_in_journey: [])
+     |> assign(steps_in_journey: Realm.get_journey_steps(journey.id))
      |> apply_action(socket.assigns.live_action)
     }
   end
