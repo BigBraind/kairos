@@ -94,6 +94,7 @@ defmodule Lifecycle.Realm do
     journey
     |> Journey.changeset(attrs)
     |> Repo.update()
+    #|> Repo.preload([:realm])
   end
 
   @doc """
