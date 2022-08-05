@@ -1,6 +1,6 @@
 <%# Main Page, the sign in page %>
-<div class="text-center">
-  <h1 class =" text-center mt-6 mb-6 max-w-xl mx-auto font-semibold text-5xl">Welcome to BigBrain, the <span class="text-purple-400 font-light opacity-50 "> quiet documentation tool. </span></h1>
+<div class="">
+  <h1 class =" text-center mt-6 mb-6 max-w-xl mx-auto font-semibold text-5xl dark:text-white">Welcome to BigBrain, the <span class="text-purple-400 dark:text-yellow-300 font-light opacity-50 "> quiet documentation tool. </span></h1>
 
 <%# <h1 class ="animate-bounce">Sign in</h1> %>
 
@@ -11,30 +11,32 @@
     </div>
   <% end %>
 
-  <%= label f, Pow.Ecto.Schema.user_id_field(@changeset), class: "text-xl" %>
-  <%= text_input f, Pow.Ecto.Schema.user_id_field(@changeset), class: "rounded-full" %>
+  <%= label f, Pow.Ecto.Schema.user_id_field(@changeset), class: "text-xl dark:text-white ml-[30%] " %>
+  <%= text_input f, Pow.Ecto.Schema.user_id_field(@changeset), class: "rounded-full mx-10" %>
   <%= error_tag f, Pow.Ecto.Schema.user_id_field(@changeset) %>
 
   <br>
 
-  <%= label f, :password , class: "text-xl" %>
-  <%= password_input f, :password, class: "mt-3 rounded-full" %>
+  <%= label f, :password , class: "text-xl dark:text-white ml-[30%]" %>
+  <%= password_input f, :password, class: "mt-3 rounded-full mx-2" %>
   <%= error_tag f, :password %>
 
   <%# <button class="px-4 py-1 text-sm bg-purple-600 text-white font-semibold rounded-full border border-white hover:text-purple-600 hover:bg-white hover:border-transparent focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 hover:border-purple-200" > Sign In
 
   </button> %>
   <br>
-
+  <div class="text-center">
   <%= submit class: "mt-6 px-4 py-1 text-md bg-purple-600 text-white font-semibold rounded-full border border-white hover:text-purple-600 hover:bg-white hover:border-transparent hover:border-purple-200 transition " do %>
 
     Sign in
   <% end %>
+  </div>
 <% end %>
 
 <%# hover:translate-x-20 %>
 
 
-
+  <div class="text-center">
   <button class="mt-4 px-4 py-1 text-sm text-purple-600 font-semibold rounded-full border border-purple-200 hover:text-white hover:bg-purple-600 hover:border-transparent focus:outline-none focus:ring-2 focus:ring-purple-600 focus:ring-offset-2"><%= link "Register", to: Routes.pow_registration_path(@conn, :new) %></button>
+  </div>
 </div>

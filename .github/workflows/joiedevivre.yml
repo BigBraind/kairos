@@ -60,7 +60,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Rename Config File
         working-directory: ./lifecycle
-        run: mv fly_stage.toml fly.toml
+        run: mv fly_prod.toml fly.toml
       - uses: superfly/flyctl-actions@master
         env:
           FLY_PROJECT_PATH: lifecycle

@@ -53,6 +53,7 @@ defmodule LifecycleWeb.PhaseLive.Show do
   defp apply_action(socket, :transition_new, %{"phase_id" => phase_id}) do
     socket
     |> assign(:phase, Timeline.get_phase!(phase_id))
+    |> assign(:transition, %Transition{} )
     |> assign(:template, Phase.list_traits(phase_id))
     |> assign(:title, "New Transition")
     |> assign(:current_user, socket.assigns.current_user)
@@ -64,14 +65,14 @@ defmodule LifecycleWeb.PhaseLive.Show do
          "transition_id" => transition_id
        }) do
     phase = Timeline.get_phase!(phase_id)
+    transition = Timeline.get_transition_by_id(transition_id)
 
-    # import IEx; IEx.pry()
     socket
     |> assign(:title, "Edit Transition")
-    |> assign(:transition, Timeline.get_transition_by_id(transition_id))
+    |> assign(:transition, transition)
     |> assign(:phase, phase)
     |> assign(:current_user, socket.assigns.current_user)
-    |> assign(:changeset, Timeline.change_transition(%Transition{}))
+    |> assign(:changeset, Timeline.change_transition(transition))
     |> assign(:template, Phase.list_traits(phase_id))
   end
 
@@ -107,7 +108,6 @@ defmodule LifecycleWeb.PhaseLive.Show do
     Pubs.handle_echo_created(socket, message)
   end
 
-  # ! this is now the actual transition instead of the echo transition
   @impl true
   def handle_info({Pubsub, [:transition, :approved], message}, socket) do
     # Pubs.handle_transition_approved(socket, message)

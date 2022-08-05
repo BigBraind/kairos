@@ -31,12 +31,14 @@ defmodule LifecycleWeb.TransitionLive.FormComponent do
 
   @impl true
   def handle_event("save", %{"transition" => transition} = _, socket) do
+    IO.inspect transition
     transition = transition
     |> Enum.map(fn {k,v} -> {assigntypes(k), mergetypes(k,v, transition)} end) # type-specific  numeric/unit merger
     |> Enum.group_by(fn {k, _v} -> k end) # parsing together types
     |> Enum.map(fn {k,v} -> {k, mergetypes(k,v)} end) # bundle together data related to types
     |> Enum.into(%{}) #keywordlist to map
     |> Map.put("image_list", ImageHandler.handle_image(socket))
+    IO.inspect transition
     save_transition(socket, socket.assigns.action, transition)
   end
 

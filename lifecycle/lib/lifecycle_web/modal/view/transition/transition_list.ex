@@ -30,15 +30,7 @@ defmodule LifecycleWeb.Modal.View.Transition.TransitionList do
      )}
   end
 
-  defp format_string(string) do
-    string
-    |> String.trim_leading()
-    |> String.trim_trailing()
-    |> String.split("\n")
-  end
-
   # max-w-md max-h-md
-
   def render(assigns) do
     ~H"""
           <div class="w-96 mx-auto" style="scroll-snap-type: x mandatory;">
@@ -51,9 +43,7 @@ defmodule LifecycleWeb.Modal.View.Transition.TransitionList do
                       <h1 class="text-xl font-bold uppercase">
                         <%= live_redirect transition.phase.title , to: Routes.phase_show_path(@socket, :show, transition.phase), class: "button" %>
                       </h1>
-                      <h2 class="text-sm font-semibold uppercase mt-5 underline">
-                        Observations
-                      </h2>
+
                       <div class="flex flex-wrap">
                         <%= for {property, value} <- transition.answers do %>
                           <%= if (property == "image_list") do %>
@@ -80,24 +70,44 @@ defmodule LifecycleWeb.Modal.View.Transition.TransitionList do
 
                         <!-- Traits component -->
                         <%= for {property, value} <- transition.answers do %>
+                        <!-- Image based Traits -->
+                        <%= if (property == "img") do %>
+                        <%= for {key, val} <- value do %>
+                          <div class="shadow-md rounded-md bg-stone-100 m-1 w-1/2">
+                            <div class="p-3 text-center">
+                              <h3><%= key %><br></h3>
+                            </div>
+
+                            <h2 class="font-medium">
+                              <%= for image_path <- val["path"] do%>
+                                <div class="flex flex-col w-full">
+                                  <button class="w-full p-1 md:p-2">
+                                    <img alt="gallery" class="button block object-cover object-center w-full h-full rounded-lg"
+                                      src={image_path}>
+                                  </button>
+                                </div>
+                              <% end %>
+                            </h2>
+                          </div>
+                        <% end %>
+                      <% end %>
                           <!-- bool & text Traits -->
                           <%= if (property == "bool" || property == "text") do %>
-                            <div class="shadow-md rounded-md bg-stone-100 m-1">
-                              <div class="p-3 text-center">
-                                <h3><%= Map.keys(value) %><br></h3>
-                                <h2 class="text-xl font-medium">
-                                  <%=
-                                    [x]=Map.values(value)
-                                    Map.values(x)
-                                  %>
+                            <%= for {key, val} <- value do %>
+                              <div class="shadow-md rounded-md bg-stone-100 m-1">
+                                <div class="px-3 pt-2 text-center">
+                                  <h3><%= key %><br></h3>
+                                </div>
+                                <h2 class="text-lg font-medium text-center px-3 py-2">
+                                  <%= Map.values(val) %>
                                 </h2>
                               </div>
-                            </div>
+                            <% end %>
                           <% end %>
                           <!-- numeric Traits -->
                           <%= if (property == "numeric") do %>
                             <%= for {trait_name, trait_dict} <- value do %>
-                              <div class="shadow-md rounded-md bg-stone-200 m-1">
+                              <div class="shadow-md rounded-md bg-stone-200 m-1 justify-center">
                                 <div class="p-3 text-center">
                                   <h3><%= trait_name %><br></h3>
                                   <div class="w-10">
@@ -133,26 +143,32 @@ defmodule LifecycleWeb.Modal.View.Transition.TransitionList do
                             </div>
                           <% end %>
                         <% end %>
-
                       </div>
-
-
-
                       <br>
-                      <h2 class="text-sm font-semibold"><%= transition.initiator.name %></h2>
-                      <h2 class="text-xs font-semibold"><%= if @id == "transition" do %> <%= Timezone.get_date(transition.inserted_at, assigns.timezone, assigns.timezone_offset) %> <% end %>  <%= Timezone.get_time(transition.inserted_at, assigns.timezone, assigns.timezone_offset) %><br></h2>
-                      <br>
+
+
+                      <!-- Edits -->
                       <div class="flex items-center justify-center">
-                      Transited: <%= transition.transited %><br>
-                      <%= if transition.transited do %>
+                        <!-- Transited: <%= transition.transited %><br> -->
+                        <%= if transition.transited do %>
+                          <div class="save-btn bg-emerald-300 px-2">
                           Approved by: <%= transition.transiter.name %><br>
-                      <% else %>
-                          <button phx-click="transit", value={transition.id}, class="button px-4 py-1 text-lg bg-orange-300 text-white font-light rounded-full hover:text-white hover:bg-orange-600 hover:font-semibold m-1">Approve</button>
-                      <% end %>
-                        <%= live_patch "Edit", to: Routes.phase_show_path(@socket, :transition_edit, transition.phase_id, transition.id), class: "button px-4 py-1 text-lg bg-orange-300 text-white font-light rounded-full hover:text-white hover:bg-orange-600 hover:font-semibold m-2" %>
-                        <%= link "Delete", to: "#", phx_click: "delete-transition", phx_value_id: transition.id, data: [confirm: "Are you sure?"], class: "button px-4 py-1 text-lg bg-red-300 text-white font-light rounded-full hover:text-white hover:bg-red-600 hover:font-semibold m-2" %>
+                          </div>
+                        <% else %>
+                          <button phx-click="transit", value={transition.id}, class="save-btn m-1">Approve</button>
+                        <% end %>
+                          <%= live_patch "Edit", to: Routes.phase_show_path(@socket, :transition_edit, transition.phase_id, transition.id), class: "save-btn m-1" %>
+                          <%= link "Delete", to: "#", phx_click: "delete-transition", phx_value_id: transition.id, data: [confirm: "Are you sure?"], class: "save-btn m-1" %>
                       </div>
+                      <br>
 
+
+                      <div class="pp-divider"></div>
+                      <!-- Author of transition info -->
+                      <div class="flex justify-between">
+                        <h2 class="text-sm"><%= transition.initiator.name %></h2>
+                        <h2 class="text-sm"><%= if @id == "transition" do %> <%= Timezone.get_date(transition.inserted_at, assigns.timezone, assigns.timezone_offset) %> <% end %>  <%= Timezone.get_time(transition.inserted_at, assigns.timezone, assigns.timezone_offset) %></h2>
+                      </div>
 
                     </div>
             <% end %>

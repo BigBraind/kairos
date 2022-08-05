@@ -30,7 +30,9 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
     {:ok,
      socket
      |> assign(assigns)
-     |> assign(:changeset, changeset)}
+     |> assign(:changeset, changeset)
+     |> assign(:trait_typemap, %{})
+    }
   end
 
   @impl true
@@ -46,6 +48,20 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
   def handle_event("save", %{"phase" => phase_params}, socket) do
     save_phase(socket, socket.assigns.action, phase_params)
   end
+
+  def handle_event("type_checked", %{"phase" => %{"traits" => trait}}, socket) do
+    index = List.first(Map.keys(trait))
+    trait_typemap = socket.assigns.trait_typemap |> Map.put(String.to_integer(index), trait[index]["type"])
+    if trait[index]["type"] == "img" do
+      {:noreply, socket
+      |> allow_upload(String.to_atom(index), accept: ~w(.jpg .jpeg .png), max_entries: 1, max_file_size: 8888888, auto_upload: true)
+      |> assign(:trait_typemap, trait_typemap)}
+    else
+      {:noreply, socket #|> allow_upload(String.to_atom(index), accept: ~w(.jpg .jpeg .png), max_entries: 1, max_file_size: 8888888, auto_upload: true)
+    |> assign(:trait_typemap, trait_typemap)}
+    end
+
+   end
 
   def handle_event("add-trait", _, socket) do
     existing_traits =
@@ -75,7 +91,7 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
       |> Changeset.put_assoc(:traits, traits)
 
     {:noreply, assign(socket, changeset: changeset)}
-  end
+   end
 
   def handle_event(
         "delete_trait",
@@ -115,7 +131,7 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
     end
   end
 
-  """
+  @doc """
     TODO:
       Future improvement:
         1. Create a list of properties(water, grain, coconut, peanuts, tea etc)
@@ -136,6 +152,51 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
     create_phase(:new, phase_params, socket)
   end
 
+  defp save_phase(socket, :step, phase_params) do
+    transition_map =  for {id, trait} <- phase_params["traits"], into: [] do
+      case trait["type"] do
+        "num" -> {:numeric, %{trait["name"] => %{"value" => trait["value"], "unit" => trait["unit"]}}}
+        "bool" -> {:bool, %{trait["name"] => %{"value" => trait["value"]}}}
+        "txt" -> {:text, %{trait["name"] => %{"value" => trait["value"]}}}
+        "img" -> {:img, %{trait["name"] => %{"value" => trait["value"], "path" => consume_uploaded_entries(socket, String.to_atom(id), fn %{path: path}, entry ->
+                                                ext = String.replace(entry.client_name, " ", "")
+                                                dest_path = path <> ext
+                                                # changes destination path name with extension for rendering
+                                                dest = Path.join([:code.priv_dir(:lifecycle), "static", "uploads", Path.basename(dest_path)])
+                                                File.cp!(path, dest)
+                                                {:ok, Routes.static_path(socket, "/uploads/#{Path.basename(dest)}")}
+                                              end)
+                                              }
+                                            }}
+      end
+    end
+    |> Enum.reduce(%{}, fn {key, val}, acc ->
+      if acc[key] do
+        Map.put(acc, key, Map.merge(acc[key], val))
+      else
+        Map.put(acc, key, val)
+      end
+    end)
+    IO.inspect(transition_map)
+    phase_params = phase_params |> Map.put("transitions", [%{initiator_id: socket.assigns.current_user.id, answers: transition_map, journey_id: socket.assigns.journey.id}])
+    create_phase(:step, phase_params, socket)
+  end
+
+  defp create_phase(:step, phase_params, socket) do
+    case Timeline.create_phase(phase_params) do
+      {:ok, phase} ->
+        {Pubsub.notify_subs({:ok, phase}, [:phase, :created], "phase_index")}
+
+        {:noreply,
+         socket
+         |> push_redirect(to: socket.assigns.return_to)
+         |> Flash.insert_flash(:info, "Phase created successfully", self())}
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        {:noreply, assign(socket, changeset: changeset)}
+    end
+  end
+
   defp save_phase(socket, :new_child, phase_params) do
     trait_list = retrieve_traits(phase_params["traits"] || %{})
 
@@ -150,12 +211,12 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
     create_phase(:new_child, phase_params, socket)
   end
 
+
+
   defp create_phase(action, phase_params, socket) do
     check_trait = Map.has_key?(socket.assigns.changeset.changes, :traits)
-    # check_existing_trait = phase_params["existing_traits"] != %{}
     check_existing_trait = phase_params["existing_traits"] != nil
 
-    IO.inspect(phase_params["existing_traits"])
 
     case Timeline.create_phase(phase_params) do
       {:ok, phase} ->
@@ -179,18 +240,33 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
           :new ->
             {Pubsub.notify_subs({:ok, phase}, [:phase, :created], "phase_index")}
 
+            {:noreply,
+         socket
+         |> push_redirect(to: Routes.phase_show_path(socket, :show, phase.id))
+         |> Flash.insert_flash(:info, "Phase created successfully", self())}
+
+          :step ->
+            {Pubsub.notify_subs({:ok, phase}, [:phase, :created], "phase_index")}
+
+            {:noreply,
+         socket
+         |> push_redirect(to: socket.assigns.return_to)
+         |> Flash.insert_flash(:info, "Phase created successfully", self())}
+
           :new_child ->
             {Pubsub.notify_subs(
                {:ok, phase},
                [:phase, :created],
                "phase:" <> socket.assigns.phase.id
              )}
-        end
 
-        {:noreply,
+            {:noreply,
          socket
          |> push_redirect(to: Routes.phase_show_path(socket, :show, phase.id))
          |> Flash.insert_flash(:info, "Phase created successfully", self())}
+        end
+
+
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, changeset: changeset)}
@@ -209,4 +285,8 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
 
     List.flatten(trait_list)
   end
+
+  defp error_to_string(:too_large), do: "Image too large"
+  defp error_to_string(:too_many_files), do: "You have selected too many files"
+  defp error_to_string(:not_accepted), do: "You have selected an unacceptable file type"
 end

@@ -15,6 +15,6 @@ defmodule Lifecycle.RealmFixtures do
       })
       |> Lifecycle.Realm.create_journey()
 
-    journey
+    journey |> Lifecycle.Repo.preload([:realm])
   end
 end

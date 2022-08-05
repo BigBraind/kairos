@@ -1,0 +1,99 @@
+# Journeys
+
+## Journey Construction
+
+```elixir
+defmodule R do
+  def recompile() do
+    Mix.Task.reenable("app.start")
+    Mix.Task.reenable("compile")
+    Mix.Task.reenable("compile.all")
+    compilers = Mix.compilers()
+    Enum.each(compilers, &Mix.Task.reenable("compile.#{&1}"))
+    Mix.Task.run("compile.all")
+  end
+end
+
+R.recompile()
+```
+
+```elixir
+alias Lifecycle.Repo
+alias Lifecycle.Timeline.Phase
+
+%Phase{}
+|> Phase.changeset(%{
+  title: "seed",
+  traits: [%{name: "weight", type: :num, value: "10"}, %{name: "height", type: :num, value: "10"}],
+  transitions: [%{initiator_id: "69727047-12d0-4b25-94b1-2326666a519e"}]
+})
+|> Repo.insert()
+
+# Lifecycle.Timeline.delete_phase(Lifecycle.Timeline.get_phase!("984eafcb-6261-4b83-b9ef-a96348c6dcab"))
+```
+
+```elixir
+alias Lifecycle.Realm
+alias Lifecycle.Repo
+alias Lifecycle.Realm.Journey
+# Lifecycle.Realm.create_journey(%{'name': "test"})
+# Lifecycle.Realm.list_journeys()
+# R.recompile()
+
+defmodule Journeyz do
+  def build_assoc(attr) do
+    Realm.create_journey()
+  end
+end
+```
+
+```elixir
+alias Lifecycle.Repo
+R.recompile()
+## Build Assoc (Create Parent then build any subsequent Children Association)
+journey_param = %{name: "Journey to the West", realm: %{name: 1}}
+transition_param = %{transited: true}
+{:ok, journey} = Realm.create_journey(journey_param)
+
+# transition =
+#   Ecto.build_assoc(journey, :transitions)
+#   |> Lifecycle.Timeline.Transition.changeset(transition_param)
+#   |> Repo.insert!()
+#   |> Repo.preload(:journey)
+```
+
+```elixir
+struct(%Lifecycle.Timeline.Transition{}, Map.put(%{transited: 1}, :journey_id, journey.id))
+# |> Repo.insert!()
+```
+
+```elixir
+# #Realm.new_journey(%{name: "hi", pointer: 3, realm: %{name: "agarr", description: "wow"}})
+# #journey = Realm.new_journey(%{name: "hi", pointer: 3})
+
+# Ecto.build_assoc(Lifecycle.Users.get_realm_by_name!("agarr"), :journeys)
+# |> Lifecycle.Realm.Journey.changeset(%{name: "hi", pointer: 3})#, journey_id:)
+
+params = %{name: "hii", pointer: 6}
+
+Repo.get(Lifecycle.Users.Realm, "13425f33-a108-413d-9fc1-603accf59e45")
+|> Ecto.build_assoc(:journeys)
+|> Ecto.changeset()
+|> Ecto.Changeset.cast(params, [:name, :pointer])
+|> Repo.insert!()
+```
+
+```elixir
+defmodule Transitionz do
+  def continue_journey(transition_attrs \\ %{}, phase_attrs \\ %{}) do
+    {:ok, p} = Lifecycle.Timeline.create_phase(phase_attrs)
+
+    Lifecycle.Timeline.create_transition(
+      transition_attrs
+      |> Map.put(:phase_id, p.id)
+    )
+  end
+end
+
+Realm.list_journeys()
+```
