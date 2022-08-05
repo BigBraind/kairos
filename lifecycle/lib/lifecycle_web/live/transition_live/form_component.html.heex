@@ -79,8 +79,7 @@
                         border-transparent
                         focus:border-transparent focus:bg-gray-200
                         text-gray-700
-                        focus:ring-1 focus:ring-offset-2 focus:ring-gray-500
-                    " %>
+                        focus:ring-1 focus:ring-offset-2 focus:ring-gray-500" %>
             <% else %>
                 <%= checkbox f, String.to_atom("bool#" <> trait.name), phx_debounce: "blur", value: trait.value, class: "
                         rounded
@@ -88,8 +87,7 @@
                         border-transparent
                         focus:border-transparent focus:bg-gray-200
                         text-gray-700
-                        focus:ring-1 focus:ring-offset-2 focus:ring-gray-500
-                    " %>
+                        focus:ring-1 focus:ring-offset-2 focus:ring-gray-500" %>
             <% end %>
         <% end %>
         <br>

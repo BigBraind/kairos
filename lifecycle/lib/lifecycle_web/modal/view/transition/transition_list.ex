@@ -43,7 +43,7 @@ defmodule LifecycleWeb.Modal.View.Transition.TransitionList do
                       <h1 class="text-xl font-bold uppercase">
                         <%= live_redirect transition.phase.title , to: Routes.phase_show_path(@socket, :show, transition.phase), class: "button" %>
                       </h1>
-                      <h2 class="text-sm font-semibold uppercase mt-5 underline">
+                      <h2 class="text-sm font-semibold uppercase mt-5">
                         Observations
                       </h2>
                       <div class="flex flex-wrap">
@@ -72,6 +72,27 @@ defmodule LifecycleWeb.Modal.View.Transition.TransitionList do
 
                         <!-- Traits component -->
                         <%= for {property, value} <- transition.answers do %>
+                        <!-- Image based Traits -->
+                        <%= if (property == "img") do %>
+                        <%= for {key, val} <- value do %>
+                          <div class="shadow-md rounded-md bg-stone-100 m-1">
+                            <div class="p-3 text-center">
+                              <h3><%= key %><br></h3>
+                            </div>
+
+                            <h2 class="text-lg font-medium">
+                              <%= for image_path <- val["path"] do%>
+                                <div class="flex flex-wrap w-1/3">
+                                  <button class="w-full p-1 md:p-2">
+                                    <img alt="gallery" class="button block object-cover object-center w-full h-full rounded-lg"
+                                      src={image_path}>
+                                  </button>
+                                </div>
+                              <% end %>
+                            </h2>
+                          </div>
+                        <% end %>
+                      <% end %>
                           <!-- bool & text Traits -->
                           <%= if (property == "bool" || property == "text") do %>
                             <%= for {key, val} <- value do %>
@@ -79,7 +100,7 @@ defmodule LifecycleWeb.Modal.View.Transition.TransitionList do
                                 <div class="p-3 text-center">
                                   <h3><%= key %><br></h3>
                                 </div>
-                                <h2 class="text-xl font-medium">
+                                <h2 class="text-lg font-medium">
                                   <%= Map.values(val) %>
                                 </h2>
                               </div>
@@ -88,7 +109,7 @@ defmodule LifecycleWeb.Modal.View.Transition.TransitionList do
                           <!-- numeric Traits -->
                           <%= if (property == "numeric") do %>
                             <%= for {trait_name, trait_dict} <- value do %>
-                              <div class="shadow-md rounded-md bg-stone-200 m-1">
+                              <div class="shadow-md rounded-md bg-stone-200 m-1 justify-center">
                                 <div class="p-3 text-center">
                                   <h3><%= trait_name %><br></h3>
                                   <div class="w-10">
@@ -124,24 +145,26 @@ defmodule LifecycleWeb.Modal.View.Transition.TransitionList do
                             </div>
                           <% end %>
                         <% end %>
-
                       </div>
-
-
-
                       <br>
+
+
+                      <!-- Author of transition info -->
                       <h2 class="text-sm font-semibold"><%= transition.initiator.name %></h2>
                       <h2 class="text-xs font-semibold"><%= if @id == "transition" do %> <%= Timezone.get_date(transition.inserted_at, assigns.timezone, assigns.timezone_offset) %> <% end %>  <%= Timezone.get_time(transition.inserted_at, assigns.timezone, assigns.timezone_offset) %><br></h2>
                       <br>
+
+                      <!-- Author of transition info -->
                       <div class="flex items-center justify-center">
-                      Transited: <%= transition.transited %><br>
-                      <%= if transition.transited do %>
+                        Transited: <%= transition.transited %>
+                        <br>
+                        <%= if transition.transited do %>
                           Approved by: <%= transition.transiter.name %><br>
-                      <% else %>
-                          <button phx-click="transit", value={transition.id}, class="button px-4 py-1 text-lg bg-orange-300 text-white font-light rounded-full hover:text-white hover:bg-orange-600 hover:font-semibold m-1">Approve</button>
-                      <% end %>
-                        <%= live_patch "Edit", to: Routes.phase_show_path(@socket, :transition_edit, transition.phase_id, transition.id), class: "button px-4 py-1 text-lg bg-orange-300 text-white font-light rounded-full hover:text-white hover:bg-orange-600 hover:font-semibold m-2" %>
-                        <%= link "Delete", to: "#", phx_click: "delete-transition", phx_value_id: transition.id, data: [confirm: "Are you sure?"], class: "button px-4 py-1 text-lg bg-red-300 text-white font-light rounded-full hover:text-white hover:bg-red-600 hover:font-semibold m-2" %>
+                        <% else %>
+                          <button phx-click="transit", value={transition.id}, class="save-btn">Approve</button>
+                        <% end %>
+                          <%= live_patch "Edit", to: Routes.phase_show_path(@socket, :transition_edit, transition.phase_id, transition.id), class: "button px-4 py-1 text-sm bg-orange-300 text-white font-light rounded-full hover:text-white hover:bg-orange-600 hover:font-semibold m-2" %>
+                          <%= link "Delete", to: "#", phx_click: "delete-transition", phx_value_id: transition.id, data: [confirm: "Are you sure?"], class: "button px-4 py-1 text-sm bg-red-300 text-white font-light rounded-full hover:text-white hover:bg-red-600 hover:font-semibold m-2" %>
                       </div>
 
 
