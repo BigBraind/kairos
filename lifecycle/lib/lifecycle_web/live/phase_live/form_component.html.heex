@@ -1,5 +1,5 @@
-<div class="font-bold border-solid border-2 border-black rounded-lg m-3 p-7 flex-auto">
-  <h1 class="text-4xl my-2 font-bold p-1"><%= @title %></h1>
+<div class="font-bold border-solid border-2 border-black rounded-lg m-3 p-7 flex-auto dark:border-white">
+  <h1 class="text-4xl my-2 font-bold p-1 dark:text-white"><%= @title %></h1>
 
   <.form
     let={f}
@@ -11,32 +11,32 @@
     >
 
     <div class="py-1">
-      <%= label f, :title, class: "text-xl my-2" %>
+      <%= label f, :title, class: "text-xl my-2 dark:text-white" %>
       <%= text_input f, :title, phx_debounce: "blur", autocomplete: "off", class: "solid-form" %>
       <%= error_tag f, :title %>
     </div>
 
     <div class="py-1">
-      <%= label f, :properties, class: "text-xl my-2" %>
+      <%= label f, :properties, class: "text-xl my-2 dark:text-white" %>
       <%= textarea f, :content, phx_debounce: "blur", autocomplete: "off", class: "solid-form" %>
       <%= error_tag f, :content %>
     </div>
 
     <div class="py-1">
-      <%= label f, :description, class: "text-xl my-2" %>
+      <%= label f, :description, class: "text-xl my-2 dark:text-white" %>
       <%= textarea f, :type, phx_debounce: "blur", autocomplete: "off", class: "solid-form h-32" %>
       <%= error_tag f, :type %>
     </div>
 
     <%# Variables %>
-    <p class="my-2 font-bold text-2xl">Variables</p>
+    <p class="my-2 font-bold text-2xl dark:text-white">Variables</p>
 
     <%= inputs_for f, :traits, fn trait -> %>
       <%# Variable Card %>
-      <div class="flex flex-wrap overflow-hidden font-bold border-solid border-2 border-black rounded-lg my-3 p-2">
+      <div class="flex flex-wrap overflow-hidden font-bold border-solid border-2 border-black dark:border-white rounded-lg my-3 p-2">
         <%# Name %>
         <div class="mx-2 my-1 form-group w-3/6">
-          <%= label trait, :name %>
+          <%= label trait, :name, class: "dark:text-white" %>
           <%= text_input trait, :name, autocomplete: "off", class: "solid-form bg-zinc-200"  %>
           <%= error_tag trait, :name %>
         </div>
@@ -44,7 +44,7 @@
 
         <%# Type %>
         <div class="mx-2 my-1 form-group w-2/6">
-          <%= label trait, :type %>
+          <%= label trait, :type, class: "dark:text-white" %>
           <%= select(trait, :type, ["Text": "txt", "Numeric": "num", "Image": "img", "True/False": "bool"], class: "block
                   w-full rounded-md
                   bg-zinc-200 border-transparent
@@ -56,8 +56,8 @@
 
         <%# Default value %>
         <div class="mx-2 my-1 form-group w-3/6">
-          <%= label trait, :value %>
-          <%= text_input trait, :value, autocomplete: "off", class: "solid-form bg-zinc-200"  %>
+          <%= label trait, :value, class: "dark:text-white" %>
+          <%= text_input trait, :value, autocomplete: "off", class: "solid-form bg-zinc-200 "  %>
           <%= error_tag trait, :value %>
         </div>
         <br>
@@ -75,16 +75,16 @@
         <%# Unit %>
         <div class="mx-2 my-1 form-group w-2/6">
         <section phx-drop-target={@uploads[String.to_atom(to_string(trait.index))].ref}>
-        <%= label trait, :upload %>
+        <%= label trait, :upload, class: "dark:text-white" %>
         <%= live_file_input @uploads[String.to_atom(to_string(trait.index))] %>
             <%= for entry <- @uploads[String.to_atom(to_string(trait.index))].entries do %>
                 <figure>
                     <%= live_img_preview entry %>
-                    <figcaption><strong>New Image</strong></figcaption>
+                    <figcaption class="dark:text-white"><strong>New Image</strong></figcaption>
                 </figure>
            <% end %>
           <%= for err <- upload_errors(@uploads[String.to_atom(to_string(trait.index))]) do %>
-             <p class="alert alert-danger"><%= error_to_string(err) %></p>
+             <p class="alert alert-danger dark:text-white"><%= error_to_string(err) %></p>
           <% end %>
         </section>
         </div>
@@ -103,15 +103,15 @@
     <% end %>
 
     <%# Add Variant Button %>
-    <a href="#" phx-target={@myself} phx-click="add-trait" class="font-bold border-solid border-2 disable:w-2 disable:px-12 disable:py-4 border-black w-fit px-5 py-1 hover:bg-blue-500 rounded-lg">+ add variable</a>
+    <a href="#" phx-target={@myself} phx-click="add-trait" class="font-bold border-solid border-2 disable:w-2 disable:px-12 disable:py-4 border-black dark:border-white dark:text-white w-fit px-5 py-1 hover:bg-blue-500 rounded-lg">+ add variable</a>
 
     <%= hidden_input f, :parent %>
     <%= error_tag f, :parent  %>
     <br>
     <br>
 
-    <div class="flex justify-end">
-      <%= submit "Save", phx_disable_with: "Saving...", class: "save-btn disable:w-2 disable:px-12 disable:py-4"%>
+    <div class="flex justify-end dark:text-white">
+      <%= submit "Save", phx_disable_with: "Saving...", class: "save-btn dark:border-white disable:w-2 disable:px-12 disable:py-4"%>
     </div>
   </.form>
 </div>
