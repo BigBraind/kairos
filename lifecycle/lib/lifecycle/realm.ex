@@ -7,6 +7,8 @@ defmodule Lifecycle.Realm do
   alias Lifecycle.Repo
   alias Lifecycle.Timeline
   alias Lifecycle.Realm.Journey
+  alias Lifecycle.Users
+  alias Lifecycle.Timeline.Transition
 
 
   @doc """
@@ -36,7 +38,27 @@ defmodule Lifecycle.Realm do
       ** (Ecto.NoResultsError)
 
   """
-  def get_journey!(id), do: Repo.get!(Journey, id)
+  def get_journey!(id), do: Repo.get!(Journey, id) |> Repo.preload(:realm)
+
+  def get_journey_by_realm_attrs(realm_name, pointer) do
+    query = Journey
+        |> where([j], j.realm_name == ^realm_name)
+        |> where([j], j.pointer == ^pointer)
+        |> order_by([e], desc: e.inserted_at)
+        |> preload(:realm)
+
+      Repo.one(query)
+  end
+
+  def get_journey_steps(journey_id) do
+    query =
+      Transition
+      |> where([e], e.journey_id == ^journey_id)
+      |> order_by([e], desc: e.inserted_at)
+      |> preload([:transiter, :initiator, :phase])
+
+    Repo.all(query, limit: 8)
+  end
 
   @doc """
   Creates a journey.
@@ -72,6 +94,7 @@ defmodule Lifecycle.Realm do
     journey
     |> Journey.changeset(attrs)
     |> Repo.update()
+    #|> Repo.preload([:realm])
   end
 
   @doc """
@@ -114,16 +137,23 @@ defmodule Lifecycle.Realm do
 
   # end
 
-  def start_journey(realm_attrs \\ %{}, journey_attrs \\ %{}) do
-    # create_journey()
-    {:ok, realm} =
-      Lifecycle.Users.create_realm(realm_attrs)
-    {:ok , journey}=
-      Journey.changeset(journey_attrs
-      |> Map.put(:realm_name, realm.name))
+  def start_journey(journey_attrs \\ %{}) do
+      Journey.changeset(%Journey{},journey_attrs)
       |> Repo.insert()
-
   end
+
+  def new_journey(journey_attrs \\ %{}) do
+    Journey.realm_changeset(%Journey{}, journey_attrs)
+    |> Repo.insert()
+  end
+
+  # def new_transition(journey, transition_param \\ %{}) do
+  #   transition =
+  #     Ecto.build_assoc(journey, :transitions)
+  #     |> Lifecycle.Timeline.Transition.changeset(transition_param)
+  #     |> Repo.insert!()
+  #     |> Repo.preload(:journey)
+  # end
 
   def continue_journey(transition_attrs \\ %{}, phase_attrs \\ %{}) do
     {:ok, p} = Lifecycle.Timeline.create_phase(phase_attrs)

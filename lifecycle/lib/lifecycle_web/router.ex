@@ -61,10 +61,11 @@ defmodule LifecycleWeb.Router do
       live("/party/:party_name/", PartyLive.Show, :show)
 
       live("/journeys", JourneyLive.Index, :index)
-      live("/journeys/new", JourneyLive.Index, :new)
+      #live("/journeys/new", JourneyLive.Index, :new)
       live("/journeys/:id/edit", JourneyLive.Index, :edit)
 
       live("/journeys/:id", JourneyLive.Show, :show)
+      live("/journeys/:id/new", JourneyLive.Show, :new)
       live("/journeys/:id/show/edit", JourneyLive.Show, :edit)
 
 
@@ -75,11 +76,19 @@ defmodule LifecycleWeb.Router do
       live "/realms/:party_name/:realm_name", RealmLive.Show, :show
       live "/realms/:party_name/:id/show/edit", RealmLive.Show, :edit
 
+      live "/start/", JourneyLive.Index, :start
+      live "/journey/:realm_name/:journey_pointer", JourneyLive.Show, :show
+      live "/journey/:realm_name/:journey_pointer/start", JourneyLive.Show, :new
+      live "/journey/:realm_name/:journey_pointer/step", JourneyLive.Show, :step
+      live "/journey/:realm_name/:journey_pointer/clone", JourneyLive.Show, :clone
+
       live("/billing", BillingLive.Index, :index)
 
       live("/transition", TransitionLive.Index, :index)
 
       live("/admin_transition", AdminLive.ViewTransition, :transition)
+
+      live("/new_trans", TransLive.Index, :view)
 
       # TODO 2.0: added routes for messaging admin(bigbrain)
     end

@@ -1,9 +1,9 @@
-<h1>Listing Journeys</h1>
+<h1 class="dark:text-white ml-3 ">Listing Journeys</h1>
 
-<%= if @live_action in [:new, :edit] do %>
+<%= if @live_action in [:start, :edit] do %>
     <.live_component
       module={LifecycleWeb.JourneyLive.FormComponent}
-      id={@journey.id || :new}
+      id={@journey.id || :start}
       title={@page_title}
       action={@live_action}
       journey={@journey}
@@ -11,7 +11,7 @@
     />
 <% end %>
 
-<table>
+<table class="dark:text-white ml-3">
   <thead>
     <tr>
       <th>Name</th>
@@ -24,7 +24,7 @@
       <tr id={"journey-#{journey.id}"}>
         <td><%= journey.name %></td>
 
-        <td>
+        <td class="dark:text-white">
           <span><%= live_redirect "Show", to: Routes.journey_show_path(@socket, :show, journey) %></span>
           <span><%= live_patch "Edit", to: Routes.journey_index_path(@socket, :edit, journey) %></span>
           <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: journey.id, data: [confirm: "Are you sure?"] %></span>
@@ -34,4 +34,5 @@
   </tbody>
 </table>
 
-<span><%= live_patch "New Journey", to: Routes.journey_index_path(@socket, :new) %></span>
+
+<span class="dark:text-white ml-3"><%= live_patch "New Journey", to: Routes.journey_index_path(@socket, :start) %></span>

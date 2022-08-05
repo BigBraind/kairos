@@ -23,7 +23,6 @@ defmodule Lifecycle.Bridge.Membership do
   @doc false
   def changeset(link, attrs \\ %{}) do
     link
-
     |> cast(attrs, [:party_id, :user_id, :role])
     |> validate_required([:party_id, :user_id, :role])
     |> unique_constraint(:membership_overload, name: :my_membership)

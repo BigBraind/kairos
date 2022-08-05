@@ -73,10 +73,17 @@
 
                 </td>
                 <%# Line break for properties/variables %>
+                <%= if phase.content do %>
                 <td class="border px-4 py-2"><%= text_to_html(phase.content) %></td>
-                
+                <%= else %>
+                <td class="border px-4 py-2"><%= "No Content" %></td>
+                <% end %>
                 <%# Line break for description %>
+                <%= if phase.type do %>
                 <td class="border px-4 py-2 "><%= text_to_html(phase.type) %></td>
+                <%= else %>
+                <td class="border px-4 py-2"><%= "No Type" %></td>
+                <% end %>
                 <td class="border px-4 py-2 "><%= get_last_updated_transition_info(phase.id, @timezone, @timezone_offset) %></td>
                 <%= if phase.parent do %>
                     <td class="border px-4 py-2"><%= for parent <- phase.parent do %>

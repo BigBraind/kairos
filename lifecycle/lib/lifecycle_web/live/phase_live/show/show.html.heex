@@ -7,21 +7,9 @@
     return_to: Routes.phase_show_path(@socket, :show, @phase.id) %>
 <% end %>
 
-<%= if @live_action in [:transition_new] do %>
+<%= if @live_action in [:transition_edit, :transition_new] do %>
    <%= live_modal LifecycleWeb.TransitionLive.FormComponent,
-   id: :transition_new,
-   title: @title,
-   template: @template,
-   phase: @phase,
-   current_user: @current_user,
-   changeset: @changeset,
-   action: @live_action,
-   return_to: Routes.phase_show_path(@socket, :show, @phase.id) %>
-<% end %>
-
-<%= if @live_action in [:transition_edit] do %>
-   <%= live_modal LifecycleWeb.TransitionLive.FormComponent,
-   id: @transition.id,
+   id: @transition.id || :transition_new,
    title: @title,
    template: @template,
    phase: @phase,
