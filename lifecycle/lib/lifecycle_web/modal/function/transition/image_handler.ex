@@ -4,7 +4,7 @@ defmodule LifecycleWeb.Modal.Function.Transition.ImageHandler do
   """
   use LifecycleWeb, :live_component
 
-  def handle_image(socket) do
+  def handle_image(socket, image_list \\ []) do
     uploaded_files =
       consume_uploaded_entries(socket, :transition, fn %{path: path}, entry ->
         ext = String.replace(entry.client_name, " ", "")
@@ -19,7 +19,6 @@ defmodule LifecycleWeb.Modal.Function.Transition.ImageHandler do
       end)
 
     # convert list to string
-    image_list = Enum.join(uploaded_files, "##")
-    image_list
+    Enum.join(image_list ++ uploaded_files, "##")
   end
 end
