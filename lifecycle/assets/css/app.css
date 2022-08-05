@@ -64,20 +64,22 @@ making the phoenix.css file useless, so I just deleted it.*/
     @apply my-0.5 block w-full rounded-md bg-zinc-200 border-transparent focus:border-gray-500 focus:bg-indigo-100 focus:ring-0;
   }
   .ccard {
-    @apply flex-grow-0 flex-shrink-0 basis-auto w-1/2 h-[100px] m-4 px-10 py-12 bg-gray-100 rounded-lg shadow-lg;
+    @apply flex-grow-0 flex-shrink-0 basis-auto w-1/2 h-[100px] m-4 px-10 py-12 bg-slate-900 dark:bg-white text-white dark:text-slate-900 rounded-lg shadow-lg;
   }
   .underline-form {
     @apply
     block /* for line break liddat */
     
     px-0.5
-    border-0 border-b-2 border-gray-300
-    focus:ring-0 focus:border-black
+    border-0 border-b-2 border-gray-300 dark:border-white
+    focus:ring-0 focus:border-black dark:focus:bg-slate-900 dark:focus:text-black
+    dark:hover:bg-slate-900
     w-auto
     mx-auto mb-2
-    bg-slate-100
-    text-lg text-opacity-30
+    bg-slate-100 dark:bg-slate-900
+    text-lg text-opacity-30 dark:text-white
   }
+
   .pp-divider {
     @apply border-0 bg-gray-500 text-gray-500 h-px
   }

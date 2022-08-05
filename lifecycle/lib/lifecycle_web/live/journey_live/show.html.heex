@@ -25,20 +25,20 @@
 
 
 
-<div class="min-h-screen w-100 bg-black">
+<div class="min-h-screen w-100 bg-slate-100 dark:bg-slate-900">
   <br>
   <br>
 
   <div class="justify-center items-center flex">
     <article class="prose prose-sm">
-      <h1 class="text-white">Realm</h1>
+      <h1 class="text-slate-900 dark:text-white">Realm</h1>
     </article>
   </div>
 
 
   <div class="justify-center items-center flex">
     <article class="prose prose-xl">
-      <h1 class="text-white"><%= @journey.realm_name %></h1>
+      <h1 class="text-slate-900 dark:text-white"><%= @journey.realm_name %></h1>
     </article>
   </div>
   <br>
@@ -47,17 +47,18 @@
   <span class="justify-center items-center flex">
     <%# Previous button %>
     <%= if Enum.at(@journey_list, 0) do %>
-      <%= live_redirect "❮", class: "flex items-center h-12 px-4 py-2 text-sm text-center text-white bg-transparent border-b border-gray-300 sm:text-base dark:border-gray-500 dark:text-white whitespace-nowrap cursor-base focus:outline-none hover:border-gray-400 dark:hover:border-gray-300" , to: Routes.journey_show_path(@socket, :show, Enum.at(@journey_list, 0).realm_name, Enum.at(@journey_list, 0).pointer) %>
+      <%= live_redirect "❮", class: "flex items-center h-12 px-4 py-2 text-sm text-center text-slate-900 dark:text-white bg-transparent border-b border-gray-300 sm:text-base dark:border-gray-500 dark:text-white whitespace-nowrap cursor-base focus:outline-none hover:border-gray-400 dark:hover:border-gray-300" , to: Routes.journey_show_path(@socket, :show, Enum.at(@journey_list, 0).realm_name, Enum.at(@journey_list, 0).pointer) %>
     <% end %>
 
     <%# Show journey names + Secret navigator %>
-    <form phx-change="search" id="search_journey_form"><%= text_input :search_journey, :pointer, placeholder: "Journey: " <> @journey.name, autofocus: true, "phx-debounce": "1000", autocomplete: "off", class: "h-12 px-4 py-2 text-center text-white rounded-t-md bg-black border border-b-0 border-gray-300"%></form>
+    <form phx-change="search" id="search_journey_form"><%= text_input :search_journey, :pointer, placeholder: "Journey: " <> @journey.name, autofocus: true, "phx-debounce": "1000", autocomplete: "off", class: "h-12 px-4 py-2 text-center text-white rounded-t-md bg-white border border-b-1 border-slate-900"%></form>
 
     <%# Next button %>
     <%= if Enum.at(@journey_list, 2) do %>
-      <%= live_redirect "❯", class: "flex items-center h-12 px-4 py-2 text-sm text-center text-white bg-transparent border-b border-gray-300 sm:text-base dark:border-gray-500 dark:text-white whitespace-nowrap cursor-base focus:outline-none hover:border-gray-400 dark:hover:border-gray-300", to: Routes.journey_show_path(@socket, :show, Enum.at(@journey_list, 2).realm_name, Enum.at(@journey_list, 2).pointer) %>
+      <%= live_redirect "❯", class: "flex items-center h-12 px-4 py-2 text-sm text-center text-slate-900 dark:text-white bg-transparent border-b border-gray-300 sm:text-base dark:border-gray-500 dark:text-white whitespace-nowrap cursor-base focus:outline-none hover:border-gray-400 dark:hover:border-gray-300", to: Routes.journey_show_path(@socket, :show, Enum.at(@journey_list, 2).realm_name, Enum.at(@journey_list, 2).pointer) %>
+
     <% else %>
-      <%= live_patch "+", to: Routes.journey_show_path(@socket, :new, @journey.realm_name, @journey.pointer), class: "flex items-center h-12 px-4 py-2 text-center text-white bg-transparent border-b border-gray-300 sm:text-base dark:border-gray-500 dark:text-white whitespace-nowrap cursor-base focus:outline-none hover:border-gray-400 dark:hover:border-gray-300"%>
+      <%= live_patch "+", to: Routes.journey_show_path(@socket, :new, @journey.realm_name, @journey.pointer), class: "flex items-center h-12 px-4 py-2 text-center text-slate-900 dark:text-white bg-transparent border-b border-gray-300 sm:text-base dark:border-gray-500 dark:text-white whitespace-nowrap cursor-base focus:outline-none hover:border-gray-400 dark:hover:border-gray-300"%>
     <% end %>
   </span>
 
@@ -72,10 +73,10 @@
   <br>
   
   <div class="grid place-items-center gap-6">
-    <button><%= live_redirect "+ Next Step", to: Routes.journey_show_path(@socket, :step, @journey.realm_name, @journey.pointer), class: "border-solid border-2 border-white hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %></button>
-    <button><%= live_patch "@ Edit", to: Routes.journey_show_path(@socket, :edit, @journey), class: "border-solid border-2 border-white hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %></button>
-    <button><%= live_redirect "<- View all journeys", to: Routes.journey_index_path(@socket, :index), class: "border-solid border-2 border-white hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" %></button>
+    <button><%= live_redirect "+ Next Step", to: Routes.journey_show_path(@socket, :step, @journey.realm_name, @journey.pointer), class: "border-solid border-2 border-slate-900 dark:border-white hover:bg-blue-700 text-slate-900 dark:text-white font-bold py-2 px-4 rounded" %></button>
+    <button><%= live_patch "@ Edit", to: Routes.journey_show_path(@socket, :edit, @journey), class: "border-solid border-2 border-slate-900 dark:border-white hover:bg-blue-700 text-slate-900 dark:text-white font-bold py-2 px-4 rounded" %></button>
+    <button><%= live_redirect "<- View all journeys", to: Routes.journey_index_path(@socket, :index), class: "border-solid border-2 border-slate-900 dark:border-white hover:bg-blue-700 text-slate-900 dark:text-white font-bold py-2 px-4 rounded" %></button>
   </div>
 </div>
 
-<div class="min-h-screen w-100 bg-black"></div>
+<%# <div class="min-h-screen w-100 bg-black"></div> %>

@@ -41,14 +41,14 @@ defmodule LifecycleWeb.Modal.View.Calendar.Month do
                 <% end %>
               </div>
           </div>
-          <div class="mb-6 text-center uppercase calendar grid grid-cols-7 gap-y-2 gap-x-2">
-              <div class="text-xs">Mon</div>
-              <div class="text-xs">Tue</div>
-              <div class="text-xs">Wed</div>
-              <div class="text-xs">Thu</div>
-              <div class="text-xs">Fri</div>
-              <div class="text-xs">Sat</div>
-              <div class="text-xs">Sun</div>
+          <div class=" text-xl uppercase calendar grid grid-cols-7 gap-y-2 gap-x-2 dark:text-white">
+              <div class="">Mon</div>
+              <div class="">Tue</div>
+              <div class="">Wed</div>
+              <div class="">Thu</div>
+              <div class="">Fri</div>
+              <div class="">Sat</div>
+              <div class="">Sun</div>
               <%= for i <- 0..(@end_of_month.day - 1) do %>
                 <Day.calendar
                   index={i}
