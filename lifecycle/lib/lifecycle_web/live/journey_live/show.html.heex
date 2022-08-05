@@ -56,6 +56,7 @@
     <%# Next button %>
     <%= if Enum.at(@journey_list, 2) do %>
       <%= live_redirect "❯", class: "flex items-center h-12 px-4 py-2 text-sm text-center text-slate-900 dark:text-white bg-transparent border-b border-gray-300 sm:text-base dark:border-gray-500 dark:text-white whitespace-nowrap cursor-base focus:outline-none hover:border-gray-400 dark:hover:border-gray-300", to: Routes.journey_show_path(@socket, :show, Enum.at(@journey_list, 2).realm_name, Enum.at(@journey_list, 2).pointer) %>
+
     <% else %>
       <%= live_patch "+", to: Routes.journey_show_path(@socket, :new, @journey.realm_name, @journey.pointer), class: "flex items-center h-12 px-4 py-2 text-center text-slate-900 dark:text-white bg-transparent border-b border-gray-300 sm:text-base dark:border-gray-500 dark:text-white whitespace-nowrap cursor-base focus:outline-none hover:border-gray-400 dark:hover:border-gray-300"%>
     <% end %>

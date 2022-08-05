@@ -48,24 +48,47 @@
           <%= select(trait, :type, ["Text": "txt", "Numeric": "num", "Image": "img", "True/False": "bool"], class: "block
                   w-full rounded-md
                   bg-zinc-200 border-transparent
-                  focus:border-gray-500 focus:bg-white focus:ring-0" ) %>
+                  focus:border-gray-500 focus:bg-white focus:ring-0",
+          phx_change: "type_checked",
+          phx_target: @myself) %>
           <%= error_tag trait, :type %>
         </div>
 
         <%# Default value %>
         <div class="mx-2 my-1 form-group w-3/6">
-          <%= label trait, :default_value %>
+          <%= label trait, :value %>
           <%= text_input trait, :value, autocomplete: "off", class: "solid-form bg-zinc-200"  %>
           <%= error_tag trait, :value %>
         </div>
         <br>
 
+        <%= if @trait_typemap[trait.index] == "num" do %>
         <%# Unit %>
         <div class="mx-2 my-1 form-group w-2/6">
           <%= label trait, :unit %>
           <%= text_input trait, :unit, autocomplete: "off", placeholder: "Unit", class: "solid-form bg-zinc-200"  %>
           <%= error_tag trait, :unit %>
         </div>
+        <% end %>
+
+        <%= if @trait_typemap[trait.index] == "img" do %>
+        <%# Unit %>
+        <div class="mx-2 my-1 form-group w-2/6">
+        <section phx-drop-target={@uploads[String.to_atom(to_string(trait.index))].ref}>
+        <%= label trait, :upload %>
+        <%= live_file_input @uploads[String.to_atom(to_string(trait.index))] %>
+            <%= for entry <- @uploads[String.to_atom(to_string(trait.index))].entries do %>
+                <figure>
+                    <%= live_img_preview entry %>
+                    <figcaption><strong>New Image</strong></figcaption>
+                </figure>
+           <% end %>
+          <%= for err <- upload_errors(@uploads[String.to_atom(to_string(trait.index))]) do %>
+             <p class="alert alert-danger"><%= error_to_string(err) %></p>
+          <% end %>
+        </section>
+        </div>
+        <% end %>
 
         <%# Trash buttons %>
         <div class="form-group flex justify-end">

@@ -14,6 +14,7 @@ defmodule Lifecycle.Timeline.Phase.Trait do
     field(:type, Ecto.Enum, values: [:num, :txt, :img, :bool])
     field(:value, :string)
     field(:unit, :string)
+    field(:path, :string, virtual: true) # for image handling in transition_answers
     field(:tracker, :string, virtual: true)
     field(:deletion, :boolean, virtual: true)
     belongs_to(:phase, Lifecycle.Timeline.Phase, foreign_key: :phase_id)

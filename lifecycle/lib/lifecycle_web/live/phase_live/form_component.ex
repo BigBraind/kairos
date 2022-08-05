@@ -30,7 +30,9 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
     {:ok,
      socket
      |> assign(assigns)
-     |> assign(:changeset, changeset)}
+     |> assign(:changeset, changeset)
+     |> assign(:trait_typemap, %{})
+    }
   end
 
   @impl true
@@ -46,6 +48,20 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
   def handle_event("save", %{"phase" => phase_params}, socket) do
     save_phase(socket, socket.assigns.action, phase_params)
   end
+
+  def handle_event("type_checked", %{"phase" => %{"traits" => trait}}, socket) do
+    index = List.first(Map.keys(trait))
+    trait_typemap = socket.assigns.trait_typemap |> Map.put(String.to_integer(index), trait[index]["type"])
+    if trait[index]["type"] == "img" do
+      {:noreply, socket
+      |> allow_upload(String.to_atom(index), accept: ~w(.jpg .jpeg .png), max_entries: 1, max_file_size: 8888888, auto_upload: true)
+      |> assign(:trait_typemap, trait_typemap)}
+    else
+      {:noreply, socket #|> allow_upload(String.to_atom(index), accept: ~w(.jpg .jpeg .png), max_entries: 1, max_file_size: 8888888, auto_upload: true)
+    |> assign(:trait_typemap, trait_typemap)}
+    end
+
+   end
 
   def handle_event("add-trait", _, socket) do
     existing_traits =
@@ -75,7 +91,7 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
       |> Changeset.put_assoc(:traits, traits)
 
     {:noreply, assign(socket, changeset: changeset)}
-  end
+   end
 
   def handle_event(
         "delete_trait",
@@ -142,6 +158,16 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
         "num" -> {:numeric, %{trait["name"] => %{"value" => trait["value"], "unit" => trait["unit"]}}}
         "bool" -> {:bool, %{trait["name"] => %{"value" => trait["value"]}}}
         "txt" -> {:text, %{trait["name"] => %{"value" => trait["value"]}}}
+        "img" -> {:img, %{trait["name"] => %{"value" => trait["value"], "path" => consume_uploaded_entries(socket, String.to_atom(id), fn %{path: path}, entry ->
+                                                ext = String.replace(entry.client_name, " ", "")
+                                                dest_path = path <> ext
+                                                # changes destination path name with extension for rendering
+                                                dest = Path.join([:code.priv_dir(:lifecycle), "static", "uploads", Path.basename(dest_path)])
+                                                File.cp!(path, dest)
+                                                {:ok, Routes.static_path(socket, "/uploads/#{Path.basename(dest)}")}
+                                              end)
+                                              }
+                                            }}
       end
     end
     |> Enum.reduce(%{}, fn {key, val}, acc ->
@@ -151,6 +177,7 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
         Map.put(acc, key, val)
       end
     end)
+    IO.inspect(transition_map)
     phase_params = phase_params |> Map.put("transitions", [%{initiator_id: socket.assigns.current_user.id, answers: transition_map, journey_id: socket.assigns.journey.id}])
     create_phase(:step, phase_params, socket)
   end
@@ -258,4 +285,8 @@ defmodule LifecycleWeb.PhaseLive.FormComponent do
 
     List.flatten(trait_list)
   end
+
+  defp error_to_string(:too_large), do: "Image too large"
+  defp error_to_string(:too_many_files), do: "You have selected too many files"
+  defp error_to_string(:not_accepted), do: "You have selected an unacceptable file type"
 end
