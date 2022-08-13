@@ -10,7 +10,7 @@
     <title>Lifecycle.Timeline.Phase — BigBrain v0.1.0</title>
     <link rel="stylesheet" href="dist/elixir-b6f1ed5df9b1d42a7309.css" />
 
-    <script src="dist/sidebar_items-cab6ade8a6.js"></script>
+    <script src="dist/sidebar_items-30729ae58b.js"></script>
 
       <script src="docs_config.js"></script>
 
@@ -61,12 +61,12 @@
 
   <div class="sidebar-header">
 
-      <a href="https://bigbrain.link">
+      <a href="https://bigbrain.link/start">
         <img src="assets/logo.png" alt="BigBrain" class="sidebar-projectImage">
       </a>
 
     <div class="sidebar-projectDetails">
-      <a href="https://bigbrain.link" class="sidebar-projectName" translate="no">
+      <a href="https://bigbrain.link/start" class="sidebar-projectName" translate="no">
 BigBrain
       </a>
       <strong class="sidebar-projectVersion" translate="no">
@@ -237,8 +237,8 @@ Functions
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">change_trait</span><span class="p" data-group-id="3749706473-1">(</span><span class="n">trait</span><span class="p" data-group-id="3749706473-1">)</span><span class="w">
-</span><span class="p" data-group-id="3749706473-2">%</span><span class="nc" data-group-id="3749706473-2">Ecto.Changeset</span><span class="p" data-group-id="3749706473-2">{</span><span class="ss">data</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3749706473-3">%</span><span class="nc" data-group-id="3749706473-3">Trait</span><span class="p" data-group-id="3749706473-3">{</span><span class="p" data-group-id="3749706473-3">}</span><span class="p" data-group-id="3749706473-2">}</span></code></pre>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">change_trait</span><span class="p" data-group-id="9132998407-1">(</span><span class="n">trait</span><span class="p" data-group-id="9132998407-1">)</span><span class="w">
+</span><span class="p" data-group-id="9132998407-2">%</span><span class="nc" data-group-id="9132998407-2">Ecto.Changeset</span><span class="p" data-group-id="9132998407-2">{</span><span class="ss">data</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="9132998407-3">%</span><span class="nc" data-group-id="9132998407-3">Trait</span><span class="p" data-group-id="9132998407-3">{</span><span class="p" data-group-id="9132998407-3">}</span><span class="p" data-group-id="9132998407-2">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="create_trait/2">
@@ -268,11 +268,11 @@ Functions
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">create_trait</span><span class="p" data-group-id="9388007218-1">(</span><span class="p" data-group-id="9388007218-2">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">value</span><span class="p" data-group-id="9388007218-2">}</span><span class="p" data-group-id="9388007218-1">)</span><span class="w">
-</span><span class="p" data-group-id="9388007218-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9388007218-4">%</span><span class="nc" data-group-id="9388007218-4">Trait</span><span class="p" data-group-id="9388007218-4">{</span><span class="p" data-group-id="9388007218-4">}</span><span class="p" data-group-id="9388007218-3">}</span><span class="w">
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">create_trait</span><span class="p" data-group-id="9174054623-1">(</span><span class="p" data-group-id="9174054623-2">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">value</span><span class="p" data-group-id="9174054623-2">}</span><span class="p" data-group-id="9174054623-1">)</span><span class="w">
+</span><span class="p" data-group-id="9174054623-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9174054623-4">%</span><span class="nc" data-group-id="9174054623-4">Trait</span><span class="p" data-group-id="9174054623-4">{</span><span class="p" data-group-id="9174054623-4">}</span><span class="p" data-group-id="9174054623-3">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="n">create_trait</span><span class="p" data-group-id="9388007218-5">(</span><span class="p" data-group-id="9388007218-6">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">bad_value</span><span class="p" data-group-id="9388007218-6">}</span><span class="p" data-group-id="9388007218-5">)</span><span class="w">
-</span><span class="p" data-group-id="9388007218-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9388007218-8">%</span><span class="nc" data-group-id="9388007218-8">Ecto.Changeset</span><span class="p" data-group-id="9388007218-8">{</span><span class="p" data-group-id="9388007218-8">}</span><span class="p" data-group-id="9388007218-7">}</span></code></pre>
+</span><span class="gp unselectable">iex&gt; </span><span class="n">create_trait</span><span class="p" data-group-id="9174054623-5">(</span><span class="p" data-group-id="9174054623-6">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">bad_value</span><span class="p" data-group-id="9174054623-6">}</span><span class="p" data-group-id="9174054623-5">)</span><span class="w">
+</span><span class="p" data-group-id="9174054623-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="9174054623-8">%</span><span class="nc" data-group-id="9174054623-8">Ecto.Changeset</span><span class="p" data-group-id="9174054623-8">{</span><span class="p" data-group-id="9174054623-8">}</span><span class="p" data-group-id="9174054623-7">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="delete_trait/1">
@@ -300,11 +300,11 @@ Functions
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">delete_trait</span><span class="p" data-group-id="6290975050-1">(</span><span class="n">trait</span><span class="p" data-group-id="6290975050-1">)</span><span class="w">
-</span><span class="p" data-group-id="6290975050-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6290975050-3">%</span><span class="nc" data-group-id="6290975050-3">Trait</span><span class="p" data-group-id="6290975050-3">{</span><span class="p" data-group-id="6290975050-3">}</span><span class="p" data-group-id="6290975050-2">}</span><span class="w">
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">delete_trait</span><span class="p" data-group-id="3989412019-1">(</span><span class="n">trait</span><span class="p" data-group-id="3989412019-1">)</span><span class="w">
+</span><span class="p" data-group-id="3989412019-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3989412019-3">%</span><span class="nc" data-group-id="3989412019-3">Trait</span><span class="p" data-group-id="3989412019-3">{</span><span class="p" data-group-id="3989412019-3">}</span><span class="p" data-group-id="3989412019-2">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="n">delete_trait</span><span class="p" data-group-id="6290975050-4">(</span><span class="n">trait</span><span class="p" data-group-id="6290975050-4">)</span><span class="w">
-</span><span class="p" data-group-id="6290975050-5">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6290975050-6">%</span><span class="nc" data-group-id="6290975050-6">Ecto.Changeset</span><span class="p" data-group-id="6290975050-6">{</span><span class="p" data-group-id="6290975050-6">}</span><span class="p" data-group-id="6290975050-5">}</span></code></pre>
+</span><span class="gp unselectable">iex&gt; </span><span class="n">delete_trait</span><span class="p" data-group-id="3989412019-4">(</span><span class="n">trait</span><span class="p" data-group-id="3989412019-4">)</span><span class="w">
+</span><span class="p" data-group-id="3989412019-5">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3989412019-6">%</span><span class="nc" data-group-id="3989412019-6">Ecto.Changeset</span><span class="p" data-group-id="3989412019-6">{</span><span class="p" data-group-id="3989412019-6">}</span><span class="p" data-group-id="3989412019-5">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="get_trait!/2">
@@ -332,10 +332,10 @@ Functions
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_trait!</span><span class="p" data-group-id="1719495881-1">(</span><span class="mi">123</span><span class="p" data-group-id="1719495881-1">)</span><span class="w">
-</span><span class="p" data-group-id="1719495881-2">%</span><span class="nc" data-group-id="1719495881-2">Trait</span><span class="p" data-group-id="1719495881-2">{</span><span class="p" data-group-id="1719495881-2">}</span><span class="w">
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_trait!</span><span class="p" data-group-id="0892121976-1">(</span><span class="mi">123</span><span class="p" data-group-id="0892121976-1">)</span><span class="w">
+</span><span class="p" data-group-id="0892121976-2">%</span><span class="nc" data-group-id="0892121976-2">Trait</span><span class="p" data-group-id="0892121976-2">{</span><span class="p" data-group-id="0892121976-2">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="n">get_trait!</span><span class="p" data-group-id="1719495881-3">(</span><span class="mi">456</span><span class="p" data-group-id="1719495881-3">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">get_trait!</span><span class="p" data-group-id="0892121976-3">(</span><span class="mi">456</span><span class="p" data-group-id="0892121976-3">)</span><span class="w">
 </span><span class="gt">** (Ecto.NoResultsError)</span></code></pre>
   </section>
 </section>
@@ -386,8 +386,8 @@ Functions
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">list_traits</span><span class="p" data-group-id="6651649987-1">(</span><span class="p" data-group-id="6651649987-1">)</span><span class="w">
-</span><span class="p" data-group-id="6651649987-2">[</span><span class="p" data-group-id="6651649987-3">%</span><span class="nc" data-group-id="6651649987-3">Trait</span><span class="p" data-group-id="6651649987-3">{</span><span class="p" data-group-id="6651649987-3">}</span><span class="p">,</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="6651649987-2">]</span></code></pre>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">list_traits</span><span class="p" data-group-id="0846574998-1">(</span><span class="p" data-group-id="0846574998-1">)</span><span class="w">
+</span><span class="p" data-group-id="0846574998-2">[</span><span class="p" data-group-id="0846574998-3">%</span><span class="nc" data-group-id="0846574998-3">Trait</span><span class="p" data-group-id="0846574998-3">{</span><span class="p" data-group-id="0846574998-3">}</span><span class="p">,</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="0846574998-2">]</span></code></pre>
   </section>
 </section>
 <section class="detail" id="update_trait/2">
@@ -415,11 +415,11 @@ Functions
   </a>
   Examples
 </h2>
-<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">update_trait</span><span class="p" data-group-id="4432462647-1">(</span><span class="n">trait</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4432462647-2">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">new_value</span><span class="p" data-group-id="4432462647-2">}</span><span class="p" data-group-id="4432462647-1">)</span><span class="w">
-</span><span class="p" data-group-id="4432462647-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4432462647-4">%</span><span class="nc" data-group-id="4432462647-4">Trait</span><span class="p" data-group-id="4432462647-4">{</span><span class="p" data-group-id="4432462647-4">}</span><span class="p" data-group-id="4432462647-3">}</span><span class="w">
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">update_trait</span><span class="p" data-group-id="1682053556-1">(</span><span class="n">trait</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1682053556-2">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">new_value</span><span class="p" data-group-id="1682053556-2">}</span><span class="p" data-group-id="1682053556-1">)</span><span class="w">
+</span><span class="p" data-group-id="1682053556-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1682053556-4">%</span><span class="nc" data-group-id="1682053556-4">Trait</span><span class="p" data-group-id="1682053556-4">{</span><span class="p" data-group-id="1682053556-4">}</span><span class="p" data-group-id="1682053556-3">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="n">update_trait</span><span class="p" data-group-id="4432462647-5">(</span><span class="n">trait</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4432462647-6">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">bad_value</span><span class="p" data-group-id="4432462647-6">}</span><span class="p" data-group-id="4432462647-5">)</span><span class="w">
-</span><span class="p" data-group-id="4432462647-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4432462647-8">%</span><span class="nc" data-group-id="4432462647-8">Ecto.Changeset</span><span class="p" data-group-id="4432462647-8">{</span><span class="p" data-group-id="4432462647-8">}</span><span class="p" data-group-id="4432462647-7">}</span></code></pre>
+</span><span class="gp unselectable">iex&gt; </span><span class="n">update_trait</span><span class="p" data-group-id="1682053556-5">(</span><span class="n">trait</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1682053556-6">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">bad_value</span><span class="p" data-group-id="1682053556-6">}</span><span class="p" data-group-id="1682053556-5">)</span><span class="w">
+</span><span class="p" data-group-id="1682053556-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1682053556-8">%</span><span class="nc" data-group-id="1682053556-8">Ecto.Changeset</span><span class="p" data-group-id="1682053556-8">{</span><span class="p" data-group-id="1682053556-8">}</span><span class="p" data-group-id="1682053556-7">}</span></code></pre>
   </section>
 </section>
 
