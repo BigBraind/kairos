@@ -64,4 +64,4 @@ jobs:
       - name: Deploy 🚀 API Docs
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: lifecycle/doc # The folder the action should deploy.
+          folder: ./lifecycle/doc # The folder the action should deploy.
