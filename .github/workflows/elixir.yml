@@ -62,6 +62,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Deploy 🚀 API Docs
+        working-directory: ./lifecycle
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: ./lifecycle/doc # The folder the action should deploy.
+          folder: doc # The folder the action should deploy.
