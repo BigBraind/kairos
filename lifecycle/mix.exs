@@ -1,6 +1,8 @@
 defmodule Lifecycle.MixProject do
   use Mix.Project
 
+  @source_url "https://github.com/BigBraind/kairos"
+
   def project do
     [
       app: :lifecycle,
@@ -11,7 +13,17 @@ defmodule Lifecycle.MixProject do
       compilers: [] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      #docs
+      name: "BigBrain",
+      description: "Knowledge Sharing & Organisation for Communities",
+      source_url: @source_url,
+      homepage_url: "https://bigbrain.link",
+      docs: [
+        main: "BigBrain",
+        logo: "priv/static/images/bigbrainlogo.png",
+        extras: ["README.md"]
+      ]
     ]
   end
 
@@ -59,7 +71,8 @@ defmodule Lifecycle.MixProject do
       # For S3:
       {:poison, "~> 3.0"},
       {:stripity_stripe, "~> 2.0"},
-      {:dotenv_parser, "~> 2.0", runtime: Mix.env() == :dev}
+      {:dotenv_parser, "~> 2.0", runtime: Mix.env() == :dev},
+      {:ex_doc, "~> 0.28.4", only: :dev, runtime: false}
     ]
   end
 
