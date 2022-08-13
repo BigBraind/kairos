@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.28.4">
+    <meta name="project" content="BigBrain v0.1.0">
+
+    <title>Lifecycle.Timeline — BigBrain v0.1.0</title>
+    <link rel="stylesheet" href="dist/elixir-b6f1ed5df9b1d42a7309.css" />
+
+    <script src="dist/sidebar_items-84aae5c473.js"></script>
+
+      <script src="docs_config.js"></script>
+
+    <script async src="dist/app-bd1cb213813bf4825aa2.js"></script>
+
+
+  </head>
+  <body data-type="modules">
+    <script>
+
+      try {
+        var settings = JSON.parse(localStorage.getItem('ex_doc:settings') || '{}');
+
+        if (settings.theme === 'dark' ||
+           ((settings.theme === 'system' || settings.theme == null) &&
+             window.matchMedia('(prefers-color-scheme: dark)').matches)
+           ) {
+          document.body.classList.add('dark')
+        }
+      } catch (error) { }
+    </script>
+
+<div class="main">
+
+
+<section class="sidebar">
+  <button class="sidebar-button sidebar-toggle" aria-label="toggle sidebar">
+    <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+  </button>
+
+  <form class="sidebar-search" action="search.html">
+    <button type="submit" class="search-button" aria-label="Submit Search">
+      <i class="ri-search-2-line" aria-hidden="true" title="Submit search"></i>
+    </button>
+    <button type="button" tabindex="-1" class="search-close-button" aria-label="Cancel Search">
+      <i class="ri-close-line ri-lg" aria-hidden="true" title="Cancel search"></i>
+    </button>
+    <label class="search-label">
+      <p class="sr-only">Search</p>
+      <input name="q" type="text" class="search-input" placeholder="Search..." aria-label="Input your search terms" autocomplete="off" />
+    </label>
+  </form>
+
+  <div class="autocomplete">
+    <div class="autocomplete-results">
+    </div>
+  </div>
+
+  <div class="sidebar-header">
+
+      <a href="https://bigbrain.link">
+        <img src="assets/logo.png" alt="BigBrain" class="sidebar-projectImage">
+      </a>
+
+    <div class="sidebar-projectDetails">
+      <a href="https://bigbrain.link" class="sidebar-projectName" translate="no">
+BigBrain
+      </a>
+      <strong class="sidebar-projectVersion" translate="no">
+        v0.1.0
+      </strong>
+    </div>
+    <ul class="sidebar-listNav">
+      <li><a id="extras-list-link" href="#full-list">Pages</a></li>
+
+        <li><a id="modules-list-link" href="#full-list">Modules</a></li>
+
+
+    </ul>
+  </div>
+
+  <div class="gradient"></div>
+  <ul id="full-list" class="sidebar-fullList"></ul>
+</section>
+
+<section class="content">
+  <output role="status" id="toast"></output>
+  <div class="content-outer">
+    <div id="content" class="content-inner">
+
+<h1>
+<button class="settings display-settings">
+  <i class="ri-settings-3-line"></i>
+  <span class="sr-only">Settings</span>
+</button>
+
+
+    <a href="https://github.com/BigBraind/kairos/blob/main/lib/lifecycle/timeline.ex#L1" title="View Source" class="view-source" rel="help">
+      <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+      <span class="sr-only">View Source</span>
+    </a>
+
+  <span translate="no">Lifecycle.Timeline</span> 
+  <small class="app-vsn" translate="no">(BigBrain v0.1.0)</small>
+
+</h1>
+
+
+  <section id="moduledoc">
+<p>The Timeline context.</p>
+  </section>
+
+
+  <section id="summary" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+        <span class="sr-only">Link to this section</span>
+      </a>
+      Summary
+    </h1>
+
+  <div class="summary-functions summary">
+    <h2>
+      <a href="#functions">Functions</a>
+    </h2>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#change_echo/2" translate="no">change_echo(echo, attrs \\ %{})</a>
+
+        </div>
+
+          <div class="summary-synopsis"><p>Returns an <code class="inline">%Ecto.Changeset{}</code> for tracking echo changes.</p></div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#change_phase/2" translate="no">change_phase(phase, attrs \\ %{})</a>
+
+        </div>
+
+          <div class="summary-synopsis"><p>Returns an <code class="inline">%Ecto.Changeset{}</code> for tracking phase changes.</p></div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#change_transition/2" translate="no">change_transition(transition, attrs \\ %{})</a>
+
+        </div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#check_if_transited_today/3" translate="no">check_if_transited_today(phase_id, begin_date, end_date)</a>
+
+        </div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#create_echo/1" translate="no">create_echo(attrs \\ %{})</a>
+
+        </div>
+
+          <div class="summary-synopsis"><p>Creates a echo.</p></div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#create_phase/1" translate="no">create_phase(attrs \\ %{})</a>
+
+        </div>
+
+          <div class="summary-synopsis"><p>Creates a phase.</p></div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#create_transition/1" translate="no">create_transition(attrs \\ %{})</a>
+
+        </div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#delete_phase/1" translate="no">delete_phase(phase)</a>
+
+        </div>
+
+          <div class="summary-synopsis"><p>Deletes a phase.</p></div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#delete_transition/1" translate="no">delete_transition(transition)</a>
+
+        </div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#get_echo!/1" translate="no">get_echo!(id)</a>
+
+        </div>
+
+          <div class="summary-synopsis"><p>Gets a single echo.</p></div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#get_phase!/1" translate="no">get_phase!(id)</a>
+
+        </div>
+
+          <div class="summary-synopsis"><p>Gets a single phase.</p></div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#get_transition_by_date/2" translate="no">get_transition_by_date(begin_date, end_date)</a>
+
+        </div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#get_transition_by_id/1" translate="no">get_transition_by_id(id)</a>
+
+        </div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#get_transition_list/1" translate="no">get_transition_list(phase_id)</a>
+
+        </div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#get_user_by_id/1" translate="no">get_user_by_id(id)</a>
+
+        </div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#last_transited_by_who_when/1" translate="no">last_transited_by_who_when(phase_id)</a>
+
+        </div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#list_echoes/0" translate="no">list_echoes()</a>
+
+        </div>
+
+          <div class="summary-synopsis"><p>Returns the list of echoes.</p></div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#list_phases/0" translate="no">list_phases()</a>
+
+        </div>
+
+          <div class="summary-synopsis"><p>Returns the list of phases.</p></div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#list_transitions/0" translate="no">list_transitions()</a>
+
+        </div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#phase_recall/1" translate="no">phase_recall(id)</a>
+
+        </div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#recall/1" translate="no">recall(limit \\ 8)</a>
+
+        </div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#update_echo/2" translate="no">update_echo(echo, attrs)</a>
+
+        </div>
+
+          <div class="summary-synopsis"><p>Updates a echo.</p></div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#update_phase/2" translate="no">update_phase(phase, attrs)</a>
+
+        </div>
+
+          <div class="summary-synopsis"><p>Updates a phase.</p></div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#update_transition/2" translate="no">update_transition(transition, attrs)</a>
+
+        </div>
+
+      </div>
+
+  </div>
+
+  </section>
+
+
+  <section id="functions" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+        <span class="sr-only">Link to this section</span>
+      </a>
+Functions
+    </h1>
+    <div class="functions-list">
+<section class="detail" id="change_echo/2">
+
+    <span id="change_echo/1"></span>
+
+  <div class="detail-header">
+    <a href="#change_echo/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">change_echo(echo, attrs \\ %{})</h1>
+
+      <a href="https://github.com/BigBraind/kairos/blob/main/lib/lifecycle/timeline.ex#L89" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Returns an <code class="inline">%Ecto.Changeset{}</code> for tracking echo changes.</p><h2 id="change_echo/2-examples" class="section-heading">
+  <a href="#change_echo/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">examples</p>
+  </a>
+  Examples
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">change_echo</span><span class="p" data-group-id="2470799215-1">(</span><span class="n">echo</span><span class="p" data-group-id="2470799215-1">)</span><span class="w">
+</span><span class="p" data-group-id="2470799215-2">%</span><span class="nc" data-group-id="2470799215-2">Ecto.Changeset</span><span class="p" data-group-id="2470799215-2">{</span><span class="ss">data</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="2470799215-3">%</span><span class="nc" data-group-id="2470799215-3">Echo</span><span class="p" data-group-id="2470799215-3">{</span><span class="p" data-group-id="2470799215-3">}</span><span class="p" data-group-id="2470799215-2">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="change_phase/2">
+
+    <span id="change_phase/1"></span>
+
+  <div class="detail-header">
+    <a href="#change_phase/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">change_phase(phase, attrs \\ %{})</h1>
+
+      <a href="https://github.com/BigBraind/kairos/blob/main/lib/lifecycle/timeline.ex#L219" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Returns an <code class="inline">%Ecto.Changeset{}</code> for tracking phase changes.</p><h2 id="change_phase/2-examples" class="section-heading">
+  <a href="#change_phase/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">examples</p>
+  </a>
+  Examples
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">change_phase</span><span class="p" data-group-id="4203966348-1">(</span><span class="n">phase</span><span class="p" data-group-id="4203966348-1">)</span><span class="w">
+</span><span class="p" data-group-id="4203966348-2">%</span><span class="nc" data-group-id="4203966348-2">Ecto.Changeset</span><span class="p" data-group-id="4203966348-2">{</span><span class="ss">data</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="4203966348-3">%</span><span class="nc" data-group-id="4203966348-3">Phase</span><span class="p" data-group-id="4203966348-3">{</span><span class="p" data-group-id="4203966348-3">}</span><span class="p" data-group-id="4203966348-2">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="change_transition/2">
+
+    <span id="change_transition/1"></span>
+
+  <div class="detail-header">
+    <a href="#change_transition/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">change_transition(transition, attrs \\ %{})</h1>
+
+      <a href="https://github.com/BigBraind/kairos/blob/main/lib/lifecycle/timeline.ex#L271" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="check_if_transited_today/3">
+
+  <div class="detail-header">
+    <a href="#check_if_transited_today/3" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">check_if_transited_today(phase_id, begin_date, end_date)</h1>
+
+      <a href="https://github.com/BigBraind/kairos/blob/main/lib/lifecycle/timeline.ex#L245" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="create_echo/1">
+
+    <span id="create_echo/0"></span>
+
+  <div class="detail-header">
+    <a href="#create_echo/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">create_echo(attrs \\ %{})</h1>
+
+      <a href="https://github.com/BigBraind/kairos/blob/main/lib/lifecycle/timeline.ex#L54" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Creates a echo.</p><h2 id="create_echo/1-examples" class="section-heading">
+  <a href="#create_echo/1-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">examples</p>
+  </a>
+  Examples
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">create_echo</span><span class="p" data-group-id="1517214547-1">(</span><span class="p" data-group-id="1517214547-2">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">value</span><span class="p" data-group-id="1517214547-2">}</span><span class="p" data-group-id="1517214547-1">)</span><span class="w">
+</span><span class="p" data-group-id="1517214547-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1517214547-4">%</span><span class="nc" data-group-id="1517214547-4">Echo</span><span class="p" data-group-id="1517214547-4">{</span><span class="p" data-group-id="1517214547-4">}</span><span class="p" data-group-id="1517214547-3">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="n">create_echo</span><span class="p" data-group-id="1517214547-5">(</span><span class="p" data-group-id="1517214547-6">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">bad_value</span><span class="p" data-group-id="1517214547-6">}</span><span class="p" data-group-id="1517214547-5">)</span><span class="w">
+</span><span class="p" data-group-id="1517214547-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1517214547-8">%</span><span class="nc" data-group-id="1517214547-8">Ecto.Changeset</span><span class="p" data-group-id="1517214547-8">{</span><span class="p" data-group-id="1517214547-8">}</span><span class="p" data-group-id="1517214547-7">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="create_phase/1">
+
+    <span id="create_phase/0"></span>
+
+  <div class="detail-header">
+    <a href="#create_phase/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">create_phase(attrs \\ %{})</h1>
+
+      <a href="https://github.com/BigBraind/kairos/blob/main/lib/lifecycle/timeline.ex#L152" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Creates a phase.</p><h2 id="create_phase/1-examples" class="section-heading">
+  <a href="#create_phase/1-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">examples</p>
+  </a>
+  Examples
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">create_phase</span><span class="p" data-group-id="6814880085-1">(</span><span class="p" data-group-id="6814880085-2">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">value</span><span class="p" data-group-id="6814880085-2">}</span><span class="p" data-group-id="6814880085-1">)</span><span class="w">
+</span><span class="p" data-group-id="6814880085-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6814880085-4">%</span><span class="nc" data-group-id="6814880085-4">Phase</span><span class="p" data-group-id="6814880085-4">{</span><span class="p" data-group-id="6814880085-4">}</span><span class="p" data-group-id="6814880085-3">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="n">create_phase</span><span class="p" data-group-id="6814880085-5">(</span><span class="p" data-group-id="6814880085-6">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">bad_value</span><span class="p" data-group-id="6814880085-6">}</span><span class="p" data-group-id="6814880085-5">)</span><span class="w">
+</span><span class="p" data-group-id="6814880085-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6814880085-8">%</span><span class="nc" data-group-id="6814880085-8">Ecto.Changeset</span><span class="p" data-group-id="6814880085-8">{</span><span class="p" data-group-id="6814880085-8">}</span><span class="p" data-group-id="6814880085-7">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="create_transition/1">
+
+    <span id="create_transition/0"></span>
+
+  <div class="detail-header">
+    <a href="#create_transition/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">create_transition(attrs \\ %{})</h1>
+
+      <a href="https://github.com/BigBraind/kairos/blob/main/lib/lifecycle/timeline.ex#L223" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="delete_phase/1">
+
+  <div class="detail-header">
+    <a href="#delete_phase/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">delete_phase(phase)</h1>
+
+      <a href="https://github.com/BigBraind/kairos/blob/main/lib/lifecycle/timeline.ex#L206" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Deletes a phase.</p><h2 id="delete_phase/1-examples" class="section-heading">
+  <a href="#delete_phase/1-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">examples</p>
+  </a>
+  Examples
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">delete_phase</span><span class="p" data-group-id="5047856110-1">(</span><span class="n">phase</span><span class="p" data-group-id="5047856110-1">)</span><span class="w">
+</span><span class="p" data-group-id="5047856110-2">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5047856110-3">%</span><span class="nc" data-group-id="5047856110-3">Phase</span><span class="p" data-group-id="5047856110-3">{</span><span class="p" data-group-id="5047856110-3">}</span><span class="p" data-group-id="5047856110-2">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="n">delete_phase</span><span class="p" data-group-id="5047856110-4">(</span><span class="n">phase</span><span class="p" data-group-id="5047856110-4">)</span><span class="w">
+</span><span class="p" data-group-id="5047856110-5">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="5047856110-6">%</span><span class="nc" data-group-id="5047856110-6">Ecto.Changeset</span><span class="p" data-group-id="5047856110-6">{</span><span class="p" data-group-id="5047856110-6">}</span><span class="p" data-group-id="5047856110-5">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="delete_transition/1">
+
+  <div class="detail-header">
+    <a href="#delete_transition/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">delete_transition(transition)</h1>
+
+      <a href="https://github.com/BigBraind/kairos/blob/main/lib/lifecycle/timeline.ex#L277" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="get_echo!/1">
+
+  <div class="detail-header">
+    <a href="#get_echo!/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">get_echo!(id)</h1>
+
+      <a href="https://github.com/BigBraind/kairos/blob/main/lib/lifecycle/timeline.ex#L40" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Gets a single echo.</p><p>Raises <a href="https://hexdocs.pm/ecto/3.8.4/Ecto.NoResultsError.html"><code class="inline">Ecto.NoResultsError</code></a> if the Echo does not exist.</p><h2 id="get_echo!/1-examples" class="section-heading">
+  <a href="#get_echo!/1-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">examples</p>
+  </a>
+  Examples
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_echo!</span><span class="p" data-group-id="7160562477-1">(</span><span class="mi">123</span><span class="p" data-group-id="7160562477-1">)</span><span class="w">
+</span><span class="p" data-group-id="7160562477-2">%</span><span class="nc" data-group-id="7160562477-2">Echo</span><span class="p" data-group-id="7160562477-2">{</span><span class="p" data-group-id="7160562477-2">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="n">get_echo!</span><span class="p" data-group-id="7160562477-3">(</span><span class="mi">456</span><span class="p" data-group-id="7160562477-3">)</span><span class="w">
+</span><span class="gt">** (Ecto.NoResultsError)</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="get_phase!/1">
+
+  <div class="detail-header">
+    <a href="#get_phase!/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">get_phase!(id)</h1>
+
+      <a href="https://github.com/BigBraind/kairos/blob/main/lib/lifecycle/timeline.ex#L138" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Gets a single phase.</p><p>Raises <a href="https://hexdocs.pm/ecto/3.8.4/Ecto.NoResultsError.html"><code class="inline">Ecto.NoResultsError</code></a> if the Phase does not exist.</p><h2 id="get_phase!/1-examples" class="section-heading">
+  <a href="#get_phase!/1-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">examples</p>
+  </a>
+  Examples
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_phase!</span><span class="p" data-group-id="9466693755-1">(</span><span class="mi">123</span><span class="p" data-group-id="9466693755-1">)</span><span class="w">
+</span><span class="p" data-group-id="9466693755-2">%</span><span class="nc" data-group-id="9466693755-2">Phase</span><span class="p" data-group-id="9466693755-2">{</span><span class="p" data-group-id="9466693755-2">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="n">get_phase!</span><span class="p" data-group-id="9466693755-3">(</span><span class="mi">456</span><span class="p" data-group-id="9466693755-3">)</span><span class="w">
+</span><span class="gt">** (Ecto.NoResultsError)</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="get_transition_by_date/2">
+
+  <div class="detail-header">
+    <a href="#get_transition_by_date/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">get_transition_by_date(begin_date, end_date)</h1>
+
+      <a href="https://github.com/BigBraind/kairos/blob/main/lib/lifecycle/timeline.ex#L258" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="get_transition_by_id/1">
+
+  <div class="detail-header">
+    <a href="#get_transition_by_id/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">get_transition_by_id(id)</h1>
+
+      <a href="https://github.com/BigBraind/kairos/blob/main/lib/lifecycle/timeline.ex#L268" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="get_transition_list/1">
+
+  <div class="detail-header">
+    <a href="#get_transition_list/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">get_transition_list(phase_id)</h1>
+
+      <a href="https://github.com/BigBraind/kairos/blob/main/lib/lifecycle/timeline.ex#L235" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="get_user_by_id/1">
+
+  <div class="detail-header">
+    <a href="#get_user_by_id/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">get_user_by_id(id)</h1>
+
+      <a href="https://github.com/BigBraind/kairos/blob/main/lib/lifecycle/timeline.ex#L275" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="last_transited_by_who_when/1">
+
+  <div class="detail-header">
+    <a href="#last_transited_by_who_when/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">last_transited_by_who_when(phase_id)</h1>
+
+      <a href="https://github.com/BigBraind/kairos/blob/main/lib/lifecycle/timeline.ex#L281" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="list_echoes/0">
+
+  <div class="detail-header">
+    <a href="#list_echoes/0" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">list_echoes()</h1>
+
+      <a href="https://github.com/BigBraind/kairos/blob/main/lib/lifecycle/timeline.ex#L24" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Returns the list of echoes.</p><h2 id="list_echoes/0-examples" class="section-heading">
+  <a href="#list_echoes/0-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">examples</p>
+  </a>
+  Examples
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">list_echoes</span><span class="p" data-group-id="6961112316-1">(</span><span class="p" data-group-id="6961112316-1">)</span><span class="w">
+</span><span class="p" data-group-id="6961112316-2">[</span><span class="p" data-group-id="6961112316-3">%</span><span class="nc" data-group-id="6961112316-3">Echo</span><span class="p" data-group-id="6961112316-3">{</span><span class="p" data-group-id="6961112316-3">}</span><span class="p">,</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="6961112316-2">]</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="list_phases/0">
+
+  <div class="detail-header">
+    <a href="#list_phases/0" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">list_phases()</h1>
+
+      <a href="https://github.com/BigBraind/kairos/blob/main/lib/lifecycle/timeline.ex#L120" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Returns the list of phases.</p><h2 id="list_phases/0-examples" class="section-heading">
+  <a href="#list_phases/0-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">examples</p>
+  </a>
+  Examples
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">list_phases</span><span class="p" data-group-id="5999270875-1">(</span><span class="p" data-group-id="5999270875-1">)</span><span class="w">
+</span><span class="p" data-group-id="5999270875-2">[</span><span class="p" data-group-id="5999270875-3">%</span><span class="nc" data-group-id="5999270875-3">Phase</span><span class="p" data-group-id="5999270875-3">{</span><span class="p" data-group-id="5999270875-3">}</span><span class="p">,</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="5999270875-2">]</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="list_transitions/0">
+
+  <div class="detail-header">
+    <a href="#list_transitions/0" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">list_transitions()</h1>
+
+      <a href="https://github.com/BigBraind/kairos/blob/main/lib/lifecycle/timeline.ex#L279" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="phase_recall/1">
+
+  <div class="detail-header">
+    <a href="#phase_recall/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">phase_recall(id)</h1>
+
+      <a href="https://github.com/BigBraind/kairos/blob/main/lib/lifecycle/timeline.ex#L98" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="recall/1">
+
+    <span id="recall/0"></span>
+
+  <div class="detail-header">
+    <a href="#recall/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">recall(limit \\ 8)</h1>
+
+      <a href="https://github.com/BigBraind/kairos/blob/main/lib/lifecycle/timeline.ex#L93" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="update_echo/2">
+
+  <div class="detail-header">
+    <a href="#update_echo/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">update_echo(echo, attrs)</h1>
+
+      <a href="https://github.com/BigBraind/kairos/blob/main/lib/lifecycle/timeline.ex#L74" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Updates a echo.</p><h2 id="update_echo/2-examples" class="section-heading">
+  <a href="#update_echo/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">examples</p>
+  </a>
+  Examples
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">update_echo</span><span class="p" data-group-id="6387638657-1">(</span><span class="n">echo</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6387638657-2">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">new_value</span><span class="p" data-group-id="6387638657-2">}</span><span class="p" data-group-id="6387638657-1">)</span><span class="w">
+</span><span class="p" data-group-id="6387638657-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6387638657-4">%</span><span class="nc" data-group-id="6387638657-4">Echo</span><span class="p" data-group-id="6387638657-4">{</span><span class="p" data-group-id="6387638657-4">}</span><span class="p" data-group-id="6387638657-3">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="n">update_echo</span><span class="p" data-group-id="6387638657-5">(</span><span class="n">echo</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6387638657-6">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">bad_value</span><span class="p" data-group-id="6387638657-6">}</span><span class="p" data-group-id="6387638657-5">)</span><span class="w">
+</span><span class="p" data-group-id="6387638657-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6387638657-8">%</span><span class="nc" data-group-id="6387638657-8">Ecto.Changeset</span><span class="p" data-group-id="6387638657-8">{</span><span class="p" data-group-id="6387638657-8">}</span><span class="p" data-group-id="6387638657-7">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="update_phase/2">
+
+  <div class="detail-header">
+    <a href="#update_phase/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">update_phase(phase, attrs)</h1>
+
+      <a href="https://github.com/BigBraind/kairos/blob/main/lib/lifecycle/timeline.ex#L188" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Updates a phase.</p><h2 id="update_phase/2-examples" class="section-heading">
+  <a href="#update_phase/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">examples</p>
+  </a>
+  Examples
+</h2>
+<pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">update_phase</span><span class="p" data-group-id="3655294701-1">(</span><span class="n">phase</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3655294701-2">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">new_value</span><span class="p" data-group-id="3655294701-2">}</span><span class="p" data-group-id="3655294701-1">)</span><span class="w">
+</span><span class="p" data-group-id="3655294701-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3655294701-4">%</span><span class="nc" data-group-id="3655294701-4">Phase</span><span class="p" data-group-id="3655294701-4">{</span><span class="p" data-group-id="3655294701-4">}</span><span class="p" data-group-id="3655294701-3">}</span><span class="w">
+
+</span><span class="gp unselectable">iex&gt; </span><span class="n">update_phase</span><span class="p" data-group-id="3655294701-5">(</span><span class="n">phase</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3655294701-6">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">bad_value</span><span class="p" data-group-id="3655294701-6">}</span><span class="p" data-group-id="3655294701-5">)</span><span class="w">
+</span><span class="p" data-group-id="3655294701-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3655294701-8">%</span><span class="nc" data-group-id="3655294701-8">Ecto.Changeset</span><span class="p" data-group-id="3655294701-8">{</span><span class="p" data-group-id="3655294701-8">}</span><span class="p" data-group-id="3655294701-7">}</span></code></pre>
+  </section>
+</section>
+<section class="detail" id="update_transition/2">
+
+  <div class="detail-header">
+    <a href="#update_transition/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">update_transition(transition, attrs)</h1>
+
+      <a href="https://github.com/BigBraind/kairos/blob/main/lib/lifecycle/timeline.ex#L229" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+
+    </div>
+  </section>
+
+      <footer class="footer">
+
+        <p>
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.28.4) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+      </footer>
+    </div>
+  </div>
+</section>
+</div>
+
+
+  </body>
+</html>

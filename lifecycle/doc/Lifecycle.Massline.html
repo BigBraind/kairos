@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.28.4">
+    <meta name="project" content="BigBrain v0.1.0">
+
+    <title>Lifecycle.Massline — BigBrain v0.1.0</title>
+    <link rel="stylesheet" href="dist/elixir-b6f1ed5df9b1d42a7309.css" />
+
+    <script src="dist/sidebar_items-84aae5c473.js"></script>
+
+      <script src="docs_config.js"></script>
+
+    <script async src="dist/app-bd1cb213813bf4825aa2.js"></script>
+
+
+  </head>
+  <body data-type="modules">
+    <script>
+
+      try {
+        var settings = JSON.parse(localStorage.getItem('ex_doc:settings') || '{}');
+
+        if (settings.theme === 'dark' ||
+           ((settings.theme === 'system' || settings.theme == null) &&
+             window.matchMedia('(prefers-color-scheme: dark)').matches)
+           ) {
+          document.body.classList.add('dark')
+        }
+      } catch (error) { }
+    </script>
+
+<div class="main">
+
+
+<section class="sidebar">
+  <button class="sidebar-button sidebar-toggle" aria-label="toggle sidebar">
+    <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+  </button>
+
+  <form class="sidebar-search" action="search.html">
+    <button type="submit" class="search-button" aria-label="Submit Search">
+      <i class="ri-search-2-line" aria-hidden="true" title="Submit search"></i>
+    </button>
+    <button type="button" tabindex="-1" class="search-close-button" aria-label="Cancel Search">
+      <i class="ri-close-line ri-lg" aria-hidden="true" title="Cancel search"></i>
+    </button>
+    <label class="search-label">
+      <p class="sr-only">Search</p>
+      <input name="q" type="text" class="search-input" placeholder="Search..." aria-label="Input your search terms" autocomplete="off" />
+    </label>
+  </form>
+
+  <div class="autocomplete">
+    <div class="autocomplete-results">
+    </div>
+  </div>
+
+  <div class="sidebar-header">
+
+      <a href="https://bigbrain.link">
+        <img src="assets/logo.png" alt="BigBrain" class="sidebar-projectImage">
+      </a>
+
+    <div class="sidebar-projectDetails">
+      <a href="https://bigbrain.link" class="sidebar-projectName" translate="no">
+BigBrain
+      </a>
+      <strong class="sidebar-projectVersion" translate="no">
+        v0.1.0
+      </strong>
+    </div>
+    <ul class="sidebar-listNav">
+      <li><a id="extras-list-link" href="#full-list">Pages</a></li>
+
+        <li><a id="modules-list-link" href="#full-list">Modules</a></li>
+
+
+    </ul>
+  </div>
+
+  <div class="gradient"></div>
+  <ul id="full-list" class="sidebar-fullList"></ul>
+</section>
+
+<section class="content">
+  <output role="status" id="toast"></output>
+  <div class="content-outer">
+    <div id="content" class="content-inner">
+
+<h1>
+<button class="settings display-settings">
+  <i class="ri-settings-3-line"></i>
+  <span class="sr-only">Settings</span>
+</button>
+
+
+    <a href="https://github.com/BigBraind/kairos/blob/main/lib/lifecycle/massline.ex#L1" title="View Source" class="view-source" rel="help">
+      <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+      <span class="sr-only">View Source</span>
+    </a>
+
+  <span translate="no">Lifecycle.Massline</span> 
+  <small class="app-vsn" translate="no">(BigBrain v0.1.0)</small>
+
+</h1>
+
+
+  <section id="moduledoc">
+<p>The Massline User/Party context.</p>
+  </section>
+
+
+  <section id="summary" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+        <span class="sr-only">Link to this section</span>
+      </a>
+      Summary
+    </h1>
+
+  <div class="summary-functions summary">
+    <h2>
+      <a href="#functions">Functions</a>
+    </h2>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#add_member/1" translate="no">add_member(attrs \\ %{})</a>
+
+        </div>
+
+          <div class="summary-synopsis"><p>Adding user to a party</p></div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#change_party/2" translate="no">change_party(party, attrs \\ %{})</a>
+
+        </div>
+
+          <div class="summary-synopsis"><p>Returns an <code class="inline">%Ecto.Changeset{}</code> for tracking party changes.</p></div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#create_party/1" translate="no">create_party(attrs \\ %{})</a>
+
+        </div>
+
+          <div class="summary-synopsis"><p>Creates a party.</p></div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#delete_party/1" translate="no">delete_party(party)</a>
+
+        </div>
+
+          <div class="summary-synopsis"><p>Deletes a party.</p></div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#get_member!/1" translate="no">get_member!(attrs)</a>
+
+        </div>
+
+          <div class="summary-synopsis"><p>  Return the membership between the a party and a user</p></div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#get_party!/1" translate="no">get_party!(id)</a>
+
+        </div>
+
+          <div class="summary-synopsis"><p>Gets a single party.
+Raises <a href="https://hexdocs.pm/ecto/3.8.4/Ecto.NoResultsError.html"><code class="inline">Ecto.NoResultsError</code></a> if the Party does not exist.</p></div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#get_party_by_name!/1" translate="no">get_party_by_name!(name)</a>
+
+        </div>
+
+          <div class="summary-synopsis"><p>Gets party's id by passing in party's name
+Raises <a href="https://hexdocs.pm/ecto/3.8.4/Ecto.NoResultsError.html"><code class="inline">Ecto.NoResultsError</code></a> if the Party does not exist.</p></div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#get_user_by_name/1" translate="no">get_user_by_name(name)</a>
+
+        </div>
+
+          <div class="summary-synopsis"><p>Gets user's id by passing in user's name</p></div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#list_members/1" translate="no">list_members(id)</a>
+
+        </div>
+
+          <div class="summary-synopsis"><p>Returns the list of members of a particular party</p></div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#list_my_parties/1" translate="no">list_my_parties(id)</a>
+
+        </div>
+
+          <div class="summary-synopsis"><p>Returns the list of membership associated with the input user</p></div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#list_parties/0" translate="no">list_parties()</a>
+
+        </div>
+
+          <div class="summary-synopsis"><p>Returns the list of all parties</p></div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#subtract_member/1" translate="no">subtract_member(attrs \\ %{})</a>
+
+        </div>
+
+          <div class="summary-synopsis"><p>Remove user from a party</p></div>
+
+      </div>
+
+      <div class="summary-row">
+        <div class="summary-signature">
+          <a href="#update_party/2" translate="no">update_party(party, attrs)</a>
+
+        </div>
+
+          <div class="summary-synopsis"><p>Updates a party.</p></div>
+
+      </div>
+
+  </div>
+
+  </section>
+
+
+  <section id="functions" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+        <span class="sr-only">Link to this section</span>
+      </a>
+Functions
+    </h1>
+    <div class="functions-list">
+<section class="detail" id="add_member/1">
+
+    <span id="add_member/0"></span>
+
+  <div class="detail-header">
+    <a href="#add_member/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">add_member(attrs \\ %{})</h1>
+
+      <a href="https://github.com/BigBraind/kairos/blob/main/lib/lifecycle/massline.ex#L87" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Adding user to a party</p><p>Input: %{&quot;role&quot; =&gt; &quot;pleb&quot;,</p><pre><code class="makeup elixir" translate="no"><span class="w">    </span><span class="s">&quot;party_id&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">:binary_id</span><span class="p">,</span><span class="w">
+    </span><span class="s">&quot;user_id&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="p">:</span><span class="err">}</span></code></pre><h2 id="add_member/1-examples" class="section-heading">
+  <a href="#add_member/1-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">examples</p>
+  </a>
+  Examples
+</h2>
+<p>iex&gt; add_member(%{&quot;role&quot; =&gt; &quot;pleb&quot;, &quot;party_id&quot; =&gt; &quot;54635226-84df-4364-95f9-c5d3a3713baf&quot;, &quot;user_id&quot; =&gt; &quot;39116133-3ded-455b-b972-198c54552cdf&quot;})
+{:ok, %Membership{}}</p>
+  </section>
+</section>
+<section class="detail" id="change_party/2">
+
+    <span id="change_party/1"></span>
+
+  <div class="detail-header">
+    <a href="#change_party/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">change_party(party, attrs \\ %{})</h1>
+
+      <a href="https://github.com/BigBraind/kairos/blob/main/lib/lifecycle/massline.ex#L297" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Returns an <code class="inline">%Ecto.Changeset{}</code> for tracking party changes.</p><h2 id="change_party/2-examples" class="section-heading">
+  <a href="#change_party/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">examples</p>
+  </a>
+  Examples
+</h2>
+<p>iex&gt; change_party(party)
+%Ecto.Changeset{data: %Party{}}</p>
+  </section>
+</section>
+<section class="detail" id="create_party/1">
+
+    <span id="create_party/0"></span>
+
+  <div class="detail-header">
+    <a href="#create_party/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">create_party(attrs \\ %{})</h1>
+
+      <a href="https://github.com/BigBraind/kairos/blob/main/lib/lifecycle/massline.ex#L223" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Creates a party.</p><p>Input:
+  %{&quot;founder_id&quot; =&gt; :binary_id,</p><pre><code class="makeup elixir" translate="no"><span class="s">&quot;name&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">:string</span><span class="p">,</span><span class="w">
+</span><span class="s">&quot;banner&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">:string</span><span class="err">}</span></code></pre><h2 id="create_party/1-examples" class="section-heading">
+  <a href="#create_party/1-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">examples</p>
+  </a>
+  Examples
+</h2>
+<p>iex&gt; create_party(%{field: value})
+{:ok, %Party{}}</p><p>iex&gt; create_party(%{field: bad_value})
+{:error, %Ecto.Changeset{}}</p>
+  </section>
+</section>
+<section class="detail" id="delete_party/1">
+
+  <div class="detail-header">
+    <a href="#delete_party/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">delete_party(party)</h1>
+
+      <a href="https://github.com/BigBraind/kairos/blob/main/lib/lifecycle/massline.ex#L284" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Deletes a party.</p><h2 id="delete_party/1-examples" class="section-heading">
+  <a href="#delete_party/1-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">examples</p>
+  </a>
+  Examples
+</h2>
+<p>iex&gt; delete_party(party)
+{:ok, %Party{}}</p><p>iex&gt; delete_party(party)
+{:error, %Ecto.Changeset{}}</p>
+  </section>
+</section>
+<section class="detail" id="get_member!/1">
+
+  <div class="detail-header">
+    <a href="#get_member!/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">get_member!(attrs)</h1>
+
+      <a href="https://github.com/BigBraind/kairos/blob/main/lib/lifecycle/massline.ex#L121" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>  Return the membership between the a party and a user</p><p>  Input: %{&quot;party_id&quot; =&gt; :binary_id,</p><pre><code class="makeup elixir" translate="no"><span class="w">      </span><span class="s">&quot;user_id&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">:binary_idz</span><span class="err">}</span></code></pre><p>  ## Examples</p><p>  iex&gt; get_member!(%{&quot;party_id&quot; =&gt; &quot;54635226-84df-4364-95f9-c5d3a3713baf&quot;, &quot;user_id&quot; =&gt; &quot;39116133-3ded-455b-b972-198c54552cdf&quot;})
+  %Membership{}</p>
+  </section>
+</section>
+<section class="detail" id="get_party!/1">
+
+  <div class="detail-header">
+    <a href="#get_party!/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">get_party!(id)</h1>
+
+      <a href="https://github.com/BigBraind/kairos/blob/main/lib/lifecycle/massline.ex#L177" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Gets a single party.
+Raises <a href="https://hexdocs.pm/ecto/3.8.4/Ecto.NoResultsError.html"><code class="inline">Ecto.NoResultsError</code></a> if the Party does not exist.</p><p>Input:
+  party_id: binary_id</p><h2 id="get_party!/1-examples" class="section-heading">
+  <a href="#get_party!/1-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">examples</p>
+  </a>
+  Examples
+</h2>
+<p>iex&gt; get_party!(&quot;7e66e29e-b302-4c66-915f-167dcf9c76e5&quot;)
+%Party{}</p><p>iex&gt; get_party!(&quot;456&quot;)
+** (Ecto.NoResultsError)</p>
+  </section>
+</section>
+<section class="detail" id="get_party_by_name!/1">
+
+  <div class="detail-header">
+    <a href="#get_party_by_name!/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">get_party_by_name!(name)</h1>
+
+      <a href="https://github.com/BigBraind/kairos/blob/main/lib/lifecycle/massline.ex#L194" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Gets party's id by passing in party's name
+Raises <a href="https://hexdocs.pm/ecto/3.8.4/Ecto.NoResultsError.html"><code class="inline">Ecto.NoResultsError</code></a> if the Party does not exist.</p><p>Input:
+  name: String</p><h2 id="get_party_by_name!/1-examples" class="section-heading">
+  <a href="#get_party_by_name!/1-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">examples</p>
+  </a>
+  Examples
+</h2>
+<p>iex&gt; get_party_by_name!(&quot;first party&quot;)
+%Party{}</p><p>iex&gt; get_party_by_name!(&quot;456&quot;)
+** (Ecto.NoResultsError)</p>
+  </section>
+</section>
+<section class="detail" id="get_user_by_name/1">
+
+  <div class="detail-header">
+    <a href="#get_user_by_name/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">get_user_by_name(name)</h1>
+
+      <a href="https://github.com/BigBraind/kairos/blob/main/lib/lifecycle/massline.ex#L199" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Gets user's id by passing in user's name</p>
+  </section>
+</section>
+<section class="detail" id="list_members/1">
+
+  <div class="detail-header">
+    <a href="#list_members/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">list_members(id)</h1>
+
+      <a href="https://github.com/BigBraind/kairos/blob/main/lib/lifecycle/massline.ex#L41" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Returns the list of members of a particular party</p><p>Input:
+  party_id: :binary_id</p><h2 id="list_members/1-examples" class="section-heading">
+  <a href="#list_members/1-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">examples</p>
+  </a>
+  Examples
+</h2>
+<p>iex&gt; list_members(id)
+[%User{}, ...]</p>
+  </section>
+</section>
+<section class="detail" id="list_my_parties/1">
+
+  <div class="detail-header">
+    <a href="#list_my_parties/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">list_my_parties(id)</h1>
+
+      <a href="https://github.com/BigBraind/kairos/blob/main/lib/lifecycle/massline.ex#L63" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Returns the list of membership associated with the input user</p><p>Input:
+  user_id: :binary_id</p><h2 id="list_my_parties/1-examples" class="section-heading">
+  <a href="#list_my_parties/1-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">examples</p>
+  </a>
+  Examples
+</h2>
+<p>iex&gt; list_my_parties(id)
+[%Membership{}, ...]</p>
+  </section>
+</section>
+<section class="detail" id="list_parties/0">
+
+  <div class="detail-header">
+    <a href="#list_parties/0" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">list_parties()</h1>
+
+      <a href="https://github.com/BigBraind/kairos/blob/main/lib/lifecycle/massline.ex#L25" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Returns the list of all parties</p><p>Input: None</p><h2 id="list_parties/0-examples" class="section-heading">
+  <a href="#list_parties/0-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">examples</p>
+  </a>
+  Examples
+</h2>
+<p>  iex&gt; list_parties()
+  [%Party{}, ...]</p>
+  </section>
+</section>
+<section class="detail" id="subtract_member/1">
+
+    <span id="subtract_member/0"></span>
+
+  <div class="detail-header">
+    <a href="#subtract_member/1" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">subtract_member(attrs \\ %{})</h1>
+
+      <a href="https://github.com/BigBraind/kairos/blob/main/lib/lifecycle/massline.ex#L139" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Remove user from a party</p><p>Input: %{&quot;party_id&quot; =&gt; :binary_id,</p><pre><code class="makeup elixir" translate="no"><span class="w">    </span><span class="s">&quot;user_name&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">:string</span><span class="err">}</span><span class="w">
+    </span><span class="nc">OR</span></code></pre><p>Input: %{&quot;party_id&quot; =&gt; :binary_id,</p><pre><code class="makeup elixir" translate="no"><span class="w">    </span><span class="s">&quot;user_id&quot;</span><span class="w"> </span><span class="p">=&gt;</span><span class="w"> </span><span class="ss">:binary_id</span><span class="err">}</span></code></pre><h2 id="subtract_member/1-examples" class="section-heading">
+  <a href="#subtract_member/1-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">examples</p>
+  </a>
+  Examples
+</h2>
+<p>iex&gt; subtract_member(%{&quot;party_id&quot; =&gt; &quot;54635226-84df-4364-95f9-c5d3a3713baf&quot;, &quot;user_name&quot; =&gt; &quot;sky&quot;})</p>
+  </section>
+</section>
+<section class="detail" id="update_party/2">
+
+  <div class="detail-header">
+    <a href="#update_party/2" class="detail-link" title="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+      <span class="sr-only">Link to this function</span>
+    </a>
+    <h1 class="signature" translate="no">update_party(party, attrs)</h1>
+
+      <a href="https://github.com/BigBraind/kairos/blob/main/lib/lifecycle/massline.ex#L266" class="view-source" rel="help" title="View Source">
+       <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+       <span class="sr-only">View Source</span>
+     </a>
+
+
+  </div>
+
+  <section class="docstring">
+
+<p>Updates a party.</p><h2 id="update_party/2-examples" class="section-heading">
+  <a href="#update_party/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i>
+  <p class="sr-only">examples</p>
+  </a>
+  Examples
+</h2>
+<p>iex&gt; update_party(party, %{field: new_value})
+{:ok, %Party{}}</p><p>iex&gt; update_party(party, %{field: bad_value})
+{:error, %Ecto.Changeset{}}</p>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+      <footer class="footer">
+
+        <p>
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.28.4) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+      </footer>
+    </div>
+  </div>
+</section>
+</div>
+
+
+  </body>
+</html>
