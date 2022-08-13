@@ -20,7 +20,7 @@ defmodule Lifecycle.MixProject do
       source_url: @source_url,
       homepage_url: "https://bigbrain.link",
       docs: [
-        main: "BigBrain",
+        main: "readme",
         logo: "priv/static/images/bigbrainlogo.png",
         extras: ["README.md"]
       ]
