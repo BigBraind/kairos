@@ -18,7 +18,7 @@ defmodule Lifecycle.MixProject do
       name: "BigBrain",
       description: "Knowledge Sharing & Organisation for Communities",
       source_url: @source_url,
-      homepage_url: "https://bigbrain.link",
+      homepage_url: "https://bigbrain.link/start",
       docs: [
         main: "readme",
         logo: "priv/static/images/bigbrainlogo.png",
