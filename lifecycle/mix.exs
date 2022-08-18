@@ -22,7 +22,9 @@ defmodule Lifecycle.MixProject do
       docs: [
         main: "readme",
         logo: "priv/static/images/bigbrainlogo.png",
-        extras: ["README.md"]
+        extras: ["README.md"],
+        source_ref: "develop",
+        source_url_pattern: "#{@source_url}/blob/develop/lifecycle/%{path}#L%{line}"
       ]
     ]
   end
